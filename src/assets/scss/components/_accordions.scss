@@ -1,0 +1,43 @@
+// Accordions
+
+.accordion {
+  & > .card-box {
+    & > .card-header {
+      padding: 0;
+      border-bottom: 0;
+
+      .btn {
+        display: block;
+        width: 100%;
+        text-align: left;
+        border-bottom: $card-border-color solid 1px;
+
+        &:not(:disabled):hover {
+          transform: translateY(0px);
+        }
+
+        &.collapsed {
+          background: $gray-200;
+          border-bottom-color: transparent;
+
+          &:hover {
+            background: $gray-100;
+            color: $black;
+          }
+
+          svg {
+            transform: rotate(90deg);
+          }
+        }
+
+        svg {
+          transform: rotate(180deg);
+          transition: $transition-base;
+        }
+      }
+    }
+
+    & > .collapse {
+    }
+  }
+}

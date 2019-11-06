@@ -1,0 +1,107 @@
+// SweetAlert
+
+.swal2-modal {
+  box-shadow: $modal-content-box-shadow-xs;
+  @include border-radius($modal-content-border-radius);
+  background: $modal-content-bg;
+}
+
+// Notifications
+$toast-colors: ();
+
+$toast-colors: map-merge(
+    (
+      "default":    $primary,
+      "success":    $success,
+      "info":       $info,
+      "warning":    $warning,
+      "error":     $danger,
+    ),
+    $toast-colors
+);
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 150ms ease-out;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.notices {
+  position: fixed;
+  display: flex;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: $spacer;
+  overflow: hidden;
+  z-index: 1052;
+  pointer-events: none;
+
+  .toast {
+    background: transparent;
+    position: relative;
+    border: 0;
+    @include border-radius($border-radius-sm);
+    width: calc(100% - #{$spacer});
+    opacity: 0.8;
+    margin: 0 0 $spacer;
+    transition: all .2s;
+
+    &:hover {
+      .alert-wrapper-bg {
+        opacity: .98;
+      }
+    }
+
+    .toast-text {
+      margin: 0;
+      padding: $spacer;
+      color: $white;
+    }
+
+    &:last-child {
+      margin: 0 0 $spacer;
+    }
+  }
+
+  // Colors
+  @each $color, $value in $toast-colors {
+    .toast-#{$color} {
+      background-color: $value;
+    }
+  }
+
+  // Individual toast position
+  .toast {
+    &.is-top, &.is-bottom {
+      align-self: center;
+    }
+    &.is-top-right, &.is-bottom-right {
+      align-self: flex-end;
+    }
+    &.is-top-left, &.is-bottom-left {
+      align-self: flex-start;
+    }
+  }
+
+  // Notice container positions
+  &.is-top {
+    flex-direction: column;
+  }
+  &.is-bottom {
+    flex-direction: column-reverse;
+  }
+  &.is-custom-parent {
+    position: absolute;
+  }
+
+  @media screen and (max-width: 768px) {
+    padding: 0;
+    position: fixed !important;
+  }
+}

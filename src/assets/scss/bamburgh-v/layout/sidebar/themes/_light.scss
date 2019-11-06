@@ -1,0 +1,121 @@
+// Sidebar light
+
+.app-sidebar {
+  &.app-sidebar--dark {
+    &.app-sidebar--light {
+    background: $sidebar-bg-light;
+    box-shadow: $sidebar-shadow-light;
+
+    .vsm-header {
+      color: $gray-600;
+    }
+
+    .hamburger-inner,
+    .hamburger-inner:after,
+    .hamburger-inner:before {
+      background: rgba($black, .5) !important;
+    }
+
+    .app-sidebar--header {
+      &:after {
+        background: $gray-200;
+      }
+    }
+
+    .app-sidebar--footer {
+      background: $gray-100;
+    }
+
+    .sidebar-navigation {
+      .vsm-list {
+        .vsm-item {
+          .vsm-link {
+            color: $gray-900;
+
+            svg {
+              color: $primary;
+              fill: $gray-300;
+            }
+
+            &:hover {
+              background: $gray-200;
+              color: $primary;
+            }
+          }
+
+          .vsm-dropdown {
+
+            .vsm-link {
+
+              &:after {
+                background: $primary;
+              }
+
+              &:hover {
+                &:after {
+                  background: $primary;
+                }
+              }
+            }
+
+            .vsm-item.active-item {
+              .vsm-link {
+                background: $gray-200;
+                color: $primary;
+
+                svg {
+                  opacity: 1;
+                }
+              }
+            }
+          }
+
+          &.active-item,
+          &.open-item {
+            & > .vsm-link {
+              background: $gray-200;
+              color: $primary;
+
+              svg {
+                opacity: 1;
+              }
+            }
+          }
+        }
+      }
+
+      // Sidebar mini
+
+      &--mini {
+        ul {
+          li {
+            a {
+              &:hover {
+                background: rgba($white, .9);
+
+                svg {
+                  color: $primary;
+                  fill: rgba($primary, .35);
+                  opacity: 1;
+                }
+              }
+            }
+
+            &.mm-active {
+              a {
+                background: rgba($white, .9);
+
+                svg {
+                  color: $primary;
+                  fill: rgba($primary, .35);
+                  opacity: 1;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  }
+}

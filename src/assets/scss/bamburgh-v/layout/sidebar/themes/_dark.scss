@@ -1,0 +1,114 @@
+// Sidebar dark
+
+.app-sidebar {
+  &--dark {
+
+    .vsm-header {
+      color: rgba($white, .2);
+    }
+
+    .hamburger-inner,
+    .hamburger-inner:after,
+    .hamburger-inner:before {
+      background: rgba($white, .5) !important;
+    }
+
+    .app-sidebar--header {
+      &:after {
+        background: rgba($white, .1);
+      }
+    }
+
+    .app-sidebar--footer {
+      background: $sidebar-footer-bg;
+    }
+
+    .sidebar-navigation {
+      .vsm-list {
+        .vsm-item {
+          .vsm-link {
+            color: rgba($white, .5);
+
+            svg {
+              color: $white;
+              fill: rgba($white, .25);
+            }
+
+            &:hover {
+              background: rgba($black, .1);
+              color: rgba($white, .9);
+            }
+          }
+
+          .vsm-dropdown {
+
+            .vsm-link {
+
+              &:after {
+                background: rgba($black, .2);
+              }
+
+              &:hover {
+                &:after {
+                  background: rgba($black, .5);
+                }
+              }
+            }
+
+            .vsm-item.active-item {
+              .vsm-link {
+                background: rgba($black, .1);
+                color: rgba($white, .9);
+              }
+            }
+          }
+
+          &.active-item,
+          &.open-item {
+            & > .vsm-link {
+              background: rgba($black, .1);
+              color: rgba($white, .9);
+            }
+          }
+        }
+      }
+
+      // Sidebar mini
+
+      &--mini {
+        ul {
+          li {
+            a {
+              svg {
+                color: $white;
+                fill: rgba($white, .25);
+                opacity: .45;
+              }
+
+              &:hover {
+                background: rgba($white, .9);
+
+                svg {
+                  color: $primary;
+                  fill: rgba($primary, .35);
+                  opacity: 1;
+                }
+              }
+            }
+
+            a.active {
+              background: rgba($white, .9);
+
+              svg {
+                color: $primary;
+                fill: rgba($primary, .35);
+                opacity: 1;
+              }
+            }
+          }
+        }
+      }
+    }
+
+  }
+}
