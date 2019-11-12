@@ -1,7 +1,7 @@
 import validations from "./validations";
 
-const GLOBAL = {
+const GLOBAL_METHODS = {
   ...validations
 };
 
-export default GLOBAL;
+export default GLOBAL_METHODS;

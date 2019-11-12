@@ -1,8 +1,12 @@
+import "core-js/stable";
+import "regenerator-runtime/runtime";
+import "intersection-observer";
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import "./registerServiceWorker";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import BootstrapVue from "bootstrap-vue";
 import Vuelidate from "vuelidate";
 Vue.use(Vuelidate);
@@ -12,6 +16,8 @@ import MIXINS from "./mixins";
 
 Vue.mixin(MIXINS);
 Vue.config.productionTip = false;
+
+Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 Vue.component("default-layout", () =>
   import("./Layout/Wrappers/baseLayout.vue")

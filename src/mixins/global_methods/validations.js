@@ -10,18 +10,26 @@ const validations = {
     }
   },
   renderValidationError({ formLabel, key, params }) {
+    const { max, min, eq, type } = params;
     const label = startCase(formLabel);
     switch (key) {
       case "required":
         return `${label} harus di isi`;
 
       case "maxLength":
-        const { max } = params;
         return `${label} maksimal ${max} karakter`;
 
       case "minLength":
-        const { min } = params;
         return `${label} minimal ${min} karakter`;
+
+      case "sameAsPassword":
+        return `${label} password harus sama dengan ${eq}`;
+
+      case "numeric":
+        return `${label} hanya boleh angka`;
+
+      case "email":
+        return `${label} tidak valid`;
 
       default:
         return "";
