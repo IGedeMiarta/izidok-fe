@@ -4,9 +4,13 @@ import router from "./router";
 import store from "./store";
 import "./registerServiceWorker";
 import BootstrapVue from "bootstrap-vue";
-
+import Vuelidate from "vuelidate";
+Vue.use(Vuelidate);
 Vue.use(BootstrapVue);
 
+import MIXINS from "./mixins";
+
+Vue.mixin(MIXINS);
 Vue.config.productionTip = false;
 
 Vue.component("default-layout", () =>

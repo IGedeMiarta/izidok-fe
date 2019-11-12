@@ -20,13 +20,15 @@
                       <div class="text-black mt-3">
                         <h1 class="display-3 mb-3 font-weight-bold">Login</h1>
                         <div>
-                          <form>
+                          <b-form v-on:submit.prevent="submitForm">
                             <div class="form-group">
                               <label>Email address</label>
                               <input
                                 type="email"
                                 class="form-control"
+                                :class="{ 'is-invalid': $v.email_address.$error }"
                                 placeholder="yourname@yourmail.com"
+                                v-model.trim="$v.email_address.$model"
                               />
                             </div>
                             <div class="form-group mb-4">
@@ -37,21 +39,23 @@
                               <input
                                 type="password"
                                 class="form-control"
+                                :class="{ 'is-invalid': $v.password.$error }"
                                 placeholder="Enter your password"
+                                v-model.trim="$v.password.$model"
                               />
                             </div>
 
                             <button class="btn btn-lg btn-second btn-block">Login</button>
-                          </form>
+                          </b-form>
                         </div>
                         <div class="text-center pt-4 text-black-50">
-                          Don't have an account?
+                          Tempat praktik anda belum terdaftar?
                           <router-link
                             tag="a"
-                            to="/user-pages/register"
+                            to="/register"
                             exact
-                            title="Create an account"
-                          >Create an account</router-link>
+                            title="Daftar disini"
+                          >Daftar disini</router-link>
                         </div>
                       </div>
                     </div>
@@ -67,11 +71,28 @@
 </template>
 
 <script>
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { required, email, minLength } from "vuelidate/lib/validators";
 
 export default {
-  components: {
-    "font-awesome-icon": FontAwesomeIcon
+  data: () => ({
+    email_address: "",
+    password: ""
+  }),
+  validations: {
+    email_address: {
+      required,
+      email
+    },
+    password: {
+      required,
+      minLength: minLength(6)
+    }
+  },
+  methods: {
+    submitForm($event) {
+      this.$v.$touch();
+      // console.log($event);
+    }
   }
 };
 </script>
