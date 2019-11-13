@@ -1,3 +1,4 @@
+import Vue from "vue";
 import startCase from "lodash/startCase";
 
 const validations = {
@@ -56,6 +57,22 @@ const validations = {
       })
     );
     return res;
+  },
+  triggerValidation({ label, $v, $vm }) {
+    const { formBasicData } = $vm;
+    const _label = label.split(" ").join("_");
+    const $v_object = $v.formData[_label];
+    const tmpIndex = formBasicData.findIndex(item => item.label === label);
+    $v_object.$touch();
+    Vue.set($vm.formBasicData[tmpIndex], "error", $v_object.$error);
+    Vue.set(
+      $vm.formBasicData[tmpIndex],
+      "validation-desc",
+      this.validationDesc({
+        formLabel: label,
+        validationLabel: $v_object
+      })
+    );
   }
 };
 

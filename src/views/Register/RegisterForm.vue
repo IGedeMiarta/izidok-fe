@@ -10,22 +10,39 @@
             <div class="flex-grow-1 w-100 d-flex align-items-center">
               <div
                 class="bg-composed-wrapper--image"
-                :style="{ backgroundImage: 'url(' + require('@/assets/img/hero-bg/hero-9.jpg') + ')' }"
+                :style="{
+                  backgroundImage:
+                    'url(' + require('@/assets/img/hero-bg/hero-9.jpg') + ')'
+                }"
               ></div>
-              <div class="bg-composed-wrapper--bg bg-premium-dark opacity-5"></div>
+              <div
+                class="bg-composed-wrapper--bg bg-premium-dark opacity-5"
+              ></div>
               <div class="bg-composed-wrapper--content p-5">
                 <div class="text-white mt-3">
-                  <h1 class="display-4 my-3 font-weight-bold">Kenapa harus mendaftar iziDok?</h1>
-                  <p
-                    class="font-size-md mb-0 text-white-50"
-                  >Kemudahan dalam mengelola aktivitas klinik/tempat praktik Anda hanya dalam genggaman. Mendaftar hanya butuh waktu 1 menit saja.</p>
-                  <div class="divider border-2 my-4 border-light opacity-2 rounded w-25"></div>
+                  <h1 class="display-4 my-3 font-weight-bold">
+                    Kenapa harus mendaftar iziDok?
+                  </h1>
+                  <p class="font-size-md mb-0 text-white-50">
+                    Kemudahan dalam mengelola aktivitas klinik/tempat praktik
+                    Anda hanya dalam genggaman. Mendaftar hanya butuh waktu 1
+                    menit saja.
+                  </p>
+                  <div
+                    class="divider border-2 my-4 border-light opacity-2 rounded w-25"
+                  ></div>
                   <div>
-                    <router-link to="/login" exact class="btn btn-lg btn-warning">
+                    <router-link
+                      to="/login"
+                      exact
+                      class="btn btn-lg btn-warning"
+                    >
                       <span class="btn-wrapper--icon">
                         <font-awesome-icon icon="arrow-left" />
                       </span>
-                      <span class="btn-wrapper--label">Kembali ke halaman Login</span>
+                      <span class="btn-wrapper--label"
+                        >Kembali ke halaman Login</span
+                      >
                     </router-link>
                   </div>
                 </div>
@@ -36,9 +53,9 @@
         <div class="col-lg-7 d-flex align-items-center">
           <div class="col-lg-6 mx-auto px-0">
             <div class="py-2">
-              <h4
-                class="mb-2 font-weight-bold text-capitalize"
-              >daftarkan {{ selectedTipeFaskes }} anda</h4>
+              <h4 class="mb-2 font-weight-bold text-capitalize">
+                daftarkan {{ selectedTipeFaskes }} anda
+              </h4>
               <b-form @submit.prevent="submitForm">
                 <b-form-group label="Tipe Faskes">
                   <b-form-radio
@@ -48,7 +65,8 @@
                     :value="tipeFaskes"
                     v-for="(tipeFaskes, index) in tipeFaskesData"
                     :key="index"
-                  >{{ tipeFaskes }}</b-form-radio>
+                    >{{ tipeFaskes }}</b-form-radio
+                  >
                 </b-form-group>
                 <template v-if="formBasicData && formBasicData.length">
                   <b-form-group
@@ -56,18 +74,24 @@
                     v-for="form in formBasicData"
                     :key="form.tmpId"
                     class="text-capitalize"
-                    :invalid-feedback="renderInvalidFeedback({validationDesc: form['validation-desc']})"
-                    :state="renderError({error: form.error})"
+                    :invalid-feedback="
+                      renderInvalidFeedback({
+                        validationDesc: form['validation-desc']
+                      })
+                    "
+                    :state="renderError({ error: form.error })"
                   >
                     <b-form-input
                       :type="form.type || 'text'"
                       :value="form.value"
-                      @keyup="setValue({
-                            label: form.label,
-                            $event,
-                            tmpId: form.tmpId
-                            })"
-                      :state="renderError({error: form.error})"
+                      @keyup="
+                        setValue({
+                          label: form.label,
+                          $event,
+                          tmpId: form.tmpId
+                        })
+                      "
+                      :state="renderError({ error: form.error })"
                       :placeholder="form.placeholder"
                     />
                   </b-form-group>
@@ -76,7 +100,7 @@
                   Dengan menekan tombol
                   <strong>Daftar</strong> anda setuju dengan semua
                   <span class="text-capitalize">
-                    persyaratan {{"&"}} ketentuan
+                    persyaratan {{ "&" }} ketentuan
                     <span class="text-lowercase">serta</span> kebijakan privasi
                     <span class="text-lowercase">yang berlaku</span>
                   </span>
@@ -84,7 +108,9 @@
                 <button
                   type="submit"
                   class="btn btn-primary btn-lg btn-block text-capitalize"
-                >daftar</button>
+                >
+                  daftar
+                </button>
               </b-form>
             </div>
           </div>
@@ -116,7 +142,8 @@ export default {
     tipeFaskesData: ["klinik", "tempat praktik"],
     selectedTipeFaskes: null,
     formBasicData: null,
-    formData: null
+    formData: null,
+    whitelistValidation: ["no._izin_klinik", "no._sip"]
   }),
   watch: {
     selectedTipeFaskes(newVal, oldVal) {
@@ -201,20 +228,21 @@ export default {
               return label;
           }
         };
-        const postData = formBasicData.reduce((obj, item) => {
+        const tmpPostData = formBasicData.reduce((obj, item) => {
           const { label } = item;
           obj[mapLabel(label)] = formData[label];
           return obj;
         }, {});
-        console.log(postData);
-
-        const res = await axios.post(`${this.url_api}/klinik`, {
+        const postData = {
           tipe_faskes:
             this.tipeFaskesData.findIndex(
               item => item === this.selectedTipeFaskes
             ) + 1,
-          ...postData
-        });
+          ...tmpPostData
+        };
+        console.log(postData);
+
+        const res = await axios.post(`${this.url_api}/klinik`, postData);
         const { status, data } = res.data;
         alert((status && "Success") || "Gagal");
       } catch (err) {
@@ -222,14 +250,15 @@ export default {
       }
     },
     submitForm() {
-      this.addKlinik();
-      if (
-        this.formBasicData
-          .filter(item => !["no._izin_klinik", "no._sip"].includes(item.label))
-          .every(item => item.error !== null && !item.error)
-      ) {
+      const tmp = this.formBasicData.filter(
+        item => !this.whitelistValidation.includes(item.label)
+      );
+      if (tmp.every(item => item.error !== null && !item.error)) {
+        this.addKlinik();
       } else {
-        this.formBasicData;
+        tmp.map(item => {
+          this.triggerValidation({ label: item.label, $v: this.$v, $vm: this });
+        });
       }
     },
     setFormData() {
@@ -305,26 +334,13 @@ export default {
           )
         : tmp;
     },
-    setValue({ label, $event = null }) {
+    setValue({ label, $event = null } = {}) {
       const { target } = $event;
       const { value } = target;
       const _label = label.split(" ").join("_");
       this.formData[_label] = value && value.trim();
       if (!/(izin_klinik)/gi.test(_label)) {
-        const $v_object = this.$v.formData[_label];
-        const tmpIndex = this.formBasicData.findIndex(
-          item => item.label === label
-        );
-        $v_object.$touch();
-        Vue.set(this.formBasicData[tmpIndex], "error", $v_object.$error);
-        Vue.set(
-          this.formBasicData[tmpIndex],
-          "validation-desc",
-          this.validationDesc({
-            formLabel: label,
-            validationLabel: $v_object
-          })
-        );
+        this.triggerValidation({ label, $v: this.$v, $vm: this });
         if (
           label === "password" &&
           this.formData.konfirmasi_password &&
