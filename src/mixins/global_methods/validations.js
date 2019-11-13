@@ -10,9 +10,13 @@ const validations = {
       return validationDesc[validationDesc.length - validationDesc.length];
     }
   },
-  renderValidationError({ formLabel, key, params }) {
+  renderValidationError({ formLabel, key, params, ignoreTransform }) {
     const { max, min, eq, type } = params;
-    const label = startCase(formLabel);
+    const label = !ignoreTransform
+      ? startCase(formLabel)
+      : !formLabel
+      ? "Field ini"
+      : formLabel;
     switch (key) {
       case "required":
         return `${label} harus di isi`;
@@ -44,7 +48,7 @@ const validations = {
         return obj;
       }, {});
   },
-  validationDesc({ formLabel, validationLabel }) {
+  validationDesc({ formLabel, validationLabel, ignoreTransform }) {
     const _validationRules = this.getValidationRules({ validationLabel });
     const tmp = Object.keys(_validationRules).filter(
       item => !_validationRules[item]
@@ -53,12 +57,13 @@ const validations = {
       this.renderValidationError({
         formLabel,
         key: item,
-        params: validationLabel["$params"][item]
+        params: validationLabel["$params"][item],
+        ignoreTransform
       })
     );
     return res;
   },
-  triggerValidation({ label, $v, $vm }) {
+  triggerValidation({ label, $v, $vm, rawLabel }) {
     const { formBasicData } = $vm;
     const _label = label.split(" ").join("_");
     const $v_object = $v.formData[_label];
@@ -69,10 +74,18 @@ const validations = {
       $vm.formBasicData[tmpIndex],
       "validation-desc",
       this.validationDesc({
-        formLabel: label,
+        ignoreTransform: formBasicData[tmpIndex].ignoreTransform,
+        formLabel: formBasicData[tmpIndex].ignoreTransform ? rawLabel : label,
         validationLabel: $v_object
       })
     );
+  },
+  renderLabel({ label }) {
+    return this.whitelistValidation &&
+      typeof this.whitelistValidation === "function" &&
+      !this.whitelistValidation({ opts: "raw" }).includes(label)
+      ? label + "*"
+      : label;
   }
 };
 

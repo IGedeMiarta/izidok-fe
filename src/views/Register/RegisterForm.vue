@@ -70,7 +70,7 @@
                 </b-form-group>
                 <template v-if="formBasicData && formBasicData.length">
                   <b-form-group
-                    :label="form.label.split('_').join(' ')"
+                    :label="renderLabel({ label: form.rawLabel })"
                     v-for="form in formBasicData"
                     :key="form.tmpId"
                     class="text-capitalize"
@@ -86,6 +86,7 @@
                       :value="form.value"
                       @keyup="
                         setValue({
+                          rawLabel: form.rawLabel,
                           label: form.label,
                           $event,
                           tmpId: form.tmpId
@@ -121,7 +122,6 @@
 </template>
 
 <script>
-import Vue from "vue";
 import axios from "axios";
 import startCase from "lodash/startCase";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -142,8 +142,7 @@ export default {
     tipeFaskesData: ["klinik", "tempat praktik"],
     selectedTipeFaskes: null,
     formBasicData: null,
-    formData: null,
-    whitelistValidation: ["no._izin_klinik", "no._sip"]
+    formData: null
   }),
   watch: {
     selectedTipeFaskes(newVal, oldVal) {
@@ -179,9 +178,9 @@ export default {
       // "no._izin_klinik": {
       //   maxLength: maxLength(50)
       // },
-      "no._sip": {
-        maxLength: maxLength(30)
-      },
+      // "no._sip": {
+      //   maxLength: maxLength(30)
+      // },
       password: {
         required,
         minLength: minLength(6)
@@ -204,6 +203,11 @@ export default {
     this.setFormData();
   },
   methods: {
+    whitelistValidation({ opts = "normalized" } = {}) {
+      const tmp = ["no. izin klinik", "no. sip"];
+
+      return opts === "raw" ? tmp : tmp.map(item => item.split(" ").join("_"));
+    },
     async addKlinik() {
       try {
         const { formData, formBasicData } = this;
@@ -251,7 +255,7 @@ export default {
     },
     submitForm() {
       const tmp = this.formBasicData.filter(
-        item => !this.whitelistValidation.includes(item.label)
+        item => !this.whitelistValidation().includes(item.label)
       );
       if (tmp.every(item => item.error !== null && !item.error)) {
         this.addKlinik();
@@ -325,7 +329,8 @@ export default {
         label: item.label.split(" ").join("_"),
         tmpId: index,
         error: null,
-        placeholder: startCase(item.placeholder)
+        placeholder: startCase(item.placeholder),
+        rawLabel: item.label
       }));
 
       return noFilter
@@ -334,13 +339,12 @@ export default {
           )
         : tmp;
     },
-    setValue({ label, $event = null } = {}) {
+    setValue({ label, rawLabel, $event = null } = {}) {
       const { target } = $event;
       const { value } = target;
-      const _label = label.split(" ").join("_");
-      this.formData[_label] = value && value.trim();
-      if (!/(izin_klinik)/gi.test(_label)) {
-        this.triggerValidation({ label, $v: this.$v, $vm: this });
+      this.formData[label] = value && value.trim();
+      if (!this.whitelistValidation().includes(label)) {
+        this.triggerValidation({ label, $v: this.$v, $vm: this, rawLabel });
         if (
           label === "password" &&
           this.formData.konfirmasi_password &&
