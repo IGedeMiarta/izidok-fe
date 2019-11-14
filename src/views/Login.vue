@@ -43,7 +43,7 @@
                                   v-if="form.rawLabel === 'password'"
                                   href="javascript:void(0);"
                                   style="position: absolute; right: 0; top: 0"
-                                  >Forgot password?</a
+                                  >Lupa password?</a
                                 >
                                 <b-form-input
                                   :type="form.type || 'text'"

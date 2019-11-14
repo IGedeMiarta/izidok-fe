@@ -97,7 +97,7 @@
                 </template>
                 <div class="form-group mb-5">
                   Dengan menekan tombol
-                  <strong>Daftar</strong>
+                  <strong>Daftar</strong>, 
                   <span class="text-capitalize">Anda</span> setuju dengan semua
                   <span class="text-capitalize">
                     syarat {{ "&" }} ketentuan
