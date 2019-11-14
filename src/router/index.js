@@ -1,6 +1,5 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
 
 Vue.use(VueRouter);
 
@@ -8,7 +7,7 @@ const routes = [
   {
     path: "/",
     name: "home",
-    component: Home
+    component: () => import("../views/Home.vue")
   },
   {
     path: "/about",
@@ -30,6 +29,12 @@ const routes = [
     name: "register-page",
     component: () => import("../views/Register.vue"),
     meta: { layout: "examples" }
+  },
+  {
+    path: "/verification-success",
+    name: "verification-success",
+    component: () => import("../views/Verification/VerificationSuccess.vue"),
+    meta: { layout: "examples" }
   }
 ];
 
@@ -48,7 +53,7 @@ router.beforeEach((to, from, next) => {
   const isAuthenticated = false;
   if (
     !isAuthenticated &&
-    // false &&
+    false &&
     !["login", "register"].includes(
       tmp && tmp.length && tmp.length > 1 && tmp[0]
     )
