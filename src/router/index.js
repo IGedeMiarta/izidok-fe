@@ -31,11 +31,24 @@ const routes = [
     meta: { layout: "examples" }
   },
   {
-    path: "/verification-success",
-    name: "verification-success",
-    component: () => import("../views/Verification/VerificationSuccess.vue"),
-    meta: { layout: "examples" }
+    path: "/verification",
+    name: "verification-page",
+    component: () => import("../views/Verification.vue"),
+    children: [
+      {
+        path: "success",
+        component: () =>
+          import("../views/Verification/VerificationSuccess.vue"),
+        meta: { layout: "example" }
+      }
+    ]
   }
+  // {
+  //   path: "/verification-success",
+  //   name: "verification-success",
+  //   component: () => import("../views/Verification/VerificationSuccess.vue"),
+  //   meta: { layout: "examples" }
+  // }
 ];
 
 const router = new VueRouter({
