@@ -36,7 +36,15 @@ const routes = [
     component: () => import("../views/Verification.vue"),
     children: [
       {
+        path: "",
+        name: "verification-process",
+        component: () =>
+          import("../views/Verification/VerificationSuccess.vue"),
+        meta: { layout: "example" }
+      },
+      {
         path: "success",
+        name: "verification-success",
         component: () =>
           import("../views/Verification/VerificationSuccess.vue"),
         meta: { layout: "example" }
