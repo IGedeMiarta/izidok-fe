@@ -58,15 +58,13 @@
               </h4>
               <b-form @submit.prevent="submitForm">
                 <b-form-group label="Tipe Faskes">
-                  <b-form-radio
-                    class="my-1 text-capitalize"
+                  <b-form-radio-group
+                    class="text-capitalize"
                     v-model="selectedTipeFaskes"
-                    name="some-radios"
-                    :value="tipeFaskes"
-                    v-for="(tipeFaskes, index) in tipeFaskesData"
-                    :key="index"
-                    >{{ tipeFaskes }}</b-form-radio
-                  >
+                    name="tipe-faskes"
+                    :options="optionsTipeFaskes"
+                    :stacked="true"
+                  />
                 </b-form-group>
                 <template v-if="formBasicData && formBasicData.length">
                   <b-form-group
@@ -99,10 +97,12 @@
                 </template>
                 <div class="form-group mb-5">
                   Dengan menekan tombol
-                  <strong>Daftar</strong> anda setuju dengan semua
+                  <strong>Daftar</strong>
+                  <span class="text-capitalize">Anda</span> setuju dengan semua
                   <span class="text-capitalize">
-                    persyaratan {{ "&" }} ketentuan
-                    <span class="text-lowercase">serta</span> kebijakan privasi
+                    syarat {{ "&" }} ketentuan
+                    <span class="text-lowercase">serta</span>
+                    <span class="text-capitalize">kebijakan privasi</span>
                     <span class="text-lowercase">yang berlaku</span>
                   </span>
                 </div>
@@ -197,10 +197,21 @@ export default {
     }
   },
   created() {
-    this.selectedTipeFaskes = this.tipeFaskesData[0];
+    const tipeFaskesDataLength = this.tipeFaskesData.length;
+    this.selectedTipeFaskes = this.tipeFaskesData[tipeFaskesDataLength - 1];
   },
   mounted() {
     this.setFormData();
+  },
+  computed: {
+    optionsTipeFaskes() {
+      const tmp = this.tipeFaskesData;
+      return tmp.reverse().map(item => ({
+        text: item === "klinik" ? `${item} (akan segera hadir)` : item,
+        value: item,
+        disabled: item === "klinik"
+      }));
+    }
   },
   methods: {
     whitelistValidation({ opts = "normalized" } = {}) {

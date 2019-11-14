@@ -81,11 +81,14 @@ const validations = {
     );
   },
   renderLabel({ label }) {
-    return this.whitelistValidation &&
-      typeof this.whitelistValidation === "function" &&
-      !this.whitelistValidation({ opts: "raw" }).includes(label)
-      ? label + "*"
-      : label;
+    const importantLabel = `${label}*`;
+    return (
+      (this.whitelistValidation &&
+        typeof this.whitelistValidation === "function" &&
+        this.whitelistValidation({ opts: "raw" }).includes(label) &&
+        label) ||
+      importantLabel
+    );
   }
 };
 
