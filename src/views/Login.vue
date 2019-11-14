@@ -60,34 +60,6 @@
                                 />
                               </b-form-group>
                             </template>
-                            <!-- <div class="form-group">
-                              <label>Email address</label>
-                              <input
-                                type="email"
-                                class="form-control"
-                                :class="{
-                                  'is-invalid': $v.email_address.$error
-                                }"
-                                placeholder="yourname@yourmail.com"
-                                v-model.trim="$v.email_address.$model"
-                              />
-                            </div>
-                            <div class="form-group mb-4">
-                              <div class="d-flex justify-content-between">
-                                <label>Password</label>
-                                <a href="javascript:void(0);"
-                                  >Forgot password?</a
-                                >
-                              </div>
-                              <input
-                                type="password"
-                                class="form-control"
-                                :class="{ 'is-invalid': $v.password.$error }"
-                                placeholder="Enter your password"
-                                v-model.trim="$v.password.$model"
-                              />
-                            </div> -->
-
                             <button class="btn btn-lg btn-second btn-block">
                               Login
                             </button>
