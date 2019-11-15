@@ -39,12 +39,13 @@
                                 style="position: relative"
                                 :state="renderError({ error: form.error })"
                               >
-                                <a
-                                  v-if="form.rawLabel === 'password'"
-                                  href="javascript:void(0);"
-                                  style="position: absolute; right: 0; top: 0"
-                                  >Forgot password?</a
-                                >
+                                <template v-if="form.rawLabel === 'password'">
+                                  <router-link
+                                    to="/forgot-password"
+                                    style="position: absolute; right: 0; top: 0"
+                                    >Forgot password?</router-link
+                                  >
+                                </template>
                                 <b-form-input
                                   :type="form.type || 'text'"
                                   @keyup="

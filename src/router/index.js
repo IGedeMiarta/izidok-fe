@@ -12,11 +12,7 @@ const routes = [
   {
     path: "/about",
     name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue")
+    component: () => import("../views/About.vue")
   },
   {
     path: "/login",
@@ -31,32 +27,31 @@ const routes = [
     meta: { layout: "examples" }
   },
   {
+    path: "/forgot-password",
+    name: "forgot-password",
+    component: () => import("../views/ForgotPassword.vue"),
+    meta: { layout: "examples" }
+  },
+  {
     path: "/verification",
-    name: "verification-page",
     component: () => import("../views/Verification.vue"),
     children: [
       {
         path: "",
         name: "verification-process",
         component: () =>
-          import("../views/Verification/VerificationSuccess.vue"),
-        meta: { layout: "example" }
+          import("../views/Verification/VerificationProcess.vue"),
+        meta: { layout: "examples" }
       },
       {
         path: "success",
         name: "verification-success",
         component: () =>
           import("../views/Verification/VerificationSuccess.vue"),
-        meta: { layout: "example" }
+        meta: { layout: "examples" }
       }
     ]
   }
-  // {
-  //   path: "/verification-success",
-  //   name: "verification-success",
-  //   component: () => import("../views/Verification/VerificationSuccess.vue"),
-  //   meta: { layout: "examples" }
-  // }
 ];
 
 const router = new VueRouter({
