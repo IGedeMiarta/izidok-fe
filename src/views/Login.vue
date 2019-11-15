@@ -176,8 +176,9 @@ export default {
         },
         {
           label: "password",
-          placeholder: "password",
-          type: "password"
+          placeholder: "Masukkan password Anda",
+          type: "password",
+          ignoreTransform: true
         }
       ].map((item, index) => ({
         ...item,
