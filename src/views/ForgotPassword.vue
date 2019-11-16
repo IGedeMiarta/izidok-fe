@@ -53,6 +53,7 @@ import {
 library.add(faArrowLeft);
 
 export default {
+  props: ["email"],
   data() {
     return {
       currentStep: 1
@@ -65,6 +66,16 @@ export default {
   computed: {
     currentStepComponent() {
       return `Step${this.currentStep}`;
+    }
+  },
+  mounted() {
+    this.redirectResetPassword();
+  },
+  methods: {
+    redirectResetPassword() {
+      if (this.email) {
+        this.currentStep++;
+      }
     }
   }
 };

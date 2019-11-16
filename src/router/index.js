@@ -27,10 +27,11 @@ const routes = [
     meta: { layout: "examples" }
   },
   {
-    path: "/forgot-password",
+    path: "/forgot-password/:email?",
     name: "forgot-password",
     component: () => import("../views/ForgotPassword.vue"),
-    meta: { layout: "examples" }
+    meta: { layout: "examples" },
+    props: true
   },
   {
     path: "/verification",

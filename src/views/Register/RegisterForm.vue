@@ -346,10 +346,11 @@ export default {
       this.formData[label] = value && value.trim();
       if (!this.whitelistValidation().includes(label)) {
         this.triggerValidation({ label, $v: this.$v, $vm: this, rawLabel });
+        const $v_object = this.$v.formData[label];
         if (
           label === "password" &&
           this.formData.konfirmasi_password &&
-          $v_object.$error
+          !$v_object.$error
         ) {
           setTimeout(() => {
             this.setValue({

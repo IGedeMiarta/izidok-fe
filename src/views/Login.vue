@@ -20,7 +20,9 @@
                   <div class="col-lg-6 pr-0 d-flex align-items-center">
                     <div class="pl-5 w-100">
                       <div class="text-black mt-3">
-                        <h1 class="display-3 mb-3 font-weight-bold">Login to your account</h1>
+                        <h1 class="display-3 mb-3 font-weight-bold">
+                          Login to your account
+                        </h1>
                         <div>
                           <b-form v-on:submit.prevent="submitForm">
                             <template
@@ -112,7 +114,7 @@ export default {
   },
   mounted() {
     this.formBasicData = this.setFormBasicData();
-    this.setFormData();
+    this.formData = this.setFormData();
   },
   methods: {
     async login() {
@@ -159,13 +161,10 @@ export default {
       }
     },
     setFormData() {
-      this.formData = this.setFormBasicData({ noFilter: false }).reduce(
-        (arr, val) => {
-          arr[val.label.split(" ").join("_")] = null;
-          return arr;
-        },
-        {}
-      );
+      return this.setFormBasicData({ noFilter: false }).reduce((arr, val) => {
+        arr[val.label.split(" ").join("_")] = null;
+        return arr;
+      }, {});
     },
     setFormBasicData({ noFilter = true } = {}) {
       const tmp = [
