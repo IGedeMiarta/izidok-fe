@@ -161,7 +161,7 @@ export default {
     submitForm($event) {
       const { formBasicData } = this;
       if (formBasicData.every(item => item.error !== null && !item.error)) {
-        console.log("good to go");
+        this.resetPassword();
       } else {
         formBasicData.map(item => {
           this.triggerValidation({
