@@ -9,8 +9,10 @@ import "./registerServiceWorker";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import BootstrapVue from "bootstrap-vue";
 import Vuelidate from "vuelidate";
+import VueSweetalert2 from "vue-sweetalert2";
 Vue.use(Vuelidate);
 Vue.use(BootstrapVue);
+Vue.use(VueSweetalert2);
 
 import MIXINS from "./mixins";
 

@@ -152,8 +152,16 @@ export default {
           }, {});
         console.log(postData);
         const res = await axios.post(`${this.url_api}/reset`, postData);
-        const { status, data, message } = res.data;
-        alert(message);
+        const { success, message } = res.data;
+        if (success) {
+          this.$swal({
+            type: "success",
+            title: "Sukses",
+            text: message
+          });
+        } else {
+          alert(message);
+        }
       } catch (err) {
         console.log(err);
       }
