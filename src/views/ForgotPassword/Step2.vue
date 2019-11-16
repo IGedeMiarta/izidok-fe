@@ -43,7 +43,7 @@
             type="submit"
           >
             <span class="btn-wrapper--label text-capitalize">
-              kirim
+              atur ulang password
             </span>
           </button>
         </b-form>
