@@ -21,12 +21,11 @@
               <div class="bg-composed-wrapper--content p-5">
                 <div class="text-white mt-3">
                   <h1 class="display-4 my-3 font-weight-bold">
-                    Kenapa harus mendaftar iziDok?
+                    Mengapa harus mendaftar iziDok?
                   </h1>
                   <p class="font-size-md mb-0 text-white-50">
-                    Kemudahan dalam mengelola aktivitas klinik/tempat praktik
-                    Anda hanya dalam genggaman. Mendaftar hanya butuh waktu 1
-                    menit saja.
+                    Kemudahan dalam mengelola klinik/tempat praktik dokter hanya dalam genggaman. 
+                    Anda hanya perlu menyisihkan waktu kurang dari sepuluh menit untuk dapat bergabung dengan IziDok.
                   </p>
                   <div
                     class="divider border-2 my-4 border-light opacity-2 rounded w-25"
@@ -72,11 +71,7 @@
                     v-for="form in formBasicData"
                     :key="form.tmpId"
                     class="text-capitalize"
-                    :invalid-feedback="
-                      renderInvalidFeedback({
-                        validationDesc: form['validation-desc']
-                      })
-                    "
+                    :invalid-feedback="form.rawLabel == 'konfirmasi password' ? 'Password tidak cocok' : 'Kolom harus diisi'"
                     :state="renderError({ error: form.error })"
                   >
                     <b-form-input
@@ -96,15 +91,10 @@
                   </b-form-group>
                 </template>
                 <div class="form-group mb-5">
-                  Dengan menekan tombol
-                  <strong>Daftar</strong>, 
+                  Dengan menekan tombol <strong>Daftar</strong>, 
                   <span class="text-capitalize">Anda</span> setuju dengan semua
-                  <span class="text-capitalize">
-                    syarat {{ "&" }} ketentuan
-                    <span class="text-lowercase">serta</span>
-                    <span class="text-capitalize">kebijakan privasi</span>
-                    <span class="text-lowercase">yang berlaku</span>
-                  </span>
+                  <span class="text-capitalize">syarat {{ "&" }} ketentuan</span> serta
+                  <span class="text-capitalize">kebijakan privasi</span> yang berlaku
                 </div>
                 <button
                   type="submit"
@@ -255,13 +245,13 @@ export default {
             ) + 1,
           ...tmpPostData
         };
-        console.log(postData);
+        // console.log(postData);
 
         const res = await axios.post(`${this.url_api}/klinik`, postData);
         const { status, data } = res.data;
         alert((status && "Success") || "Gagal");
       } catch (err) {
-        console.log(err);
+        // console.log(err);
       }
     },
     submitForm() {
@@ -289,50 +279,50 @@ export default {
       const tmp = [
         {
           label: "nama dokter",
-          placeholder: "masukkan nama anda",
+          placeholder: "Masukkan nama dokter",
           parent: "tempat praktik"
         },
         {
           label: "no. sip",
-          placeholder: "masukkan nomor sip anda",
+          placeholder: "Masukkan nomor SIP",
           parent: "tempat praktik"
         },
         {
           label: "nama klinik",
-          placeholder: "masukkan nama klinik anda",
+          placeholder: "Masukkan nama klinik Anda",
           parent: "klinik"
         },
         {
           label: "no. izin klinik",
-          placeholder: "masukkan no. izin klinik anda",
+          placeholder: "Masukkan no. izin klinik Anda",
           parent: "klinik"
         },
         {
           label: "nama pic",
-          placeholder: "masukkan nama pic anda",
+          placeholder: "Masukkan nama pic Anda",
           parent: "klinik"
         },
         {
           label: "no. handphone",
-          placeholder: "masukkan nomor handphone anda"
+          placeholder: "Masukkan nomor handphone Anda"
         },
         {
           label: "email",
-          placeholder: "masukkan email",
+          placeholder: "Masukkan email Anda",
           type: "email"
         },
         {
           label: "username",
-          placeholder: "username"
+          placeholder: "Masukkan username Anda"
         },
         {
           label: "password",
-          placeholder: "password",
+          placeholder: "Masukkan password Anda",
           type: "password"
         },
         {
           label: "konfirmasi password",
-          placeholder: "konfirmasi password",
+          placeholder: "Masukkan password Anda sekali lagi",
           type: "password"
         }
       ].map((item, index) => ({
@@ -340,7 +330,7 @@ export default {
         label: item.label.split(" ").join("_"),
         tmpId: index,
         error: null,
-        placeholder: startCase(item.placeholder),
+        placeholder: item.placeholder,
         rawLabel: item.label
       }));
 
@@ -356,10 +346,11 @@ export default {
       this.formData[label] = value && value.trim();
       if (!this.whitelistValidation().includes(label)) {
         this.triggerValidation({ label, $v: this.$v, $vm: this, rawLabel });
+        const $v_object = this.$v.formData[label];
         if (
           label === "password" &&
           this.formData.konfirmasi_password &&
-          $v_object.$error
+          !$v_object.$error
         ) {
           setTimeout(() => {
             this.setValue({

@@ -20,7 +20,9 @@
                   <div class="col-lg-6 pr-0 d-flex align-items-center">
                     <div class="pl-5 w-100">
                       <div class="text-black mt-3">
-                        <h1 class="display-3 mb-3 font-weight-bold">Login</h1>
+                        <h1 class="display-3 mb-3 font-weight-bold">
+                          Login to your account
+                        </h1>
                         <div>
                           <b-form v-on:submit.prevent="submitForm">
                             <template
@@ -39,12 +41,13 @@
                                 style="position: relative"
                                 :state="renderError({ error: form.error })"
                               >
-                                <a
-                                  v-if="form.rawLabel === 'password'"
-                                  href="javascript:void(0);"
-                                  style="position: absolute; right: 0; top: 0"
-                                  >Lupa password?</a
-                                >
+                                <template v-if="form.rawLabel === 'password'">
+                                  <router-link
+                                    to="/forgot-password"
+                                    style="position: absolute; right: 0; top: 0"
+                                    >Forgot password?</router-link
+                                  >
+                                </template>
                                 <b-form-input
                                   :type="form.type || 'text'"
                                   @keyup="
@@ -66,7 +69,7 @@
                           </b-form>
                         </div>
                         <div class="text-center pt-4 text-black-50">
-                          Tempat praktik anda belum terdaftar?
+                          Klinik/Tempat praktik anda belum terdaftar?
                           <router-link
                             tag="a"
                             to="/register"
@@ -111,7 +114,7 @@ export default {
   },
   mounted() {
     this.formBasicData = this.setFormBasicData();
-    this.setFormData();
+    this.formData = this.setFormData();
   },
   methods: {
     async login() {
@@ -158,13 +161,10 @@ export default {
       }
     },
     setFormData() {
-      this.formData = this.setFormBasicData({ noFilter: false }).reduce(
-        (arr, val) => {
-          arr[val.label.split(" ").join("_")] = null;
-          return arr;
-        },
-        {}
-      );
+      return this.setFormBasicData({ noFilter: false }).reduce((arr, val) => {
+        arr[val.label.split(" ").join("_")] = null;
+        return arr;
+      }, {});
     },
     setFormBasicData({ noFilter = true } = {}) {
       const tmp = [
@@ -176,8 +176,9 @@ export default {
         },
         {
           label: "password",
-          placeholder: "password",
-          type: "password"
+          placeholder: "Masukkan password Anda",
+          type: "password",
+          ignoreTransform: true
         }
       ].map((item, index) => ({
         ...item,
