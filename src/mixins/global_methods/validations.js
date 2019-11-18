@@ -19,7 +19,7 @@ const validations = {
       : formLabel;
     switch (key) {
       case "required":
-        return `${label} harus di isi`;
+        return `${label} harus diisi`;
 
       case "maxLength":
         return `${label} maksimal ${max} karakter`;
