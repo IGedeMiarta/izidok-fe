@@ -150,7 +150,7 @@ export default {
             obj[key.label] = key.value;
             return obj;
           }, {});
-        console.log(postData);
+        // console.log(postData);
         const res = await axios.post(`${this.url_api}/reset`, postData);
         const { success, message } = res.data;
         if (success) {
@@ -163,7 +163,7 @@ export default {
           alert(message);
         }
       } catch (err) {
-        console.log(err);
+        // console.log(err);
       }
     },
     submitForm($event) {

@@ -142,7 +142,7 @@ export default {
         const { status, data } = res.data;
         alert((status && "Success") || "Gagal");
       } catch (err) {
-        console.log(err);
+        // console.log(err);
       }
     },
     submitForm($event) {
