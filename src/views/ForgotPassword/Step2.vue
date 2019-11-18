@@ -7,7 +7,7 @@
       <h3
         class="font-size-lg line-height-sm font-weight-light d-block px-3 mb-3 text-white-50"
       >
-        Masukkan password baru Anda untuk dapat melanjutkan akses ke izidok.
+        Masukkan password baru Anda untuk dapat melanjutkan akses ke IziDok.
       </h3>
       <div class="row no-gutters">
         <b-form @submit.prevent="submitForm" class="col-sm-12">
