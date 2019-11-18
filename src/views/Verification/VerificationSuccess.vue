@@ -6,7 +6,7 @@
           <div class="flex-grow-1 w-100 d-flex align-items-center">
             <div class="bg-composed-wrapper--content py-5">
               <div class="container">
-                <b-modal centered v-model="modalShow">
+                <b-modal centered v-model="modalShow" no-close-on-backdrop hide-header-close>
                   <p>
                     Akun Anda berhasil diaktivasi. Silakan login untuk mengakses
                     iziDok
