@@ -34,7 +34,7 @@
         computed: {
             sidebarCollapsed: {
                 get() {
-                    return this.$store.state.sidebarCollapsed;
+                    return !this.$store.state.sidebarCollapsed;
                 },
             },
             sidebarCollapsedMobile: {

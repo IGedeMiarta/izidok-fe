@@ -7,7 +7,7 @@
       <h3
         class="font-size-lg line-height-sm font-weight-light d-block px-3 mb-3 text-white-50"
       >
-        Masukkan password baru Anda untuk dapat melanjutkan akses ke izidok.
+        Masukkan password baru Anda untuk dapat melanjutkan akses ke IziDok.
       </h3>
       <div class="row no-gutters">
         <b-form @submit.prevent="submitForm" class="col-sm-12">
@@ -150,7 +150,7 @@ export default {
             obj[key.label] = key.value;
             return obj;
           }, {});
-        console.log(postData);
+        // console.log(postData);
         const res = await axios.post(`${this.url_api}/reset`, postData);
         const { success, message } = res.data;
         if (success) {
@@ -163,7 +163,7 @@ export default {
           alert(message);
         }
       } catch (err) {
-        console.log(err);
+        // console.log(err);
       }
     },
     submitForm($event) {
