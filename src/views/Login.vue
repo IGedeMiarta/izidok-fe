@@ -45,7 +45,7 @@
                                   <router-link
                                     to="/forgot-password"
                                     style="position: absolute; right: 0; top: 0"
-                                    >Forgot password?</router-link
+                                    >Lupa password?</router-link
                                   >
                                 </template>
                                 <b-form-input
@@ -94,6 +94,7 @@
 <script>
 import startCase from "lodash/startCase";
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
+import axios from 'axios';
 
 export default {
   data: () => ({

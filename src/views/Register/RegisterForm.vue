@@ -71,7 +71,11 @@
                     v-for="form in formBasicData"
                     :key="form.tmpId"
                     class="text-capitalize"
-                    :invalid-feedback="form.rawLabel == 'konfirmasi password' ? 'Password tidak cocok' : 'Kolom harus diisi'"
+                    :invalid-feedback="
+                      renderInvalidFeedback({
+                        validationDesc: form['validation-desc']
+                      })
+                    "
                     :state="renderError({ error: form.error })"
                   >
                     <b-form-input
