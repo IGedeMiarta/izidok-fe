@@ -1,82 +1,84 @@
 <template>
   <div class="app-wrapper bg-white h-100">
     <div class="app-main">
-      <div class="divider border-2 border-primary bg-primary"></div>
-      <div class="app-content p-0">
-        <div class="app-content--inner d-flex align-items-center">
-          <div class="flex-grow-1 w-100 d-flex align-items-center">
-            <div class="bg-composed-wrapper--content py-5">
-              <div class="container">
-                <div class="row">
-                  <div
-                    class="col-lg-6 pl-0 d-none d-lg-flex align-items-center"
-                  >
-                    <img
-                      src="@/assets/img/illustrations/login.svg"
-                      class="w-75 mx-auto d-block img-fluid"
-                      alt
-                    />
-                  </div>
-                  <div class="col-lg-6 pr-0 d-flex align-items-center">
-                    <div class="pl-5 w-100">
-                      <div class="text-black mt-3">
-                        <h1 class="display-3 mb-3 font-weight-bold">
-                          Login to your account
-                        </h1>
-                        <div>
-                          <b-form v-on:submit.prevent="submitForm">
-                            <template
-                              v-if="formBasicData && formBasicData.length"
-                            >
-                              <b-form-group
-                                :label="renderLabel({ label: form.rawLabel })"
-                                v-for="form in formBasicData"
-                                :key="form.tmpId"
-                                class="text-capitalize"
-                                :invalid-feedback="
-                                  renderInvalidFeedback({
-                                    validationDesc: form['validation-desc']
-                                  })
-                                "
-                                style="position: relative"
-                                :state="renderError({ error: form.error })"
+      <template v-if="!loggedIn">
+        <div class="divider border-2 border-primary bg-primary"></div>
+        <div class="app-content p-0">
+          <div class="app-content--inner d-flex align-items-center">
+            <div class="flex-grow-1 w-100 d-flex align-items-center">
+              <div class="bg-composed-wrapper--content py-5">
+                <div class="container">
+                  <div class="row">
+                    <div
+                      class="col-lg-6 pl-0 d-none d-lg-flex align-items-center"
+                    >
+                      <img
+                        src="@/assets/img/illustrations/login.svg"
+                        class="w-75 mx-auto d-block img-fluid"
+                        alt
+                      />
+                    </div>
+                    <div class="col-lg-6 pr-0 d-flex align-items-center">
+                      <div class="pl-5 w-100">
+                        <div class="text-black mt-3">
+                          <h1 class="display-3 mb-3 font-weight-bold">
+                            Login to your account
+                          </h1>
+                          <div>
+                            <b-form v-on:submit.prevent="submitForm">
+                              <template
+                                v-if="formBasicData && formBasicData.length"
                               >
-                                <template v-if="form.rawLabel === 'password'">
-                                  <router-link
-                                    to="/forgot-password"
-                                    style="position: absolute; right: 0; top: 0"
-                                    >Lupa password?</router-link
-                                  >
-                                </template>
-                                <b-form-input
-                                  :type="form.type || 'text'"
-                                  @keyup="
-                                    setValue({
-                                      rawLabel: form.rawLabel,
-                                      label: form.label,
-                                      $event,
-                                      tmpId: form.tmpId
+                                <b-form-group
+                                  :label="renderLabel({ label: form.rawLabel })"
+                                  v-for="form in formBasicData"
+                                  :key="form.tmpId"
+                                  class="text-capitalize"
+                                  :invalid-feedback="
+                                    renderInvalidFeedback({
+                                      validationDesc: form['validation-desc']
                                     })
                                   "
+                                  style="position: relative"
                                   :state="renderError({ error: form.error })"
-                                  :placeholder="form.placeholder"
-                                />
-                              </b-form-group>
-                            </template>
-                            <button class="btn btn-lg btn-second btn-block">
-                              Login
-                            </button>
-                          </b-form>
-                        </div>
-                        <div class="text-center pt-4 text-black-50">
-                          Klinik/Tempat praktik anda belum terdaftar?
-                          <router-link
-                            tag="a"
-                            to="/register"
-                            exact
-                            title="Daftar disini"
-                            >Daftar disini</router-link
-                          >
+                                >
+                                  <template v-if="form.rawLabel === 'password'">
+                                    <router-link
+                                      to="/forgot-password"
+                                      style="position: absolute; right: 0; top: 0"
+                                      >Lupa password?</router-link
+                                    >
+                                  </template>
+                                  <b-form-input
+                                    :type="form.type || 'text'"
+                                    @keyup="
+                                      setValue({
+                                        rawLabel: form.rawLabel,
+                                        label: form.label,
+                                        $event,
+                                        tmpId: form.tmpId
+                                      })
+                                    "
+                                    :state="renderError({ error: form.error })"
+                                    :placeholder="form.placeholder"
+                                  />
+                                </b-form-group>
+                              </template>
+                              <button class="btn btn-lg btn-second btn-block">
+                                Login
+                              </button>
+                            </b-form>
+                          </div>
+                          <div class="text-center pt-4 text-black-50">
+                            Klinik/Tempat praktik anda belum terdaftar?
+                            <router-link
+                              tag="a"
+                              to="/register"
+                              exact
+                              title="Daftar disini"
+                              >Daftar disini</router-link
+                            >
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -86,7 +88,10 @@
             </div>
           </div>
         </div>
-      </div>
+      </template>
+      <template v-if="firstJoin && loggedIn">
+        <first-join-component :modalShow="firstJoin" />
+      </template>
     </div>
   </div>
 </template>
@@ -94,13 +99,18 @@
 <script>
 import startCase from "lodash/startCase";
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   data: () => ({
     formBasicData: null,
-    formData: null
+    formData: null,
+    loggedIn: false,
+    firstJoin: false
   }),
+  components: {
+    "first-join-component": () => import("@/components/FirstJoin")
+  },
   validations: {
     formData: {
       ["email_/_username"]: {
@@ -119,6 +129,7 @@ export default {
   },
   methods: {
     async login() {
+      this.loggedIn = false;
       try {
         const { formData } = this;
         const mapLabel = label => {
@@ -141,9 +152,14 @@ export default {
           }, {});
         const res = await axios.post(`${this.url_api}/login`, postData);
         const { status, data } = res.data;
-        alert((status && "Success") || "Gagal");
+        this.loggedIn = true;
+        // alert((status && "Success") || "Gagal");
       } catch (err) {
+        this.loggedIn = false;
         // console.log(err);
+      } finally {
+        this.loggedIn = true;
+        this.firstJoin = true;
       }
     },
     submitForm($event) {
