@@ -10,6 +10,8 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import BootstrapVue from "bootstrap-vue";
 import Vuelidate from "vuelidate";
 import VueSweetalert2 from "vue-sweetalert2";
+import PageTitle from './Layout/Components/PageTitle'
+
 Vue.use(Vuelidate);
 Vue.use(BootstrapVue);
 Vue.use(VueSweetalert2);
@@ -18,6 +20,8 @@ import MIXINS from "./mixins";
 
 Vue.mixin(MIXINS);
 Vue.config.productionTip = false;
+
+Vue.component('PageTitle', PageTitle);
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 

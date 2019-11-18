@@ -5,6 +5,11 @@ Vue.use(VueRouter);
 
 const routes = [
   {
+    path: "/rekam-medis",
+    name: "rekam-medis",
+    component: () => import("../views/RekamMedis.vue"),
+  },
+  {
     path: "/",
     name: "home",
     component: () => import("../views/Home.vue"),
