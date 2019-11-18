@@ -35,6 +35,12 @@ const routes = [
     props: true
   },
   {
+    path: "/input-tarif",
+    name: "input-tarif",
+    component: () => import("../views/InputTarif.vue"),
+    meta: { layout: "apps" }
+  },
+  {
     path: "/verification",
     component: () => import("../views/Verification.vue"),
     children: [
