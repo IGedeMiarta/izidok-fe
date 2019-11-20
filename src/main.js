@@ -21,6 +21,7 @@ Vue.config.productionTip = false;
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 
+Vue.component("page-title", () => import("./Layout/Components/PageTitle.vue"));
 Vue.component("default-layout", () =>
   import("./Layout/Wrappers/baseLayout.vue")
 );

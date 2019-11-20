@@ -41,6 +41,12 @@ const routes = [
     meta: { layout: "apps" }
   },
   {
+    path: "/input-data-operator",
+    name: "input-data-operator",
+    component: () => import("../views/InputDataOperator.vue"),
+    meta: { layout: "apps" }
+  },
+  {
     path: "/verification",
     component: () => import("../views/Verification.vue"),
     children: [
