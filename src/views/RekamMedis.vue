@@ -5,9 +5,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <exampleAlt title="Alternate">
-                        <container/>
-                    </exampleAlt>
+                    <container/>
                 </div>
             </div>
         </div>

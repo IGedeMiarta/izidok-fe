@@ -80,42 +80,7 @@
                     </b-button>
                 </div>
                 <b-collapse id="accordion-2" accordion="accordion-example" role="tabpanel">
-                    <div class="row mt-3">
-                        <div class="col">
-                            <div class="text-center">
-                                <div>
-                                    <font-awesome-icon icon="user" class="font-size-xxl text-success"/>
-                                </div>
-                                <div class="mt-2 line-height-sm">
-                                    <b class="font-size-lg">2,345</b>
-                                    <span class="text-black-50 d-block">users</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="text-center">
-                                <div>
-                                    <font-awesome-icon icon="chart-bar" class="font-size-xxl text-info"/>
-                                </div>
-                                <div class="mt-2 line-height-sm">
-                                    <b class="font-size-lg">$9,693</b>
-                                    <span class="text-black-50 d-block">revenue</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="divider mt-3 mb-3"></div>
-                    <div class="text-center mb-3">
-                        <a v-b-tooltip href="javascript:void(0);" class="m-3 btn btn-primary p-0 d-inline-block text-center font-size-xxl d-70 rounded" title="Menu Example">
-                            <font-awesome-icon icon="cloud-moon-rain"/>
-                        </a>
-                        <a v-b-tooltip href="javascript:void(0);" class="m-3 btn btn-success p-0 d-inline-block text-center font-size-xxl d-70 rounded" title="Menu Example">
-                            <font-awesome-icon icon="cloud-sun"/>
-                        </a>
-                        <a v-b-tooltip href="javascript:void(0);" class="m-3 btn btn-danger p-0 d-inline-block text-center font-size-xxl d-70 rounded" title="Menu Example">
-                            <font-awesome-icon icon="cloud-meatball"/>
-                        </a>
-                    </div>
+                    <Canvas/>   
                 </b-collapse>
             </div>
             <div class="card card-box">
@@ -199,55 +164,11 @@
 </template>
 
 <script>
-    import {library} from '@fortawesome/fontawesome-svg-core'
-    import {
-        faAllergies,
-        faBasketballBall,
-        faBezierCurve,
-        faAnchor,
-        faBabyCarriage,
-        faAward,
-        faPlayCircle,
-        faUser,
-        faCloudMoonRain,
-        faSun,
-        faSnowflake,
-        faChevronRight,
-        faBong,
-        faAmbulance,
-        faArrowUp,
-        faCloudMeatball,
-        faCloudSun,
-        faDiagnoses,
-        faSave
-    } from '@fortawesome/free-solid-svg-icons'
-    import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
-
-    library.add(    
-        faAllergies,
-        faBasketballBall,
-        faBezierCurve,
-        faAnchor,
-        faBabyCarriage,
-        faAward,
-        faPlayCircle,
-        faUser,
-        faCloudMoonRain,
-        faSun,
-        faSnowflake,
-        faChevronRight,
-        faBong,
-        faAmbulance,
-        faArrowUp,
-        faCloudMeatball,
-        faCloudSun,
-        faDiagnoses,
-        faSave
-    );
+import Canvas from '../../Layout/Components/Canvas';
 
     export default {
         components: {
-            'font-awesome-icon': FontAwesomeIcon,
+            Canvas
         },
     }
 </script>
