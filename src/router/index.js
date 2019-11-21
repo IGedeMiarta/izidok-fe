@@ -55,7 +55,8 @@ const routes = [
         name: "verification-process",
         component: () =>
           import("../views/Verification/VerificationProcess.vue"),
-        meta: { layout: "examples" }
+        meta: { layout: "examples" },
+        props: true
       },
       {
         path: "success",
