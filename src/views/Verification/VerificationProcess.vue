@@ -78,7 +78,7 @@ import {
 
 library.add(faArrowLeft);
 
-const staticCounter = 5;
+const staticCounter = 60;
 
 export default {
   data() {
