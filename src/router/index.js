@@ -7,8 +7,7 @@ const routes = [
   {
     path: "/",
     name: "home",
-    component: () => import("../views/Home.vue"),
-    meta: { layout: "apps" }
+    component: () => import("../views/Home.vue")
   },
   {
     path: "/about",
@@ -37,14 +36,12 @@ const routes = [
   {
     path: "/input-tarif",
     name: "input-tarif",
-    component: () => import("../views/InputTarif.vue"),
-    meta: { layout: "apps" }
+    component: () => import("../views/InputTarif.vue")
   },
   {
     path: "/input-data-operator",
     name: "input-data-operator",
-    component: () => import("../views/InputDataOperator.vue"),
-    meta: { layout: "apps" }
+    component: () => import("../views/InputDataOperator.vue")
   },
   {
     path: "/verification",

@@ -1,5 +1,5 @@
 <template>
-  <div class="app-content app-content-aside fixed-inner-layout bg-white">
+  <div>
     <div class="app-content--inner p-0 d-flex flex-column">
       <page-title
         heading="Input Data Operator"
