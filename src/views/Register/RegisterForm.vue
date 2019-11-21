@@ -256,7 +256,12 @@ export default {
         const res = await axios.post(`${this.url_api}/klinik`, postData);
         const { status, data } = res.data;
         if(status) {
-          this.$router.push('verification');
+          this.$router.push({
+            name: 'verification-process', 
+            params: {
+              email: postData.email
+            }
+          });
         }
       } catch (err) {
         // console.log(err);
@@ -296,7 +301,8 @@ export default {
           label: "No. SIP",
           placeholder: "Masukkan nomor SIP",
           parent: "tempat praktik",
-          name: "nomor_ijin"
+          name: "nomor_ijin",
+          maxlength: 30
         },
         {
           label: "nama klinik",

@@ -31,7 +31,7 @@
                       class="line-height-sm font-weight-light d-block px-1 mb-3 text-black-50"
                     >
                       Verifikasi akun Anda sekarang. Link verifikasi dikirimkan
-                      ke yourname@yourmail.com
+                      ke {{ email }}
                     </h4>
                     <strong class="d-block"
                       >Tidak mendapatkan email verifikasi?</strong
@@ -81,6 +81,7 @@ library.add(faArrowLeft);
 const staticCounter = 60;
 
 export default {
+  props: ['email'],
   data() {
     return {
       resendLinkActivation: 0,
