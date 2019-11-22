@@ -16,7 +16,7 @@
       <transition name="fade" mode="out-in" appear>
         <Header />
       </transition>
-      <div class="app-content">
+      <div class="app-content bg-white">
         <div class="app-content--inner">
           <slot></slot>
         </div>
