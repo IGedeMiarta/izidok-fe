@@ -11,7 +11,7 @@
         untuk mengatur ulang password Anda.
       </h3>
       <div class="row no-gutters">
-        <b-form @submit.prevent="submitForm" class="col-sm-12">
+        <b-form @submit.prevent="submitForm" class="col-sm-12 forgot-form">
           <b-row>
             <div class="col-sm-12 col-md-8 mt-0 mt-sm-4 px-2">
               <b-form-group
@@ -39,6 +39,7 @@
                   size="lg"
                   :state="renderError({ error: form.error })"
                   :placeholder="form.placeholder"
+                  class="forgot-field"
                 />
               </b-form-group>
             </div>
@@ -133,7 +134,7 @@ export default {
         // console.log(postData);
         const res = await axios.post(`${this.url_api}/forgot`, postData);
         const { status, data, message } = res.data;
-        alert(message);
+        // alert(message);
       } catch (err) {
         // console.log(err);
       }
@@ -156,3 +157,9 @@ export default {
   }
 };
 </script>
+
+<style>
+.forgot-form .invalid-feedback {
+  color: #fff !important;
+}
+</style>

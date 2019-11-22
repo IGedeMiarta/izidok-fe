@@ -10,7 +10,7 @@
         Masukkan password baru Anda untuk dapat melanjutkan akses ke IziDok.
       </h3>
       <div class="row no-gutters">
-        <b-form @submit.prevent="submitForm" class="col-sm-12">
+        <b-form @submit.prevent="submitForm" class="col-sm-12 forgot-form">
           <b-form-group
             v-for="form in formBasicData"
             :key="form.tmpId"
@@ -184,3 +184,9 @@ export default {
   }
 };
 </script>
+
+<style>
+.forgot-form .invalid-feedback {
+  color: #fff !important;
+}
+</style>
