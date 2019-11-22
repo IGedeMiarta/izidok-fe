@@ -343,7 +343,7 @@ export default {
           label: "username",
           placeholder: "Masukkan username Anda",
           name: "username",
-          maxlength: 50
+          maxlength: 20
         },
         {
           label: "password",
