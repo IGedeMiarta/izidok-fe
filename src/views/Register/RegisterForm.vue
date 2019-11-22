@@ -282,7 +282,7 @@ export default {
     setFormData() {
       this.formData = this.setFormBasicData({ noFilter: false }).reduce(
         (arr, val) => {
-          arr[val.label.split(" ").join("_")] = null;
+          arr[val.label.split(" ").join("_")] = '';
           return arr;
         },
         {}
