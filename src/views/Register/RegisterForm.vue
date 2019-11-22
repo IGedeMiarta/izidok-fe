@@ -168,7 +168,8 @@ export default {
       "no._handphone": {
         numeric,
         required,
-        maxLength: maxLength(15)
+        maxLength: maxLength(15),
+        minLength: minLength(10)
       },
       // "no._izin_klinik": {
       //   maxLength: maxLength(50)
@@ -259,7 +260,8 @@ export default {
           this.$router.push({
             name: 'verification-process', 
             params: {
-              email: postData.email
+              email: postData.email,
+              user_id: data.user_id
             }
           });
         }
@@ -282,7 +284,7 @@ export default {
     setFormData() {
       this.formData = this.setFormBasicData({ noFilter: false }).reduce(
         (arr, val) => {
-          arr[val.label.split(" ").join("_")] = null;
+          arr[val.label.split(" ").join("_")] = '';
           return arr;
         },
         {}
@@ -341,7 +343,7 @@ export default {
           label: "username",
           placeholder: "Masukkan username Anda",
           name: "username",
-          maxlength: 50
+          maxlength: 20
         },
         {
           label: "password",

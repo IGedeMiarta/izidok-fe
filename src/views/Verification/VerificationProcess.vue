@@ -75,13 +75,14 @@ import {
   email,
   numeric
 } from "vuelidate/lib/validators";
+import axios from 'axios';
 
 library.add(faArrowLeft);
 
 const staticCounter = 60;
 
 export default {
-  props: ['email'],
+  props: ['email', 'user_id'],
   data() {
     return {
       resendLinkActivation: 0,
@@ -98,11 +99,19 @@ export default {
     }
   },
   methods: {
-    triggerResend() {
-      const { resendLinkActivation } = this;
-      if (resendLinkActivation < 3) {
-        this.resendLinkActivation++;
-        this.counterFunc();
+    async triggerResend() {
+      try {
+        const { resendLinkActivation } = this;
+        if (resendLinkActivation < 3) {
+          this.resendLinkActivation++;
+          this.counterFunc();
+
+          const res = await axios.get(`${this.url_api}/email/resend/${this.user_id}`);
+
+        }
+      }
+      catch (err) {
+
       }
     },
     counterFunc() {

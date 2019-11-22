@@ -152,14 +152,14 @@ export default {
           }, {});
         const res = await axios.post(`${this.url_api}/login`, postData);
         const { status, data } = res.data;
-        this.loggedIn = true;
-        // alert((status && "Success") || "Gagal");
+        if(status) {
+          localStorage.setItem('__tkn__', data.token);
+          this.loggedIn = true;
+          this.firstJoin = data.first_login;
+        }
       } catch (err) {
         this.loggedIn = false;
         // console.log(err);
-      } finally {
-        this.loggedIn = true;
-        this.firstJoin = true;
       }
     },
     submitForm($event) {
