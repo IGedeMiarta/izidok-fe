@@ -200,7 +200,7 @@ export default {
     },
     errorDesc({ label, index }) {
       const { tmpInputTarifData } = this;
-      console.log(tmpInputTarifData[index]);
+      // console.log(tmpInputTarifData[index]);
       if (
         tmpInputTarifData[index].error &&
         tmpInputTarifData[index].error[label]
@@ -272,7 +272,7 @@ export default {
         const { status, data } = res.data;
         alert((status && "Success") || "Gagal");
       } catch (err) {
-        console.log(err);
+        // console.log(err);
       }
     },
     constructPostData() {
