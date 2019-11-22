@@ -259,7 +259,8 @@ export default {
           this.$router.push({
             name: 'verification-process', 
             params: {
-              email: postData.email
+              email: postData.email,
+              user_id: data.user_id
             }
           });
         }
