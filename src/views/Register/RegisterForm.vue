@@ -168,7 +168,8 @@ export default {
       "no._handphone": {
         numeric,
         required,
-        maxLength: maxLength(15)
+        maxLength: maxLength(15),
+        minLength: minLength(10)
       },
       // "no._izin_klinik": {
       //   maxLength: maxLength(50)
