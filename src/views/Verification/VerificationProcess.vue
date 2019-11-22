@@ -33,26 +33,33 @@
                       Verifikasi akun Anda sekarang. Link verifikasi dikirimkan
                       ke {{ email }}
                     </h4>
-                    <strong class="d-block"
-                      >Tidak mendapatkan email verifikasi?</strong
-                    >
-                    <template
-                      v-if="intervalCounter && resendLinkActivation <= 3"
-                    >
-                      <p class="my-1">
-                        Tunggu <span>{{ this.counterValue }}</span> detik
-                        lagi...
-                      </p>
+                    <strong class="d-block">
+                      <template v-if="resendLinkActivation < 3">
+                        Tidak mendapatkan email verifikasi?
+                      </template>
+                      <template v-else>
+                        Anda telah mencapai batas limit aktivasi. Silahkan hubungi Customer Care iziDok.
+                      </template>
+                    </strong>
+                    <template v-if="resendLinkActivation < 3">
+                      <template
+                        v-if="intervalCounter && resendLinkActivation <= 3"
+                      >
+                        <p class="my-1">
+                          Tunggu <span>{{ this.counterValue }}</span> detik
+                          lagi...
+                        </p>
+                      </template>
+                      <button
+                        class="btn px-5 btn-first mt-4 mb-3 btn-lg"
+                        :disabled="counter !== 0"
+                        @click="this.triggerResend"
+                      >
+                        <span class="btn-wrapper--label">
+                          Kirim ulang email
+                        </span>
+                      </button>
                     </template>
-                    <button
-                      class="btn px-5 btn-first mt-4 mb-3 btn-lg"
-                      :disabled="!(resendLinkActivation < 3 && counter === 0)"
-                      @click="this.triggerResend"
-                    >
-                      <span class="btn-wrapper--label">
-                        Kirim ulang email
-                      </span>
-                    </button>
                   </div>
                 </div>
               </div>
