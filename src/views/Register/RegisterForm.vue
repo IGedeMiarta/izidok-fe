@@ -70,7 +70,7 @@
                     :label="renderLabel({ label: form.rawLabel })"
                     v-for="form in formBasicData"
                     :key="form.tmpId"
-                    class="text-capitalize"
+                    :class="form.rawLabel == 'No. SIP' ? '' : 'text-capitalize'"
                     :invalid-feedback="
                       renderInvalidFeedback({
                         validationDesc: form['validation-desc']
@@ -91,6 +91,7 @@
                       "
                       :state="renderError({ error: form.error })"
                       :placeholder="form.placeholder"
+                      v-bind:maxlength="form.maxlength"
                     />
                   </b-form-group>
                 </template>
@@ -167,7 +168,8 @@ export default {
       "no._handphone": {
         numeric,
         required,
-        maxLength: maxLength(15)
+        maxLength: maxLength(15),
+        minLength: minLength(10)
       },
       // "no._izin_klinik": {
       //   maxLength: maxLength(50)
@@ -186,7 +188,8 @@ export default {
       },
       username: {
         required,
-        maxLength: maxLength(20)
+        maxLength: maxLength(20),
+        minLength: minLength(3)
       }
     }
   },
@@ -199,7 +202,7 @@ export default {
   },
   computed: {
     optionsTipeFaskes() {
-      const tmp = this.tipeFaskesData;
+      const tmp = this.tipeFaskesData.slice(0);
       return tmp.reverse().map(item => ({
         text: item === "klinik" ? `${item} (akan segera hadir)` : item,
         value: item,
@@ -209,37 +212,37 @@ export default {
   },
   methods: {
     whitelistValidation({ opts = "normalized" } = {}) {
-      const tmp = ["no. izin klinik", "no. sip"];
+      const tmp = ["no. izin klinik", "No. SIP"];
 
       return opts === "raw" ? tmp : tmp.map(item => item.split(" ").join("_"));
     },
     async addKlinik() {
       try {
         const { formData, formBasicData } = this;
-        const mapLabel = label => {
-          switch (true) {
-            case /(izin)/gi.test(label):
-              return "no_ijin";
+        // const mapLabel = label => {
+        //   switch (true) {
+        //     case /(izin)/gi.test(label):
+        //       return "no_ijin";
 
-            case /(handphone)/gi.test(label):
-              return "nomor_telp";
+        //     case /(handphone)/gi.test(label):
+        //       return "nomor_telp";
 
-            case /(konfirmasi)/gi.test(label):
-              const tmp = label.split("_").reverse();
-              return tmp
-                .map(
-                  (item, index) =>
-                    (index === tmp.length - 1 && "confirmation") || item
-                )
-                .join("_");
+        //     case /(konfirmasi)/gi.test(label):
+        //       const tmp = label.split("_").reverse();
+        //       return tmp
+        //         .map(
+        //           (item, index) =>
+        //             (index === tmp.length - 1 && "confirmation") || item
+        //         )
+        //         .join("_");
 
-            default:
-              return label;
-          }
-        };
+        //     default:
+        //       return label;
+        //   }
+        // };
         const tmpPostData = formBasicData.reduce((obj, item) => {
-          const { label } = item;
-          obj[mapLabel(label)] = formData[label];
+          const { label, name } = item;
+          obj[name] = formData[label];
           return obj;
         }, {});
         const postData = {
@@ -253,7 +256,15 @@ export default {
 
         const res = await axios.post(`${this.url_api}/klinik`, postData);
         const { status, data } = res.data;
-        alert((status && "Success") || "Gagal");
+        if(status) {
+          this.$router.push({
+            name: 'verification-process', 
+            params: {
+              email: postData.email,
+              user_id: data.user_id
+            }
+          });
+        }
       } catch (err) {
         // console.log(err);
       }
@@ -273,7 +284,7 @@ export default {
     setFormData() {
       this.formData = this.setFormBasicData({ noFilter: false }).reduce(
         (arr, val) => {
-          arr[val.label.split(" ").join("_")] = null;
+          arr[val.label.split(" ").join("_")] = '';
           return arr;
         },
         {}
@@ -284,50 +295,67 @@ export default {
         {
           label: "nama dokter",
           placeholder: "Masukkan nama dokter",
-          parent: "tempat praktik"
+          parent: "tempat praktik",
+          name: "nama_klinik",
+          maxlength: 50
         },
         {
-          label: "no. sip",
+          label: "No. SIP",
           placeholder: "Masukkan nomor SIP",
-          parent: "tempat praktik"
+          parent: "tempat praktik",
+          name: "nomor_ijin",
+          maxlength: 30
         },
         {
           label: "nama klinik",
           placeholder: "Masukkan nama klinik Anda",
-          parent: "klinik"
+          parent: "klinik",
+          name: "nama_klinik",
+          maxlength: 50
         },
         {
           label: "no. izin klinik",
           placeholder: "Masukkan no. izin klinik Anda",
-          parent: "klinik"
+          parent: "klinik",
+          name: "nomor_ijin"
         },
         {
           label: "nama pic",
           placeholder: "Masukkan nama pic Anda",
-          parent: "klinik"
+          parent: "klinik",
+          name: "nama_pic",
+          maxlength: 50
         },
         {
           label: "no. handphone",
-          placeholder: "Masukkan nomor handphone Anda"
+          placeholder: "Masukkan nomor handphone Anda",
+          name: "nomor_telp",
+          maxlength: 15
         },
         {
           label: "email",
           placeholder: "Masukkan email Anda",
-          type: "email"
+          type: "email",
+          name: "email",
+          maxlength: 50
         },
         {
           label: "username",
-          placeholder: "Masukkan username Anda"
+          placeholder: "Masukkan username Anda",
+          name: "username",
+          maxlength: 20
         },
         {
           label: "password",
           placeholder: "Masukkan password Anda",
-          type: "password"
+          type: "password",
+          name: "password"
         },
         {
           label: "konfirmasi password",
           placeholder: "Masukkan password Anda sekali lagi",
-          type: "password"
+          type: "password",
+          name: "password_confirmation"
         }
       ].map((item, index) => ({
         ...item,

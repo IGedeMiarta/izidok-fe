@@ -7,8 +7,7 @@ const routes = [
   {
     path: "/",
     name: "home",
-    component: () => import("../views/Home.vue"),
-    meta: { layout: "apps" }
+    component: () => import("../views/Home.vue")
   },
   {
     path: "/about",
@@ -35,6 +34,16 @@ const routes = [
     props: true
   },
   {
+    path: "/input-tarif",
+    name: "input-tarif",
+    component: () => import("../views/InputTarif.vue")
+  },
+  {
+    path: "/input-data-operator",
+    name: "input-data-operator",
+    component: () => import("../views/InputDataOperator.vue")
+  },
+  {
     path: "/verification",
     component: () => import("../views/Verification.vue"),
     children: [
@@ -43,7 +52,8 @@ const routes = [
         name: "verification-process",
         component: () =>
           import("../views/Verification/VerificationProcess.vue"),
-        meta: { layout: "examples" }
+        meta: { layout: "examples" },
+        props: true
       },
       {
         path: "success",

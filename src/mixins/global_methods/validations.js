@@ -28,7 +28,8 @@ const validations = {
         return `${label} minimal ${min} karakter`;
 
       case "sameAsPassword":
-        return `${label} password harus sama dengan ${eq}`;
+        // return `${label} harus sama dengan ${eq}`;
+        return `password tidak cocok`;
 
       case "numeric":
         return `${label} hanya boleh angka`;

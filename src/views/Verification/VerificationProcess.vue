@@ -31,28 +31,35 @@
                       class="line-height-sm font-weight-light d-block px-1 mb-3 text-black-50"
                     >
                       Verifikasi akun Anda sekarang. Link verifikasi dikirimkan
-                      ke yourname@yourmail.com
+                      ke {{ email }}
                     </h4>
-                    <strong class="d-block"
-                      >Tidak mendapatkan email verifikasi?</strong
-                    >
-                    <template
-                      v-if="intervalCounter && resendLinkActivation <= 3"
-                    >
-                      <p class="my-1">
-                        Tunggu <span>{{ this.counterValue }}</span> detik
-                        lagi...
-                      </p>
+                    <strong class="d-block">
+                      <template v-if="resendLinkActivation < 3">
+                        Tidak mendapatkan email verifikasi?
+                      </template>
+                      <template v-else>
+                        Anda telah mencapai batas limit aktivasi. Silahkan hubungi Customer Care iziDok.
+                      </template>
+                    </strong>
+                    <template v-if="resendLinkActivation < 3">
+                      <template
+                        v-if="intervalCounter && resendLinkActivation <= 3"
+                      >
+                        <p class="my-1">
+                          Tunggu <span>{{ this.counterValue }}</span> detik
+                          lagi...
+                        </p>
+                      </template>
+                      <button
+                        class="btn px-5 btn-first mt-4 mb-3 btn-lg"
+                        :disabled="counter !== 0"
+                        @click="this.triggerResend"
+                      >
+                        <span class="btn-wrapper--label">
+                          Kirim ulang email
+                        </span>
+                      </button>
                     </template>
-                    <button
-                      class="btn px-5 btn-first mt-4 mb-3 btn-lg"
-                      :disabled="!(resendLinkActivation < 3 && counter === 0)"
-                      @click="this.triggerResend"
-                    >
-                      <span class="btn-wrapper--label">
-                        Kirim ulang email
-                      </span>
-                    </button>
                   </div>
                 </div>
               </div>
@@ -75,12 +82,14 @@ import {
   email,
   numeric
 } from "vuelidate/lib/validators";
+import axios from 'axios';
 
 library.add(faArrowLeft);
 
-const staticCounter = 5;
+const staticCounter = 60;
 
 export default {
+  props: ['email', 'user_id'],
   data() {
     return {
       resendLinkActivation: 0,
@@ -97,11 +106,19 @@ export default {
     }
   },
   methods: {
-    triggerResend() {
-      const { resendLinkActivation } = this;
-      if (resendLinkActivation < 3) {
-        this.resendLinkActivation++;
-        this.counterFunc();
+    async triggerResend() {
+      try {
+        const { resendLinkActivation } = this;
+        if (resendLinkActivation < 3) {
+          this.resendLinkActivation++;
+          this.counterFunc();
+
+          const res = await axios.get(`${this.url_api}/email/resend/${this.user_id}`);
+
+        }
+      }
+      catch (err) {
+
       }
     },
     counterFunc() {

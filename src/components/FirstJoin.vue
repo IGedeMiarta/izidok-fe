@@ -27,21 +27,16 @@
           <h1 class="display-4 my-3 font-weight-bold">
             Selamat bergabung dengan iziDok
           </h1>
-          <p class="font-size-lg text-black mb-4">
+          <p class=" text-black mb-4">
             iziDok siap membantu untuk memudahkan Anda dalam menangani pasien
             dan Klinik/Tempat Praktik Anda.
           </p>
-          <!-- <p class="font-size-sm mb-3 text-black-50">
-            Far far away, behind the word mountains, far from the countries
-            Vokalia and Consonantia, there live the blind texts. Separated they
-            live in Bookmarksgrove right at the coast of the Semantics
-          </p> -->
-          <a
-            href="javascript:void(0);"
+          <router-link
+            to="/input-tarif"
             class="text-capitalize btn btn-primary btn-block"
           >
             mulai
-          </a>
+          </router-link>
         </div>
       </div>
     </div>
