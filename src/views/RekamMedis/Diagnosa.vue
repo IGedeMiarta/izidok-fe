@@ -2,60 +2,92 @@
   <div>
     <form>
       <div class="form-row">
-        <div class="form-group col-md-3">
-            <label for="kodePenyakit">Pilih Kode Diagnosis*</label>
-            <select id="kodePenyakit" class="form-control">
-                <option selected>Pilih Kode...</option>
-                <option>P-001</option>
-                <option>P-002</option>
-            </select>
-        </div>
         <div class="form-group col-md-4">
-            <label for="diagnosis">Diagnosis*</label>
-            <input type="text" class="form-control" id="diagnosis">
+          <label for="kodePenyakit">Pilih Kode Diagnosis*</label>
+          <multiselect
+            v-model="selectedKodePenyakit"
+            :options="kodePenyakit"
+            placeholder="Pilih Kode Diagnosis"
+            label="kode"
+            track-by="kode"
+            open-direction="bottom"
+            :multiple="true"
+            :loading="isLoading"
+            :clear-on-select="false"
+            :close-on-select="false"
+            :options-limit="10"
+            :hide-selected="true"
+            @search-change="asyncFind"
+          ></multiselect>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="diagnosis">Diagnosis*</label>
+          <multiselect
+            v-model="selectedKodePenyakit"
+            :options="kodePenyakit"
+            :multiple="true"
+            placeholder="Pilih Diagnosis"
+            label="description"
+            track-by="description"
+            :loading="isLoading"
+            :hide-selected="true"
+            :options-limit="10"
+            :limit="3"
+            open-direction="bottom"
+            :limit-text="limitText"
+            @search-change="asyncFind"
+          ></multiselect>
         </div>
       </div>
     </form>
     <div class="col-md-12">
       <label>Catatan :</label>
-      <canvas id="note-canvas"
-                ref="canvas"
-                @mousedown="handleMousedown"
-                @mouseup="handleMouseup"
-                @mousemove="handleMousemove"
-                @touchstart="handleTouchstart"
-                @touchend="handleTouchend"
-                @touchmove="handleTouchmove"
-                width="1000"
-                height="300">
-          Your browser does not support the HTML 5 Canvas.
-        </canvas>
+      <canvas
+        id="note-canvas"
+        ref="canvas"
+        @mousedown="handleMousedown"
+        @mouseup="handleMouseup"
+        @mousemove="handleMousemove"
+        @touchstart="handleTouchstart"
+        @touchend="handleTouchend"
+        @touchmove="handleTouchmove"
+        width="1000"
+        height="300"
+      >Your browser does not support the HTML 5 Canvas.</canvas>
     </div>
-    
+
     <div class="col-md-4">
-      <b-button @click='clear' variant="primary" size="sm" class="m-1">Clear</b-button>
-      <b-button @click='toDataUrl' variant="primary" size="sm" class="m-1">Save</b-button>
+      <b-button @click="clear" variant="primary" size="sm" class="m-1">Clear</b-button>
+      <!-- <b-button @click="toDataUrl" variant="primary" size="sm" class="m-1">Save</b-button> -->
     </div>
-    
   </div>
 </template>
 
 <script>
+import Multiselect from "vue-multiselect";
+import axios from "axios";
+
 export default {
-	data(){
-    return{
+  components: {
+    Multiselect
+  },
+  data() {
+    return {
       drawing: false,
       mousePos: { x: 0, y: 0 },
       lastPos: { x: 0, y: 0 },
-      ctx: null
-    }
+      ctx: null,
+      isLoading: false,
+      selectedKodePenyakit: [],
+      kodePenyakit: []
+    };
   },
   computed: {
     canvas() {
       return this.$refs.canvas;
     }
   },
-  methods:{
+  methods: {
     handleMousedown(event) {
       this.drawing = true;
       this.lastPos = this.getMousePos(event);
@@ -119,9 +151,47 @@ export default {
     },
     toDataUrl() {
       console.log(this.canvas.toDataURL());
+    },
+    limitText(count) {
+      return `and ${count} other kode penyakit`;
+    },
+    asyncFind(query) {
+      let self = this;
+      this.isLoading = true;
+
+      axios
+        .get("http://localhost:9000/api/v1/kode_penyakit/name/" + query, {
+          headers: {
+            Authorization:
+              "Bearer RnkySmZJRUg5bHYzODNpS1d1UnV4ajJ0ZFpGSVhrVlVUTVNzY0N1Qg==",
+            "Content-Type": "application/json"
+          }
+        })
+        .then(function(response) {
+          console.log(response);
+          let res = response.data;
+
+          if (!res.status) {
+            self.isLoading = false;
+            return;
+          }
+
+          let kode_penyakit = res.data.kode_penyakit;
+
+          if (kode_penyakit) {
+            console.log(kode_penyakit);
+            self.kodePenyakit = kode_penyakit;
+          }
+
+          self.isLoading = false;
+        })
+        .catch(err => console.log(err));
+    },
+    clearAll() {
+      this.selectedKodePenyakit = [];
     }
   },
-  mounted(){
+  mounted() {
     this.ctx = this.canvas.getContext("2d");
     this.ctx.strokeStyle = "#222222";
     this.ctx.lineWith = 2;
@@ -171,23 +241,24 @@ export default {
       false
     );
   }
-  
-}
+};
 </script>
 
 <style scoped>
-  canvas {
-    /* border: 1px solid #666; */
-    cursor:crosshair;
-    width: 100%
-  }
+canvas {
+  /* border: 1px solid #666; */
+  cursor: crosshair;
+  width: 100%;
+}
 
-  /* body {
+/* body {
     padding: 2em;
   } */
 
-  #note-canvas {
-    /* border: 1px solid; */
-    touch-action: none;
-  }
+#note-canvas {
+  /* border: 1px solid; */
+  touch-action: none;
+}
 </style>
+
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
