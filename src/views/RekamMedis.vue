@@ -84,7 +84,7 @@ export default {
     Anamnesa,
     Pemeriksaan,
     Diagnosa,
-    Footer
+    Footer,
   },
    methods: {
     ...mapActions(['fetchPasien', 'fetchOrgans', 'saveRekamMedis']),

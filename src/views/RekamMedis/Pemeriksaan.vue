@@ -23,21 +23,25 @@
         </div>
       </div>
     </form>
-    <div class="col-md-12">
-      <canvas
-        id="note-canvas"
-        ref="canvas"
-        @mousedown="handleMousedown"
-        @mouseup="handleMouseup"
-        @mousemove="handleMousemove"
-        @touchstart="handleTouchstart"
-        @touchend="handleTouchend"
-        @touchmove="handleTouchmove"
-        width="1000"
-        height="300"
-      >Your browser does not support the HTML 5 Canvas.</canvas>
+    <div class="row">
+      <div class="col-md-8">
+        <canvas
+          id="note-canvas"
+          ref="canvas"
+          @mousedown="handleMousedown"
+          @mouseup="handleMouseup"
+          @mousemove="handleMousemove"
+          @touchstart="handleTouchstart"
+          @touchend="handleTouchend"
+          @touchmove="handleTouchmove"
+          width="1000"
+          height="500"
+        >Your browser does not support the HTML 5 Canvas.</canvas>
+      </div>
+      <div class="col-md-4">
+        <Editor />
+      </div>
     </div>
-
     <div class="col-md-4">
       <b-button @click="clear" variant="primary" size="sm" class="m-1">Clear</b-button>
       <!-- <b-button id="saveImage" @click="toDataUrl" variant="primary" size="sm" class="m-1">Save</b-button> -->
@@ -49,9 +53,13 @@
 <script>
 import axios from "axios";
 import { mapGetters } from "vuex";
+import Editor from "./Editor";
 
 export default {
-  name: 'Pemeriksaan',
+  name: "Pemeriksaan",
+  components: {
+    Editor
+  },
   data() {
     return {
       drawing: false,
@@ -65,9 +73,36 @@ export default {
     canvas: function() {
       return this.$refs.canvas;
     },
-    ...mapGetters(["dataOrgans"]),
+    ...mapGetters(["dataOrgans"])
   },
   methods: {
+    toDataUrl() {
+      var dataURL = this.canvas.toDataURL("image/png");
+      console.log(dataURL);
+      alert("Check your console to get downloaded image...");
+    },
+    organChanged() {
+      let self = this;
+
+      console.log("selected organ_id", self.selectedOrgan);
+
+      let organ_id = self.selectedOrgan;
+
+      axios
+        .get("http://localhost:9000/api/v1/organ/" + organ_id, {
+          headers: {
+            Authorization:
+              "Bearer RnkySmZJRUg5bHYzODNpS1d1UnV4ajJ0ZFpGSVhrVlVUTVNzY0N1Qg==",
+            "Content-Type": "application/json"
+          }
+        })
+        .then(function(response) {
+          let res = response.data.data;
+          self.clear();
+          self.drawBackground(res.gambar);
+        })
+        .catch(err => console.log(err));
+    },
     drawBackground(image_url) {
       var canvas = document.getElementById("note-canvas"),
         ctx = canvas.getContext("2d");
@@ -143,33 +178,6 @@ export default {
     clear() {
       this.canvas.width = this.canvas.width;
     },
-    toDataUrl() {
-      var dataURL = this.canvas.toDataURL("image/png");
-      console.log(dataURL);
-      alert("Check your console to get downloaded image...");
-    },
-    organChanged() {
-      let self = this;
-
-      console.log("selected organ_id", self.selectedOrgan);
-
-      let organ_id = self.selectedOrgan;
-
-      axios
-        .get("http://localhost:9000/api/v1/organ/" + organ_id, {
-          headers: {
-            Authorization:
-              "Bearer RnkySmZJRUg5bHYzODNpS1d1UnV4ajJ0ZFpGSVhrVlVUTVNzY0N1Qg==",
-            "Content-Type": "application/json"
-          }
-        })
-        .then(function(response) {
-          let res = response.data.data;
-          self.clear();
-          self.drawBackground(res.gambar);
-        })
-        .catch(err => console.log(err));
-    }
   },
   mounted() {
     this.ctx = this.canvas.getContext("2d");
@@ -226,12 +234,12 @@ export default {
 
 <style scoped>
 canvas {
+  border: 1px solid rgb(212, 212, 212);
   cursor: crosshair;
   width: 100%;
 }
 
 #note-canvas {
-  /* border: 1px solid; */
   touch-action: none;
 }
 </style>

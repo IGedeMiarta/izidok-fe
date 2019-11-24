@@ -13,9 +13,9 @@
             </div>
             <div class="col-xl-5 d-flex align-items-center justify-content-start mt-4 mt-xl-0 justify-content-xl-end">
                 <div class="mx-auto mx-xl-0">
-                    <a href="https://demo.uifort.com/bamburgh-vue-admin-dashboard-pro-docs/" class="btn btn-success" target="_blank" v-b-tooltip.hover title="Riwayat">
+                    <a href="https://demo.uifort.com/bamburgh-vue-admin-dashboard-pro-docs/" class="btn btn-primary" target="_blank" v-b-tooltip.hover title="Riwayat">
                         <span>
-                            <font-awesome-icon icon="file-code" /> Riwayat
+                            Lihat Riwayat
                         </span>
                     </a>
                 </div>
@@ -45,7 +45,7 @@
 
     export default {
         components: {
-            'font-awesome-icon': FontAwesomeIcon,
+            // 'font-awesome-icon': FontAwesomeIcon,
             // VuePerfectScrollbar,
         },
         props: {

@@ -40,22 +40,27 @@
         </div>
       </div>
     </form>
-    <div class="col-md-12">
-      <label>Catatan :</label>
-      <canvas
-        id="note-canvas"
-        ref="canvas"
-        @mousedown="handleMousedown"
-        @mouseup="handleMouseup"
-        @mousemove="handleMousemove"
-        @touchstart="handleTouchstart"
-        @touchend="handleTouchend"
-        @touchmove="handleTouchmove"
-        width="1000"
-        height="300"
-      >Your browser does not support the HTML 5 Canvas.</canvas>
+    <div class="row">
+      <div class="col-md-8">
+        <label>Catatan :</label>
+        <canvas
+          id="note-canvas"
+          ref="canvas"
+          @mousedown="handleMousedown"
+          @mouseup="handleMouseup"
+          @mousemove="handleMousemove"
+          @touchstart="handleTouchstart"
+          @touchend="handleTouchend"
+          @touchmove="handleTouchmove"
+          width="1000"
+          height="300"
+        >Your browser does not support the HTML 5 Canvas.</canvas>
+      </div>
+      <div class="col-md-4">
+         <label></label>
+        <Editor />
+      </div>
     </div>
-
     <div class="col-md-4">
       <b-button @click="clear" variant="primary" size="sm" class="m-1">Clear</b-button>
       <!-- <b-button id="saveImage" @click="toDataUrl" variant="primary" size="sm" class="m-1">Save</b-button> -->
@@ -68,10 +73,12 @@
 import Multiselect from "vue-multiselect";
 import axios from "axios";
 import { mapGetters, mapActions } from "vuex";
+import Editor from "./Editor";
 
 export default {
   components: {
-    Multiselect
+    Multiselect,
+    Editor
   },
   data() {
     return {
@@ -84,8 +91,8 @@ export default {
       kodePenyakit: []
     };
   },
-  watch:{
-    selectedKodePenyakit: function(){
+  watch: {
+    selectedKodePenyakit: function() {
       this.updateDiagnosa(this.selectedKodePenyakit);
     }
   },
@@ -195,7 +202,7 @@ export default {
     },
     clearAll() {
       this.selectedKodePenyakit = [];
-    },
+    }
   },
   mounted() {
     this.ctx = this.canvas.getContext("2d");
@@ -252,17 +259,12 @@ export default {
 
 <style scoped>
 canvas {
-  /* border: 1px solid #666; */
+  border: 1px solid rgb(212, 212, 212);
   cursor: crosshair;
   width: 100%;
 }
 
-/* body {
-    padding: 2em;
-  } */
-
 #note-canvas {
-  /* border: 1px solid; */
   touch-action: none;
 }
 </style>
