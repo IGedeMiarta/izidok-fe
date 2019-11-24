@@ -58,7 +58,8 @@
 
     <div class="col-md-4">
       <b-button @click="clear" variant="primary" size="sm" class="m-1">Clear</b-button>
-      <!-- <b-button @click="toDataUrl" variant="primary" size="sm" class="m-1">Save</b-button> -->
+      <!-- <b-button id="saveImage" @click="toDataUrl" variant="primary" size="sm" class="m-1">Save</b-button> -->
+      <!-- <b-button @click="drawBackground('ini url')" variant="primary" size="sm" class="m-1">Image</b-button> -->
     </div>
   </div>
 </template>
@@ -66,6 +67,7 @@
 <script>
 import Multiselect from "vue-multiselect";
 import axios from "axios";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   components: {
@@ -82,12 +84,18 @@ export default {
       kodePenyakit: []
     };
   },
+  watch:{
+    selectedKodePenyakit: function(){
+      this.updateDiagnosa(this.selectedKodePenyakit);
+    }
+  },
   computed: {
     canvas() {
       return this.$refs.canvas;
     }
   },
   methods: {
+    ...mapActions(["updateDiagnosa"]),
     handleMousedown(event) {
       this.drawing = true;
       this.lastPos = this.getMousePos(event);
@@ -168,7 +176,6 @@ export default {
           }
         })
         .then(function(response) {
-          console.log(response);
           let res = response.data;
 
           if (!res.status) {
@@ -179,7 +186,6 @@ export default {
           let kode_penyakit = res.data.kode_penyakit;
 
           if (kode_penyakit) {
-            console.log(kode_penyakit);
             self.kodePenyakit = kode_penyakit;
           }
 
@@ -189,7 +195,7 @@ export default {
     },
     clearAll() {
       this.selectedKodePenyakit = [];
-    }
+    },
   },
   mounted() {
     this.ctx = this.canvas.getContext("2d");

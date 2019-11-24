@@ -13,7 +13,7 @@
             <option :value="null" disabled>Pilih Organ...</option>
             <option
               v-bind:key="organ.id"
-              v-for="organ in organs"
+              v-for="organ in dataOrgans"
               :value="organ.id"
             >{{ organ.nama +', '+ organ.sub_nama}}</option>
           </select>
@@ -48,9 +48,10 @@
 
 <script>
 import axios from "axios";
+import { mapGetters } from "vuex";
 
 export default {
-  props: ["organs"],
+  name: 'Pemeriksaan',
   data() {
     return {
       drawing: false,
@@ -61,9 +62,10 @@ export default {
     };
   },
   computed: {
-    canvas() {
+    canvas: function() {
       return this.$refs.canvas;
-    }
+    },
+    ...mapGetters(["dataOrgans"]),
   },
   methods: {
     drawBackground(image_url) {
@@ -142,8 +144,6 @@ export default {
       this.canvas.width = this.canvas.width;
     },
     toDataUrl() {
-      var button = document.getElementById("saveImage");
-      // console.log(this.canvas.toDataURL());
       var dataURL = this.canvas.toDataURL("image/png");
       console.log(dataURL);
       alert("Check your console to get downloaded image...");

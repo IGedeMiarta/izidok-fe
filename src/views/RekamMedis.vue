@@ -1,14 +1,14 @@
 <template>
   <div>
-    <top
-      v-bind:heading="pasien.nama"
-      v-bind:subheading="'NOMOR: '+pasien.nomor_rekam_medis+' / '+pasien.jenis_kelamin+' / ? Tahun'"
+    <Top
+      v-bind:heading="dataPasien.nama"
+      v-bind:subheading="'NOMOR: '+dataPasien.nomor_rekam_medis+' / '+dataPasien.jenis_kelamin+' / ? Tahun'"
     />
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
           <div>
-            <div class="accordion mb-5">
+            <div class="accordion mb-3">
               <div class="card card-box">
                 <div class="card-header">
                   <b-button
@@ -16,12 +16,12 @@
                     v-b-toggle.accordion-1
                   >
                     <span>Anamnesa</span>
-                    <font-awesome-icon icon="angle-up" class="font-size-xl" />
+                    <!-- <font-awesome-icon icon="angle-up" class="font-size-xl" /> -->
                   </b-button>
                 </div>
                 <b-collapse id="accordion-1" visible accordion="accordion-example" role="tabpanel">
                   <div class="card-body">
-                    <Anamnesa v-bind:pasien="pasien" />
+                    <Anamnesa />
                   </div>
                 </b-collapse>
               </div>
@@ -32,12 +32,12 @@
                     v-b-toggle.accordion-2
                   >
                     <span>Pemeriksaan Fisik</span>
-                    <font-awesome-icon icon="angle-up" class="font-size-xl" />
+                    <!-- <font-awesome-icon icon="angle-up" class="font-size-xl" /> -->
                   </b-button>
                 </div>
                 <b-collapse id="accordion-2" accordion="accordion-example" role="tabpanel">
                   <div class="card-body">
-                    <Pemeriksaan v-bind:organs="organs" />
+                    <Pemeriksaan ref="pemeriksaan"/>
                   </div>
                 </b-collapse>
               </div>
@@ -48,16 +48,18 @@
                     v-b-toggle.accordion-3
                   >
                     <span>Diagnosa</span>
-                    <font-awesome-icon icon="angle-up" class="font-size-xl" />
+                    <!-- <font-awesome-icon icon="angle-up" class="font-size-xl" /> -->
                   </b-button>
                 </div>
                 <b-collapse id="accordion-3" accordion="accordion-example" role="tabpanel">
                   <div class="card-body">
-                    <Diagnosa />
+                    <Diagnosa ref="diagnosa"/>
                   </div>
                 </b-collapse>
               </div>
             </div>
+            <Footer />
+            <button @click="saveData" class="btn btn-primary">Submit</button>
           </div>
         </div>
       </div>
@@ -66,67 +68,42 @@
 </template>
 
 <script>
-import top from "./RekamMedis/Header.vue";
+import Top from "./RekamMedis/Header.vue";
+import Footer from "./RekamMedis/Footer.vue";
 import Anamnesa from "./RekamMedis/Anamnesa";
 import Pemeriksaan from "./RekamMedis/Pemeriksaan.vue";
 import Diagnosa from "./RekamMedis/Diagnosa";
 import axios from "axios";
 
+import { mapGetters, mapActions } from "vuex";
+
 export default {
   name: "RekamMedis",
   components: {
-    top,
+    Top,
     Anamnesa,
     Pemeriksaan,
-    Diagnosa
+    Diagnosa,
+    Footer
   },
-  data() {
-    return {
-      organs: [],
-      pasien: {}
-    };
-  },
-  methods: {
-    getOrgan() {
-      let self = this;
-      axios
-        .get("http://localhost:9000/api/v1/organ", {
-          headers: {
-            Authorization:
-              "Bearer RnkySmZJRUg5bHYzODNpS1d1UnV4ajJ0ZFpGSVhrVlVUTVNzY0N1Qg==",
-            "Content-Type": "application/json"
-          }
-        })
-        .then(function(response) {
-          let res = response.data.data;
-          self.organs = res.organ;
+   methods: {
+    ...mapActions(['fetchPasien', 'fetchOrgans', 'saveRekamMedis']),
+    saveData(){
+        // get data anamnesa
+        // this.saveRekamMedis(this.dataPasien);
+        
+        // get data pemeriksaan
+        // this.$refs.pemeriksaan.toDataUrl();
 
-          console.log(res.organ);
-        })
-        .catch(err => console.log(err));
-    },
-    getPasien() {
-      let self = this;
-      axios
-        .get("http://localhost:9000/api/v1/pasien/1", {
-          headers: {
-            Authorization:
-              "Bearer RnkySmZJRUg5bHYzODNpS1d1UnV4ajJ0ZFpGSVhrVlVUTVNzY0N1Qg==",
-            "Content-Type": "application/json"
-          }
-        })
-        .then(function(response) {
-          let res = response.data;
-          self.pasien = res.data;
-
-          console.log(res.data);
-        })
-        .catch(err => console.log(err));
+        // get data diagnosa
+        // this.$refs.diagnosa.toDataUrl();
+        // console.log(this.dataKodePenyakit);
     }
   },
+  computed: mapGetters(['dataPasien', 'dataOrgans', 'dataKodePenyakit']),
   created() {
-    this.getOrgan();
-    this.getPasien();
+    this.fetchPasien();
+    this.fetchOrgans();
   }
 };
 </script>
