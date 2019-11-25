@@ -64,7 +64,8 @@
                                   />
                                 </b-form-group>
                               </template>
-                              <button class="btn btn-lg btn-second btn-block">
+                              <b-alert :show="isTooMuchFailed()" variant="danger">Anda telah gagal login terlalu banyak.</b-alert>
+                              <button class="btn btn-lg btn-second btn-block" :disabled="isTooMuchFailed()">
                                 Login
                               </button>
                             </b-form>
@@ -101,12 +102,16 @@ import startCase from "lodash/startCase";
 import { required, minLength, maxLength } from "vuelidate/lib/validators";
 import axios from "axios";
 
+const maxFailed = 3;
+const maxFailedCounter = 10;
+
 export default {
   data: () => ({
     formBasicData: null,
     formData: null,
     loggedIn: false,
-    firstJoin: false
+    firstJoin: false,
+    failedCounter: 0
   }),
   components: {
     "first-join-component": () => import("@/components/FirstJoin")
@@ -156,6 +161,14 @@ export default {
           localStorage.setItem('__tkn__', data.token);
           this.loggedIn = true;
           this.firstJoin = data.first_login;
+        }
+        else {
+          alert('Login gagal');
+          this.failedCounter++;
+
+          if(this.isTooMuchFailed()) {
+            this.disablingLogin()
+          }
         }
       } catch (err) {
         this.loggedIn = false;
@@ -224,6 +237,14 @@ export default {
         $vm: this,
         rawLabel
       });
+    },
+    isTooMuchFailed() {
+      return this.failedCounter >= maxFailed
+    },
+    disablingLogin() {
+      setTimeout(() => {
+        this.failedCounter = 0;
+      }, maxFailedCounter * 1000)
     }
   }
 };
