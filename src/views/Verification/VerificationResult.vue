@@ -8,13 +8,12 @@
               <div class="container">
                 <b-modal centered v-model="modalShow" no-close-on-backdrop hide-header-close>
                   <p>
-                    Akun Anda berhasil diaktivasi. Silakan login untuk mengakses
-                    iziDok
+                    {{ text[state] }}
                   </p>
                   <div slot="modal-footer">
-                    <b-button @click="redirectToLogin" variant="primary"
-                      >Login</b-button
-                    >
+                    <b-button @click="redirectToLogin" variant="primary">
+                      {{ state == 'success' ? 'Login' : 'Kembali ke Login' }}
+                    </b-button>
                   </div>
                 </b-modal>
               </div>
@@ -28,10 +27,35 @@
 
 <script>
 export default {
+  props: ['state'], // success | already-activated | expired
   data() {
     return {
-      modalShow: false
+      modalShow: false,
+      text: {
+        'success'           : 'Akun Anda berhasil diaktivasi. Silakan login untuk mengakses iziDok.',
+        'already-activated' : 'Akun Anda gagal diaktivasi. Email anda telah teraktivasi sebelumnya.',
+        'failed'            : 'Akun Anda gagal diaktivasi. Lakukan aktivasi ulang.',
+      }
     };
+  },
+  beforeRouteEnter: (to, from, next) => {
+    if([
+      'success', 
+      'already-activated', 
+      'failed'].includes(to.params.state)) {
+      next()
+    }
+    else {
+      next('/')
+    }
+
+    // if (!to.params.summary) {
+    //   next("/");
+    // } else {
+    //   next(vm => {
+    //     vm.prevRoute = from
+    //   });
+    // }
   },
   methods: {
     toggleModal() {
