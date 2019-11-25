@@ -25,7 +25,7 @@
     <b-row>
       <b-col cols="6">
         <b-row>
-          <b-col cols="6" v-for="(number, index) in 2" :key="index">
+          <b-col cols="6" v-for="(number, index) in 4" :key="index">
             <CardDashboard title="pasien baru" :highlight="5" />
           </b-col>
         </b-row>

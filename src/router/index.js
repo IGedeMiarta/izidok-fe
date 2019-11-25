@@ -63,6 +63,22 @@ const routes = [
         meta: { layout: "examples" }
       }
     ]
+  },
+  {
+    path: "/rawat-jalan",
+    component: () => import("../views/RawatJalan.vue"),
+    children: [
+      {
+        path: "antrean",
+        name: "antrean-rawat-jalan",
+        component: () => import("../views/RawatJalan/Antrean.vue")
+      },
+      {
+        path: "registrasi",
+        name: "registrasi-rawat-jalan",
+        component: () => import("../views/RawatJalan/Registrasi.vue")
+      }
+    ]
   }
 ];
 

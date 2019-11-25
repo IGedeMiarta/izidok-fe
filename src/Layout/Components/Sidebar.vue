@@ -133,7 +133,7 @@ export default {
           },
           child: [
             {
-              href: "/layouts/light-sidebar",
+              href: "/rawat-jalan/registrasi",
               title: "Registrasi"
             },
             {
