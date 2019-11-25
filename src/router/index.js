@@ -56,11 +56,12 @@ const routes = [
         props: true
       },
       {
-        path: "success",
-        name: "verification-success",
+        path: ":state",
+        name: "verification-result",
         component: () =>
-          import("../views/Verification/VerificationSuccess.vue"),
-        meta: { layout: "examples" }
+          import("../views/Verification/VerificationResult.vue"),
+        meta: { layout: "examples" },
+        props: true
       }
     ]
   },
