@@ -3,7 +3,6 @@
     <form>
       <div class="form-row">
         <div class="form-group col-md-3">
-          <!-- <label for="kodePenyakit">Pilih Kode Diagnosis*</label> -->
           <multiselect
             v-model="selectedKodePenyakit"
             :options="kodePenyakit"
@@ -21,7 +20,6 @@
           ></multiselect>
         </div>
         <div class="form-group col-md-4">
-          <!-- <label for="diagnosis">Diagnosis*</label> -->
           <multiselect
             v-model="selectedKodePenyakit"
             :options="kodePenyakit"
@@ -72,8 +70,6 @@
         >Your browser does not support the HTML 5 Canvas.</canvas>
         <div class="col-md-4">
           <b-button @click="clear" variant="primary" size="sm" class="m-1">Clear</b-button>
-          <!-- <b-button id="saveImage" @click="toDataUrl" variant="primary" size="sm" class="m-1">Save</b-button> -->
-          <!-- <b-button @click="drawBackground('ini url')" variant="primary" size="sm" class="m-1">Image</b-button> -->
         </div>
       </div>
       <div class="col-md-12" v-show="isHidden">
@@ -109,7 +105,10 @@ export default {
   },
   watch: {
     selectedKodePenyakit: function() {
-      this.updateDiagnosa(this.selectedKodePenyakit);
+      this.updatePostData({
+        key: "selected_penyakit",
+        value: this.selectedKodePenyakit
+      });
     }
   },
   computed: {
@@ -118,9 +117,9 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["updateDiagnosa", "updateNoteDiagnosa"]),
+    ...mapActions(["updatePostData", "updateCanvas"]),
     updateContent(content) {
-      this.updateNoteDiagnosa(content);
+      this.updatePostData({ key: "diagnosa_text", value: content });
     },
     handleMousedown(event) {
       this.drawing = true;
@@ -183,9 +182,6 @@ export default {
     clear() {
       this.canvas.width = this.canvas.width;
     },
-    toDataUrl() {
-      return this.canvas.toDataURL();
-    },
     limitText(count) {
       return `and ${count} other kode penyakit`;
     },
@@ -230,6 +226,9 @@ export default {
     this.ctx = this.canvas.getContext("2d");
     this.ctx.strokeStyle = "#222222";
     this.ctx.lineWith = 2;
+
+    //append data canvas to vuex global state
+    this.updateCanvas({ key: "DIAGNOSA", value: this.canvas });
 
     // Get a regular interval for drawing to the screen
     window.requestAnimFrame = (function(callback) {

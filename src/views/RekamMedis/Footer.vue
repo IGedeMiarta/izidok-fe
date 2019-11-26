@@ -4,7 +4,6 @@
       <form>
         <div class="form-row">
           <div class="form-group col-md-4">
-            <!-- <label>Konsultasi Selanjutnya:</label> -->
             <b-form-group label="Konsultasi Selanjutnya:">
               <b-form-radio
                 class="my-1"
@@ -54,8 +53,9 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
-  components: {},
   data() {
     return {
       selectedRadio: {},
@@ -63,19 +63,18 @@ export default {
       checkbox: false
     };
   },
-  methods: {
-    getDataFooter() {
-      if (this.selectedRadio != 99) {
-        return {
-          radio: this.selectedRadio,
-          checkbox: this.checkbox
-        };
-      }
-
-      return {
-        radio: this.hari,
-        checkbox: this.checkbox
-      };
+  methods: mapActions(["updatePostData"]),
+  watch:{
+    selectedRadio: function (){
+      if (this.selectedRadio != 99)
+        this.updatePostData({key:'next_konsultasi', value: this.selectedRadio});
+    },
+    hari: function (){
+      if (this.selectedRadio == 99)
+        this.updatePostData({key:'next_konsultasi', value: this.hari});
+    },
+    checkbox: function (){
+      this.updatePostData({key:'agreement', value: this.checkbox});
     }
   }
 };

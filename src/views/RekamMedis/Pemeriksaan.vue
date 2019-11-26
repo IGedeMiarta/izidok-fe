@@ -13,7 +13,7 @@
             <option :value="null" disabled>Pilih Organ...</option>
             <option
               v-bind:key="organ.id"
-              v-for="organ in dataOrgans"
+              v-for="organ in organs"
               :value="organ.id"
             >{{ organ.nama +', '+ organ.sub_nama}}</option>
           </select>
@@ -50,8 +50,6 @@
         >Your browser does not support the HTML 5 Canvas.</canvas>
         <div class="col-md-4">
           <b-button @click="clear" variant="primary" size="sm" class="m-1">Clear</b-button>
-          <!-- <b-button id="saveImage" @click="toDataUrl" variant="primary" size="sm" class="m-1">Save</b-button> -->
-          <!-- <b-button @click="drawBackground('ini url')" variant="primary" size="sm" class="m-1">Image</b-button> -->
         </div>
       </div>
       <div v-show="isHidden" class="col-md-4">
@@ -85,21 +83,20 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["organs"]),
     canvas: function() {
       return this.$refs.canvas;
-    },
-    ...mapGetters(["dataOrgans"])
+    }
+  },
+  watch: {
+    selectedOrgan: function() {
+      this.updatePostData({ key: "selected_organ", value: this.selectedOrgan });
+    }
   },
   methods: {
-    ...mapActions(["updateNotePemeriksaan"]),
+    ...mapActions(["updatePostData", "updateCanvas"]),
     updateContent(content) {
-      this.updateNotePemeriksaan(content);
-    },
-    toDataUrl() {
-      var dataURL = this.canvas.toDataURL("image/png");
-      return dataURL;
-      // console.log(dataURL);
-      // alert("Check your console to get downloaded image...");
+      this.updatePostData({ key: "pemeriksaan_text", value: content });
     },
     organChanged() {
       let self = this;
@@ -121,9 +118,6 @@ export default {
         })
         .catch(err => console.log(err));
     },
-    getSelectedOrgan(){
-      return this.selectedOrgan;
-    },
     drawBackground(image_url) {
       let self = this;
       var canvas = document.getElementById("note-canvas"),
@@ -138,7 +132,7 @@ export default {
 
       //remove existing image
       if (img_organ.hasChildNodes()) {
-        img_organ.innerHTML = '';
+        img_organ.innerHTML = "";
       }
 
       background.onload = function() {
@@ -219,6 +213,9 @@ export default {
   mounted() {
     this.ctx = this.canvas.getContext("2d");
     this.ctx.strokeStyle = "#222222";
+
+    //append data canvas to vuex global state
+    this.updateCanvas({ key: "PEMERIKSAAN", value: this.canvas });
 
     // Get a regular interval for drawing to the screen
     window.requestAnimFrame = (function(callback) {

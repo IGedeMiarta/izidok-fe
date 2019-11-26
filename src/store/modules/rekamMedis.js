@@ -1,78 +1,79 @@
 import axios from 'axios';
+import store from '@/store/'
 
 const state = {
     pasien: {},
     organs: [],
-    kodePenyakit: [],
-    notePemeriksaan: '',
-    noteDiagnosa: ''
+    penyakits: [],
+    postData: {},
+    canvas_pemeriksaan: null,
+    canvas_diagnosa: null
 };
 
 const getters = {
-    dataPasien: state => state.pasien,
-    dataOrgans: state => state.organs,
-    dataKodePenyakit: state => state.kodePenyakit,
-    dataNotePemeriksaan: state => state.notePemeriksaan,
-    dataNoteDiagnosa: state => state.noteDiagnosa
+    pasien: state => state.pasien,
+    organs: state => state.organs,
+    postData: state => state.postData,
+    canvas_pemeriksaan: state => state.canvas_pemeriksaan,
+    canvas_diagnosa: state => state.canvas_diagnosa,
 };
 
 const actions = {
-    async fetchPasien({ commit }) {
-        const response = await axios.get("http://localhost:9000/api/v1/pasien/1", {
+    async fetchData({ commit }) {
+        const res_pasien = await axios.get(store.state.URL_API + "/pasien/1", {
             headers: {
                 Authorization:
-                    "Bearer RnkySmZJRUg5bHYzODNpS1d1UnV4ajJ0ZFpGSVhrVlVUTVNzY0N1Qg==",
+                    "Bearer " + store.state.BEARER_TOKEN,
                 "Content-Type": "application/json"
             }
         });
 
-        commit('setPasien', response.data);
-    },
-    async fetchOrgans({ commit }) {
-        const response = await axios.get("http://localhost:9000/api/v1/organ", {
+        const res_organs = await axios.get(store.state.URL_API + "/organ", {
             headers: {
                 Authorization:
-                    "Bearer RnkySmZJRUg5bHYzODNpS1d1UnV4ajJ0ZFpGSVhrVlVUTVNzY0N1Qg==",
+                    "Bearer " + store.state.BEARER_TOKEN,
                 "Content-Type": "application/json"
             }
         });
-        commit('setOrgans', response.data);
-    },
-    // async saveRekamMedis({ commit }, data){
-    //     console.log(data);
-    // },
-    updateAnamnesa({ commit }, data) {
-        commit('setAnamnesa', data);
+
+        commit('setPasien', res_pasien.data);
+        commit('setOrgans', res_organs.data);
     },
 
-    updateDiagnosa({ commit }, data) {
-        commit('setDiagnosa', data);
+    updateAnamnesa({ commit }, payload) {
+        commit('setPostData', payload);
     },
 
-    updateNotePemeriksaan({ commit }, data) {
-        commit('setNotePemeriksaan', data);
+    updatePostData({ commit }, payload) {
+        commit('setPostData', payload);
     },
 
-    updateNoteDiagnosa({ commit }, data) {
-        commit('setNoteDiagnosa', data);
+    updateCanvas({ commit }, payload) {
+        commit('setCanvas', payload);
     },
 
+    saveRekamMedis({ commit }) {
+        console.log('canvas pemeriksaan', state.canvas_pemeriksaan.toDataURL("image/png"));
+        console.log('canvas diagnosa', state.canvas_diagnosa.toDataURL("image/png"));
+        console.log(state.postData);
+    }
 };
 
 const mutations = {
     setPasien: (state, pasien) => (state.pasien = pasien.data),
     setOrgans: (state, organs) => (state.organs = organs.data.organ),
-    setAnamnesa: (state, data) => {
-        state.pasien[data.target.id] = data.target.value;
+    setPostData: (state, payload) => {
+        state.postData[payload.key] = payload.value;
+        // console.log(state.postData);
     },
-    setDiagnosa: (state, data) => {
-        state.kodePenyakit = data;
-    },
-    setNotePemeriksaan: (state, data) => {
-        state.notePemeriksaan = data;
-    },
-    setNoteDiagnosa: (state, data) => {
-        state.noteDiagnosa = data;
+    setCanvas: (state, payload) => {
+        if(payload.key === 'PEMERIKSAAN'){
+            state.canvas_pemeriksaan = payload.value;
+        }
+
+        if(payload.key === 'DIAGNOSA'){
+            state.canvas_diagnosa = payload.value;
+        }
     }
 };
 

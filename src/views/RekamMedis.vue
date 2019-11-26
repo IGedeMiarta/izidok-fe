@@ -1,8 +1,8 @@
 <template>
   <div>
     <Top
-      v-bind:heading="dataPasien.nama"
-      v-bind:subheading="'NOMOR: '+dataPasien.nomor_rekam_medis+' / '+dataPasien.jenis_kelamin+' / ? Tahun'"
+      v-bind:heading="pasien.nama"
+      v-bind:subheading="'NOMOR: '+pasien.nomor_rekam_medis+' / '+pasien.jenis_kelamin+' / ? Tahun'"
     />
     <div class="container">
       <div class="row">
@@ -59,7 +59,7 @@
               </div>
             </div>
             <Footer ref="footer" />
-            <button @click="saveData" class="btn btn-primary">Submit</button>
+            <button @click="saveRekamMedis" class="btn btn-primary">Submit</button>
           </div>
         </div>
       </div>
@@ -69,10 +69,10 @@
 
 <script>
 import Top from "./RekamMedis/Header.vue";
-import Footer from "./RekamMedis/Footer.vue";
 import Anamnesa from "./RekamMedis/Anamnesa";
 import Pemeriksaan from "./RekamMedis/Pemeriksaan.vue";
 import Diagnosa from "./RekamMedis/Diagnosa";
+import Footer from "./RekamMedis/Footer.vue";
 import axios from "axios";
 
 import { mapGetters, mapActions } from "vuex";
@@ -86,51 +86,10 @@ export default {
     Diagnosa,
     Footer
   },
-  methods: {
-    ...mapActions(["fetchPasien", "fetchOrgans", "saveRekamMedis"]),
-    saveData() {      
-      let anamnesa = {
-        tensi: this.dataPasien.tensi,
-        nadi: this.dataPasien.nadi,
-        suhu: this.dataPasien.suhu,
-        respirasi: this.dataPasien.respirasi,
-        tinggi_badan: this.dataPasien.tinggi_badan,
-        berat_badan: this.dataPasien.berat_badan,
-      }
-
-      let pemeriksaan = {
-        organ_id: this.$refs.pemeriksaan.getSelectedOrgan(),
-        pemeriksaan_text: this.dataNotePemeriksaan,
-        pemeriksaan_draw: this.$refs.pemeriksaan.toDataUrl()
-      }
-
-      let diagnosa = {
-        kode_penyakit_id: this.dataKodePenyakit,
-        diagnosa_text: this.dataNoteDiagnosa,
-        diagnosa_draw: this.$refs.diagnosa.toDataUrl()
-      }
-
-      let footer = this.$refs.footer.getDataFooter();
-      let misc = {
-        next_konsultasi: footer.radio,
-        agreement: footer.checkbox
-      }
-
-      let postData = {...anamnesa, ...pemeriksaan, ...diagnosa, ...misc}
-
-      console.log(postData);
-
-    }
-  },
-  computed: mapGetters([
-    "dataPasien",
-    "dataKodePenyakit",
-    "dataNotePemeriksaan",
-    "dataNoteDiagnosa"
-  ]),
+  methods: mapActions(["fetchData", "saveRekamMedis"]),
+  computed: mapGetters(["pasien"]),
   created() {
-    this.fetchPasien();
-    this.fetchOrgans();
+    this.fetchData();
   }
 };
 </script>

@@ -8,8 +8,8 @@
             type="text"
             class="form-control"
             id="tensi"
-            :value="dataPasien.tensi"
-            @input="updateAnamnesa($event);"
+            :value="pasien.tensi"
+            @input="updateAnamnesa({key:$event.target.id, value: $event.target.value});"
           />
         </div>
         <div class="form-group col-md-2">
@@ -18,8 +18,8 @@
             type="text"
             class="form-control"
             id="nadi"
-            :value="dataPasien.nadi"
-            @input="updateAnamnesa($event);"
+            :value="pasien.nadi"
+            @input="updateAnamnesa({key:$event.target.id, value: $event.target.value});"
           />
         </div>
         <div class="form-group col-md-2">
@@ -28,8 +28,8 @@
             type="text"
             class="form-control"
             id="tinggi_badan"
-            :value="dataPasien.tinggi_badan"
-            @input="updateAnamnesa($event);"
+            :value="pasien.tinggi_badan"
+            @input="updateAnamnesa({key:$event.target.id, value: $event.target.value});"
           />
         </div>
         <div class="form-group col-md-2">
@@ -38,23 +38,23 @@
             type="text"
             class="form-control"
             id="berat_badan"
-            :value="dataPasien.berat_badan"
-            @input="updateAnamnesa($event);"
+            :value="pasien.berat_badan"
+            @input="updateAnamnesa({key:$event.target.id, value: $event.target.value});"
           />
         </div>
       </div>
       <div class="form-row">
         <div class="form-group col-md-2">
           <label for="nadi">Nadi*</label>
-          <input type="text" class="form-control" id="nadi" :value="dataPasien.nadi" @input="updateAnamnesa($event);"/>
+          <input type="text" class="form-control" id="nadi" :value="pasien.nadi" @input="updateAnamnesa({key:$event.target.id, value: $event.target.value});"/>
         </div>
         <div class="form-group col-md-2">
           <label for="suhu">Suhu*</label>
-          <input type="text" class="form-control" id="suhu" :value="dataPasien.suhu" @input="updateAnamnesa($event);"/>
+          <input type="text" class="form-control" id="suhu" :value="pasien.suhu" @input="updateAnamnesa({key:$event.target.id, value: $event.target.value});"/>
         </div>
         <div class="form-group col-md-4">
           <label for="respirasi">Respirasi*</label>
-          <input type="text" class="form-control" id="respirasi" :value="dataPasien.respirasi" @input="updateAnamnesa($event);"/>
+          <input type="text" class="form-control" id="respirasi" :value="pasien.respirasi" @input="updateAnamnesa({key:$event.target.id, value: $event.target.value});"/>
         </div>
       </div>
     </form>
@@ -66,10 +66,8 @@ import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "Anamnesa",
-  computed: mapGetters(["dataPasien"]),
-  methods: {
-    ...mapActions(["updateAnamnesa"])
-  }
+  computed: mapGetters(["pasien"]),
+  methods: mapActions(["updateAnamnesa"])
 };
 </script>
 
