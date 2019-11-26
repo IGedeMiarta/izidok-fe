@@ -58,7 +58,7 @@
                 </b-collapse>
               </div>
             </div>
-            <Footer ref="footer"/>
+            <Footer ref="footer" />
             <button @click="saveData" class="btn btn-primary">Submit</button>
           </div>
         </div>
@@ -88,21 +88,38 @@ export default {
   },
   methods: {
     ...mapActions(["fetchPasien", "fetchOrgans", "saveRekamMedis"]),
-    saveData() {
-      // get data anamnesa
-      // this.saveRekamMedis(this.dataPasien);
+    saveData() {      
+      let anamnesa = {
+        tensi: this.dataPasien.tensi,
+        nadi: this.dataPasien.nadi,
+        suhu: this.dataPasien.suhu,
+        respirasi: this.dataPasien.respirasi,
+        tinggi_badan: this.dataPasien.tinggi_badan,
+        berat_badan: this.dataPasien.berat_badan,
+      }
 
-      // get data pemeriksaan
-      // this.$refs.pemeriksaan.toDataUrl();
+      let pemeriksaan = {
+        organ_id: this.$refs.pemeriksaan.getSelectedOrgan(),
+        pemeriksaan_text: this.dataNotePemeriksaan,
+        pemeriksaan_draw: this.$refs.pemeriksaan.toDataUrl()
+      }
 
-      // get data diagnosa
-      // this.$refs.diagnosa.toDataUrl();
-      // console.log(this.dataKodePenyakit);
+      let diagnosa = {
+        kode_penyakit_id: this.dataKodePenyakit,
+        diagnosa_text: this.dataNoteDiagnosa,
+        diagnosa_draw: this.$refs.diagnosa.toDataUrl()
+      }
 
-      // console.log(this.dataNotePemeriksaan);
-      // console.log(this.dataNoteDiagnosa);
+      let footer = this.$refs.footer.getDataFooter();
+      let misc = {
+        next_konsultasi: footer.radio,
+        agreement: footer.checkbox
+      }
 
-        // console.log(this.$refs.footer.getDataFooter());
+      let postData = {...anamnesa, ...pemeriksaan, ...diagnosa, ...misc}
+
+      console.log(postData);
+
     }
   },
   computed: mapGetters([

@@ -97,8 +97,9 @@ export default {
     },
     toDataUrl() {
       var dataURL = this.canvas.toDataURL("image/png");
-      console.log(dataURL);
-      alert("Check your console to get downloaded image...");
+      return dataURL;
+      // console.log(dataURL);
+      // alert("Check your console to get downloaded image...");
     },
     organChanged() {
       let self = this;
@@ -119,6 +120,9 @@ export default {
           self.drawBackground(res.gambar);
         })
         .catch(err => console.log(err));
+    },
+    getSelectedOrgan(){
+      return this.selectedOrgan;
     },
     drawBackground(image_url) {
       let self = this;

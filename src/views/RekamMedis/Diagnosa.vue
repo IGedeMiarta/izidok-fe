@@ -184,7 +184,7 @@ export default {
       this.canvas.width = this.canvas.width;
     },
     toDataUrl() {
-      console.log(this.canvas.toDataURL());
+      return this.canvas.toDataURL();
     },
     limitText(count) {
       return `and ${count} other kode penyakit`;
