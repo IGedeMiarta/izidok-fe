@@ -54,7 +54,9 @@
           <!-- <b-button @click="drawBackground('ini url')" variant="primary" size="sm" class="m-1">Image</b-button> -->
         </div>
       </div>
-      <div v-show="isHidden" class="col-md-4">container image</div>
+      <div v-show="isHidden" class="col-md-4">
+        <div id="img_organ"></div>
+      </div>
       <div v-show="isHidden" class="col-md-8">
         <Editor id="editor" v-on:update-content="updateContent" />
       </div>
@@ -101,8 +103,6 @@ export default {
     organChanged() {
       let self = this;
 
-      console.log("selected organ_id", self.selectedOrgan);
-
       let organ_id = self.selectedOrgan;
 
       axios
@@ -121,8 +121,10 @@ export default {
         .catch(err => console.log(err));
     },
     drawBackground(image_url) {
+      let self = this;
       var canvas = document.getElementById("note-canvas"),
-        ctx = canvas.getContext("2d");
+        ctx = canvas.getContext("2d"),
+        img_organ = document.getElementById("img_organ");
 
       let backgroundURL = image_url;
 
@@ -130,8 +132,17 @@ export default {
       background.crossOrigin = "Anonymous";
       background.src = backgroundURL;
 
+      //remove existing image
+      if (img_organ.hasChildNodes()) {
+        img_organ.innerHTML = '';
+      }
+
       background.onload = function() {
-        ctx.drawImage(background, 0, 0);
+        if (self.isHidden) {
+          img_organ.appendChild(background);
+        } else {
+          ctx.drawImage(background, 0, 0);
+        }
       };
     },
     handleMousedown(event) {
@@ -195,8 +206,10 @@ export default {
     clear() {
       this.canvas.width = this.canvas.width;
     },
-    penColor(color){
-      this.ctx.strokeStyle = color;
+    penColor(color) {
+      var canvas = document.getElementById("note-canvas"),
+        ctx = canvas.getContext("2d");
+      ctx.strokeStyle = color;
     }
   },
   mounted() {
