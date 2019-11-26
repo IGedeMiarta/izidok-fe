@@ -21,10 +21,21 @@
         <div class="form-group col-md-3">
           <input type="text" class="form-control" id="subNamaOrgan" />
         </div>
+        <div class="form-group col-md-2" style="text-align:left">
+          <span @click="penColor('blue')" class="dot" style="background-color: blue;"></span>
+          <span @click="penColor('red')" class="dot" style="background-color: red;"></span>
+          <span @click="penColor('#54c756')" class="dot" style="background-color: #54c756;"></span>
+          <span @click="penColor('#555')" class="dot" style="background-color: #555;"></span>
+          <span @click="penColor('orange')" class="dot" style="background-color: orange;"></span>
+        </div>
+        <div class="form-group col-md-2">
+          <b-button v-on:click="isHidden = false" variant="success" size="sm" class="m-1">Pen</b-button>
+          <b-button v-on:click="isHidden = true" variant="danger" size="sm" class="m-1">Text</b-button>
+        </div>
       </div>
     </form>
     <div class="row">
-      <div class="col-md-8">
+      <div class="col-md-12" v-show="!isHidden">
         <canvas
           id="note-canvas"
           ref="canvas"
@@ -34,25 +45,26 @@
           @touchstart="handleTouchstart"
           @touchend="handleTouchend"
           @touchmove="handleTouchmove"
-          width="1000"
+          width="700"
           height="500"
         >Your browser does not support the HTML 5 Canvas.</canvas>
+        <div class="col-md-4">
+          <b-button @click="clear" variant="primary" size="sm" class="m-1">Clear</b-button>
+          <!-- <b-button id="saveImage" @click="toDataUrl" variant="primary" size="sm" class="m-1">Save</b-button> -->
+          <!-- <b-button @click="drawBackground('ini url')" variant="primary" size="sm" class="m-1">Image</b-button> -->
+        </div>
       </div>
-      <div class="col-md-4">
-        <Editor />
+      <div v-show="isHidden" class="col-md-4">container image</div>
+      <div v-show="isHidden" class="col-md-8">
+        <Editor id="editor" v-on:update-content="updateContent" />
       </div>
-    </div>
-    <div class="col-md-4">
-      <b-button @click="clear" variant="primary" size="sm" class="m-1">Clear</b-button>
-      <!-- <b-button id="saveImage" @click="toDataUrl" variant="primary" size="sm" class="m-1">Save</b-button> -->
-      <!-- <b-button @click="drawBackground('ini url')" variant="primary" size="sm" class="m-1">Image</b-button> -->
     </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import Editor from "./Editor";
 
 export default {
@@ -62,6 +74,7 @@ export default {
   },
   data() {
     return {
+      isHidden: false,
       drawing: false,
       mousePos: { x: 0, y: 0 },
       lastPos: { x: 0, y: 0 },
@@ -76,6 +89,10 @@ export default {
     ...mapGetters(["dataOrgans"])
   },
   methods: {
+    ...mapActions(["updateNotePemeriksaan"]),
+    updateContent(content) {
+      this.updateNotePemeriksaan(content);
+    },
     toDataUrl() {
       var dataURL = this.canvas.toDataURL("image/png");
       console.log(dataURL);
@@ -178,11 +195,13 @@ export default {
     clear() {
       this.canvas.width = this.canvas.width;
     },
+    penColor(color){
+      this.ctx.strokeStyle = color;
+    }
   },
   mounted() {
     this.ctx = this.canvas.getContext("2d");
     this.ctx.strokeStyle = "#222222";
-    this.ctx.lineWith = 2;
 
     // Get a regular interval for drawing to the screen
     window.requestAnimFrame = (function(callback) {
@@ -236,10 +255,23 @@ export default {
 canvas {
   border: 1px solid rgb(212, 212, 212);
   cursor: crosshair;
-  width: 100%;
 }
 
 #note-canvas {
   touch-action: none;
+  /* position: absolute; */
+  /* display: none; */
+}
+
+#editor {
+  /* display: none; */
+}
+
+.dot {
+  margin-right: 5px;
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  display: inline-block;
 }
 </style>

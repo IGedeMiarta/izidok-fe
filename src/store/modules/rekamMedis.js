@@ -3,13 +3,17 @@ import axios from 'axios';
 const state = {
     pasien: {},
     organs: [],
-    kodePenyakit: []
+    kodePenyakit: [],
+    notePemeriksaan: '',
+    noteDiagnosa: ''
 };
 
 const getters = {
     dataPasien: state => state.pasien,
     dataOrgans: state => state.organs,
-    dataKodePenyakit: state => state.kodePenyakit
+    dataKodePenyakit: state => state.kodePenyakit,
+    dataNotePemeriksaan: state => state.notePemeriksaan,
+    dataNoteDiagnosa: state => state.noteDiagnosa
 };
 
 const actions = {
@@ -45,6 +49,14 @@ const actions = {
         commit('setDiagnosa', data);
     },
 
+    updateNotePemeriksaan({ commit }, data) {
+        commit('setNotePemeriksaan', data);
+    },
+
+    updateNoteDiagnosa({ commit }, data) {
+        commit('setNoteDiagnosa', data);
+    },
+
 };
 
 const mutations = {
@@ -55,6 +67,12 @@ const mutations = {
     },
     setDiagnosa: (state, data) => {
         state.kodePenyakit = data;
+    },
+    setNotePemeriksaan: (state, data) => {
+        state.notePemeriksaan = data;
+    },
+    setNoteDiagnosa: (state, data) => {
+        state.noteDiagnosa = data;
     }
 };
 

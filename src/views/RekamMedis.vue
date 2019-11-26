@@ -37,7 +37,7 @@
                 </div>
                 <b-collapse id="accordion-2" accordion="accordion-example" role="tabpanel">
                   <div class="card-body">
-                    <Pemeriksaan ref="pemeriksaan"/>
+                    <Pemeriksaan ref="pemeriksaan" />
                   </div>
                 </b-collapse>
               </div>
@@ -53,12 +53,12 @@
                 </div>
                 <b-collapse id="accordion-3" accordion="accordion-example" role="tabpanel">
                   <div class="card-body">
-                    <Diagnosa ref="diagnosa"/>
+                    <Diagnosa ref="diagnosa" />
                   </div>
                 </b-collapse>
               </div>
             </div>
-            <Footer />
+            <Footer ref="footer"/>
             <button @click="saveData" class="btn btn-primary">Submit</button>
           </div>
         </div>
@@ -84,23 +84,33 @@ export default {
     Anamnesa,
     Pemeriksaan,
     Diagnosa,
-    Footer,
+    Footer
   },
-   methods: {
-    ...mapActions(['fetchPasien', 'fetchOrgans', 'saveRekamMedis']),
-    saveData(){
-        // get data anamnesa
-        // this.saveRekamMedis(this.dataPasien);
-        
-        // get data pemeriksaan
-        // this.$refs.pemeriksaan.toDataUrl();
+  methods: {
+    ...mapActions(["fetchPasien", "fetchOrgans", "saveRekamMedis"]),
+    saveData() {
+      // get data anamnesa
+      // this.saveRekamMedis(this.dataPasien);
 
-        // get data diagnosa
-        // this.$refs.diagnosa.toDataUrl();
-        // console.log(this.dataKodePenyakit);
+      // get data pemeriksaan
+      // this.$refs.pemeriksaan.toDataUrl();
+
+      // get data diagnosa
+      // this.$refs.diagnosa.toDataUrl();
+      // console.log(this.dataKodePenyakit);
+
+      // console.log(this.dataNotePemeriksaan);
+      // console.log(this.dataNoteDiagnosa);
+
+        // console.log(this.$refs.footer.getDataFooter());
     }
   },
-  computed: mapGetters(['dataPasien', 'dataOrgans', 'dataKodePenyakit']),
+  computed: mapGetters([
+    "dataPasien",
+    "dataKodePenyakit",
+    "dataNotePemeriksaan",
+    "dataNoteDiagnosa"
+  ]),
   created() {
     this.fetchPasien();
     this.fetchOrgans();

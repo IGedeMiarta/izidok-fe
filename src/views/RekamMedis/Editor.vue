@@ -2,8 +2,10 @@
     <div>
         <quill-editor ref="myTextEditor"
                       v-model="content"
-                      :options="editorOption">
+                      :options="editorOption"
+                      style="height: 300px; margin-bottom:50px">
         </quill-editor>
+        <!-- <button @click="save">save</button> -->
     </div>
 </template>
 
@@ -16,13 +18,14 @@
     import { quillEditor } from 'vue-quill-editor'
 
     export default {
-        name: 'Editor',
+        props: ['editorContent'],
         components: {
             quillEditor
         },
         data() {
             return {
                 name: '01-example',
+                content: this.editorContent,
                 editorOption: {
                     modules: {
                         toolbar: [
@@ -44,5 +47,10 @@
                 return this.$refs.myTextEditor.quill
             },
         },
+        watch:{
+            content: function(){
+                this.$emit('update-content', this.content);
+            }
+        }
     }
 </script>

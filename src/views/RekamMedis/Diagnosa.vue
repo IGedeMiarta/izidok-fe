@@ -2,12 +2,12 @@
   <div>
     <form>
       <div class="form-row">
-        <div class="form-group col-md-4">
-          <label for="kodePenyakit">Pilih Kode Diagnosis*</label>
+        <div class="form-group col-md-3">
+          <!-- <label for="kodePenyakit">Pilih Kode Diagnosis*</label> -->
           <multiselect
             v-model="selectedKodePenyakit"
             :options="kodePenyakit"
-            placeholder="Pilih Kode Diagnosis"
+            placeholder="Pilih Kode Diagnosis*"
             label="kode"
             track-by="kode"
             open-direction="bottom"
@@ -20,13 +20,13 @@
             @search-change="asyncFind"
           ></multiselect>
         </div>
-        <div class="form-group col-md-6">
-          <label for="diagnosis">Diagnosis*</label>
+        <div class="form-group col-md-4">
+          <!-- <label for="diagnosis">Diagnosis*</label> -->
           <multiselect
             v-model="selectedKodePenyakit"
             :options="kodePenyakit"
             :multiple="true"
-            placeholder="Pilih Diagnosis"
+            placeholder="Pilih Diagnosis*"
             label="description"
             track-by="description"
             :loading="isLoading"
@@ -38,11 +38,26 @@
             @search-change="asyncFind"
           ></multiselect>
         </div>
+        <div class="form-group col-md-2" style="text-align:left">
+          <span @click="penColor('blue')" class="dot" style="background-color: blue;"></span>
+          <span @click="penColor('red')" class="dot" style="background-color: red;"></span>
+          <span @click="penColor('#54c756')" class="dot" style="background-color: #54c756;"></span>
+          <span @click="penColor('#555')" class="dot" style="background-color: #555;"></span>
+          <span @click="penColor('orange')" class="dot" style="background-color: orange;"></span>
+        </div>
+        <div class="form-group col-md-2">
+          <b-button v-on:click="isHidden = false" variant="success" size="sm" class="m-1">Pen</b-button>
+          <b-button v-on:click="isHidden = true" variant="danger" size="sm" class="m-1">Text</b-button>
+        </div>
       </div>
     </form>
     <div class="row">
-      <div class="col-md-8">
+      <div class="col-md-2">
         <label>Catatan :</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12" v-show="!isHidden">
         <canvas
           id="note-canvas"
           ref="canvas"
@@ -52,19 +67,19 @@
           @touchstart="handleTouchstart"
           @touchend="handleTouchend"
           @touchmove="handleTouchmove"
-          width="1000"
-          height="300"
+          width="700"
+          height="500"
         >Your browser does not support the HTML 5 Canvas.</canvas>
+        <div class="col-md-4">
+          <b-button @click="clear" variant="primary" size="sm" class="m-1">Clear</b-button>
+          <!-- <b-button id="saveImage" @click="toDataUrl" variant="primary" size="sm" class="m-1">Save</b-button> -->
+          <!-- <b-button @click="drawBackground('ini url')" variant="primary" size="sm" class="m-1">Image</b-button> -->
+        </div>
       </div>
-      <div class="col-md-4">
-         <label></label>
-        <Editor />
+      <div class="col-md-12" v-show="isHidden">
+        <label></label>
+        <Editor v-on:update-content="updateContent" />
       </div>
-    </div>
-    <div class="col-md-4">
-      <b-button @click="clear" variant="primary" size="sm" class="m-1">Clear</b-button>
-      <!-- <b-button id="saveImage" @click="toDataUrl" variant="primary" size="sm" class="m-1">Save</b-button> -->
-      <!-- <b-button @click="drawBackground('ini url')" variant="primary" size="sm" class="m-1">Image</b-button> -->
     </div>
   </div>
 </template>
@@ -82,6 +97,7 @@ export default {
   },
   data() {
     return {
+      isHidden: false,
       drawing: false,
       mousePos: { x: 0, y: 0 },
       lastPos: { x: 0, y: 0 },
@@ -102,7 +118,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["updateDiagnosa"]),
+    ...mapActions(["updateDiagnosa", "updateNoteDiagnosa"]),
+    updateContent(content) {
+      this.updateNoteDiagnosa(content);
+    },
     handleMousedown(event) {
       this.drawing = true;
       this.lastPos = this.getMousePos(event);
@@ -202,6 +221,9 @@ export default {
     },
     clearAll() {
       this.selectedKodePenyakit = [];
+    },
+    penColor(color) {
+      this.ctx.strokeStyle = color;
     }
   },
   mounted() {
@@ -261,11 +283,20 @@ export default {
 canvas {
   border: 1px solid rgb(212, 212, 212);
   cursor: crosshair;
-  width: 100%;
+  /* width: 100%; */
 }
 
 #note-canvas {
   touch-action: none;
+  /* position: relative; */
+}
+
+.dot {
+  margin-right: 5px;
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  display: inline-block;
 }
 </style>
 
