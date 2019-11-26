@@ -135,11 +135,21 @@ export default {
         img_organ.innerHTML = "";
       }
 
+      console.log(this.canvas.width);
+
       background.onload = function() {
         if (self.isHidden) {
           img_organ.appendChild(background);
         } else {
-          ctx.drawImage(background, 0, 0);
+          var width = background.width,
+            height = background.height;
+
+          if (width > 700) {
+            width = 0.5 * width;
+            height = 0.5 * height;
+          }
+
+          ctx.drawImage(background, 0, 0, width, height);
         }
       };
     },
