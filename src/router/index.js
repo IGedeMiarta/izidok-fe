@@ -58,8 +58,7 @@ const routes = [
       {
         path: ":state",
         name: "verification-result",
-        component: () =>
-          import("../views/Verification/VerificationResult.vue"),
+        component: () => import("../views/Verification/VerificationResult.vue"),
         meta: { layout: "examples" },
         props: true
       }
@@ -78,6 +77,22 @@ const routes = [
         path: "registrasi",
         name: "registrasi-rawat-jalan",
         component: () => import("../views/RawatJalan/Registrasi.vue")
+      }
+    ]
+  },
+  {
+    path: "/pasien",
+    component: () => import("../views/Pasien.vue"),
+    children: [
+      {
+        path: "/list",
+        name: "list-pasien",
+        component: () => import("../views/Pasien/List.vue")
+      },
+      {
+        path: "/tambah",
+        name: "tambah-pasien",
+        component: () => import("../views/Pasien/Tambah.vue")
       }
     ]
   }

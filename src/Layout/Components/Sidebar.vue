@@ -153,6 +153,7 @@ export default {
         },
         {
           title: "Manajemen Pasien",
+          href: "/pasien",
           icon: {
             element: "font-awesome-icon",
             attributes: {
