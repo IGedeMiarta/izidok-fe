@@ -18,20 +18,6 @@
               :pressed.sync="data.state"
               >{{ data.label }}</b-button
             >
-            <!-- <b-button
-              pill
-              variant="secondary"
-              size="sm"
-              class="ml-4 text-capitalize"
-              >bulanan</b-button
-            >
-            <b-button
-              pill
-              variant="secondary"
-              size="sm"
-              class="ml-4 text-capitalize"
-              >tahunan</b-button
-            > -->
             <b-button
               pill
               variant="secondary"

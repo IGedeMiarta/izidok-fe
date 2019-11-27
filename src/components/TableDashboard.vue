@@ -2,20 +2,14 @@
   <div class="card card-box mb-5">
     <div class="card-header pr-2">
       <div class="card-header--title">
-        <b-button class="float-right text-capitalize" pill variant="success"
+        <b-button
+          :to="{ name: 'registrasi-rawat-jalan' }"
+          class="float-right text-capitalize"
+          pill
+          variant="success"
           >registrasi baru</b-button
         >
       </div>
-      <!-- <div class="card-header--actions">
-        <a
-          href="javascript:void(0)"
-          class="btn btn-sm text-primary btn-link"
-          v-b-tooltip.hover
-          title="Refresh"
-        >
-          <font-awesome-icon spin icon="sync" />
-        </a>
-      </div> -->
     </div>
     <div class="card-body p-0">
       <div>
