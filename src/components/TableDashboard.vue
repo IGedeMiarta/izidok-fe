@@ -26,73 +26,45 @@
                 <th scope="col">no</th>
                 <th scope="col">nama pasien</th>
                 <th scope="col">dokter</th>
-                <th scope="col" class="text-center">no. rekam medik</th>
-                <th scope="col"></th>
+                <th scope="col" class="text-center">
+                  no. rekam medis
+                </th>
               </tr>
             </thead>
             <tbody class="list">
-              <tr>
-                <td>
+              <tr v-for="data in 5" :key="data">
+                <td class="text-wrap">
                   <div class="align-box-row">
                     <div class="d-flex align-items-center">
-                      <span>1</span>
+                      <span>{{ data }}</span>
                     </div>
                   </div>
                 </td>
-                <td>
+                <td class="text-wrap">
                   <div class="align-box-row">
                     <span class="d-block">
                       John Doe
-                      <small class="d-block text-black-50"
-                        >(john@example.com)</small
-                      >
                     </span>
                   </div>
                 </td>
                 <td>
                   <div class="align-box-row">
-                    dr. asd asd asd
-                    <!-- <div
-                      class="progress-bar-sm progress-bar-animated-alt progress w-100"
-                    >
-                      <div
-                        class="progress-bar bg-success"
-                        role="progressbar"
-                        aria-valuenow="33"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                        style="width: 33%;"
-                      ></div>
-                    </div>
-                    <div class="pl-1">
-                      100%
-                    </div> -->
+                    <span>Dr. Dawai Pagi </span>
                   </div>
                 </td>
-                <td class="status">
-                  <div class="text-center">
-                    <span class="badge badge-warning">Pending</span>
-                  </div>
-                </td>
-                <td class="text-center" width="5%">
-                  <b-dropdown
-                    no-caret
-                    right
-                    variant="link p-0 btn-link-primary"
-                    class="text-primary"
+                <td>
+                  <div
+                    class="text-center d-flex align-items-center justify-content-between"
                   >
-                    <template slot="button-content">
-                      <div class="font-size-xl">
-                        <font-awesome-icon icon="ellipsis-h" />
-                      </div>
-                    </template>
-                    <b-dropdown-item>First Action</b-dropdown-item>
-                    <b-dropdown-item>Second Action</b-dropdown-item>
-                    <b-dropdown-item>Third Action</b-dropdown-item>
-                    <b-dropdown-divider></b-dropdown-divider>
-                    <b-dropdown-item active>Active action</b-dropdown-item>
-                    <b-dropdown-item disabled>Disabled action</b-dropdown-item>
-                  </b-dropdown>
+                    <span class="flex-grow-1">0001-0{{ data }}</span>
+                    <span
+                      ><b-button variant="dark" size="sm">
+                        <span class="btn-wrapper--icon">
+                          <font-awesome-icon
+                            icon="sign-in-alt"
+                          /> </span></b-button
+                    ></span>
+                  </div>
                 </td>
               </tr>
             </tbody>
@@ -105,5 +77,9 @@
 </template>
 
 <script>
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
+library.add(faSignInAlt);
+
 export default {};
 </script>

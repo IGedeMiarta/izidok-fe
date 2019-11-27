@@ -116,6 +116,7 @@ export default {
       const tmp = [
         {
           title: "Dashboard",
+          href: "/",
           icon: {
             element: "font-awesome-icon",
             attributes: {
