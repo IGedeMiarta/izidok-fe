@@ -91,7 +91,7 @@
         </div>
       </template>
       <template v-if="firstJoin && loggedIn">
-        <first-join-component :modalShow="firstJoin" />
+        <first-join-component :modalShow="firstJoin" :klinik_id="klinik_id" />
       </template>
     </div>
   </div>
@@ -111,7 +111,8 @@ export default {
     formData: null,
     loggedIn: false,
     firstJoin: false,
-    failedCounter: 0
+    failedCounter: 0,
+    klinik_id: null
   }),
   components: {
     "first-join-component": () => import("@/components/FirstJoin")
@@ -160,7 +161,13 @@ export default {
         if(status) {
           localStorage.setItem('__tkn__', data.token);
           this.loggedIn = true;
-          this.firstJoin = data.first_login;
+          this.firstJoin = true//data.first_login;
+          this.klinik_id = (data.kliniks && data.kliniks[0]) ? data.kliniks[0].id : null;
+
+          // not first join
+          if(!this.firstJoin) {
+            this.$router.push('/');
+          }
         }
         else {
           alert('Login gagal');

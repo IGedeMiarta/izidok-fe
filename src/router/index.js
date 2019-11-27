@@ -36,7 +36,8 @@ const routes = [
   {
     path: "/input-tarif",
     name: "input-tarif",
-    component: () => import("../views/InputTarif.vue")
+    component: () => import("../views/InputTarif.vue"),
+    props: true,
   },
   {
     path: "/input-data-operator",

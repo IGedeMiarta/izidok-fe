@@ -32,7 +32,7 @@
             dan Klinik/Tempat Praktik Anda.
           </p>
           <router-link
-            to="/input-tarif"
+            :to="{name:'input-tarif',params:{klinik_id:klinik_id}}"
             class="text-capitalize btn btn-primary btn-block"
           >
             mulai
@@ -45,7 +45,7 @@
 
 <script>
 export default {
-  props: ["modalShow"],
+  props: ["modalShow", 'klinik_id'],
   mounted() {
     if (this.modalShow) {
       this.$refs["first-join-modal"].show();

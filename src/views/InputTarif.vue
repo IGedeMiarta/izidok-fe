@@ -138,10 +138,12 @@ import startCase from "lodash/startCase";
 import { VMoney } from "v-money";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
+import axios from 'axios';
 library.add(faPlus, faMinus);
 
 export default {
   directives: { money: VMoney },
+  props: ['klinik_id'],
   data: () => ({
     money: {
       decimal: ",",
@@ -165,6 +167,7 @@ export default {
   }),
   mounted() {
     this.tmpInputTarifData = this.setTmpInputTarifData();
+    // console.log('input-tarif.klinik_id', this.klinik_id)
   },
   methods: {
     setTmpInputTarifData() {
@@ -255,22 +258,22 @@ export default {
         });
         const p = y.every(h => h);
         if (p) {
-          false && this.doSumbitInputTarif();
-          this.$router.replace({
-            path: "/input-data-operator"
-          });
+          this.doSubmitInputTarif();
         }
       });
     },
-    async doSumbitInputTarif() {
+    async doSubmitInputTarif() {
       const { constructPostData } = this;
       try {
         const res = await axios.post(
           `${this.url_api}/layanan`,
-          constructPostData()
+          {arr: constructPostData()}
         );
         const { status, data } = res.data;
-        alert((status && "Success") || "Gagal");
+
+        this.$router.push({
+          path: "/input-data-operator"
+        });
       } catch (err) {
         // console.log(err);
       }
@@ -280,13 +283,14 @@ export default {
       const tmp = tmpInputTarifData.map(item => {
         const x = Object.keys(item).filter(y => !["error"].includes(y));
         const z = x.reduce((obj, key) => {
-          if (/(tarif)/gi.test(key)) {
-            const t = key.split("_");
-            key = t[t.length - t.length];
+          let q = key
+          if (key == 'tarif_layanan') {
+            q = 'tarif';
           }
-          obj[key] = item[key];
+          obj[q] = item[key];
           return obj;
         }, {});
+        z.klinik_id = this.klinik_id
         return z;
       });
       return tmp;

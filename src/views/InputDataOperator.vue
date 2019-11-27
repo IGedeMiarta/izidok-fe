@@ -65,6 +65,7 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { maxLength, email, required } from "vuelidate/lib/validators";
+import axios from 'axios';
 library.add(faPlus, faMinus);
 
 export default {
