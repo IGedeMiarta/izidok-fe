@@ -25,8 +25,19 @@
     <b-row class="align-items-center">
       <b-col cols="6">
         <b-row>
-          <b-col cols="6" v-for="(number, index) in 4" :key="index">
-            <CardDashboard title="pasien baru" :highlight="5" />
+          <b-col cols="6">
+            <CardDashboard title="pasien baru" :highlight="5" bg-color="bg-first" />
+          </b-col>
+          <b-col cols="6">
+            <CardDashboard title="pasien rawat jalan" :highlight="15" bg-color="bg-success" />
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col cols="6">
+            <CardDashboard title="antrian" :highlight="4" />
+          </b-col>
+          <b-col cols="6">
+            <CardDashboard title="pendapatan" highlight="1.500.000" bg-color="bg-warning" />
           </b-col>
         </b-row>
       </b-col>
