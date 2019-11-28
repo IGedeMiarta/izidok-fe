@@ -83,19 +83,13 @@ const routes = [
   },
   {
     path: "/pasien",
-    component: () => import("../views/Pasien.vue"),
-    children: [
-      {
-        path: "/list",
-        name: "list-pasien",
-        component: () => import("../views/Pasien/List.vue")
-      },
-      {
-        path: "/tambah",
-        name: "tambah-pasien",
-        component: () => import("../views/Pasien/Tambah.vue")
-      }
-    ]
+    name: "pasien",
+    component: () => import("../views/Pasien/List.vue")
+  },
+  {
+    path: "/pasien/tambah",
+    name: "tambah pasien",
+    component: () => import("../views/Pasien/Tambah.vue")
   }
 ];
 
