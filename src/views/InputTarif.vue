@@ -12,7 +12,7 @@
               <b-row class="d-flex align-items-center">
                 <b-col cols="12">
                   <b-row class="d-flex align-items-center mb-4">
-                    <b-col cols="3" class="text-capitalize">nama layanan</b-col>
+                    <b-col cols="4" class="text-capitalize">nama layanan</b-col>
                     <b-col cols="3" class="text-capitalize">kode layanan</b-col>
                     <b-col cols="3" class="text-capitalize"
                       >tarif layanan</b-col
@@ -23,7 +23,7 @@
                     v-for="(inputTarif, index) in tmpInputTarifData"
                     :key="index"
                   >
-                    <b-col cols="3">
+                    <b-col cols="4">
                       <div role="group">
                         <b-form-input
                           :value="inputTarif.nama_layanan"
@@ -37,6 +37,7 @@
                           :state="errorState({ label: 'nama_layanan', index })"
                           :placeholder="placeholderInput('nama_layanan')"
                           :disabled="index <= 1"
+                          maxlength="30"
                         ></b-form-input>
                         <b-form-invalid-feedback class="text-capitalize">
                           {{
@@ -59,6 +60,7 @@
                           "
                           :state="errorState({ label: 'kode_layanan', index })"
                           :placeholder="placeholderInput('kode_layanan')"
+                          maxlength="5"
                         ></b-form-input>
                         <b-form-invalid-feedback class="text-capitalize">
                           {{
@@ -82,6 +84,7 @@
                           @keypress="isNumber"
                           :state="errorState({ label: 'tarif_layanan', index })"
                           :placeholder="placeholderInput('tarif_layanan')"
+                          maxlength="12"
                         ></b-form-input>
                         <b-form-invalid-feedback class="text-capitalize">
                           {{
@@ -91,7 +94,7 @@
                         </b-form-invalid-feedback>
                       </div>
                     </b-col>
-                    <b-col cols="3" v-if="index > 1">
+                    <b-col cols="2" v-if="index > 1">
                       <b-button
                         variant="danger"
                         style="padding: .5rem .8rem; border-radius: 100%"
@@ -104,7 +107,7 @@
                 </b-col>
               </b-row>
               <b-row class="d-flex align-items-center">
-                <b-col cols="9">
+                <b-col cols="10">
                   <div class="d-flex justify-content-center">
                     <b-button
                       variant="first"
@@ -115,7 +118,7 @@
                     /></b-button>
                   </div>
                 </b-col>
-                <b-col cols="3">
+                <b-col cols="2">
                   <b-button
                     class="text-capitalize"
                     type="submit"
