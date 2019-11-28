@@ -1,7 +1,11 @@
 import axios from 'axios';
-import store from '@/store/'
+import store from '@/store/';
+import router from '../../router'
 
 const state = {
+    CONST_PASIENID: 1,
+    CONST_TRANSKLINIKID: 1,
+
     pasien: {},
     organs: [],
     penyakits: [],
@@ -20,7 +24,7 @@ const getters = {
 
 const actions = {
     async fetchData({ commit }) {
-        const res_pasien = await axios.get(store.state.URL_API + "/pasien/1", {
+        const res_pasien = await axios.get(store.state.URL_API + "/pasien/" + state.CONST_PASIENID, {
             headers: {
                 Authorization:
                     "Bearer " + store.state.BEARER_TOKEN,
@@ -52,11 +56,53 @@ const actions = {
         commit('setCanvas', payload);
     },
 
-    saveRekamMedis({ commit }) {
-        console.log('canvas pemeriksaan', state.canvas_pemeriksaan.toDataURL("image/png"));
-        console.log('canvas diagnosa', state.canvas_diagnosa.toDataURL("image/png"));
-        console.log(state.postData);
+    async saveRekamMedis({ commit }) {
+        state.postData['transklinik_id'] = state.CONST_TRANSKLINIKID;
+        state.postData['pasien_id'] = state.CONST_PASIENID;
+
+        if (state.postData['pemeriksaan_is_draw']) {
+            state.postData['pemeriksaan_draw'] = state.canvas_pemeriksaan.toDataURL("image/png");
+        }
+
+        if (state.postData['diagnosa_is_draw']) {
+            state.postData['diagnosa_draw'] = state.canvas_diagnosa.toDataURL("image/png");
+        }
+
+        if (!state.postData['agreement']) {
+            return alert('Anda belum menyetujui pernyataan...');
+        }
+
+        if (!state.postData['next_konsultasi']) {
+            return alert('Anda belum mimilih waktu konsultasi selanjutnya...');
+        }
+
+        console.log('Postdata: ', state.postData);
+
+        try {
+            const res = await axios.post(
+                store.state.URL_API + "/rekam_medis",
+                { ...state.postData  },
+                {
+                    headers: {
+                        Authorization:
+                            "Bearer " + store.state.BEARER_TOKEN,
+                        "Content-Type": "application/json"
+                    }
+                }
+            );
+
+            console.log('Response: ', res.data);
+
+            router.push({
+              path: "/"
+            });
+
+        } catch (err) {
+            console.log(err);
+        }
+
     }
+
 };
 
 const mutations = {
@@ -67,11 +113,11 @@ const mutations = {
         // console.log(state.postData);
     },
     setCanvas: (state, payload) => {
-        if(payload.key === 'PEMERIKSAAN'){
+        if (payload.key === 'PEMERIKSAAN') {
             state.canvas_pemeriksaan = payload.value;
         }
 
-        if(payload.key === 'DIAGNOSA'){
+        if (payload.key === 'DIAGNOSA') {
             state.canvas_diagnosa = payload.value;
         }
     }

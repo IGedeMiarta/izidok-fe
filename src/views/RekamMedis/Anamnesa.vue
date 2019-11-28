@@ -67,7 +67,7 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   name: "Anamnesa",
   computed: mapGetters(["pasien"]),
-  methods: mapActions(["updateAnamnesa"])
+  methods: mapActions(["updateAnamnesa"]),
 };
 </script>
 

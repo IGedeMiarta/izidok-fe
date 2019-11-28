@@ -29,8 +29,18 @@
           <span @click="penColor('orange')" class="dot" style="background-color: orange;"></span>
         </div>
         <div class="form-group col-md-2">
-          <b-button v-on:click="isHidden = false" variant="success" size="sm" class="m-1">Pen</b-button>
-          <b-button v-on:click="isHidden = true" variant="danger" size="sm" class="m-1">Text</b-button>
+          <b-button
+            v-on:click="isHidden = false;updatePostData({key:'pemeriksaan_is_draw', value: true});"
+            variant="success"
+            size="sm"
+            class="m-1"
+          >Pen</b-button>
+          <b-button
+            v-on:click="isHidden = true;updatePostData({key:'pemeriksaan_is_draw', value: false});"
+            variant="danger"
+            size="sm"
+            class="m-1"
+          >Text</b-button>
         </div>
       </div>
     </form>
@@ -64,6 +74,7 @@
 
 <script>
 import axios from "axios";
+import store from "@/store/";
 import { mapGetters, mapActions } from "vuex";
 import Editor from "./Editor";
 
@@ -90,7 +101,7 @@ export default {
   },
   watch: {
     selectedOrgan: function() {
-      this.updatePostData({ key: "selected_organ", value: this.selectedOrgan });
+      this.updatePostData({ key: "organ_id", value: this.selectedOrgan });
     }
   },
   methods: {
@@ -104,10 +115,9 @@ export default {
       let organ_id = self.selectedOrgan;
 
       axios
-        .get("http://localhost:9000/api/v1/organ/" + organ_id, {
+        .get(store.state.URL_API + "/organ/" + organ_id, {
           headers: {
-            Authorization:
-              "Bearer RnkySmZJRUg5bHYzODNpS1d1UnV4ajJ0ZFpGSVhrVlVUTVNzY0N1Qg==",
+            Authorization: "Bearer " + store.state.BEARER_TOKEN,
             "Content-Type": "application/json"
           }
         })
@@ -226,6 +236,7 @@ export default {
 
     //append data canvas to vuex global state
     this.updateCanvas({ key: "PEMERIKSAAN", value: this.canvas });
+    this.updatePostData({ key: "pemeriksaan_is_draw", value: true });
 
     // Get a regular interval for drawing to the screen
     window.requestAnimFrame = (function(callback) {

@@ -44,8 +44,8 @@
           <span @click="penColor('orange')" class="dot" style="background-color: orange;"></span>
         </div>
         <div class="form-group col-md-2">
-          <b-button v-on:click="isHidden = false" variant="success" size="sm" class="m-1">Pen</b-button>
-          <b-button v-on:click="isHidden = true" variant="danger" size="sm" class="m-1">Text</b-button>
+          <b-button v-on:click="isHidden = false;updatePostData({key:'diagnosa_is_draw', value: true});" variant="success" size="sm" class="m-1">Pen</b-button>
+          <b-button v-on:click="isHidden = true;updatePostData({key:'diagnosa_is_draw', value: false});" variant="danger" size="sm" class="m-1">Text</b-button>
         </div>
       </div>
     </form>
@@ -83,6 +83,7 @@
 <script>
 import Multiselect from "vue-multiselect";
 import axios from "axios";
+import store from "@/store/";
 import { mapGetters, mapActions } from "vuex";
 import Editor from "./Editor";
 
@@ -106,7 +107,7 @@ export default {
   watch: {
     selectedKodePenyakit: function() {
       this.updatePostData({
-        key: "selected_penyakit",
+        key: "kode_penyakit",
         value: this.selectedKodePenyakit
       });
     }
@@ -190,10 +191,9 @@ export default {
       this.isLoading = true;
 
       axios
-        .get("http://localhost:9000/api/v1/kode_penyakit/name/" + query, {
+        .get(store.state.URL_API + "/kode_penyakit/name/" + query, {
           headers: {
-            Authorization:
-              "Bearer RnkySmZJRUg5bHYzODNpS1d1UnV4ajJ0ZFpGSVhrVlVUTVNzY0N1Qg==",
+            Authorization: "Bearer " + store.state.BEARER_TOKEN,
             "Content-Type": "application/json"
           }
         })
@@ -229,6 +229,7 @@ export default {
 
     //append data canvas to vuex global state
     this.updateCanvas({ key: "DIAGNOSA", value: this.canvas });
+    this.updatePostData({key:'diagnosa_is_draw', value: true});
 
     // Get a regular interval for drawing to the screen
     window.requestAnimFrame = (function(callback) {
