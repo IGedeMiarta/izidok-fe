@@ -239,7 +239,7 @@ export default {
     submitForm() {
       const { formBasicData } = this;
       if (formBasicData.every(item => item.error !== null && !item.error)) {
-        console.log("good to go");
+        // console.log("good to go");
       } else {
         formBasicData.map(item => {
           this.triggerValidation({
