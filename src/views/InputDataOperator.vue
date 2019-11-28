@@ -101,7 +101,9 @@ export default {
           constructPostData()
         );
         const { status, data } = res.data;
-        alert((status && "Success") || "Gagal");
+        if(status) {
+          this.$router.push('/')
+        }
       } catch (err) {
         // console.log(err);
       }
