@@ -1,9 +1,9 @@
 <template>
   <div class="page-title">
     <div class="row">
-      <div class="col-xl-7">
+      <div class="col-xl-12">
         <div>
-          <template v-if="breadcrumb.length && breadcrumb.length > 0">
+          <template v-if="breadcrumb && breadcrumb.length && breadcrumb.length > 0">
             <ol class="breadcrumb text-uppercase font-size-xs p-0">
               <li
                 class="breadcrumb-item"
