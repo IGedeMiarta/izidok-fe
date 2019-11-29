@@ -229,7 +229,7 @@ export default {
       }
     },
     placeholderInput(label = "") {
-      return startCase(`masukkan ${label}`);
+      return startCase(`input ${label}`);
     },
     validateInput({ label, $event }) {
       return {
