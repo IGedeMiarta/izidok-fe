@@ -57,12 +57,19 @@ const routes = [
         props: true
       },
       {
+        path: "operator/:token",
+        name: "verification-operator",
+        component: () => import("../views/Verification/VerificationOperator.vue"),
+        meta: { layout: "examples" },
+        props: true
+      },
+      {
         path: ":state",
         name: "verification-result",
         component: () => import("../views/Verification/VerificationResult.vue"),
         meta: { layout: "examples" },
         props: true
-      }
+      },
     ]
   },
   {
