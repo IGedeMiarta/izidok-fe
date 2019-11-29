@@ -57,12 +57,19 @@ const routes = [
         props: true
       },
       {
+        path: "operator/:token",
+        name: "verification-operator",
+        component: () => import("../views/Verification/VerificationOperator.vue"),
+        meta: { layout: "examples" },
+        props: true
+      },
+      {
         path: ":state",
         name: "verification-result",
         component: () => import("../views/Verification/VerificationResult.vue"),
         meta: { layout: "examples" },
         props: true
-      }
+      },
     ]
   },
   {
@@ -83,19 +90,13 @@ const routes = [
   },
   {
     path: "/pasien",
-    component: () => import("../views/Pasien.vue"),
-    children: [
-      {
-        path: "/list",
-        name: "list-pasien",
-        component: () => import("../views/Pasien/List.vue")
-      },
-      {
-        path: "/tambah",
-        name: "tambah-pasien",
-        component: () => import("../views/Pasien/Tambah.vue")
-      }
-    ]
+    name: "pasien",
+    component: () => import("../views/Pasien/List.vue")
+  },
+  {
+    path: "/pasien/tambah",
+    name: "tambah pasien",
+    component: () => import("../views/Pasien/Tambah.vue")
   }
 ];
 

@@ -35,6 +35,7 @@
                     "
                     :state="renderError({ error: form.error })"
                     :placeholder="form.placeholder"
+                    maxlength="50"
                   />
                 </b-form-group>
 

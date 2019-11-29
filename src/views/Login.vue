@@ -161,8 +161,11 @@ export default {
         if(status) {
           localStorage.setItem('__tkn__', data.token);
           this.loggedIn = true;
-          this.firstJoin = true//data.first_login;
+          this.firstJoin = data.first_login;
           this.klinik_id = (data.kliniks && data.kliniks[0]) ? data.kliniks[0].id : null;
+          
+          localStorage.setItem('user.name', data.user.nama);
+          localStorage.setItem('user.role', data.user.roles[0].role);
 
           // not first join
           if(!this.firstJoin) {
