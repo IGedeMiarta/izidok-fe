@@ -51,7 +51,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="javascript:void(0);">
+              <a class="nav-link" href="javascript:void(0);" @click="logout">
                 log out
               </a>
             </li>
@@ -73,6 +73,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faDribbble } from "@fortawesome/free-brands-svg-icons";
+import axios from 'axios';
 library.add(
   faDribbble,
   faPlusCircle,
@@ -100,6 +101,18 @@ export default {
           "popover-custom-lg",
           "popover-secondary"
         );
+    },
+    async logout() {
+      try {
+        const res = await axios.post(`${this.url_api}/logout`);
+        const { status, data, message } = res.data;
+        if(status) {
+          localStorage.removeItem('__tkn__');
+          this.$router.push('/login');
+        }
+      } catch (err) {
+        // console.log(err);
+      }
     }
   }
 };
