@@ -13,10 +13,10 @@
       </div>
       <div class="d-none d-md-block pl-2">
         <div class="font-weight-bold">
-          Daniel Craig
+          {{ userName }}
         </div>
         <span class="text-black-50">
-          Vuejs Developer
+          {{ userRole }}
         </span>
       </div>
       <span class="pl-3">
@@ -74,6 +74,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faDribbble } from "@fortawesome/free-brands-svg-icons";
 import axios from 'axios';
+import startCase from "lodash/startCase";
 library.add(
   faDribbble,
   faPlusCircle,
@@ -86,6 +87,14 @@ library.add(
 export default {
   components: {
     "font-awesome-icon": FontAwesomeIcon
+  },
+  computed: {
+    userName() {
+      return startCase(localStorage.getItem('user.name'))
+    },
+    userRole() {
+      return startCase(localStorage.getItem('user.role'))
+    }
   },
   methods: {
     showTooltip() {
