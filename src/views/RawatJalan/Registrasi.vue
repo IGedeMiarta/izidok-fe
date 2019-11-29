@@ -233,6 +233,20 @@ export default {
     this.formData = this.setFormData();
   },
   methods: {
+    overwriteAntrean() {
+      this.$swal({
+        title: "Pasien telah berada pada list antrean",
+        text: `Apakah anda yakin untuk melanjutkan registrasi?`,
+        type: "question",
+        showCancelButton: true,
+        cancelButtonText: startCase("tidak"),
+        confirmButtonText: startCase("ya")
+      }).then(res => {
+        if (res.value) {
+          console.log(res);
+        }
+      });
+    },
     whitelistValidation() {
       return this.setFormBasicData().map(item => item.rawLabel);
     },
