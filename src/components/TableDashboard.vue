@@ -19,7 +19,6 @@
               <tr class="text-capitalize">
                 <th scope="col">no</th>
                 <th scope="col">nama pasien</th>
-                <th scope="col">dokter</th>
                 <th scope="col" class="text-center">
                   no. rekam medis
                 </th>
@@ -39,11 +38,6 @@
                     <span class="d-block">
                       John Doe
                     </span>
-                  </div>
-                </td>
-                <td>
-                  <div class="align-box-row">
-                    <span>Dr. Dawai Pagi </span>
                   </div>
                 </td>
                 <td>
