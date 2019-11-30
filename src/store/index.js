@@ -8,8 +8,8 @@ Vue.use(Vuex);
 // Create store
 export default new Vuex.Store({
   state: {
-    URL_API: 'http://localhost:9000/api/v1',
-    BEARER_TOKEN: 'VkFFZm1oME91bG8xWnVZdmllRmhPMzhwMnZJWVA1TkZiMnVMSGQ1Ng==' 
+    URL_API: 'http://localhost:9001/api/v1',
+    BEARER_TOKEN: 'dEdLQXBaZzhWV1czUWFCR3ZtNXBYTUpkdVlXWWw1Vk1FUlc0N1FuNg==' 
   },
   modules: {
     rekamMedis

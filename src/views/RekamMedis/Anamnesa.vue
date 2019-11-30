@@ -7,8 +7,8 @@
           <input
             type="text"
             class="form-control"
-            id="tensi"
-            :value="pasien.tensi"
+            id="tensi_sistole"
+            :value="pasien.tensi_sistole"
             @input="updateAnamnesa({key:$event.target.id, value: $event.target.value});"
           />
         </div>
@@ -17,8 +17,8 @@
           <input
             type="text"
             class="form-control"
-            id="nadi"
-            :value="pasien.nadi"
+            id="tensi_diastole"
+            :value="pasien.tensi_diastole"
             @input="updateAnamnesa({key:$event.target.id, value: $event.target.value});"
           />
         </div>
