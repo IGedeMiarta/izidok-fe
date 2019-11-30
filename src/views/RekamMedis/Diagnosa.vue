@@ -2,7 +2,7 @@
   <div>
     <form>
       <div class="form-row">
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-4">
           <multiselect
             v-model="selectedKodePenyakit"
             :options="kodePenyakit"
@@ -36,16 +36,34 @@
             @search-change="asyncFind"
           ></multiselect>
         </div>
-        <div class="form-group col-md-2" style="text-align:left">
-          <span @click="penColor('blue')" class="dot" style="background-color: blue;"></span>
-          <span @click="penColor('red')" class="dot" style="background-color: red;"></span>
-          <span @click="penColor('#54c756')" class="dot" style="background-color: #54c756;"></span>
-          <span @click="penColor('#555')" class="dot" style="background-color: #555;"></span>
-          <span @click="penColor('orange')" class="dot" style="background-color: orange;"></span>
+        <div
+          class="col-md-4 d-flex align-items-center justify-content-start mt-4 mt-xl-0 justify-content-xl-end"
+        >
+          <div>
+            <font-awesome-icon
+              icon="pen-alt"
+              class="font-size-xl m-2"
+              v-on:click="isHidden = false;
+              updatePostData({key:'diagnosa_is_draw', value: true});"
+            />
+            <font-awesome-icon
+              icon="keyboard"
+              class="font-size-xl m-2"
+              v-on:click="isHidden = true;
+              updatePostData({key:'diagnosa_is_draw', value: false});"
+            />
+          </div>
         </div>
-        <div class="form-group col-md-2">
-          <b-button v-on:click="isHidden = false;updatePostData({key:'diagnosa_is_draw', value: true});" variant="success" size="sm" class="m-1">Pen</b-button>
-          <b-button v-on:click="isHidden = true;updatePostData({key:'diagnosa_is_draw', value: false});" variant="danger" size="sm" class="m-1">Text</b-button>
+        <div
+          class="col-md-12 d-flex align-items-center justify-content-start mt-4 mt-xl-0 justify-content-xl-end"
+        >
+          <div>
+            <span @click="penColor('blue')" class="dot" style="background-color: blue;"></span>
+            <span @click="penColor('red')" class="dot" style="background-color: red;"></span>
+            <span @click="penColor('#54c756')" class="dot" style="background-color: #54c756;"></span>
+            <span @click="penColor('#555')" class="dot" style="background-color: #555;"></span>
+            <span @click="penColor('orange')" class="dot" style="background-color: orange;"></span>
+          </div>
         </div>
       </div>
     </form>
@@ -57,7 +75,7 @@
     <div class="row">
       <div class="col-md-12" v-show="!isHidden">
         <canvas
-          id="note-canvas"
+          id="diagnosa-canvas"
           ref="canvas"
           @mousedown="handleMousedown"
           @mouseup="handleMouseup"
@@ -65,7 +83,7 @@
           @touchstart="handleTouchstart"
           @touchend="handleTouchend"
           @touchmove="handleTouchmove"
-          width="700"
+          width="1000"
           height="500"
         >Your browser does not support the HTML 5 Canvas.</canvas>
         <div class="col-md-4">
@@ -229,7 +247,7 @@ export default {
 
     //append data canvas to vuex global state
     this.updateCanvas({ key: "DIAGNOSA", value: this.canvas });
-    this.updatePostData({key:'diagnosa_is_draw', value: true});
+    this.updatePostData({ key: "diagnosa_is_draw", value: true });
 
     // Get a regular interval for drawing to the screen
     window.requestAnimFrame = (function(callback) {
@@ -251,7 +269,7 @@ export default {
     document.body.addEventListener(
       "touchstart",
       function(e) {
-        if (e.target == document.getElementById("note-canvas")) {
+        if (e.target == document.getElementById("diagnosa-canvas")) {
           e.preventDefault();
         }
       },
@@ -260,7 +278,7 @@ export default {
     document.body.addEventListener(
       "touchend",
       function(e) {
-        if (e.target == document.getElementById("note-canvas")) {
+        if (e.target == document.getElementById("diagnosa-canvas")) {
           e.preventDefault();
         }
       },
@@ -269,7 +287,7 @@ export default {
     document.body.addEventListener(
       "touchmove",
       function(e) {
-        if (e.target == document.getElementById("note-canvas")) {
+        if (e.target == document.getElementById("diagnosa-canvas")) {
           e.preventDefault();
         }
       },
@@ -281,12 +299,12 @@ export default {
 
 <style scoped>
 canvas {
-  border: 1px solid rgb(212, 212, 212);
+  /* border: 1px solid rgb(212, 212, 212); */
   cursor: crosshair;
   /* width: 100%; */
 }
 
-#note-canvas {
+#diagnosa-canvas {
   touch-action: none;
   /* position: relative; */
 }

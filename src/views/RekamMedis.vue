@@ -1,9 +1,6 @@
 <template>
   <div>
-    <Top
-      v-bind:heading="pasien.nama"
-      v-bind:subheading="'NOMOR: '+pasien.nomor_rekam_medis+' / '+pasien.jenis_kelamin+' / ? Tahun'"
-    />
+    <Top/>
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
@@ -15,11 +12,27 @@
                     class="btn-link btn-lg d-flex align-items-center justify-content-between shadow-none"
                     v-b-toggle.accordion-1
                   >
-                    <span>Anamnesa</span>
+                    <span>Tanda - tanda Vital</span>
                     <!-- <font-awesome-icon icon="angle-up" class="font-size-xl" /> -->
                   </b-button>
                 </div>
                 <b-collapse id="accordion-1" visible accordion="accordion-example" role="tabpanel">
+                  <div class="card-body">
+                    <TandaVital />
+                  </div>
+                </b-collapse>
+              </div>
+               <div class="card card-box">
+                <div class="card-header">
+                  <b-button
+                    class="btn-link btn-lg d-flex align-items-center justify-content-between shadow-none"
+                    v-b-toggle.accordion-2
+                  >
+                    <span>Anamnesa</span>
+                    <!-- <font-awesome-icon icon="angle-up" class="font-size-xl" /> -->
+                  </b-button>
+                </div>
+                <b-collapse id="accordion-2" accordion="accordion-example" role="tabpanel">
                   <div class="card-body">
                     <Anamnesa />
                   </div>
@@ -29,13 +42,13 @@
                 <div class="card-header">
                   <b-button
                     class="btn-link btn-lg d-flex align-items-center justify-content-between shadow-none collapsed"
-                    v-b-toggle.accordion-2
+                    v-b-toggle.accordion-3
                   >
                     <span>Pemeriksaan Fisik</span>
                     <!-- <font-awesome-icon icon="angle-up" class="font-size-xl" /> -->
                   </b-button>
                 </div>
-                <b-collapse id="accordion-2" accordion="accordion-example" role="tabpanel">
+                <b-collapse id="accordion-3" accordion="accordion-example" role="tabpanel">
                   <div class="card-body">
                     <Pemeriksaan ref="pemeriksaan" />
                   </div>
@@ -45,13 +58,13 @@
                 <div class="card-header">
                   <b-button
                     class="btn-link btn-lg d-flex align-items-center justify-content-between shadow-none collapsed"
-                    v-b-toggle.accordion-3
+                    v-b-toggle.accordion-4
                   >
                     <span>Diagnosa</span>
                     <!-- <font-awesome-icon icon="angle-up" class="font-size-xl" /> -->
                   </b-button>
                 </div>
-                <b-collapse id="accordion-3" accordion="accordion-example" role="tabpanel">
+                <b-collapse id="accordion-4" accordion="accordion-example" role="tabpanel">
                   <div class="card-body">
                     <Diagnosa ref="diagnosa" />
                   </div>
@@ -69,6 +82,7 @@
 
 <script>
 import Top from "./RekamMedis/Header.vue";
+import TandaVital from "./RekamMedis/TandaVital";
 import Anamnesa from "./RekamMedis/Anamnesa";
 import Pemeriksaan from "./RekamMedis/Pemeriksaan.vue";
 import Diagnosa from "./RekamMedis/Diagnosa";
@@ -81,6 +95,7 @@ export default {
   name: "RekamMedis",
   components: {
     Top,
+    TandaVital,
     Anamnesa,
     Pemeriksaan,
     Diagnosa,

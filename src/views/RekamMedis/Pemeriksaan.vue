@@ -2,7 +2,7 @@
   <div>
     <form>
       <div class="form-row">
-        <div class="form-group col-md-3">
+        <div class="col-md-3">
           <select
             @change="organChanged"
             v-model="selectedOrgan"
@@ -18,36 +18,46 @@
             >{{ organ.nama +', '+ organ.sub_nama}}</option>
           </select>
         </div>
-        <div class="form-group col-md-3">
+        <div class="col-md-3">
           <input type="text" class="form-control" id="subNamaOrgan" />
         </div>
-        <div class="form-group col-md-2" style="text-align:left">
-          <span @click="penColor('blue')" class="dot" style="background-color: blue;"></span>
-          <span @click="penColor('red')" class="dot" style="background-color: red;"></span>
-          <span @click="penColor('#54c756')" class="dot" style="background-color: #54c756;"></span>
-          <span @click="penColor('#555')" class="dot" style="background-color: #555;"></span>
-          <span @click="penColor('orange')" class="dot" style="background-color: orange;"></span>
+        <div
+          class="col-md-6 d-flex align-items-center justify-content-start mt-4 mt-xl-0 justify-content-xl-end"
+        >
+          <div>
+            <font-awesome-icon
+              icon="pen-alt"
+              class="font-size-xl m-2"
+              v-on:click="isHidden = false;
+              updatePostData({key:'pemeriksaan_is_draw', value: true});
+              drawBackground(image_url);"
+            />
+            <font-awesome-icon
+              icon="keyboard"
+              class="font-size-xl m-2"
+              v-on:click="isHidden = true;
+              updatePostData({key:'pemeriksaan_is_draw', value: false});
+              drawBackground(image_url);"
+            />
+          </div>
         </div>
-        <div class="form-group col-md-2">
-          <b-button
-            v-on:click="isHidden = false;updatePostData({key:'pemeriksaan_is_draw', value: true});"
-            variant="success"
-            size="sm"
-            class="m-1"
-          >Pen</b-button>
-          <b-button
-            v-on:click="isHidden = true;updatePostData({key:'pemeriksaan_is_draw', value: false});"
-            variant="danger"
-            size="sm"
-            class="m-1"
-          >Text</b-button>
+        <div
+          class="col-md-12 d-flex align-items-center justify-content-start mt-4 mt-xl-0 justify-content-xl-end"
+        >
+          <div>
+            <span @click="penColor('blue')" class="dot" style="background-color: blue;"></span>
+            <span @click="penColor('red')" class="dot" style="background-color: red;"></span>
+            <span @click="penColor('#54c756')" class="dot" style="background-color: #54c756;"></span>
+            <span @click="penColor('#555')" class="dot" style="background-color: #555;"></span>
+            <span @click="penColor('orange')" class="dot" style="background-color: orange;"></span>
+          </div>
         </div>
       </div>
     </form>
     <div class="row">
       <div class="col-md-12" v-show="!isHidden">
         <canvas
-          id="note-canvas"
+          id="pemeriksaan-canvas"
           ref="canvas"
           @mousedown="handleMousedown"
           @mouseup="handleMouseup"
@@ -55,7 +65,7 @@
           @touchstart="handleTouchstart"
           @touchend="handleTouchend"
           @touchmove="handleTouchmove"
-          width="700"
+          width="1000"
           height="500"
         >Your browser does not support the HTML 5 Canvas.</canvas>
         <div class="col-md-4">
@@ -77,11 +87,17 @@ import axios from "axios";
 import store from "@/store/";
 import { mapGetters, mapActions } from "vuex";
 import Editor from "./Editor";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faPenAlt, faKeyboard } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+library.add(faPenAlt, faKeyboard);
 
 export default {
   name: "Pemeriksaan",
   components: {
-    Editor
+    Editor,
+    "font-awesome-icon": FontAwesomeIcon
   },
   data() {
     return {
@@ -90,7 +106,8 @@ export default {
       mousePos: { x: 0, y: 0 },
       lastPos: { x: 0, y: 0 },
       ctx: null,
-      selectedOrgan: null
+      selectedOrgan: null,
+      image_url: null
     };
   },
   computed: {
@@ -123,14 +140,15 @@ export default {
         })
         .then(function(response) {
           let res = response.data.data;
+          self.image_url = res.gambar;
           self.clear();
-          self.drawBackground(res.gambar);
+          self.drawBackground(self.image_url);
         })
         .catch(err => console.log(err));
     },
     drawBackground(image_url) {
       let self = this;
-      var canvas = document.getElementById("note-canvas"),
+      var canvas = document.getElementById("pemeriksaan-canvas"),
         ctx = canvas.getContext("2d"),
         img_organ = document.getElementById("img_organ");
 
@@ -144,8 +162,6 @@ export default {
       if (img_organ.hasChildNodes()) {
         img_organ.innerHTML = "";
       }
-
-      console.log(this.canvas.width);
 
       background.onload = function() {
         if (self.isHidden) {
@@ -225,7 +241,7 @@ export default {
       this.canvas.width = this.canvas.width;
     },
     penColor(color) {
-      var canvas = document.getElementById("note-canvas"),
+      var canvas = document.getElementById("pemeriksaan-canvas"),
         ctx = canvas.getContext("2d");
       ctx.strokeStyle = color;
     }
@@ -258,7 +274,7 @@ export default {
     document.body.addEventListener(
       "touchstart",
       function(e) {
-        if (e.target == document.getElementById("note-canvas")) {
+        if (e.target == document.getElementById("pemeriksaan-canvas")) {
           e.preventDefault();
         }
       },
@@ -267,7 +283,7 @@ export default {
     document.body.addEventListener(
       "touchend",
       function(e) {
-        if (e.target == document.getElementById("note-canvas")) {
+        if (e.target == document.getElementById("pemeriksaan-canvas")) {
           e.preventDefault();
         }
       },
@@ -276,7 +292,7 @@ export default {
     document.body.addEventListener(
       "touchmove",
       function(e) {
-        if (e.target == document.getElementById("note-canvas")) {
+        if (e.target == document.getElementById("pemeriksaan-canvas")) {
           e.preventDefault();
         }
       },
@@ -288,11 +304,11 @@ export default {
 
 <style scoped>
 canvas {
-  border: 1px solid rgb(212, 212, 212);
+  /* border: 1px solid rgb(212, 212, 212); */
   cursor: crosshair;
 }
 
-#note-canvas {
+#pemeriksaan-canvas {
   touch-action: none;
   /* position: absolute; */
   /* display: none; */

@@ -11,7 +11,8 @@ const state = {
     penyakits: [],
     postData: {},
     canvas_pemeriksaan: null,
-    canvas_diagnosa: null
+    canvas_diagnosa: null,
+    canvas_anamnesa: null
 };
 
 const getters = {
@@ -20,6 +21,7 @@ const getters = {
     postData: state => state.postData,
     canvas_pemeriksaan: state => state.canvas_pemeriksaan,
     canvas_diagnosa: state => state.canvas_diagnosa,
+    canvas_anamnesa: state => state.canvas_anamnesa,
 };
 
 const actions = {
@@ -60,6 +62,10 @@ const actions = {
         state.postData['transklinik_id'] = state.CONST_TRANSKLINIKID;
         state.postData['pasien_id'] = state.CONST_PASIENID;
 
+        if (state.postData['anamnesa_is_draw']) {
+            state.postData['anamnesa_draw'] = state.canvas_anamnesa.toDataURL("image/png");
+        }
+
         if (state.postData['pemeriksaan_is_draw']) {
             state.postData['pemeriksaan_draw'] = state.canvas_pemeriksaan.toDataURL("image/png");
         }
@@ -93,9 +99,9 @@ const actions = {
 
             console.log('Response: ', res.data);
 
-            router.push({
-              path: "/"
-            });
+            // router.push({
+            //   path: "/"
+            // });
 
         } catch (err) {
             console.log(err);
@@ -119,6 +125,10 @@ const mutations = {
 
         if (payload.key === 'DIAGNOSA') {
             state.canvas_diagnosa = payload.value;
+        }
+
+        if (payload.key === 'ANAMNESA') {
+            state.canvas_anamnesa = payload.value;
         }
     }
 };
