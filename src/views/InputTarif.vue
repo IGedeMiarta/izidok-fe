@@ -81,7 +81,7 @@
                               $event
                             })
                           "
-                          @keypress="isNumber"
+                          v-money="money"
                           :state="errorState({ label: 'tarif_layanan', index })"
                           :placeholder="placeholderInput('tarif_layanan')"
                           maxlength="12"
@@ -141,16 +141,16 @@ import startCase from "lodash/startCase";
 import { VMoney } from "v-money";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
-import axios from 'axios';
+import axios from "axios";
 library.add(faPlus, faMinus);
 
 export default {
   directives: { money: VMoney },
-  props: ['klinik_id'],
+  props: ["klinik_id"],
   data: () => ({
     money: {
-      decimal: ",",
-      thousands: ".",
+      decimal: "",
+      thousands: ",",
       prefix: "",
       suffix: "",
       precision: 0
@@ -268,10 +268,9 @@ export default {
     async doSubmitInputTarif() {
       const { constructPostData } = this;
       try {
-        const res = await axios.post(
-          `${this.url_api}/layanan`,
-          {arr: constructPostData()}
-        );
+        const res = await axios.post(`${this.url_api}/layanan`, {
+          arr: constructPostData()
+        });
         const { status, data } = res.data;
 
         this.$router.push({
@@ -286,14 +285,14 @@ export default {
       const tmp = tmpInputTarifData.map(item => {
         const x = Object.keys(item).filter(y => !["error"].includes(y));
         const z = x.reduce((obj, key) => {
-          let q = key
-          if (key == 'tarif_layanan') {
-            q = 'tarif';
+          let q = key;
+          if (key == "tarif_layanan") {
+            q = "tarif";
           }
           obj[q] = item[key];
           return obj;
         }, {});
-        z.klinik_id = this.klinik_id
+        z.klinik_id = this.klinik_id;
         return z;
       });
       return tmp;
@@ -305,9 +304,11 @@ export default {
         label,
         $event
       });
-      tmp[label] = $event;
 
-      Vue.set(this.tmpInputTarifData, index, tmp);
+      if (label !== "tarif_layanan") {
+        tmp[label] = $event;
+        Vue.set(this.tmpInputTarifData, index, tmp);
+      }
     },
     addInputTarifData() {
       const { tmpInputTarifData, validateAll, generateErrorObj } = this;
