@@ -47,7 +47,9 @@
                 class="form-group col-md-3"
                 style="float:left;padding-top:30px;padding-left:0;"
               >
-                <b-button variant="primary" @click="fetchListPasien">CARI</b-button>
+                <b-button variant="primary" @click="fetchListPasien"
+                  >CARI</b-button
+                >
               </div>
             </div>
             <div class="col-md-3 no-padding">
@@ -84,21 +86,18 @@
                     <a
                       href="javascript:void(0)"
                       class="btn bg-kuning font-size-md pl-2 pr-2 btn-sm ml-1 mr-1"
-                      title="View details"
                     >
                       <font-awesome-icon icon="pencil-alt" />
                     </a>
-                    <a
-                      href="javascript:void(0)"
+                    <b-link
+                      @click.prevent="removePasien(data.nama)"
                       class="btn bg-danger font-size-md pl-2 pr-2 btn-sm ml-1 mr-1"
-                      title="View details"
                     >
                       <font-awesome-icon icon="trash-alt" />
-                    </a>
+                    </b-link>
                     <a
-                      href="javascript:void(0)"
+                      @click.prevent=""
                       class="btn bg-first font-size-md pl-2 pr-2 btn-sm ml-1 mr-1"
-                      title="View details"
                     >
                       <font-awesome-icon icon="search" />
                     </a>
@@ -127,6 +126,7 @@
 </template>
 
 <script>
+import startCase from "lodash/startCase";
 import axios from "axios";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
@@ -150,7 +150,15 @@ export default {
       currentPage: 1,
       rows: 100,
       perPage: 10,
-      pasienList: [],
+      pasienList: [
+        {
+          nama: "relep",
+          nomor_polis: "asd",
+          jenis_kelamin: "perempuan",
+          tanggal_lahir: "20-10-2014",
+          nama_dokter: "meki"
+        }
+      ],
       namaPasien: "",
       noRekamMedis: ""
     };
@@ -159,6 +167,19 @@ export default {
     this.fetchListPasien();
   },
   methods: {
+    removePasien(namaPasien = null) {
+      this.$swal({
+        text: `Apakah anda yakin ingin menghapus data pasien ${namaPasien}?`,
+        type: "question",
+        showCancelButton: true,
+        cancelButtonText: startCase("batal"),
+        confirmButtonText: startCase("ya")
+      }).then(res => {
+        if (res.value) {
+          console.log(res);
+        }
+      });
+    },
     async fetchListPasien() {
       try {
         const res = await axios.get(
@@ -168,7 +189,7 @@ export default {
         if (success) {
           const { data: pasienData, total } = data;
           this.rows = total;
-          this.pasienList = pasienData;
+          this.pasienList = [...pasienData];
         }
       } catch (err) {
         console.log(err);
