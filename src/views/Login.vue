@@ -165,7 +165,7 @@ export default {
           this.klinik_id = (data.kliniks && data.kliniks[0]) ? data.kliniks[0].id : null;
           
           localStorage.setItem('user.name', data.user.nama);
-          localStorage.setItem('user.role', data.user.roles[0].role);
+          localStorage.setItem('user.role', data.user.role.role);
 
           // not first join
           if(!this.firstJoin) {
