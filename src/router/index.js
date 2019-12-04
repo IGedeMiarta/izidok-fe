@@ -27,7 +27,7 @@ const routes = [
     meta: { layout: "examples" }
   },
   {
-    path: "/forgot-password/:email?",
+    path: "/forgot-password/:token?",
     name: "forgot-password",
     component: () => import("../views/ForgotPassword.vue"),
     meta: { layout: "examples" },

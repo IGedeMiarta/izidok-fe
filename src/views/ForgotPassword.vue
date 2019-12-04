@@ -27,7 +27,7 @@
                   <div
                     class="bg-composed-wrapper--bg bg-night-sky opacity-5"
                   ></div>
-                  <component :is="currentStepComponent"></component>
+                  <component :is="currentStepComponent" :token="token"></component>
                 </div>
               </div>
             </div>
@@ -53,7 +53,7 @@ import {
 library.add(faArrowLeft);
 
 export default {
-  props: ["email"],
+  props: ["token"],
   data() {
     return {
       currentStep: 1
@@ -73,7 +73,7 @@ export default {
   },
   methods: {
     redirectResetPassword() {
-      if (this.email) {
+      if (this.token) {
         this.currentStep++;
       }
     }
