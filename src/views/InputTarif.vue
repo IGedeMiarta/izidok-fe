@@ -58,6 +58,7 @@
                               $event
                             })
                           "
+                          @keyup="onKeyupKode($event, index)"
                           :state="errorState({ label: 'kode_layanan', index })"
                           :placeholder="placeholderInput('kode_layanan')"
                           maxlength="5"
@@ -164,11 +165,11 @@ export default {
         kode_layanan: null,
         tarif_layanan: null
       }
-    ]
+    ],
+    kodeContainer: []
   }),
   mounted() {
     this.tmpInputTarifData = this.setTmpInputTarifData();
-    // console.log('input-tarif.klinik_id', this.klinik_id)
   },
   methods: {
     setTmpInputTarifData() {
@@ -204,7 +205,6 @@ export default {
     },
     errorDesc({ label, index }) {
       const { tmpInputTarifData } = this;
-      // console.log(tmpInputTarifData[index]);
       if (
         tmpInputTarifData[index].error &&
         tmpInputTarifData[index].error[label]
@@ -311,15 +311,37 @@ export default {
     onChangeValue({ index, label, $event }) {
       const { tmpInputTarifData, validateInput } = this;
       const tmp = tmpInputTarifData[index];
-      tmp.error[label] = validateInput({
-        label,
-        $event
-      });
+      if(tmp.error[label].error !== false) {
+        tmp.error[label] = validateInput({
+          label,
+          $event
+        });
+      }
 
       if (label !== "tarif_layanan") {
         tmp[label] = $event;
         Vue.set(this.tmpInputTarifData, index, tmp);
       }
+    },
+    onKeyupKode($event, index) {
+      Vue.set(this.kodeContainer, index, $event.target.value)
+      this.kodeContainer.forEach((item, i) => {
+        if(index == i) return;
+        if(item == $event.target.value) {
+          this.tmpInputTarifData[index].error['kode_layanan'].error = false
+          this.tmpInputTarifData[index].error['kode_layanan'].desc = 'Kode layanan tidak boleh sama'
+
+          this.tmpInputTarifData[i].error['kode_layanan'].error = false
+          this.tmpInputTarifData[i].error['kode_layanan'].desc = 'Kode layanan tidak boleh sama'
+        }
+        else {
+          this.tmpInputTarifData[index].error['kode_layanan'].error = true
+          this.tmpInputTarifData[index].error['kode_layanan'].desc = ''
+
+          this.tmpInputTarifData[i].error['kode_layanan'].error = true
+          this.tmpInputTarifData[i].error['kode_layanan'].desc = ''
+        }
+      })
     },
     addInputTarifData() {
       const { tmpInputTarifData, validateAll, generateErrorObj } = this;
