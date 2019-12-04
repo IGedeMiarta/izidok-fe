@@ -81,7 +81,7 @@
                               $event
                             })
                           "
-                          v-money="money"
+                          @keyup="onKeyupTarif($event, index)"
                           :state="errorState({ label: 'tarif_layanan', index })"
                           :placeholder="placeholderInput('tarif_layanan')"
                           maxlength="12"
@@ -138,14 +138,12 @@
 <script>
 import Vue from "vue";
 import startCase from "lodash/startCase";
-import { VMoney } from "v-money";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 library.add(faPlus, faMinus);
 
 export default {
-  directives: { money: VMoney },
   props: ["klinik_id"],
   data: () => ({
     money: {
@@ -214,7 +212,9 @@ export default {
         return tmpInputTarifData[index].error[label].desc;
       }
     },
-    isNumber($event) {
+    onKeyupTarif($event, index) {
+      const { tmpInputTarifData } = this;
+
       var evt = $event;
       evt = evt ? evt : window.event;
       var charCode = evt.which ? evt.which : evt.keyCode;
@@ -225,6 +225,14 @@ export default {
       ) {
         evt.preventDefault();
       } else {
+
+        // memberikan separator ribuan
+        const tmp = tmpInputTarifData[index];
+        const newResult = $event.target.value.replace(/\D/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        tmp['tarif_layanan'] = newResult;
+        Vue.set(this.tmpInputTarifData, index, tmp);
+
         return true;
       }
     },
@@ -285,9 +293,12 @@ export default {
       const tmp = tmpInputTarifData.map(item => {
         const x = Object.keys(item).filter(y => !["error"].includes(y));
         const z = x.reduce((obj, key) => {
-          let q = key;
-          if (key == "tarif_layanan") {
-            q = "tarif";
+          let q = key
+          if (key == 'tarif_layanan') {
+            q = 'tarif';
+
+            // hapus separator ribuan dan jadikan int
+            item[key] = parseInt(item[key].replace(/\D/g, ""))
           }
           obj[q] = item[key];
           return obj;
