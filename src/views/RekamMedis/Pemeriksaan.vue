@@ -3,23 +3,22 @@
     <form>
       <div class="form-row">
         <div class="col-md-3">
-          <select
-            @change="organChanged"
+          <multiselect
             v-model="selectedOrgan"
-            id="namaOrgan"
-            class="form-control"
-          >
-            <option disabled></option>
-            <option :value="null" disabled>Pilih Organ...</option>
-            <option
-              v-bind:key="organ.id"
-              v-for="organ in organs"
-              :value="organ.id"
-            >{{ organ.nama +', '+ organ.sub_nama}}</option>
-          </select>
-        </div>
-        <div class="col-md-3">
-          <input type="text" class="form-control" id="subNamaOrgan" />
+            :options="organs"
+            placeholder="Pilih Organ*"
+            label="nama"
+            track-by="nama"
+            open-direction="bottom"
+            :multiple="false"
+            :loading="isLoading"
+            :clear-on-select="true"
+            :close-on-select="true"
+            :options-limit="10"
+            :hide-selected="true"
+            @search-change="asyncFind"
+          ></multiselect>
+
         </div>
         <div
           class="col-md-6 d-flex align-items-center justify-content-start mt-4 mt-xl-0 justify-content-xl-end"
@@ -90,12 +89,14 @@ import Editor from "./Editor";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPenAlt, faKeyboard } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import Multiselect from "vue-multiselect";
 
 library.add(faPenAlt, faKeyboard);
 
 export default {
   name: "Pemeriksaan",
   components: {
+    Multiselect,
     Editor,
     "font-awesome-icon": FontAwesomeIcon
   },
@@ -106,20 +107,24 @@ export default {
       mousePos: { x: 0, y: 0 },
       lastPos: { x: 0, y: 0 },
       ctx: null,
-      selectedOrgan: null,
-      image_url: null
+      // selectedOrgan: null,
+      image_url: null,
+      isLoading: false,
+      selectedOrgan: [],
+      organs: []
     };
   },
   computed: {
-    ...mapGetters(["organs"]),
+    // ...mapGetters(["organs"]),
     canvas: function() {
       return this.$refs.canvas;
     }
   },
   watch: {
     selectedOrgan: function() {
-      this.updatePostData({ key: "organ_id", value: this.selectedOrgan });
-    }
+      this.updatePostData({ key: "organ_id", value: this.selectedOrgan.id });
+      this.organChanged();
+    },
   },
   methods: {
     ...mapActions(["updatePostData", "updateCanvas"]),
@@ -128,23 +133,9 @@ export default {
     },
     organChanged() {
       let self = this;
-
-      let organ_id = self.selectedOrgan;
-
-      axios
-        .get(store.state.URL_API + "/organ/" + organ_id, {
-          headers: {
-            Authorization: "Bearer " + store.state.BEARER_TOKEN,
-            "Content-Type": "application/json"
-          }
-        })
-        .then(function(response) {
-          let res = response.data.data;
-          self.image_url = res.gambar;
-          self.clear();
-          self.drawBackground(self.image_url);
-        })
-        .catch(err => console.log(err));
+      self.image_url = self.selectedOrgan.gambar;
+      self.clear();
+      self.drawBackground(self.image_url);
     },
     drawBackground(image_url) {
       let self = this;
@@ -244,7 +235,36 @@ export default {
       var canvas = document.getElementById("pemeriksaan-canvas"),
         ctx = canvas.getContext("2d");
       ctx.strokeStyle = color;
-    }
+    },
+    asyncFind(query) {
+      let self = this;
+      this.isLoading = true;
+
+      axios
+        .get(store.state.URL_API + "/organ/name/" + query, {
+          headers: {
+            Authorization: "Bearer " + store.state.BEARER_TOKEN,
+            "Content-Type": "application/json"
+          }
+        })
+        .then(function(response) {
+          let res = response.data;
+
+          if (!res.status) {
+            self.isLoading = false;
+            return;
+          }
+
+          let organs = res.data.organs;
+
+          if (organs) {
+            self.organs = organs;
+          }
+
+          self.isLoading = false;
+        })
+        .catch(err => console.log(err));
+    },
   },
   mounted() {
     this.ctx = this.canvas.getContext("2d");
