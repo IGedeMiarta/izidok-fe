@@ -57,7 +57,14 @@
                 class="form-group col-md-12"
                 style="padding-top:30px;padding-left:0;"
               >
-                <b-button variant="first" style="float:right;">TAMBAH</b-button>
+                <b-button
+                  variant="first"
+                  to="{
+                  name: 'pasien-tambah'
+                }"
+                  style="float:right;"
+                  >TAMBAH</b-button
+                >
               </div>
             </div>
           </div>
@@ -90,7 +97,12 @@
                       <font-awesome-icon icon="pencil-alt" />
                     </a>
                     <b-link
-                      @click.prevent="removePasien(data.nama)"
+                      @click.prevent="
+                        removePasien({
+                          id: data.id,
+                          nama: data.nama
+                        })
+                      "
                       class="btn bg-danger font-size-md pl-2 pr-2 btn-sm ml-1 mr-1"
                     >
                       <font-awesome-icon icon="trash-alt" />
@@ -167,18 +179,44 @@ export default {
     this.fetchListPasien();
   },
   methods: {
-    removePasien(namaPasien = null) {
+    removePasien({ id, nama = null } = {}) {
       this.$swal({
-        text: `Apakah anda yakin ingin menghapus data pasien ${namaPasien}?`,
+        text: `Apakah anda yakin ingin menghapus data pasien ${nama}?`,
         type: "question",
         showCancelButton: true,
         cancelButtonText: startCase("batal"),
         confirmButtonText: startCase("ya")
-      }).then(res => {
+      }).then(async res => {
         if (res.value) {
           console.log(res);
+          await this.deletePasien();
         }
       });
+    },
+    async deletePasien(id) {
+      try {
+        const res = await axios.delete(`${this.url_api}/pasien/${id}`);
+        const { status, data } = res.data;
+        if (status) {
+          this.$swal({
+            type: "success",
+            title: startCase("deleted"),
+            text: startCase("pasien berhasil di hapus")
+          });
+        } else {
+          this.$swal({
+            type: "error",
+            title: startCase("gagal"),
+            text: startCase("pasien gagal di hapus")
+          });
+        }
+      } catch (err) {
+        this.$swal({
+          type: "error",
+          title: startCase("gagal"),
+          text: startCase("pasien gagal di hapus")
+        });
+      }
     },
     async fetchListPasien() {
       try {

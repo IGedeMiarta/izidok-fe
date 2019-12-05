@@ -95,7 +95,7 @@ const routes = [
   },
   {
     path: "/pasien/tambah",
-    name: "tambah pasien",
+    name: "pasien-tambah",
     component: () => import("../views/Pasien/Tambah.vue")
   }
 ];
