@@ -12,7 +12,7 @@
         />
       </div>
       <div class="form-group col-md-6 pl-3">
-        <label for="nohp">No. Handphone</label>
+        <label for="nohp">No. Handphone*</label>
         <input
           type="text"
           class="form-control"
@@ -24,7 +24,7 @@
     </div>
     <div class="form-row">
       <div class="form-group col-md-6 pr-3">
-        <label for="nik">NIK*</label>
+        <label for="nik">NIK</label>
         <input
           type="text"
           class="form-control"
@@ -87,14 +87,7 @@
           </b-form-group>
         </div>
         <div class="form-group col-md-6 no-padding float-left">
-          <label for="goldarah">Gol. Darah*</label>
-          <!-- <input
-            type="text"
-            class="form-control"
-            id="goldarah"
-            name="goldarah"
-            placeholder="Gol. Darah"
-          /> -->
+          <label for="goldarah">Gol. Darah</label>
           <select id="inputState" class="form-control">
             <option value="" selected></option>
             <option value="0">O</option>
@@ -152,7 +145,7 @@
       <b-col cols="6">
         <b-row>
           <b-col cols="4">
-            <label for="alamatrumah">RT/RW*</label>
+            <label for="alamatrumah">RT/RW</label>
             <input
               type="text"
               class="form-control"
@@ -162,7 +155,7 @@
             />
           </b-col>
           <b-col cols="4">
-            <label for="nohppj">Kel/Desa*</label>
+            <label for="nohppj">Kel/Desa</label>
             <input
               type="text"
               class="form-control"
@@ -189,16 +182,19 @@
       <b-col cols="6">
         <label for="inputState">Status Perkawinan*</label>
         <select id="inputState" class="form-control">
-          <option value="" selected></option>
-          <option value="0">Sudah Kawin</option>
-          <option value="1">Sudah Kawin 2X</option>
+          <option
+            :value="data"
+            v-for="data in ['kawin', 'tidak kawin', 'janda/duda']"
+            :key="data"
+            >{{ startCase(data) }}</option
+          >
         </select>
       </b-col>
       <b-col cols="6"></b-col>
     </b-row>
     <b-row>
       <b-col cols="6">
-        <label for="inputState">Pekerjaan*</label>
+        <label for="inputState">Pekerjaan</label>
         <select id="inputState" class="form-control">
           <option value="" selected></option>
           <option value="0">Kerja</option>
@@ -224,5 +220,10 @@
 </template>
 
 <script>
-export default {};
+import startCase from "lodash/startCase";
+export default {
+  methods: {
+    startCase: startCase
+  }
+};
 </script>
