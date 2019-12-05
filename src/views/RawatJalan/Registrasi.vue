@@ -112,9 +112,7 @@ const tmp = [
     label: "no. ktp",
     type: "text",
     col: 3,
-    validations: {
-      required
-    }
+    validations: {}
   },
   {
     label: "nama lengkap",
@@ -162,49 +160,37 @@ const tmp = [
     label: "tinggi badan",
     type: "text",
     col: 2,
-    validations: {
-      required
-    }
+    validations: {}
   },
   {
     label: "berat badan",
     type: "text",
     col: 2,
-    validations: {
-      required
-    }
+    validations: {}
   },
   {
     label: "suhu badan",
     type: "text",
     col: 2,
-    validations: {
-      required
-    }
+    validations: {}
   },
   {
     label: "tensi sistole",
     type: "text",
     col: 2,
-    validations: {
-      required
-    }
+    validations: {}
   },
   {
     label: "tinggi diastole",
     type: "text",
     col: 2,
-    validations: {
-      required
-    }
+    validations: {}
   },
   {
     label: "nadi",
     type: "text",
     col: 2,
-    validations: {
-      required
-    }
+    validations: {}
   }
 ];
 

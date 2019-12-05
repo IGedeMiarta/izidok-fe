@@ -59,9 +59,9 @@
               >
                 <b-button
                   variant="first"
-                  to="{
-                  name: 'pasien-tambah'
-                }"
+                  :to="{
+                    name: 'pasien-tambah'
+                  }"
                   style="float:right;"
                   >TAMBAH</b-button
                 >
