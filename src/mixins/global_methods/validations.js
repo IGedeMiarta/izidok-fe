@@ -35,7 +35,7 @@ const validations = {
         return `${label} hanya boleh angka`;
 
       case "email":
-        return `${label} tidak valid`;
+        return `format ${label} tidak sesuai`;
 
       default:
         return "";

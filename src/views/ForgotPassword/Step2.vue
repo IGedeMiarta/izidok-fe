@@ -143,16 +143,11 @@ export default {
     async resetPassword() {
       try {
         const { formData } = this;
-        let postData = Object.keys(formData)
-          .map(item => ({
-            label: item,
-            value: formData[item]
-          }))
-          .reduce((obj, key) => {
-            obj[key.label] = key.value;
-            return obj;
-          }, {});
-        postData.token = this.token;
+        let postData = {
+          password: formData.password,
+          konfirm_password: formData.konfirmasi_password,
+          token: this.token
+        }
         // console.log(postData);
         const res = await axios.post(`${this.url_api}/reset`, postData);
         const { success, message } = res.data;
@@ -166,7 +161,7 @@ export default {
           alert(message);
         }
       } catch (err) {
-        console.log(err);
+        // console.log(err);
       }
     },
     submitForm($event) {
