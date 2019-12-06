@@ -71,13 +71,13 @@ export default {
   validations: {
     formData: {
       password: {
-        required
-        // minLength: minLength(6)
+        required,
+        minLength: minLength(6),
       },
       konfirmasi_password: {
         required,
-        sameAsPassword: sameAs("password")
-        // minLength: minLength(6)
+        sameAsPassword: sameAs("password"),
+        minLength: minLength(6),
       }
     }
   },
