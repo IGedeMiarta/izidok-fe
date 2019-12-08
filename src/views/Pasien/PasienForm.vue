@@ -24,6 +24,7 @@
               })
             "
             :state="getDataError({ rawLabel: 'nama lengkap' })"
+            :disabled="disabledForm()"
           />
         </b-form-group>
         <b-form-group
@@ -47,6 +48,7 @@
               })
             "
             :state="getDataError({ rawLabel: 'no. handphone' })"
+            :disabled="disabledForm()"
           />
         </b-form-group>
       </div>
@@ -72,6 +74,7 @@
               })
             "
             :state="getDataError({ rawLabel: 'nik' })"
+            :disabled="disabledForm()"
           />
         </b-form-group>
         <b-form-group
@@ -95,6 +98,7 @@
               })
             "
             :state="getDataError({ rawLabel: 'email' })"
+            :disabled="disabledForm()"
           />
         </b-form-group>
       </div>
@@ -120,6 +124,7 @@
               })
             "
             :state="getDataError({ rawLabel: 'tempat tanggal lahir' })"
+            :disabled="disabledForm()"
           />
         </b-form-group>
         <b-form-group
@@ -143,6 +148,7 @@
               })
             "
             :state="getDataError({ rawLabel: 'nama penjamin/asuransi' })"
+            :disabled="disabledForm()"
           />
         </b-form-group>
       </div>
@@ -170,6 +176,7 @@
                     })
                   "
                   :options="['Pria', 'Wanita']"
+                  :disabled="disabledForm()"
                 >
                 </b-form-radio-group>
               </b-form-group>
@@ -201,6 +208,8 @@
                       $event
                     })
                   "
+                  :state="getDataError({ rawLabel: 'gol. darah' })"
+                  :disabled="disabledForm()"
                 />
               </b-form-group>
             </b-col>
@@ -228,6 +237,7 @@
                 })
               "
               :state="getDataError({ rawLabel: 'no. member/polis asuransi' })"
+              :disabled="disabledForm()"
             />
           </b-form-group>
           <b-form-group
@@ -251,6 +261,7 @@
                 })
               "
               :state="getDataError({ rawLabel: 'nama penanggung jawab' })"
+              :disabled="disabledForm()"
             />
           </b-form-group>
         </div>
@@ -277,6 +288,7 @@
               })
             "
             :state="getDataError({ rawLabel: 'alamat rumah' })"
+            :disabled="disabledForm()"
           />
         </b-form-group>
         <b-form-group
@@ -300,6 +312,7 @@
               })
             "
             :state="getDataError({ rawLabel: 'no. hp penanggung jawab' })"
+            :disabled="disabledForm()"
           />
         </b-form-group>
       </div>
@@ -328,6 +341,7 @@
                     })
                   "
                   :state="getDataError({ rawLabel: 'rt/rw' })"
+                  :disabled="disabledForm()"
                 />
               </b-form-group>
             </b-col>
@@ -353,6 +367,7 @@
                     })
                   "
                   :state="getDataError({ rawLabel: 'kel/desa' })"
+                  :disabled="disabledForm()"
                 />
               </b-form-group>
             </b-col>
@@ -378,6 +393,7 @@
                     })
                   "
                   :state="getDataError({ rawLabel: 'kecamatan' })"
+                  :disabled="disabledForm()"
                 />
               </b-form-group>
             </b-col>
@@ -413,6 +429,8 @@
                   $event
                 })
               "
+              :state="getDataError({ rawLabel: 'status perkawinan' })"
+              :disabled="disabledForm()"
             />
           </b-form-group>
         </b-col>
@@ -456,23 +474,42 @@
                   $event
                 })
               "
+              :state="getDataError({ rawLabel: 'pekerjaan' })"
+              :disabled="disabledForm()"
             />
           </b-form-group>
         </b-col>
         <b-col cols="6" class="d-flex align-items-center justify-content-end">
           <b-button
+            @click="$emit('keluar', true)"
             class="ml-3 text-uppercase"
-            variant="danger"
+            :variant="btnVariant()"
             style="font-size:17.5px;"
-            >keluar</b-button
+            >{{ btnText() }}</b-button
           >
-          <b-button
-            class="ml-3 text-uppercase"
-            variant="primary"
-            style="font-size:17.5px;"
-            type="submit"
-            >simpan</b-button
-          >
+          <template v-if="formType !== 'detail'">
+            <b-button
+              class="ml-3 text-uppercase"
+              variant="primary"
+              style="font-size:17.5px;"
+              type="submit"
+              >simpan</b-button
+            >
+          </template>
+          <template v-else>
+            <b-button
+              class="ml-3 text-uppercase float-left"
+              variant="success"
+              style="font-size:17.5px;"
+              @click="
+                $router.push({
+                  name: 'pasien-edit',
+                  params: { idPasien }
+                })
+              "
+              >edit</b-button
+            >
+          </template>
         </b-col>
       </b-row>
     </b-form>
@@ -480,6 +517,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import startCase from "lodash/startCase";
 import {
   required,
@@ -500,8 +538,8 @@ const tmp = [
     label: "no. handphone",
     validations: {
       required,
-      minLength: minLength(10),
-      numeric
+      numeric,
+      minLength: minLength(10)
     }
   },
   {
@@ -573,6 +611,15 @@ const tmp = [
 ];
 
 export default {
+  props: {
+    formType: {
+      default: "add",
+      type: String
+    },
+    idPasien: {
+      type: [String, Number]
+    }
+  },
   data: () => ({
     formBasicData: null,
     formData: null,
@@ -589,12 +636,72 @@ export default {
       }
     };
   },
-  mounted() {
-    this.formBasicData = this.setFormBasicData();
-    this.formData = this.setFormData();
+  async mounted() {
+    if (this.formType !== "detail") {
+      this.formBasicData = this.setFormBasicData();
+      this.formData = this.setFormData();
+    }
+    await this.getPasienData();
   },
   methods: {
     startCase: startCase,
+    btnText() {
+      switch (this.formType) {
+        case "detail":
+          return "tutup";
+
+        case "edit":
+          return "batal";
+
+        default:
+          return "keluar";
+      }
+    },
+    btnVariant() {
+      switch (this.formType) {
+        case "detail":
+          return "primary";
+
+        default:
+          return "danger";
+      }
+    },
+    disabledForm() {
+      return this.formType === "detail";
+    },
+    async getPasienData() {
+      if (this.idPasien) {
+        try {
+          const res = await axios.get(`${this.url_api}/pasien`, this.idPasien);
+          const { status, data } = res.data;
+          if (status) {
+            const {
+              nama,
+              nik,
+              tempat_lahir,
+              tanggal_lahir,
+              jenis_kelamin,
+              golongan_darah,
+              alamat_rumah,
+              rt,
+              rw,
+              kelurahan,
+              kecamatan,
+              status_perkawinan,
+              pekerjaan,
+              nomor_hp,
+              nama_penjamin,
+              nomor_polis,
+              email,
+              nama_penanggung_jawab
+            } = data;
+            // todo assign data
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    },
     whitelistValidation() {
       return this.setFormBasicData().map(item => item.rawLabel);
     },
@@ -631,7 +738,7 @@ export default {
     submitForm() {
       const { formBasicData } = this;
       if (formBasicData.every(item => item.error !== null && !item.error)) {
-        console.log("good to go");
+        this.$emit("submitForm", this.formData);
       } else {
         formBasicData.map(item => {
           this.triggerValidation({

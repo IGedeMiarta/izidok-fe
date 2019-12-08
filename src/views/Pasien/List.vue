@@ -90,12 +90,16 @@
                   <td>{{ data.tanggal_lahir }}</td>
                   <td>{{ data.nama_dokter }}</td>
                   <td class="text-center">
-                    <a
-                      href="javascript:void(0)"
+                    <b-link
+                      @click.prevent="
+                        editPasien({
+                          id: data.id
+                        })
+                      "
                       class="btn bg-kuning font-size-md pl-2 pr-2 btn-sm ml-1 mr-1"
                     >
                       <font-awesome-icon icon="pencil-alt" />
-                    </a>
+                    </b-link>
                     <b-link
                       @click.prevent="
                         removePasien({
@@ -107,12 +111,16 @@
                     >
                       <font-awesome-icon icon="trash-alt" />
                     </b-link>
-                    <a
-                      @click.prevent=""
+                    <b-link
+                      @click.prevent="
+                        detailPasien({
+                          id: data.id
+                        })
+                      "
                       class="btn bg-first font-size-md pl-2 pr-2 btn-sm ml-1 mr-1"
                     >
                       <font-awesome-icon icon="search" />
-                    </a>
+                    </b-link>
                   </td>
                 </tr>
               </tbody>
@@ -164,6 +172,7 @@ export default {
       perPage: 10,
       pasienList: [
         {
+          id: 1,
           nama: "relep",
           nomor_polis: "asd",
           jenis_kelamin: "perempuan",
@@ -192,6 +201,22 @@ export default {
           await this.deletePasien();
         }
       });
+    },
+    editPasien({ id } = {}) {
+      if (id) {
+        this.$router.push({
+          name: "pasien-edit",
+          params: { idPasien: id }
+        });
+      }
+    },
+    detailPasien({ id } = {}) {
+      if (id) {
+        this.$router.push({
+          name: "pasien-detail",
+          params: { idPasien: id }
+        });
+      }
     },
     async deletePasien(id) {
       try {

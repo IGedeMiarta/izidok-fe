@@ -37,7 +37,7 @@ const routes = [
     path: "/input-tarif",
     name: "input-tarif",
     component: () => import("../views/InputTarif.vue"),
-    props: true,
+    props: true
   },
   {
     path: "/input-data-operator",
@@ -59,7 +59,8 @@ const routes = [
       {
         path: "operator/:token",
         name: "verification-operator",
-        component: () => import("../views/Verification/VerificationOperator.vue"),
+        component: () =>
+          import("../views/Verification/VerificationOperator.vue"),
         meta: { layout: "examples" },
         props: true
       },
@@ -69,7 +70,7 @@ const routes = [
         component: () => import("../views/Verification/VerificationResult.vue"),
         meta: { layout: "examples" },
         props: true
-      },
+      }
     ]
   },
   {
@@ -91,12 +92,31 @@ const routes = [
   {
     path: "/pasien",
     name: "pasien",
-    component: () => import("../views/Pasien/List.vue")
-  },
-  {
-    path: "/pasien/tambah",
-    name: "pasien-tambah",
-    component: () => import("../views/Pasien/Tambah.vue")
+    component: () => import("../views/Pasien.vue"),
+    children: [
+      {
+        path: "",
+        name: "pasien-list",
+        component: () => import("../views/Pasien/List.vue")
+      },
+      {
+        path: "tambah",
+        name: "pasien-tambah",
+        component: () => import("../views/Pasien/Tambah.vue")
+      },
+      {
+        path: "edit/:id?",
+        name: "pasien-edit",
+        component: () => import("../views/Pasien/Edit.vue"),
+        props: true
+      },
+      {
+        path: "detail/:id?",
+        name: "pasien-detail",
+        component: () => import("../views/Pasien/Detail.vue"),
+        props: true
+      }
+    ]
   }
 ];
 

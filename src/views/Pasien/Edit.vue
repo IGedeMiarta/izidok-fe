@@ -7,7 +7,7 @@
           label: 'Manajemen Pasien'
         },
         {
-          label: 'Tambah Pasien',
+          label: 'edit Pasien',
           active: true
         }
       ]"
@@ -16,7 +16,7 @@
     <div class="container">
       <div class="card card-box">
         <div class="card-header">
-          <h4 class="text-capitalize my-2">tambah pasien</h4>
+          <h4 class="text-capitalize my-2">edit pasien</h4>
         </div>
         <div class="card-body">
           <div class="mb-4">
@@ -34,7 +34,12 @@
               </div></vue-dropzone
             >
           </div>
-          <PasienForm @keluar="goingPlaces" @submitForm="submitForm" />
+          <PasienForm
+            formType="edit"
+            @keluar="goingPlaces"
+            @submitForm="submitForm"
+            :idPasien="idPasien"
+          />
         </div>
       </div>
     </div>
@@ -46,6 +51,9 @@ import axios from "axios";
 import startCase from "lodash/startCase";
 
 export default {
+  props: {
+    idPasien: [String, Number]
+  },
   components: {
     vueDropzone: () => import("vue2-dropzone"),
     PasienForm: () => import("./PasienForm")
@@ -79,6 +87,17 @@ export default {
       next();
     }
   },
+  beforeRouteEnter(to, from, next) {
+    const { params } = to;
+    const { idPasien } = params;
+    if (!idPasien) {
+      next({
+        name: "pasien-list"
+      });
+    } else {
+      next();
+    }
+  },
   methods: {
     simpan() {
       this.$swal({
@@ -88,7 +107,7 @@ export default {
     },
     submitForm(data) {
       this.beingSubmit = true;
-      this.addPasien(data);
+      this.editPasien(data);
     },
     goingPlaces() {
       const tmp = {
@@ -101,9 +120,13 @@ export default {
 
       this.$router.push(tmp);
     },
-    async addPasien(postData) {
+    async editPasien(postData) {
       try {
-        const res = await axios.post(`${this.url_api}/pasien`, postData);
+        const { idPasien } = postData;
+        const res = await axios.put(
+          `${this.url_api}/pasien/${idPasien}`,
+          postData
+        );
         const { status, data } = res.data;
         if (status) {
           this.goingPlaces();

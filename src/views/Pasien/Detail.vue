@@ -7,7 +7,7 @@
           label: 'Manajemen Pasien'
         },
         {
-          label: 'Tambah Pasien',
+          label: 'Detail Pasien',
           active: true
         }
       ]"
@@ -16,25 +16,15 @@
     <div class="container">
       <div class="card card-box">
         <div class="card-header">
-          <h4 class="text-capitalize my-2">tambah pasien</h4>
+          <h4 class="text-capitalize my-2">detail pasien</h4>
         </div>
         <div class="card-body">
-          <div class="mb-4">
-            <vue-dropzone
-              ref="myVueDropzone"
-              id="dropzone"
-              :options="dropzoneOptions"
-              useCustomSlot
-              class="custom-dropzone"
-            >
-              <div class="dropzone-custom-content">
-                <h3 class="dropzone-custom-title text-capitalize">
-                  ambil foto <span class="text-uppercase">ktp</span>
-                </h3>
-              </div></vue-dropzone
-            >
-          </div>
-          <PasienForm @keluar="goingPlaces" @submitForm="submitForm" />
+          <PasienForm
+            formType="detail"
+            @keluar="goingPlaces"
+            @submitForm="submitForm"
+            :idPasien="idPasien"
+          />
         </div>
       </div>
     </div>
@@ -46,8 +36,10 @@ import axios from "axios";
 import startCase from "lodash/startCase";
 
 export default {
+  props: {
+    idPasien: [String, Number]
+  },
   components: {
-    vueDropzone: () => import("vue2-dropzone"),
     PasienForm: () => import("./PasienForm")
   },
   data: () => ({
@@ -59,22 +51,11 @@ export default {
     },
     beingSubmit: false
   }),
-  beforeRouteLeave(to, from, next) {
-    if (!this.beingSubmit) {
-      this.$swal({
-        title: startCase("keluar"),
-        text: `Apakah anda yakin untuk keluar dari halaman ini?`,
-        type: "warning",
-        showCancelButton: true,
-        cancelButtonText: startCase("tidak"),
-        confirmButtonText: startCase("ya")
-      }).then(res => {
-        if (res.value) {
-          next();
-        } else {
-          next(false);
-        }
-      });
+  beforeRouteEnter(to, from, next) {
+    const { params } = to;
+    const { idPasien } = params;
+    if (!idPasien) {
+      next(false);
     } else {
       next();
     }
@@ -88,7 +69,7 @@ export default {
     },
     submitForm(data) {
       this.beingSubmit = true;
-      this.addPasien(data);
+      this.editPasien(data);
     },
     goingPlaces() {
       const tmp = {
@@ -101,9 +82,13 @@ export default {
 
       this.$router.push(tmp);
     },
-    async addPasien(postData) {
+    async editPasien(postData) {
       try {
-        const res = await axios.post(`${this.url_api}/pasien`, postData);
+        const { idPasien } = postData;
+        const res = await axios.put(
+          `${this.url_api}/pasien/${idPasien}`,
+          postData
+        );
         const { status, data } = res.data;
         if (status) {
           this.goingPlaces();
