@@ -182,6 +182,7 @@ export default {
         },
         {
           title: "Halaman Pembayaran",
+          href: "/pembayaran",
           icon: {
             element: "font-awesome-icon",
             attributes: {
