@@ -117,6 +117,11 @@ const routes = [
         props: true
       }
     ]
+  },
+  {
+    path: "/pembayaran",
+    name: "pembayaran",
+    component: () => import("../views/Pembayaran.vue")
   }
 ];
 
