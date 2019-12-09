@@ -74,15 +74,8 @@
                     <b-col cols="3">
                       <div role="group">
                         <b-form-input
-                          :value="inputTarif.tarif_layanan"
-                          @change="
-                            onChangeValue({
-                              label: 'tarif_layanan',
-                              index,
-                              $event
-                            })
-                          "
-                          @keyup="onKeyupTarif($event, index)"
+                          v-model.lazy="inputTarif.tarif_layanan"
+                          v-money="money"
                           :state="errorState({ label: 'tarif_layanan', index })"
                           :placeholder="placeholderInput('tarif_layanan')"
                           maxlength="12"
@@ -142,10 +135,12 @@ import startCase from "lodash/startCase";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import { VMoney } from 'v-money'
 library.add(faPlus, faMinus);
 
 export default {
   props: ["klinik_id"],
+  directives: {money: VMoney},
   data: () => ({
     money: {
       decimal: "",
@@ -225,14 +220,6 @@ export default {
       ) {
         evt.preventDefault();
       } else {
-
-        // memberikan separator ribuan
-        const tmp = tmpInputTarifData[index];
-        const newResult = $event.target.value.replace(/\D/g, "")
-          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        tmp['tarif_layanan'] = newResult;
-        Vue.set(this.tmpInputTarifData, index, tmp);
-
         return true;
       }
     },
