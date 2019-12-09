@@ -2,7 +2,7 @@
   <div>
     <form>
       <div class="form-row">
-        <div class="col-md-3">
+        <div class="col-md-6">
           <multiselect
             v-model="selectedOrgan"
             :options="organs"
