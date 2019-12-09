@@ -35,7 +35,7 @@ const validations = {
         return `${label} hanya boleh angka`;
 
       case "email":
-        return `${label} tidak valid`;
+        return `format ${label} tidak sesuai`;
 
       default:
         return "";
@@ -90,6 +90,44 @@ const validations = {
         label) ||
       importantLabel
     );
+  },
+  itemFormBasicData({ rawLabel }) {
+    if (
+      this.formBasicData &&
+      this.formBasicData.length &&
+      this.formBasicData.length > 0
+    ) {
+      return this.formBasicData.find(item => item.rawLabel === rawLabel);
+    } else {
+      return null;
+    }
+  },
+  blindlyGetData({ rawLabel, opts = null }) {
+    switch (opts) {
+      case "error":
+        return this.getDataError({ rawLabel });
+
+      default:
+        return this.getValidationDesc({ rawLabel });
+    }
+  },
+  getValidationDesc({ rawLabel }) {
+    const item = this.itemFormBasicData({ rawLabel });
+    if (item) {
+      const { "validation-desc": validationDesc } = item;
+      return validationDesc;
+    } else {
+      return null;
+    }
+  },
+  getDataError({ rawLabel }) {
+    const item = this.itemFormBasicData({ rawLabel });
+    if (item) {
+      const { error } = item;
+      return this.renderError({ error });
+    } else {
+      return null;
+    }
   }
 };
 

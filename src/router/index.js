@@ -5,6 +5,11 @@ Vue.use(VueRouter);
 
 const routes = [
   {
+    path: "/rekam-medis",
+    name: "rekam-medis",
+    component: () => import("../views/RekamMedis.vue"),
+  },
+  {
     path: "/",
     name: "home",
     component: () => import("../views/Home.vue")
@@ -27,7 +32,7 @@ const routes = [
     meta: { layout: "examples" }
   },
   {
-    path: "/forgot-password/:email?",
+    path: "/forgot-password/:token?",
     name: "forgot-password",
     component: () => import("../views/ForgotPassword.vue"),
     meta: { layout: "examples" },
@@ -36,7 +41,8 @@ const routes = [
   {
     path: "/input-tarif",
     name: "input-tarif",
-    component: () => import("../views/InputTarif.vue")
+    component: () => import("../views/InputTarif.vue"),
+    props: true
   },
   {
     path: "/input-data-operator",
@@ -56,14 +62,84 @@ const routes = [
         props: true
       },
       {
-        path: "success",
-        name: "verification-success",
+        path: "operator/:token",
+        name: "verification-operator",
         component: () =>
-          import("../views/Verification/VerificationSuccess.vue"),
-        meta: { layout: "examples" }
+          import("../views/Verification/VerificationOperator.vue"),
+        meta: { layout: "examples" },
+        props: true
+      },
+      {
+        path: ":state",
+        name: "verification-result",
+        component: () => import("../views/Verification/VerificationResult.vue"),
+        meta: { layout: "examples" },
+        props: true
+      }
+    ]
+  },
+  {
+    path: "/rawat-jalan",
+    component: () => import("../views/RawatJalan.vue"),
+    children: [
+      {
+        path: "antrean",
+        name: "antrean-rawat-jalan",
+        component: () => import("../views/RawatJalan/Antrean.vue")
+      },
+      {
+        path: "registrasi",
+        name: "registrasi-rawat-jalan",
+        component: () => import("../views/RawatJalan/Registrasi.vue")
+      }
+    ]
+  },
+  {
+    path: "/pasien",
+    name: "pasien",
+    component: () => import("../views/Pasien.vue"),
+    children: [
+      {
+        path: "",
+        name: "pasien-list",
+        component: () => import("../views/Pasien/List.vue")
+      },
+      {
+        path: "tambah",
+        name: "pasien-tambah",
+        component: () => import("../views/Pasien/Tambah.vue")
+      },
+      {
+        path: "edit/:id?",
+        name: "pasien-edit",
+        component: () => import("../views/Pasien/Edit.vue"),
+        props: true
+      },
+      {
+        path: "detail/:id?",
+        name: "pasien-detail",
+        component: () => import("../views/Pasien/Detail.vue"),
+        props: true
+      }
+    ]
+  },
+  {
+    path: "/pembayaran",
+    name: "pembayaran",
+    component: () => import("../views/Pembayaran.vue"),
+    children: [
+      {
+        path: "/pembayaran/list",
+        name: "pembayaran-list",
+        component: () => import("../views/Pembayaran/List.vue")
       }
     ]
   }
+  // {
+  //   path: "/pembayaran",
+  //   name: "pembayaran",
+  //   component: () => import("../views/Pembayaran.vue")
+  // }
 ];
 
 const router = new VueRouter({

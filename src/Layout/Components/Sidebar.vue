@@ -116,6 +116,7 @@ export default {
       const tmp = [
         {
           title: "Dashboard",
+          href: "/",
           icon: {
             element: "font-awesome-icon",
             attributes: {
@@ -133,7 +134,7 @@ export default {
           },
           child: [
             {
-              href: "/layouts/light-sidebar",
+              href: "/rawat-jalan/registrasi",
               title: "Registrasi"
             },
             {
@@ -152,6 +153,7 @@ export default {
         },
         {
           title: "Manajemen Pasien",
+          href: "/pasien",
           icon: {
             element: "font-awesome-icon",
             attributes: {
@@ -180,6 +182,7 @@ export default {
         },
         {
           title: "Halaman Pembayaran",
+          href: "/pembayaran",
           icon: {
             element: "font-awesome-icon",
             attributes: {

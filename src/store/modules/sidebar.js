@@ -1,8 +1,8 @@
 const sidebar = {
   namespaced: true,
   state: {
-    sidebarCollapsed: false,
-    sidebarCollapsedMobile: false
+    sidebarCollapsed: true,
+    sidebarCollapsedMobile: true
   },
   mutations: {
     SET_SIDEBAR_COLLAPSED(state, value) {

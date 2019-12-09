@@ -35,6 +35,7 @@
                     "
                     :state="renderError({ error: form.error })"
                     :placeholder="form.placeholder"
+                    maxlength="50"
                   />
                 </b-form-group>
 
@@ -65,6 +66,7 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { maxLength, email, required } from "vuelidate/lib/validators";
+import axios from 'axios';
 library.add(faPlus, faMinus);
 
 export default {
@@ -100,7 +102,9 @@ export default {
           constructPostData()
         );
         const { status, data } = res.data;
-        alert((status && "Success") || "Gagal");
+        if(status) {
+          this.$router.push('/')
+        }
       } catch (err) {
         // console.log(err);
       }

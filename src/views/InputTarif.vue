@@ -12,7 +12,7 @@
               <b-row class="d-flex align-items-center">
                 <b-col cols="12">
                   <b-row class="d-flex align-items-center mb-4">
-                    <b-col cols="3" class="text-capitalize">nama layanan</b-col>
+                    <b-col cols="4" class="text-capitalize">nama layanan</b-col>
                     <b-col cols="3" class="text-capitalize">kode layanan</b-col>
                     <b-col cols="3" class="text-capitalize"
                       >tarif layanan</b-col
@@ -23,7 +23,7 @@
                     v-for="(inputTarif, index) in tmpInputTarifData"
                     :key="index"
                   >
-                    <b-col cols="3">
+                    <b-col cols="4">
                       <div role="group">
                         <b-form-input
                           :value="inputTarif.nama_layanan"
@@ -37,6 +37,7 @@
                           :state="errorState({ label: 'nama_layanan', index })"
                           :placeholder="placeholderInput('nama_layanan')"
                           :disabled="index <= 1"
+                          maxlength="30"
                         ></b-form-input>
                         <b-form-invalid-feedback class="text-capitalize">
                           {{
@@ -57,8 +58,10 @@
                               $event
                             })
                           "
+                          @input="onInputKode($event, index, inputTarif, 'kode_layanan')"
                           :state="errorState({ label: 'kode_layanan', index })"
                           :placeholder="placeholderInput('kode_layanan')"
+                          maxlength="5"
                         ></b-form-input>
                         <b-form-invalid-feedback class="text-capitalize">
                           {{
@@ -71,17 +74,11 @@
                     <b-col cols="3">
                       <div role="group">
                         <b-form-input
-                          :value="inputTarif.tarif_layanan"
-                          @change="
-                            onChangeValue({
-                              label: 'tarif_layanan',
-                              index,
-                              $event
-                            })
-                          "
-                          @keypress="isNumber"
+                          v-model.lazy="inputTarif.tarif_layanan"
+                          v-money="money"
                           :state="errorState({ label: 'tarif_layanan', index })"
                           :placeholder="placeholderInput('tarif_layanan')"
+                          maxlength="12"
                         ></b-form-input>
                         <b-form-invalid-feedback class="text-capitalize">
                           {{
@@ -91,7 +88,7 @@
                         </b-form-invalid-feedback>
                       </div>
                     </b-col>
-                    <b-col cols="3" v-if="index > 1">
+                    <b-col cols="2" v-if="index > 1">
                       <b-button
                         variant="danger"
                         style="padding: .5rem .8rem; border-radius: 100%"
@@ -104,7 +101,7 @@
                 </b-col>
               </b-row>
               <b-row class="d-flex align-items-center">
-                <b-col cols="9">
+                <b-col cols="10">
                   <div class="d-flex justify-content-center">
                     <b-button
                       variant="first"
@@ -115,7 +112,7 @@
                     /></b-button>
                   </div>
                 </b-col>
-                <b-col cols="3">
+                <b-col cols="2">
                   <b-button
                     class="text-capitalize"
                     type="submit"
@@ -135,17 +132,19 @@
 <script>
 import Vue from "vue";
 import startCase from "lodash/startCase";
-import { VMoney } from "v-money";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+import { VMoney } from 'v-money'
 library.add(faPlus, faMinus);
 
 export default {
-  directives: { money: VMoney },
+  props: ["klinik_id"],
+  directives: {money: VMoney},
   data: () => ({
     money: {
-      decimal: ",",
-      thousands: ".",
+      decimal: "",
+      thousands: ",",
       prefix: "",
       suffix: "",
       precision: 0
@@ -161,7 +160,8 @@ export default {
         kode_layanan: null,
         tarif_layanan: null
       }
-    ]
+    ],
+    kodeContainer: []
   }),
   mounted() {
     this.tmpInputTarifData = this.setTmpInputTarifData();
@@ -200,7 +200,6 @@ export default {
     },
     errorDesc({ label, index }) {
       const { tmpInputTarifData } = this;
-      // console.log(tmpInputTarifData[index]);
       if (
         tmpInputTarifData[index].error &&
         tmpInputTarifData[index].error[label]
@@ -208,7 +207,9 @@ export default {
         return tmpInputTarifData[index].error[label].desc;
       }
     },
-    isNumber($event) {
+    onKeyupTarif($event, index) {
+      const { tmpInputTarifData } = this;
+
       var evt = $event;
       evt = evt ? evt : window.event;
       var charCode = evt.which ? evt.which : evt.keyCode;
@@ -223,7 +224,7 @@ export default {
       }
     },
     placeholderInput(label = "") {
-      return startCase(`masukkan ${label}`);
+      return startCase(`input ${label}`);
     },
     validateInput({ label, $event }) {
       return {
@@ -255,22 +256,21 @@ export default {
         });
         const p = y.every(h => h);
         if (p) {
-          false && this.doSumbitInputTarif();
-          this.$router.replace({
-            path: "/input-data-operator"
-          });
+          this.doSubmitInputTarif();
         }
       });
     },
-    async doSumbitInputTarif() {
+    async doSubmitInputTarif() {
       const { constructPostData } = this;
       try {
-        const res = await axios.post(
-          `${this.url_api}/layanan`,
-          constructPostData()
-        );
+        const res = await axios.post(`${this.url_api}/layanan`, {
+          arr: constructPostData()
+        });
         const { status, data } = res.data;
-        alert((status && "Success") || "Gagal");
+
+        this.$router.push({
+          path: "/input-data-operator"
+        });
       } catch (err) {
         // console.log(err);
       }
@@ -280,13 +280,17 @@ export default {
       const tmp = tmpInputTarifData.map(item => {
         const x = Object.keys(item).filter(y => !["error"].includes(y));
         const z = x.reduce((obj, key) => {
-          if (/(tarif)/gi.test(key)) {
-            const t = key.split("_");
-            key = t[t.length - t.length];
+          let q = key
+          if (key == 'tarif_layanan') {
+            q = 'tarif';
+
+            // hapus separator ribuan dan jadikan int
+            item[key] = parseInt(item[key].replace(/\D/g, ""))
           }
-          obj[key] = item[key];
+          obj[q] = item[key];
           return obj;
         }, {});
+        z.klinik_id = this.klinik_id;
         return z;
       });
       return tmp;
@@ -294,13 +298,39 @@ export default {
     onChangeValue({ index, label, $event }) {
       const { tmpInputTarifData, validateInput } = this;
       const tmp = tmpInputTarifData[index];
-      tmp.error[label] = validateInput({
-        label,
-        $event
-      });
-      tmp[label] = $event;
+      if(tmp.error[label].error !== false) {
+        tmp.error[label] = validateInput({
+          label,
+          $event
+        });
+      }
 
-      Vue.set(this.tmpInputTarifData, index, tmp);
+      if (label !== "tarif_layanan") {
+        tmp[label] = $event;
+        Vue.set(this.tmpInputTarifData, index, tmp);
+      }
+    },
+    onInputKode(val, index, o, p) {
+      val = val.toUpperCase()
+      Vue.set(o, p, val)
+      Vue.set(this.kodeContainer, index, val)
+      this.kodeContainer.forEach((item, i) => {
+        if(index == i) return;
+        if(item == val) {
+          this.tmpInputTarifData[index].error['kode_layanan'].error = false
+          this.tmpInputTarifData[index].error['kode_layanan'].desc = 'Kode layanan tidak boleh sama'
+
+          this.tmpInputTarifData[i].error['kode_layanan'].error = false
+          this.tmpInputTarifData[i].error['kode_layanan'].desc = 'Kode layanan tidak boleh sama'
+        }
+        else {
+          this.tmpInputTarifData[index].error['kode_layanan'].error = true
+          this.tmpInputTarifData[index].error['kode_layanan'].desc = ''
+
+          this.tmpInputTarifData[i].error['kode_layanan'].error = true
+          this.tmpInputTarifData[i].error['kode_layanan'].desc = ''
+        }
+      })
     },
     addInputTarifData() {
       const { tmpInputTarifData, validateAll, generateErrorObj } = this;

@@ -2,7 +2,8 @@
   <div>
     <a
       href="javascript:void(0);"
-      class="card border-0 card-box card-box-hover-rise card-box-hover text-white align-box-row bg-midnight-bloom align-items-start mb-5 p-4"
+      class="card border-0 card-box card-box-hover-rise card-box-hover text-white align-box-row align-items-start mb-5 p-4"
+      :class="bgColor"
     >
       <div>
         <div class="display-3 font-weight-bold">
@@ -41,6 +42,11 @@ export default {
     highlight: {
       required: true,
       type: Number
+    },
+    bgColor: {
+      required: false,
+      type: String,
+      default: 'bg-midnight-bloom'
     }
   }
 };

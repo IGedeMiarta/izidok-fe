@@ -60,8 +60,10 @@ import {
   // maxLength,
   sameAs
 } from "vuelidate/lib/validators";
+import axios from 'axios';
 
 export default {
+  props: ['token'],
   data: () => ({
     formBasicData: null,
     formData: null
@@ -69,13 +71,13 @@ export default {
   validations: {
     formData: {
       password: {
-        required
-        // minLength: minLength(6)
+        required,
+        minLength: minLength(6),
       },
       konfirmasi_password: {
         required,
-        sameAsPassword: sameAs("password")
-        // minLength: minLength(6)
+        sameAsPassword: sameAs("password"),
+        minLength: minLength(6),
       }
     }
   },
@@ -141,15 +143,11 @@ export default {
     async resetPassword() {
       try {
         const { formData } = this;
-        const postData = Object.keys(formData)
-          .map(item => ({
-            label: item,
-            value: formData[item]
-          }))
-          .reduce((obj, key) => {
-            obj[key.label] = key.value;
-            return obj;
-          }, {});
+        let postData = {
+          password: formData.password,
+          konfirm_password: formData.konfirmasi_password,
+          token: this.token
+        }
         // console.log(postData);
         const res = await axios.post(`${this.url_api}/reset`, postData);
         const { success, message } = res.data;
