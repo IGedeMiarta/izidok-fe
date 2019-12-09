@@ -197,7 +197,7 @@ export default {
         confirmButtonText: startCase("ya")
       }).then(async res => {
         if (res.value) {
-          console.log(res);
+          // console.log(res);
           await this.deletePasien();
         }
       });
@@ -255,7 +255,7 @@ export default {
           this.pasienList = [...pasienData];
         }
       } catch (err) {
-        console.log(err);
+        // console.log(err);
       }
     }
   }
