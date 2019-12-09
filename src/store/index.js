@@ -9,7 +9,7 @@ Vue.use(Vuex);
 // Create store
 export default new Vuex.Store({
   state: {
-    URL_API: "http://149.129.239.15/api/v1",
+    URL_API: "http://localhost:9001/api/v1",
     BEARER_TOKEN: 'OGdyWGFCb3NBRWhDblEwWmVUc0d5R28wa0tMQXh0dWFLd1VCdVFwcw==',
   },
   modules: {

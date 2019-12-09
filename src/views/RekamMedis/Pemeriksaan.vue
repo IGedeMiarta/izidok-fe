@@ -2,7 +2,7 @@
   <div>
     <form>
       <div class="form-row">
-        <div class="col-md-3">
+        <div class="col-md-6">
           <multiselect
             v-model="selectedOrgan"
             :options="organs"
@@ -18,7 +18,6 @@
             :hide-selected="true"
             @search-change="asyncFind"
           ></multiselect>
-
         </div>
         <div
           class="col-md-6 d-flex align-items-center justify-content-start mt-4 mt-xl-0 justify-content-xl-end"
@@ -124,7 +123,7 @@ export default {
     selectedOrgan: function() {
       this.updatePostData({ key: "organ_id", value: this.selectedOrgan.id });
       this.organChanged();
-    },
+    }
   },
   methods: {
     ...mapActions(["updatePostData", "updateCanvas"]),
@@ -263,8 +262,10 @@ export default {
 
           self.isLoading = false;
         })
-        .catch(err => {/*console.log(err)*/});
-    },
+        .catch(err => {
+          /*console.log(err)*/
+        });
+    }
   },
   mounted() {
     this.ctx = this.canvas.getContext("2d");
