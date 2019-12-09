@@ -58,7 +58,7 @@
                               $event
                             })
                           "
-                          @keyup="onKeyupKode($event, index)"
+                          @input="onInputKode($event, index, inputTarif, 'kode_layanan')"
                           :state="errorState({ label: 'kode_layanan', index })"
                           :placeholder="placeholderInput('kode_layanan')"
                           maxlength="5"
@@ -310,11 +310,13 @@ export default {
         Vue.set(this.tmpInputTarifData, index, tmp);
       }
     },
-    onKeyupKode($event, index) {
-      Vue.set(this.kodeContainer, index, $event.target.value)
+    onInputKode(val, index, o, p) {
+      val = val.toUpperCase()
+      Vue.set(o, p, val)
+      Vue.set(this.kodeContainer, index, val)
       this.kodeContainer.forEach((item, i) => {
         if(index == i) return;
-        if(item == $event.target.value) {
+        if(item == val) {
           this.tmpInputTarifData[index].error['kode_layanan'].error = false
           this.tmpInputTarifData[index].error['kode_layanan'].desc = 'Kode layanan tidak boleh sama'
 
