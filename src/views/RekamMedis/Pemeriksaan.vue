@@ -2,7 +2,7 @@
   <div>
     <form>
       <div class="form-row">
-        <div class="col-md-3">
+        <div class="col-md-6">
           <multiselect
             v-model="selectedOrgan"
             :options="organs"
@@ -24,6 +24,10 @@
           class="col-md-6 d-flex align-items-center justify-content-start mt-4 mt-xl-0 justify-content-xl-end"
         >
           <div>
+            <font-awesome-icon
+              icon="eraser"
+              class="font-size-xl m-2"
+            />
             <font-awesome-icon
               icon="pen-alt"
               class="font-size-xl m-2"
@@ -86,19 +90,13 @@ import axios from "axios";
 import store from "@/store/";
 import { mapGetters, mapActions } from "vuex";
 import Editor from "./Editor";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faPenAlt, faKeyboard } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import Multiselect from "vue-multiselect";
-
-library.add(faPenAlt, faKeyboard);
 
 export default {
   name: "Pemeriksaan",
   components: {
     Multiselect,
     Editor,
-    "font-awesome-icon": FontAwesomeIcon
   },
   data() {
     return {
