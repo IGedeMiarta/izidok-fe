@@ -222,12 +222,48 @@ export default {
     ],
     items: [
       {
-        no: 123,
-        "nomor rekam medis": "asd123",
-        "nama pasien": "asd",
-        "jenis kelamin": "perempuan",
-        "nomor hp": "0912382399",
-        "dokter tujuan": "dawai pagi",
+        no: 1,
+        "nomor rekam medis": "00011",
+        "nama pasien": "Adisty Zara",
+        "jenis kelamin": "P",
+        "nomor hp": "08900001113",
+        "dokter tujuan": "dr. Aviandra",
+        actions: 1
+      },
+      {
+        no: 2,
+        "nomor rekam medis": "00012",
+        "nama pasien": "Ario Bayu",
+        "jenis kelamin": "L",
+        "nomor hp": "08900001214",
+        "dokter tujuan": "dr. Aviandra",
+        actions: 1
+      },
+      {
+        no: 3,
+        "nomor rekam medis": "00013",
+        "nama pasien": "Ernest Prakasa",
+        "jenis kelamin": "L",
+        "nomor hp": "08900101316",
+        "dokter tujuan": "dr. Aviandra",
+        actions: 1
+      },
+      {
+        no: 4,
+        "nomor rekam medis": "00014",
+        "nama pasien": "Raditya Dika",
+        "jenis kelamin": "L",
+        "nomor hp": "08900121517",
+        "dokter tujuan": "dr. Aviandra",
+        actions: 1
+      },
+      {
+        no: 5,
+        "nomor rekam medis": "00015",
+        "nama pasien": "Maudy Ayunda",
+        "jenis kelamin": "P",
+        "nomor hp": "08900111192",
+        "dokter tujuan": "dr. Aviandra",
         actions: 1
       }
     ]
