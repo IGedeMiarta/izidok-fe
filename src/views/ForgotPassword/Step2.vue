@@ -120,25 +120,28 @@ export default {
       const { value } = target;
       const $v_object = this.$v.formData[label];
       this.formData[label] = value && value.trim();
-      this.triggerValidation({
-        label,
-        $v: this.$v,
-        $vm: this,
-        rawLabel
-      });
-      if (
-        label === "password" &&
-        this.formData.konfirmasi_password &&
-        !$v_object.$error
-      ) {
-        setTimeout(() => {
-          this.setValue({
-            label: "konfirmasi_password",
-            $event
-          });
-          this.$v.formData.konfirmasi_password.$touch();
-        }, 500);
-      }
+
+      this.formBasicData.forEach((item) => {
+        this.triggerValidation({
+          label: item.label,
+          $v: this.$v,
+          $vm: this,
+          rawLabel: item.rawLabel
+        });
+      })
+      // if (
+      //   label === "password" &&
+      //   this.formData.konfirmasi_password &&
+      //   !$v_object.$error
+      // ) {
+      //   setTimeout(() => {
+      //     this.setValue({
+      //       label: "konfirmasi_password",
+      //       $event
+      //     });
+      //     this.$v.formData.konfirmasi_password.$touch();
+      //   }, 500);
+      // }
     },
     async resetPassword() {
       try {

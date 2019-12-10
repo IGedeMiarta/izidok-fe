@@ -377,21 +377,34 @@ export default {
       const { value } = target;
       this.formData[label] = value && value.trim();
       if (!this.whitelistValidation().includes(label)) {
-        this.triggerValidation({ label, $v: this.$v, $vm: this, rawLabel });
-        const $v_object = this.$v.formData[label];
-        if (
-          label === "password" &&
-          this.formData.konfirmasi_password &&
-          !$v_object.$error
-        ) {
-          setTimeout(() => {
-            this.setValue({
-              label: "konfirmasi_password",
-              $event
+        const confirms = ['password', 'konfirmasi_password'];
+        if(confirms.includes(label)) {
+          confirms.forEach((item) => {
+            this.triggerValidation({ 
+              label: item, 
+              $v: this.$v, 
+              $vm: this, 
+              rawLabel: item.split('_').join(' ') 
             });
-            this.$v.formData.konfirmasi_password.$touch();
-          }, 800);
+          })
         }
+        else {
+          this.triggerValidation({ label, $v: this.$v, $vm: this, rawLabel });
+        }
+        // const $v_object = this.$v.formData[label];
+        // if (
+        //   label === "password" &&
+        //   this.formData.konfirmasi_password &&
+        //   !$v_object.$error
+        // ) {
+        //   setTimeout(() => {
+        //     this.setValue({
+        //       label: "konfirmasi_password",
+        //       $event
+        //     });
+        //     this.$v.formData.konfirmasi_password.$touch();
+        //   }, 800);
+        // }
       }
     }
   }
