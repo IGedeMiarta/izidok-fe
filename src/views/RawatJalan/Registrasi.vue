@@ -229,7 +229,7 @@ export default {
         confirmButtonText: startCase("ya")
       }).then(res => {
         if (res.value) {
-          console.log(res);
+          // console.log(res);
         }
       });
     },

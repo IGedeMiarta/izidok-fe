@@ -58,7 +58,7 @@
                               $event
                             })
                           "
-                          @keyup="onKeyupKode($event, index)"
+                          @input="onInputKode($event, index, inputTarif, 'kode_layanan')"
                           :state="errorState({ label: 'kode_layanan', index })"
                           :placeholder="placeholderInput('kode_layanan')"
                           maxlength="5"
@@ -74,15 +74,8 @@
                     <b-col cols="3">
                       <div role="group">
                         <b-form-input
-                          :value="inputTarif.tarif_layanan"
-                          @change="
-                            onChangeValue({
-                              label: 'tarif_layanan',
-                              index,
-                              $event
-                            })
-                          "
-                          @keyup="onKeyupTarif($event, index)"
+                          v-model.lazy="inputTarif.tarif_layanan"
+                          v-money="money"
                           :state="errorState({ label: 'tarif_layanan', index })"
                           :placeholder="placeholderInput('tarif_layanan')"
                           maxlength="12"
@@ -142,10 +135,12 @@ import startCase from "lodash/startCase";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import { VMoney } from 'v-money'
 library.add(faPlus, faMinus);
 
 export default {
   props: ["klinik_id"],
+  directives: {money: VMoney},
   data: () => ({
     money: {
       decimal: "",
@@ -225,14 +220,6 @@ export default {
       ) {
         evt.preventDefault();
       } else {
-
-        // memberikan separator ribuan
-        const tmp = tmpInputTarifData[index];
-        const newResult = $event.target.value.replace(/\D/g, "")
-          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        tmp['tarif_layanan'] = newResult;
-        Vue.set(this.tmpInputTarifData, index, tmp);
-
         return true;
       }
     },
@@ -323,11 +310,13 @@ export default {
         Vue.set(this.tmpInputTarifData, index, tmp);
       }
     },
-    onKeyupKode($event, index) {
-      Vue.set(this.kodeContainer, index, $event.target.value)
+    onInputKode(val, index, o, p) {
+      val = val.toUpperCase()
+      Vue.set(o, p, val)
+      Vue.set(this.kodeContainer, index, val)
       this.kodeContainer.forEach((item, i) => {
         if(index == i) return;
-        if(item == $event.target.value) {
+        if(item == val) {
           this.tmpInputTarifData[index].error['kode_layanan'].error = false
           this.tmpInputTarifData[index].error['kode_layanan'].desc = 'Kode layanan tidak boleh sama'
 

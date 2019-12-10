@@ -75,7 +75,7 @@ export default {
         age = age - 1;
       }
 
-        console.log(age);
+        // console.log(age);
       return age;
     }
   }
