@@ -41,6 +41,10 @@
         >
           <div>
             <font-awesome-icon
+              icon="eraser"
+              class="font-size-xl m-2"
+            />
+            <font-awesome-icon
               icon="pen-alt"
               class="font-size-xl m-2"
               v-on:click="isHidden = false;

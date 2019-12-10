@@ -25,6 +25,10 @@
         >
           <div>
             <font-awesome-icon
+              icon="eraser"
+              class="font-size-xl m-2"
+            />
+            <font-awesome-icon
               icon="pen-alt"
               class="font-size-xl m-2"
               v-on:click="isHidden = false;
@@ -86,19 +90,13 @@ import axios from "axios";
 import store from "@/store/";
 import { mapGetters, mapActions } from "vuex";
 import Editor from "./Editor";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faPenAlt, faKeyboard } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import Multiselect from "vue-multiselect";
-
-library.add(faPenAlt, faKeyboard);
 
 export default {
   name: "Pemeriksaan",
   components: {
     Multiselect,
     Editor,
-    "font-awesome-icon": FontAwesomeIcon
   },
   data() {
     return {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Top/>
+    <Top />
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
@@ -22,7 +22,7 @@
                   </div>
                 </b-collapse>
               </div>
-               <div class="card card-box">
+              <div class="card card-box">
                 <div class="card-header">
                   <b-button
                     class="btn-link btn-lg d-flex align-items-center justify-content-between shadow-none"
@@ -72,7 +72,12 @@
               </div>
             </div>
             <Footer ref="footer" />
-            <button @click="saveRekamMedis" class="btn btn-primary">Submit</button>
+            <div
+              class="col-xl-12 d-flex justify-content-xl-end"
+            >
+              <button class="btn btn-info m-2">Keluar</button>
+              <button @click="saveRekamMedis" class="btn btn-primary m-2">Simpan</button>
+            </div>
           </div>
         </div>
       </div>
@@ -88,6 +93,14 @@ import Pemeriksaan from "./RekamMedis/Pemeriksaan.vue";
 import Diagnosa from "./RekamMedis/Diagnosa";
 import Footer from "./RekamMedis/Footer.vue";
 import axios from "axios";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+  faPenAlt,
+  faKeyboard,
+  faEraser
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+library.add(faPenAlt, faKeyboard, faEraser);
 
 import { mapGetters, mapActions } from "vuex";
 
