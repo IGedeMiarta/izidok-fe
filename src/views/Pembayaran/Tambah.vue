@@ -61,7 +61,7 @@
                 <b-button variant="success" class="text-uppercase mr-3"
                   >simpan</b-button
                 >
-                <b-button variant="outline-primary" class="text-uppercase"
+                <b-button variant="primary" class="text-uppercase"
                   >bayar</b-button
                 >
               </div>
