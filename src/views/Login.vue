@@ -9,14 +9,8 @@
               <div class="bg-composed-wrapper--content py-5">
                 <div class="container">
                   <div class="row">
-                    <div
-                      class="col-lg-6 pl-0 d-none d-lg-flex align-items-center"
-                    >
-                      <img
-                        src="@/assets/img/illustrations/login.svg"
-                        class="w-75 mx-auto d-block img-fluid"
-                        alt
-                      />
+                    <div class="col-lg-6 pl-0 d-none d-lg-flex align-items-center" >
+                      <img src="@/assets/login.png" class="img-fluid" alt="login izidok" />
                     </div>
                     <div class="col-lg-6 pr-0 d-flex align-items-center">
                       <div class="pl-5 w-100">
