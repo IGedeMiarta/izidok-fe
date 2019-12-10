@@ -156,10 +156,17 @@ export default {
           localStorage.setItem('__tkn__', data.token);
           this.loggedIn = true;
           this.firstJoin = data.first_login;
-          this.klinik_id = (data.kliniks && data.kliniks[0]) ? data.kliniks[0].id : null;
+
+          this.klinik_id = null
+          if(data.kliniks && data.kliniks[0]) {
+            this.klinik_id = data.kliniks[0].id
+          }
+          if(data.user.klinik_id) {
+            this.klinik_id = data.user.klinik_id
+          }
           
           localStorage.setItem('user.name', data.user.nama);
-          localStorage.setItem('user.role', data.user.role.role);
+          localStorage.setItem('user.role', data.user.roles[0].name);
 
           // not first join
           if(!this.firstJoin) {
@@ -176,7 +183,7 @@ export default {
         }
       } catch (err) {
         this.loggedIn = false;
-        // console.log(err);
+        console.log(err);
       }
     },
     submitForm($event) {

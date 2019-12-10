@@ -7,7 +7,7 @@ const routes = [
   {
     path: "/rekam-medis",
     name: "rekam-medis",
-    component: () => import("../views/RekamMedis.vue"),
+    component: () => import("../views/RekamMedis.vue")
   },
   {
     path: "/",
@@ -129,7 +129,12 @@ const routes = [
     component: () => import("../views/Pembayaran.vue"),
     children: [
       {
-        path: "/pembayaran/list",
+        path: "tambah",
+        name: "pembayaran-tambah",
+        component: () => import("../views/Pembayaran/Tambah.vue")
+      },
+      {
+        path: "list",
         name: "pembayaran-list",
         component: () => import("../views/Pembayaran/List.vue")
       }
