@@ -101,7 +101,7 @@ export default {
               }
             },
             title: {
-              text: "Income (thousand crores)",
+              text: "Pasien Baru",
               style: {
                 color: "#008FFB"
               }
@@ -112,7 +112,7 @@ export default {
           },
 
           {
-            seriesName: "Income",
+            seriesName: "Pasien Baru",
             opposite: true,
             axisTicks: {
               show: true
@@ -127,14 +127,14 @@ export default {
               }
             },
             title: {
-              text: "Operating Cashflow (thousand crores)",
+              text: "Pasien Rawat Jalan",
               style: {
                 color: "#00E396"
               }
             }
           },
           {
-            seriesName: "Revenue",
+            seriesName: "Pendapatan",
             opposite: true,
             axisTicks: {
               show: true
@@ -149,7 +149,7 @@ export default {
               }
             },
             title: {
-              text: "Revenue (thousand crores)",
+              text: "Pendapatan",
               style: {
                 color: "#FEB019"
               }

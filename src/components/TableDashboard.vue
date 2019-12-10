@@ -2,6 +2,7 @@
   <div class="card card-box mb-5">
     <div class="card-header pr-2">
       <div class="card-header--title">
+        <h4 style="display:inline-block">Antrean Saat Ini</h4>
         <b-button
           :to="{ name: 'registrasi-rawat-jalan' }"
           class="float-right text-capitalize"

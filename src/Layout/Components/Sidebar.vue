@@ -95,17 +95,17 @@ export default {
         const signedInAs = "dokter praktek";
         const tmp = [
           {
-            href: "/layouts/light-sidebar",
+            // href: "/layouts/light-sidebar",
             title: "Manajemen Dokter",
             type: "klinik"
           },
           {
-            href: "/layouts/light-sidebar",
+            // href: "/layouts/light-sidebar",
             title: "Manajemen Operator",
             type: ["klinik", "dokter praktek"]
           },
           {
-            href: "/layouts/light-sidebar",
+            // href: "/layouts/light-sidebar",
             title: "Manajemen Tarif",
             type: ["klinik", "dokter praktek"]
           }
@@ -134,19 +134,23 @@ export default {
           },
           child: [
             {
+              href: "/rawat-jalan/antrean",
+              title: "Antrean"
+            },
+            {
               href: "/rawat-jalan/registrasi",
               title: "Registrasi"
             },
             {
-              href: "/layouts/dark-sidebar",
+              href: "/rekam-medis",
               title: "Rekam Medis"
             },
             {
-              href: "/layouts/gradient-sidebar-1",
+              // href: "/layouts/gradient-sidebar-1",
               title: "Resep"
             },
             {
-              href: "/layouts/gradient-sidebar-2",
+              // href: "/layouts/gradient-sidebar-2",
               title: "Rujukan Lab"
             }
           ]
@@ -182,7 +186,7 @@ export default {
         },
         {
           title: "Halaman Pembayaran",
-          href: "/pembayaran",
+          // href: "/pembayaran",
           icon: {
             element: "font-awesome-icon",
             attributes: {

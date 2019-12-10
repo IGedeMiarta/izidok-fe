@@ -34,7 +34,7 @@
         </b-row>
         <b-row>
           <b-col cols="6">
-            <CardDashboard title="antrian" :highlight="4" />
+            <CardDashboard title="antrean" :highlight="4" />
           </b-col>
           <b-col cols="6">
             <CardDashboard title="pendapatan" highlight="1.500.000" bg-color="bg-warning" />
@@ -66,17 +66,17 @@ export default {
   data: () => ({
     dataSeries: [
       {
-        name: "Income",
+        name: "Pasien Baru",
         type: "column",
         data: [1.4, 2, 2.5, 1.5, 2.5, 2.8, 3.8, 4.6]
       },
       {
-        name: "Cashflow",
+        name: "Pasien Rawat Jalan",
         type: "column",
         data: [1.1, 3, 3.1, 4, 4.1, 4.9, 6.5, 8.5]
       },
       {
-        name: "Revenue",
+        name: "Pendapatan",
         type: "line",
         data: [20, 29, 37, 36, 44, 45, 50, 58]
       }
