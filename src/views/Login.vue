@@ -161,7 +161,7 @@ export default {
           if(data.kliniks && data.kliniks[0]) {
             this.klinik_id = data.kliniks[0].id
           }
-          else if(data.user.klinik_id) {
+          if(data.user.klinik_id) {
             this.klinik_id = data.user.klinik_id
           }
           
