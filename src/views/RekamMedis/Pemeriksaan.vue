@@ -18,7 +18,6 @@
             :hide-selected="true"
             @search-change="asyncFind"
           ></multiselect>
-
         </div>
         <div
           class="col-md-6 d-flex align-items-center justify-content-start mt-4 mt-xl-0 justify-content-xl-end"
@@ -26,21 +25,28 @@
           <div>
             <font-awesome-icon
               icon="eraser"
-              class="font-size-xl m-2"
+              class="font-size-xl m-2 grow icon"
+              v-on:click="isPen = false; 
+              isActive = 'eraser'"
+              v-show="!isHidden"
+              :class="{ active: isActive === 'eraser' }"
             />
             <font-awesome-icon
               icon="pen-alt"
-              class="font-size-xl m-2"
+              class="font-size-xl m-2 grow icon"
               v-on:click="isHidden = false;
+              isPen = true;
               updatePostData({key:'pemeriksaan_is_draw', value: true});
-              drawBackground(image_url);"
+              isActive = 'pen'"
+              :class="{ active: isActive === 'pen' }"
             />
             <font-awesome-icon
               icon="keyboard"
-              class="font-size-xl m-2"
+              class="font-size-xl m-2 grow icon"
               v-on:click="isHidden = true;
               updatePostData({key:'pemeriksaan_is_draw', value: false});
-              drawBackground(image_url);"
+              isActive = 'keyboard'"
+              :class="{ active: isActive === 'keyboard' }"
             />
           </div>
         </div>
@@ -48,11 +54,11 @@
           class="col-md-12 d-flex align-items-center justify-content-start mt-4 mt-xl-0 justify-content-xl-end"
         >
           <div>
-            <span @click="penColor('blue')" class="dot" style="background-color: blue;"></span>
-            <span @click="penColor('red')" class="dot" style="background-color: red;"></span>
-            <span @click="penColor('#54c756')" class="dot" style="background-color: #54c756;"></span>
-            <span @click="penColor('#555')" class="dot" style="background-color: #555;"></span>
-            <span @click="penColor('orange')" class="dot" style="background-color: orange;"></span>
+            <span @click="penColor('blue');isColorActive = 'blue'" class="dot grow" style="background-color: blue;" :class="{ color_active: isColorActive === 'blue' }"></span>
+            <span @click="penColor('red');isColorActive = 'red'" class="dot grow" style="background-color: red;" :class="{ color_active: isColorActive === 'red' }"></span>
+            <span @click="penColor('#54c756');isColorActive = 'green'" class="dot grow" style="background-color: #54c756;" :class="{ color_active: isColorActive === 'green' }"></span>
+            <span @click="penColor('#555');isColorActive = 'black'" class="dot grow" style="background-color: #555;" :class="{ color_active: isColorActive === 'black' }"></span>
+            <span @click="penColor('orange');isColorActive = 'yellow'" class="dot grow" style="background-color: orange;" :class="{ color_active: isColorActive === 'yellow' }"></span>
           </div>
         </div>
       </div>
@@ -71,9 +77,6 @@
           width="1000"
           height="500"
         >Your browser does not support the HTML 5 Canvas.</canvas>
-        <div class="col-md-4">
-          <b-button @click="clear" variant="primary" size="sm" class="m-1">Clear</b-button>
-        </div>
       </div>
       <div v-show="isHidden" class="col-md-4">
         <div id="img_organ"></div>
@@ -96,7 +99,7 @@ export default {
   name: "Pemeriksaan",
   components: {
     Multiselect,
-    Editor,
+    Editor
   },
   data() {
     return {
@@ -105,15 +108,16 @@ export default {
       mousePos: { x: 0, y: 0 },
       lastPos: { x: 0, y: 0 },
       ctx: null,
-      // selectedOrgan: null,
       image_url: null,
       isLoading: false,
       selectedOrgan: [],
-      organs: []
+      organs: [],
+      isPen: true,
+      isActive: 'pen',
+       isColorActive: 'black',
     };
   },
   computed: {
-    // ...mapGetters(["organs"]),
     canvas: function() {
       return this.$refs.canvas;
     }
@@ -122,7 +126,7 @@ export default {
     selectedOrgan: function() {
       this.updatePostData({ key: "organ_id", value: this.selectedOrgan.id });
       this.organChanged();
-    },
+    }
   },
   methods: {
     ...mapActions(["updatePostData", "updateCanvas"]),
@@ -175,8 +179,29 @@ export default {
     handleMouseup(event) {
       this.drawing = false;
     },
-    handleMousemove(event) {
-      this.mousePos = this.getMousePos(event);
+    handleMousemove(e) {
+      this.mousePos = this.getMousePos(e);
+      if (this.drawing) {
+        this.ctx.beginPath();
+        if (this.isPen) {
+          this.ctx.globalCompositeOperation = "source-over";
+          this.ctx.moveTo(this.lastPos.x, this.lastPos.y);
+          this.ctx.lineTo(this.mousePos.x, this.mousePos.y);
+          this.ctx.stroke();
+        } else {
+          this.ctx.globalCompositeOperation = "destination-out";
+          this.ctx.arc(
+            this.mousePos.x,
+            this.mousePos.y,
+            8,
+            0,
+            Math.PI * 2,
+            false
+          );
+          this.ctx.fill();
+        }
+        this.lastPos = this.mousePos;
+      }
     },
     handleTouchstart(event) {
       this.mousePos = this.getTouchPos(event);
@@ -214,25 +239,9 @@ export default {
         y: touchEvent.touches[0].clientY - rect.top
       };
     },
-    renderCanvas() {
-      if (this.drawing) {
-        this.ctx.moveTo(this.lastPos.x, this.lastPos.y);
-        this.ctx.lineTo(this.mousePos.x, this.mousePos.y);
-        this.ctx.stroke();
-        this.lastPos = this.mousePos;
-      }
-    },
-    drawLoop() {
-      window.requestAnimFrame(this.drawLoop);
-      this.renderCanvas();
-    },
-    clear() {
-      this.canvas.width = this.canvas.width;
-    },
     penColor(color) {
-      var canvas = document.getElementById("pemeriksaan-canvas"),
-        ctx = canvas.getContext("2d");
-      ctx.strokeStyle = color;
+      this.ispen = true;
+      this.ctx.strokeStyle = color;
     },
     asyncFind(query) {
       let self = this;
@@ -262,7 +271,7 @@ export default {
           self.isLoading = false;
         })
         .catch(err => console.log(err));
-    },
+    }
   },
   mounted() {
     this.ctx = this.canvas.getContext("2d");
@@ -285,8 +294,6 @@ export default {
         }
       );
     })();
-
-    this.drawLoop();
 
     // Prevent scrolling when touching the canvas
     document.body.addEventListener(
@@ -336,11 +343,4 @@ canvas {
   /* display: none; */
 }
 
-.dot {
-  margin-right: 5px;
-  height: 25px;
-  width: 25px;
-  border-radius: 50%;
-  display: inline-block;
-}
 </style>

@@ -121,3 +121,34 @@ export default {
   }
 };
 </script>
+
+<style>
+.dot {
+  margin-right: 8px;
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.icon{
+  color:#cccccc;
+}
+
+.grow {
+  transition: all 0.2s ease-in-out;
+}
+
+.grow:hover {
+  transform: scale(1.3);
+}
+
+.active {
+  color: #464159;
+  transform: scale(1.3);
+}
+
+.color_active {
+  transform: scale(1.3);
+}
+</style>
