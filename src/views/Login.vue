@@ -9,14 +9,8 @@
               <div class="bg-composed-wrapper--content py-5">
                 <div class="container">
                   <div class="row">
-                    <div
-                      class="col-lg-6 pl-0 d-none d-lg-flex align-items-center"
-                    >
-                      <img
-                        src="@/assets/img/illustrations/login.svg"
-                        class="w-75 mx-auto d-block img-fluid"
-                        alt
-                      />
+                    <div class="col-lg-6 pl-0 d-none d-lg-flex align-items-center" >
+                      <img src="@/assets/login.png" class="img-fluid" alt="login izidok" />
                     </div>
                     <div class="col-lg-6 pr-0 d-flex align-items-center">
                       <div class="pl-5 w-100">
@@ -162,10 +156,17 @@ export default {
           localStorage.setItem('__tkn__', data.token);
           this.loggedIn = true;
           this.firstJoin = data.first_login;
-          this.klinik_id = (data.kliniks && data.kliniks[0]) ? data.kliniks[0].id : null;
+
+          this.klinik_id = null
+          if(data.kliniks && data.kliniks[0]) {
+            this.klinik_id = data.kliniks[0].id
+          }
+          if(data.user.klinik_id) {
+            this.klinik_id = data.user.klinik_id
+          }
           
           localStorage.setItem('user.name', data.user.nama);
-          localStorage.setItem('user.role', data.user.role.role);
+          localStorage.setItem('user.role', data.user.roles[0].name);
 
           // not first join
           if(!this.firstJoin) {
@@ -182,7 +183,7 @@ export default {
         }
       } catch (err) {
         this.loggedIn = false;
-        // console.log(err);
+        console.log(err);
       }
     },
     submitForm($event) {

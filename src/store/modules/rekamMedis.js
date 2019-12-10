@@ -26,21 +26,9 @@ const getters = {
 
 const actions = {
     async fetchData({ commit }) {
-        const res_pasien = await axios.get(store.state.URL_API + "/pasien/" + state.CONST_PASIENID, {
-            headers: {
-                Authorization:
-                    "Bearer " + store.state.BEARER_TOKEN,
-                "Content-Type": "application/json"
-            }
-        });
+        const res_pasien = await axios.get(store.state.URL_API + "/pasien/" + state.CONST_PASIENID);
 
-        const res_organs = await axios.get(store.state.URL_API + "/organ", {
-            headers: {
-                Authorization:
-                    "Bearer " + store.state.BEARER_TOKEN,
-                "Content-Type": "application/json"
-            }
-        });
+        const res_organs = await axios.get(store.state.URL_API + "/organ");
 
         commit('setPasien', res_pasien.data);
         commit('setOrgans', res_organs.data);
@@ -99,9 +87,9 @@ const actions = {
 
             console.log('Response: ', res.data);
 
-            // router.push({
-            //   path: "/"
-            // });
+            router.push({
+              path: "/pembayaran"
+            });
 
         } catch (err) {
             console.log(err);

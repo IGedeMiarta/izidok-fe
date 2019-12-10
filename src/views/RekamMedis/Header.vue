@@ -14,6 +14,10 @@
             class="text-black-50 mb-0"
           >NO RM. {{pasien.nomor_rekam_medis}} / {{(pasien.jenis_kelamin==1)?'Laki-laki':'Perempuan'}} / {{age}}</p>
         </div>
+        <br>
+        <p style="font-weight:bold"
+            class="text-black-50 mb-0"
+          >Hari ini : {{tanggal}}</p>
       </div>
       <div
         class="col-xl-5 d-flex align-items-center justify-content-start mt-4 mt-xl-0 justify-content-xl-end"
@@ -46,6 +50,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { mapGetters } from "vuex";
+import moment from 'moment';
 
 library.add(faStar, faFileCode, faExpandArrowsAlt, faBuilding);
 
@@ -61,12 +66,16 @@ export default {
   },
   computed: {
     ...mapGetters(["pasien"]),
-    age: function(){
-        return this.getAge(this.pasien.tanggal_lahir);
+    age: function() {
+      return this.getAge(this.pasien.tanggal_lahir);
+    },
+    tanggal: function(){
+      moment.locale('id');   
+      return moment().format('dddd, Do MMMM YYYY');
     }
   },
-  methods:{
-      getAge(DOB) {
+  methods: {
+    getAge(DOB) {
       var today = new Date();
       var birthDate = new Date(DOB);
       var age = today.getFullYear() - birthDate.getFullYear();
@@ -75,7 +84,7 @@ export default {
         age = age - 1;
       }
 
-        // console.log(age);
+      console.log(age);
       return age;
     }
   }
