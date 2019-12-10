@@ -134,6 +134,23 @@ const routes = [
         component: () => import("../views/Pembayaran/List.vue")
       }
     ]
+  },
+  {
+    path: "/operator",
+    name: "operator",
+    component: () => import("../views/Operator.vue"),
+    children: [
+      {
+        path: "/operator/list",
+        name: "operator-list",
+        component: () => import("../views/Operator/List.vue")
+      },
+      {
+        path: "/operator/tambah",
+        name: "operator-tambah",
+        component: () => import("../views/Operator/Tambah.vue")
+      }
+    ]
   }
   // {
   //   path: "/pembayaran",
