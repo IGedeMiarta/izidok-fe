@@ -157,14 +157,9 @@ import {
   faPencilAlt
 } from "@fortawesome/free-solid-svg-icons";
 
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-
 library.add(faArrowRight, faArrowUp, faTrashAlt, faSearch, faPencilAlt);
 
 export default {
-  components: {
-    "font-awesome-icon": FontAwesomeIcon
-  },
   data() {
     return {
       currentPage: 1,
@@ -248,11 +243,12 @@ export default {
         const res = await axios.get(
           `${this.url_api}/pasien?limit=10&page=${this.currentPage}`
         );
-        const { status, data } = res.data;
+        const { success, data } = res.data;
         if (success) {
-          const { data: pasienData, total } = data;
+          const { pasien: pasienData, total } = data;
+          const { data: listPasien } = pasienData;
+          this.pasienList = [...listPasien];
           this.rows = total;
-          this.pasienList = [...pasienData];
         }
       } catch (err) {
         // console.log(err);
