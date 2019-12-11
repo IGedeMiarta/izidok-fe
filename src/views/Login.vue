@@ -153,7 +153,7 @@ export default {
         const res = await axios.post(`${this.url_api}/login`, postData);
         const { status, data } = res.data;
         if(status) {
-          localStorage.setItem('__tkn__', data.token);
+          this.$store.commit('SET_BEARER_TOKEN', data.token);
           this.loggedIn = true;
           this.firstJoin = data.first_login;
 
@@ -165,8 +165,7 @@ export default {
             this.klinik_id = data.user.klinik_id
           }
           
-          localStorage.setItem('user.name', data.user.nama);
-          localStorage.setItem('user.role', data.user.roles[0].name);
+          this.$store.commit('SET_USER', data.user);
 
           // not first join
           if(!this.firstJoin) {

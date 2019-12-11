@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import store from "@/store";
 
 Vue.use(VueRouter);
 
@@ -175,7 +176,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const { name } = to;
-  const isAuthenticated = localStorage.getItem('__tkn__') !== null;
+  const isAuthenticated = store.state.BEARER_TOKEN !== null;
   const isRouteAuth = [
     'login-page',
     'register-page',
