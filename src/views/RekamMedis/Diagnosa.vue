@@ -99,6 +99,9 @@
           width="1000"
           height="500"
         >Your browser does not support the HTML 5 Canvas.</canvas>
+        <div class="col-md-4">
+          <b-button @click="clear" variant="primary" size="sm" class="m-1">Clear</b-button>
+        </div>
       </div>
       <div class="col-md-12" v-show="isHidden">
         <label></label>
@@ -252,12 +255,16 @@ export default {
         })
         .catch(err => console.log(err));
     },
-    clearAll() {
-      this.selectedKodePenyakit = [];
-    },
+    // clearAll() {
+    //   this.selectedKodePenyakit = [];
+    // },
     penColor(color) {
       this.ctx.strokeStyle = color;
-    }
+    },
+    clear() {
+      this.canvas.width = this.canvas.width;
+    },
+
   },
   mounted() {
     this.ctx = this.canvas.getContext("2d");

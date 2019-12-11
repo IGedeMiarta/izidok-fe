@@ -9,7 +9,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     URL_API: 'http://localhost:9001/api/v1',
-    BEARER_TOKEN: 'OGdyWGFCb3NBRWhDblEwWmVUc0d5R28wa0tMQXh0dWFLd1VCdVFwcw==' 
+    BEARER_TOKEN: null
   },
   modules: {
     rekamMedis
