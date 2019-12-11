@@ -2,7 +2,7 @@
   <div class="card card-box mb-5">
     <div class="card-header pr-2">
       <div class="card-header--title">
-        <h4 style="display:inline-block">Antrean Saat Ini</h4>
+        <h4 style="display:inline-block">Antrean Hari Ini</h4>
         <b-button
           :to="{ name: 'registrasi-rawat-jalan' }"
           class="float-right text-capitalize"
@@ -58,6 +58,12 @@
               </tr>
             </tbody>
           </table>
+          <b-pagination
+            class="d-flex justify-content-center mt-4"
+            v-model="currentPage"
+            :total-rows="rows"
+            :per-page="perPage"
+          ></b-pagination>
         </div>
         <div class="divider"></div>
       </div>
@@ -78,7 +84,10 @@ export default {
       'Ernest Prakasa',
       'Raditya Dika',
       'Maudy Ayunda'
-    ]
+    ],
+    currentPage: 1,
+    rows: 26,
+    perPage: 5,
   })
 };
 </script>
