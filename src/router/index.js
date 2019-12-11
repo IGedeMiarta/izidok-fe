@@ -175,25 +175,19 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const { name } = to;
-  const tmp = name && name.split("-");
-  const isAuthenticated = false;
-  if (
-    !isAuthenticated &&
-    false &&
-    !["login", "register"].includes(
-      tmp && tmp.length && tmp.length > 1 && tmp[0]
-    )
-  ) {
-    next({
-      path: "/login",
-      replace: true,
-      meta: {
-        layout: "examples"
-      }
-    });
-  } else {
-    next();
-  }
+  const isAuthenticated = localStorage.getItem('__tkn__') !== null;
+  const isRouteAuth = [
+    'login-page',
+    'register-page',
+    'forgot-password',
+    'verification-process',
+    'verification-operator',
+    'verification-result'
+  ].includes(name)
+
+  if (!isAuthenticated && !isRouteAuth) next('/login');
+  else if(isAuthenticated && isRouteAuth) next('/');
+  else next();
 });
 
 export default router;
