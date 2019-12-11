@@ -71,11 +71,36 @@
           class="col-md-12 d-flex align-items-center justify-content-start mt-4 mt-xl-0 justify-content-xl-end"
         >
           <div>
-            <span @click="penColor('blue');isColorActive = 'blue'" class="dot grow" style="background-color: blue;" :class="{ color_active: isColorActive === 'blue' }"></span>
-            <span @click="penColor('red');isColorActive = 'red'" class="dot grow" style="background-color: red;" :class="{ color_active: isColorActive === 'red' }"></span>
-            <span @click="penColor('#54c756');isColorActive = 'green'" class="dot grow" style="background-color: #54c756;" :class="{ color_active: isColorActive === 'green' }"></span>
-            <span @click="penColor('#555');isColorActive = 'black'" class="dot grow" style="background-color: #555;" :class="{ color_active: isColorActive === 'black' }"></span>
-            <span @click="penColor('orange');isColorActive = 'yellow'" class="dot grow" style="background-color: orange;" :class="{ color_active: isColorActive === 'yellow' }"></span>
+            <span
+              @click="penColor('blue');isColorActive = 'blue'"
+              class="dot grow"
+              style="background-color: blue;"
+              :class="{ color_active: isColorActive === 'blue' }"
+            ></span>
+            <span
+              @click="penColor('red');isColorActive = 'red'"
+              class="dot grow"
+              style="background-color: red;"
+              :class="{ color_active: isColorActive === 'red' }"
+            ></span>
+            <span
+              @click="penColor('#54c756');isColorActive = 'green'"
+              class="dot grow"
+              style="background-color: #54c756;"
+              :class="{ color_active: isColorActive === 'green' }"
+            ></span>
+            <span
+              @click="penColor('#555');isColorActive = 'black'"
+              class="dot grow"
+              style="background-color: #555;"
+              :class="{ color_active: isColorActive === 'black' }"
+            ></span>
+            <span
+              @click="penColor('orange');isColorActive = 'yellow'"
+              class="dot grow"
+              style="background-color: orange;"
+              :class="{ color_active: isColorActive === 'yellow' }"
+            ></span>
           </div>
         </div>
       </div>
@@ -99,6 +124,9 @@
           width="1000"
           height="500"
         >Your browser does not support the HTML 5 Canvas.</canvas>
+        <div class="col-md-4">
+          <b-button @click="clear" variant="primary" size="sm" class="m-1">Clear</b-button>
+        </div>
       </div>
       <div class="col-md-12" v-show="isHidden">
         <label></label>
@@ -131,8 +159,8 @@ export default {
       selectedKodePenyakit: [],
       kodePenyakit: [],
       isPen: true,
-      isActive: 'pen',
-       isColorActive: 'black',
+      isActive: "pen",
+      isColorActive: "black"
     };
   },
   watch: {
@@ -228,12 +256,7 @@ export default {
       this.isLoading = true;
 
       axios
-        .get(store.state.URL_API + "/kode_penyakit/name/" + query, {
-          headers: {
-            Authorization: "Bearer " + store.state.BEARER_TOKEN,
-            "Content-Type": "application/json"
-          }
-        })
+        .get(store.state.URL_API + "/kode_penyakit/name/" + query)
         .then(function(response) {
           let res = response.data;
 
@@ -252,11 +275,14 @@ export default {
         })
         .catch(err => console.log(err));
     },
-    clearAll() {
-      this.selectedKodePenyakit = [];
-    },
+    // clearAll() {
+    //   this.selectedKodePenyakit = [];
+    // },
     penColor(color) {
       this.ctx.strokeStyle = color;
+    },
+    clear() {
+      this.canvas.width = this.canvas.width;
     }
   },
   mounted() {
@@ -324,7 +350,6 @@ canvas {
   touch-action: none;
   /* position: relative; */
 }
-
 </style>
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

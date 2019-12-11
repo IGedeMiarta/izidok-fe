@@ -77,6 +77,9 @@
           width="1000"
           height="500"
         >Your browser does not support the HTML 5 Canvas.</canvas>
+        <div class="col-md-4">
+          <b-button @click="clear" variant="primary" size="sm" class="m-1">Clear</b-button>
+        </div>
       </div>
       <div v-show="isHidden" class="col-md-4">
         <div id="img_organ"></div>
@@ -271,7 +274,11 @@ export default {
           self.isLoading = false;
         })
         .catch(err => console.log(err));
-    }
+    },
+    clear() {
+      this.canvas.width = this.canvas.width;
+    },
+
   },
   mounted() {
     this.ctx = this.canvas.getContext("2d");
