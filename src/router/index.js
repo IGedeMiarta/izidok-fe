@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import store from "@/store";
 
 Vue.use(VueRouter);
 
@@ -175,25 +176,19 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const { name } = to;
-  const tmp = name && name.split("-");
-  const isAuthenticated = false;
-  if (
-    !isAuthenticated &&
-    false &&
-    !["login", "register"].includes(
-      tmp && tmp.length && tmp.length > 1 && tmp[0]
-    )
-  ) {
-    next({
-      path: "/login",
-      replace: true,
-      meta: {
-        layout: "examples"
-      }
-    });
-  } else {
-    next();
-  }
+  const isAuthenticated = store.state.BEARER_TOKEN !== null;
+  const isRouteAuth = [
+    'login-page',
+    'register-page',
+    'forgot-password',
+    'verification-process',
+    'verification-operator',
+    'verification-result'
+  ].includes(name)
+
+  if (!isAuthenticated && !isRouteAuth) next('/login');
+  else if(isAuthenticated && isRouteAuth) next('/');
+  else next();
 });
 
 export default router;

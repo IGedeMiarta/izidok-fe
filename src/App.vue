@@ -11,18 +11,6 @@
 <script>
 import axios from 'axios';
 
-axios.interceptors.request.use((config) => {
-  const token = localStorage.getItem('__tkn__')
-
-  if(token) {
-    config.headers.Authorization = `Bearer ${token}`
-  }
-
-  return config
-}, (error) => {
-  return Promise.reject(error)
-})
-
 const default_layout = "default";
 
 export default {
