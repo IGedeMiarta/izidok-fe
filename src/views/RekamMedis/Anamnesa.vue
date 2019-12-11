@@ -90,7 +90,7 @@
           height="500"
         >Your browser does not support the HTML 5 Canvas.</canvas>
         <div class="col-md-4">
-          <b-button @click="clear" variant="primary" size="sm" class="m-1">Clear</b-button>
+          <b-button @click="clear" variant="warning" size="sm" class="m-1">Clear</b-button>
         </div>
       </div>
       <div class="col-md-12" v-show="isHidden">
