@@ -1,53 +1,75 @@
 <template>
   <div>
-    <form>
-      <div class="form-row">
-        <div class="form-group col-md-4"></div>
-        <div class="form-group col-md-4"></div>
-        <div
-          class="col-md-4 d-flex align-items-center justify-content-start mt-4 mt-xl-0 justify-content-xl-end"
-        >
+    <div class="row">
+      <div class="col-md-4 offset-md-8">
+        <div class="row d-flex justify-content-end mr-2">
+          <font-awesome-icon
+            icon="eraser"
+            class="font-size-xl m-2 grow icon"
+            v-on:click="isPen = false; 
+                    isActive = 'eraser'"
+            v-show="!isHidden"
+            :class="{ active: isActive === 'eraser' }"
+          />
+          <font-awesome-icon
+            icon="pen-alt"
+            class="font-size-xl m-2 grow icon"
+            v-on:click="isHidden = false;
+                    isPen = true;
+                    updatePostData({key:'anamnesa_is_draw', value: true});
+                    isActive = 'pen'"
+            :class="{ active: isActive === 'pen' }"
+          />
+          <font-awesome-icon
+            icon="keyboard"
+            class="font-size-xl m-2 grow icon"
+            v-on:click="isHidden = true;
+                    updatePostData({key:'anamnesa_is_draw', value: false});
+                    isActive = 'keyboard'"
+            :class="{ active: isActive === 'keyboard' }"
+          />
+        </div>
+        <div class="row d-flex justify-content-end mr-2">
           <div>
-            <font-awesome-icon
-              icon="eraser"
-              class="font-size-xl m-2 grow icon"
-              v-on:click="isPen = false; 
-              isActive = 'eraser'"
-              v-show="!isHidden"
-              :class="{ active: isActive === 'eraser' }"
-            />
-            <font-awesome-icon
-              icon="pen-alt"
-              class="font-size-xl m-2 grow icon"
-              v-on:click="isHidden = false;
-              isPen = true;
-              updatePostData({key:'anamnesa_is_draw', value: true});
-              isActive = 'pen'"
-              :class="{ active: isActive === 'pen' }"
-            />
-            <font-awesome-icon
-              icon="keyboard"
-              class="font-size-xl m-2 grow icon"
-              v-on:click="isHidden = true;
-              updatePostData({key:'anamnesa_is_draw', value: false});
-              isActive = 'keyboard'"
-              :class="{ active: isActive === 'keyboard' }"
-            />
+            <input type="range" class="custom-range" min="1" max="50" v-model.number="penWidth" />
           </div>
         </div>
-        <div
-          class="col-md-12 d-flex align-items-center justify-content-start mt-4 mt-xl-0 justify-content-xl-end"
-        >
+        <div class="row d-flex justify-content-end mr-2">
           <div>
-            <span @click="penColor('blue');isColorActive = 'blue'" class="dot grow" style="background-color: blue;" :class="{ color_active: isColorActive === 'blue' }"></span>
-            <span @click="penColor('red');isColorActive = 'red'" class="dot grow" style="background-color: red;" :class="{ color_active: isColorActive === 'red' }"></span>
-            <span @click="penColor('#54c756');isColorActive = 'green'" class="dot grow" style="background-color: #54c756;" :class="{ color_active: isColorActive === 'green' }"></span>
-            <span @click="penColor('#555');isColorActive = 'black'" class="dot grow" style="background-color: #555;" :class="{ color_active: isColorActive === 'black' }"></span>
-            <span @click="penColor('orange');isColorActive = 'yellow'" class="dot grow" style="background-color: orange;" :class="{ color_active: isColorActive === 'yellow' }"></span>
+            <span
+              @click="penColor('blue');isColorActive = 'blue'"
+              class="dot grow"
+              style="background-color: blue;"
+              :class="{ color_active: isColorActive === 'blue' }"
+            ></span>
+            <span
+              @click="penColor('red');isColorActive = 'red'"
+              class="dot grow"
+              style="background-color: red;"
+              :class="{ color_active: isColorActive === 'red' }"
+            ></span>
+            <span
+              @click="penColor('#54c756');isColorActive = 'green'"
+              class="dot grow"
+              style="background-color: #54c756;"
+              :class="{ color_active: isColorActive === 'green' }"
+            ></span>
+            <span
+              @click="penColor('#555');isColorActive = 'black'"
+              class="dot grow"
+              style="background-color: #555;"
+              :class="{ color_active: isColorActive === 'black' }"
+            ></span>
+            <span
+              @click="penColor('orange');isColorActive = 'yellow'"
+              class="dot grow"
+              style="background-color: orange;"
+              :class="{ color_active: isColorActive === 'yellow' }"
+            ></span>
           </div>
         </div>
       </div>
-    </form>
+    </div>
     <div class="row">
       <div class="col-md-2">
         <label>Catatan :</label>
@@ -94,12 +116,13 @@ export default {
       isHidden: false,
       isPen: true,
       isLoading: false,
-      isActive: 'pen',
-      isColorActive: 'black',
+      isActive: "pen",
+      isColorActive: "black",
       mousePos: { x: 0, y: 0 },
       lastPos: { x: 0, y: 0 },
       drawing: false,
-      ctx: null
+      ctx: null,
+      penWidth: 2
     };
   },
   computed: {
@@ -114,6 +137,7 @@ export default {
     },
     handleMousedown(e) {
       this.lastPos = this.getMousePos(e);
+      this.ctx.lineWidth = this.penWidth;
       this.drawing = true;
     },
     handleMouseup(e) {
@@ -133,7 +157,7 @@ export default {
           this.ctx.arc(
             this.mousePos.x,
             this.mousePos.y,
-            8,
+            this.penWidth,
             0,
             Math.PI * 2,
             false
@@ -185,13 +209,15 @@ export default {
     },
     clear() {
       this.canvas.width = this.canvas.width;
-    },
+    }
   },
   mounted() {
     this.ctx = this.canvas.getContext("2d");
 
     this.ctx.strokeStyle = "#222222";
-    this.ctx.lineWith = 2;
+    this.ctx.lineWidth = this.penWidth;
+    this.ctx.lineJoin = "round";
+    this.ctx.lineCap = "round";
 
     //append data canvas to vuex global state
     this.updateCanvas({ key: "ANAMNESA", value: this.canvas });
