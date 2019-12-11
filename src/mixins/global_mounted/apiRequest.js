@@ -1,8 +1,8 @@
 import axios from "axios";
-import store from '@/store'
+import store from "@/store";
 
 const getAuthorizationToken = () =>
-  JSON.stringify(store.state.BEARER_TOKEN) || null;
+  `Bearer ${store.state.BEARER_TOKEN}` || null;
 
 export default () => {
   axios.defaults.headers.common["Authorization"] = getAuthorizationToken();
