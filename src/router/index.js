@@ -1,5 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import store from "@/store";
 
 Vue.use(VueRouter);
 
@@ -7,7 +8,7 @@ const routes = [
   {
     path: "/rekam-medis",
     name: "rekam-medis",
-    component: () => import("../views/RekamMedis.vue"),
+    component: () => import("../views/RekamMedis.vue")
   },
   {
     path: "/",
@@ -129,9 +130,31 @@ const routes = [
     component: () => import("../views/Pembayaran.vue"),
     children: [
       {
-        path: "/pembayaran/list",
+        path: "tambah",
+        name: "pembayaran-tambah",
+        component: () => import("../views/Pembayaran/Tambah.vue")
+      },
+      {
+        path: "list",
         name: "pembayaran-list",
         component: () => import("../views/Pembayaran/List.vue")
+      }
+    ]
+  },
+  {
+    path: "/operator",
+    name: "operator",
+    component: () => import("../views/Operator.vue"),
+    children: [
+      {
+        path: "/operator/list",
+        name: "operator-list",
+        component: () => import("../views/Operator/List.vue")
+      },
+      {
+        path: "/operator/tambah",
+        name: "operator-tambah",
+        component: () => import("../views/Operator/Tambah.vue")
       }
     ]
   }
@@ -153,25 +176,19 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const { name } = to;
-  const tmp = name && name.split("-");
-  const isAuthenticated = false;
-  if (
-    !isAuthenticated &&
-    false &&
-    !["login", "register"].includes(
-      tmp && tmp.length && tmp.length > 1 && tmp[0]
-    )
-  ) {
-    next({
-      path: "/login",
-      replace: true,
-      meta: {
-        layout: "examples"
-      }
-    });
-  } else {
-    next();
-  }
+  const isAuthenticated = store.state.BEARER_TOKEN !== null;
+  const isRouteAuth = [
+    'login-page',
+    'register-page',
+    'forgot-password',
+    'verification-process',
+    'verification-operator',
+    'verification-result'
+  ].includes(name)
+
+  if (!isAuthenticated && !isRouteAuth) next('/login');
+  else if(isAuthenticated && isRouteAuth) next('/');
+  else next();
 });
 
 export default router;

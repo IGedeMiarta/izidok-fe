@@ -51,6 +51,7 @@
     "vuejs-datepicker": "1.6.2",
     "vuelidate": "0.7.4",
     "vuex": "3.0.1",
+    "vuex-persist": "^2.2.0",
     "weekstart": "^1.0.1"
   },
   "devDependencies": {

@@ -2,6 +2,7 @@
   <div class="card card-box mb-5">
     <div class="card-header pr-2">
       <div class="card-header--title">
+        <h4 style="display:inline-block">Antrean Hari Ini</h4>
         <b-button
           :to="{ name: 'registrasi-rawat-jalan' }"
           class="float-right text-capitalize"
@@ -25,18 +26,18 @@
               </tr>
             </thead>
             <tbody class="list">
-              <tr v-for="data in 5" :key="data">
+              <tr v-for="(name, key) in names" :key="key">
                 <td class="text-wrap">
                   <div class="align-box-row">
                     <div class="d-flex align-items-center">
-                      <span>{{ data }}</span>
+                      <span>{{ key+1 }}</span>
                     </div>
                   </div>
                 </td>
                 <td class="text-wrap">
                   <div class="align-box-row">
                     <span class="d-block">
-                      John Doe
+                      {{ name }}
                     </span>
                   </div>
                 </td>
@@ -44,7 +45,7 @@
                   <div
                     class="text-center d-flex align-items-center justify-content-between"
                   >
-                    <span class="flex-grow-1">0001-0{{ data }}</span>
+                    <span class="flex-grow-1">0001-0{{ key+1 }}</span>
                     <span
                       ><b-button variant="dark" size="sm">
                         <span class="btn-wrapper--icon">
@@ -57,6 +58,12 @@
               </tr>
             </tbody>
           </table>
+          <b-pagination
+            class="d-flex justify-content-center mt-4"
+            v-model="currentPage"
+            :total-rows="rows"
+            :per-page="perPage"
+          ></b-pagination>
         </div>
         <div class="divider"></div>
       </div>
@@ -69,5 +76,18 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
 library.add(faSignInAlt);
 
-export default {};
+export default {
+  data: () => ({
+    names: [
+      'Adisty Zara',
+      'Ario Bayu',
+      'Ernest Prakasa',
+      'Raditya Dika',
+      'Maudy Ayunda'
+    ],
+    currentPage: 1,
+    rows: 26,
+    perPage: 5,
+  })
+};
 </script>

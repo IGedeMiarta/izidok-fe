@@ -90,10 +90,11 @@ export default {
   },
   computed: {
     userName() {
-      return startCase(localStorage.getItem('user.name'))
+      return startCase(this.$store.state.user.nama)
     },
     userRole() {
-      return startCase(localStorage.getItem('user.role'))
+      let role = this.$store.state.user.roles[0].name
+      return startCase(role)
     }
   },
   methods: {
@@ -116,7 +117,8 @@ export default {
         const res = await axios.post(`${this.url_api}/logout`);
         const { status, data, message } = res.data;
         if(status) {
-          localStorage.removeItem('__tkn__');
+          this.$store.commit('SET_BEARER_TOKEN', null);
+          this.$store.commit('SET_USER', null);
           this.$router.push('/login');
         }
       } catch (err) {
