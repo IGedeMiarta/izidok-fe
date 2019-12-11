@@ -118,6 +118,7 @@ export default {
         const { status, data, message } = res.data;
         if(status) {
           this.$store.commit('SET_BEARER_TOKEN', null);
+          this.$store.commit('SET_USER', null);
           this.$router.push('/login');
         }
       } catch (err) {
