@@ -77,7 +77,6 @@
                   <th>no. rekam medis</th>
                   <th>jenis kelamin</th>
                   <th>tanggal lahir</th>
-                  <th>nama dokter</th>
                   <th class="no-sort text-center">Actions</th>
                 </tr>
               </thead>
@@ -88,7 +87,6 @@
                   <td>{{ data.nomor_polis }}</td>
                   <td>{{ data.jenis_kelamin }}</td>
                   <td>{{ data.tanggal_lahir }}</td>
-                  <td>{{ data.nama_dokter }}</td>
                   <td class="text-center">
                     <b-link
                       @click.prevent="
