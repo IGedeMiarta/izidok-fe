@@ -278,13 +278,13 @@ export default {
       this.isLoading = true;
 
       axios
-        .get(store.state.URL_API + "/organ/name/" + query, {
+        .get(store.state.URL_API + "/organ/name?query=" + query, {
           headers: {
             Authorization: "Bearer " + store.state.BEARER_TOKEN,
             "Content-Type": "application/json"
           }
         })
-        .then(function(response) {
+        .then(response => {
           let res = response.data;
 
           if (!res.status) {
@@ -300,7 +300,9 @@ export default {
 
           self.isLoading = false;
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+          self.isLoading = false;
+          console.log(err)});
     },
     clear() {
       this.canvas.width = this.canvas.width;

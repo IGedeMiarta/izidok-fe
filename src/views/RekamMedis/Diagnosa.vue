@@ -258,8 +258,8 @@ export default {
       this.isLoading = true;
 
       axios
-        .get(store.state.URL_API + "/kode_penyakit/name/" + query)
-        .then(function(response) {
+        .get(store.state.URL_API + "/kode_penyakit/name?query=" + query)
+        .then(response => {
           let res = response.data;
 
           if (!res.status) {
@@ -275,7 +275,10 @@ export default {
 
           self.isLoading = false;
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+          self.isLoading = false;
+          console.log(err);
+          });
     },
     // clearAll() {
     //   this.selectedKodePenyakit = [];
