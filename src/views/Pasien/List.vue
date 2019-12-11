@@ -191,7 +191,7 @@ export default {
       }).then(async res => {
         if (res.value) {
           // console.log(res);
-          await this.deletePasien();
+          await this.deletePasien(id);
         }
       });
     },
