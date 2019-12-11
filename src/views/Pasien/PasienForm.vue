@@ -54,7 +54,7 @@
       </div>
       <div class="form-row">
         <b-form-group
-          label="NIK"
+          label="No. KTP"
           class="text-capitalize col-md-6 pr-3"
           style="position: relative"
           :state="getDataError({ rawLabel: 'nik' })"
@@ -103,54 +103,102 @@
         </b-form-group>
       </div>
       <div class="form-row">
-        <b-form-group
-          label="Tempat Tanggal Lahir"
-          class="text-capitalize col-md-6 pr-3"
-          style="position: relative"
-          :state="getDataError({ rawLabel: 'tempat tanggal lahir' })"
-          :invalid-feedback="
-            renderInvalidFeedback({
-              validationDesc: blindlyGetData({
-                rawLabel: 'tempat tanggal lahir'
-              })
-            })
-          "
-        >
-          <b-form-input
-            @keyup="
-              setValue({
-                rawLabel: 'tempat tanggal lahir',
-                $event
-              })
-            "
-            :state="getDataError({ rawLabel: 'tempat tanggal lahir' })"
-            :disabled="disabledForm()"
-          />
-        </b-form-group>
-        <b-form-group
-          label="Nama Penjamin/Asuransi"
-          class="text-capitalize col-md-6"
-          style="position: relative"
-          :state="getDataError({ rawLabel: 'nama penjamin/asuransi' })"
-          :invalid-feedback="
-            renderInvalidFeedback({
-              validationDesc: blindlyGetData({
-                rawLabel: 'nama penjamin/asuransi'
-              })
-            })
-          "
-        >
-          <b-form-input
-            @keyup="
-              setValue({
-                rawLabel: 'nama penjamin/asuransi',
-                $event
-              })
-            "
+        <b-col cols="6">
+          <b-row>
+            <b-col cols="6"
+              ><b-form-group
+                label="Tempat Lahir"
+                class="text-capitalize"
+                style="position: relative"
+                :state="getDataError({ rawLabel: 'tempat lahir' })"
+                :invalid-feedback="
+                  renderInvalidFeedback({
+                    validationDesc: blindlyGetData({
+                      rawLabel: 'tempat lahir'
+                    })
+                  })
+                "
+              >
+                <b-form-input
+                  @keyup="
+                    setValue({
+                      rawLabel: 'tempat lahir',
+                      $event
+                    })
+                  "
+                  :state="getDataError({ rawLabel: 'tempat lahir' })"
+                  :disabled="disabledForm()"
+                /> </b-form-group
+            ></b-col>
+            <b-col cols="6">
+              <b-form-group
+                label="Tanggal Lahir"
+                class="text-capitalize mr-2"
+                style="position: relative"
+                :state="getDataError({ rawLabel: 'tanggal lahir' })"
+                :invalid-feedback="
+                  renderInvalidFeedback({
+                    validationDesc: blindlyGetData({
+                      rawLabel: 'tanggal lahir'
+                    })
+                  })
+                "
+              >
+                <b-form-input
+                  @keyup="
+                    setValue({
+                      rawLabel: 'tanggal lahir',
+                      $event
+                    })
+                  "
+                  :state="getDataError({ rawLabel: 'tanggal lahir' })"
+                  :disabled="disabledForm()"
+                />
+                <!-- <Datetime
+                  v-model.lazy="formData['tanggal_lahir']"
+                  :input-class="[
+                    getDataError({ rawLabel: 'tanggal lahir' }) === null
+                      ? ''
+                      : getDataError({ rawLabel: 'tanggal lahir' })
+                      ? 'is-valid'
+                      : 'is-invalid',
+                    'form-control'
+                  ]"
+                  :state="getDataError({ rawLabel: 'tanggal lahir' })"
+                  :disabled="disabledForm()"
+                  zone="Asia/Jakarta"
+                  format="dd-LL-yyyy"
+                /> -->
+              </b-form-group>
+            </b-col>
+          </b-row>
+        </b-col>
+        <b-col cols="6">
+          <b-form-group
+            label="Nama Penjamin/Asuransi"
+            class="text-capitalize"
+            style="position: relative"
             :state="getDataError({ rawLabel: 'nama penjamin/asuransi' })"
-            :disabled="disabledForm()"
-          />
-        </b-form-group>
+            :invalid-feedback="
+              renderInvalidFeedback({
+                validationDesc: blindlyGetData({
+                  rawLabel: 'nama penjamin/asuransi'
+                })
+              })
+            "
+          >
+            <b-form-input
+              @keyup="
+                setValue({
+                  rawLabel: 'nama penjamin/asuransi',
+                  $event
+                })
+              "
+              :state="getDataError({ rawLabel: 'nama penjamin/asuransi' })"
+              :disabled="disabledForm()"
+            />
+          </b-form-group>
+        </b-col>
       </div>
       <div class="form-row">
         <div class="col-md-6">
@@ -175,7 +223,11 @@
                       $event
                     })
                   "
-                  :options="['Pria', 'Wanita']"
+                  class="text-capitalize"
+                  :options="[
+                    { text: 'laki-laki', value: 1 },
+                    { text: 'perempuan', value: 0 }
+                  ]"
                   :disabled="disabledForm()"
                 >
                 </b-form-radio-group>
@@ -319,16 +371,16 @@
       <b-row class="mb-3">
         <b-col cols="6">
           <b-row>
-            <b-col cols="4">
+            <b-col cols="3">
               <b-form-group
-                label="RT/RW"
+                label="RT"
                 class="text-capitalize"
                 style="position: relative"
-                :state="getDataError({ rawLabel: 'rt/rw' })"
+                :state="getDataError({ rawLabel: 'rt' })"
                 :invalid-feedback="
                   renderInvalidFeedback({
                     validationDesc: blindlyGetData({
-                      rawLabel: 'rt/rw'
+                      rawLabel: 'rt'
                     })
                   })
                 "
@@ -336,16 +388,42 @@
                 <b-form-input
                   @keyup="
                     setValue({
-                      rawLabel: 'rt/rw',
+                      rawLabel: 'rt',
                       $event
                     })
                   "
-                  :state="getDataError({ rawLabel: 'rt/rw' })"
+                  :state="getDataError({ rawLabel: 'rt' })"
                   :disabled="disabledForm()"
                 />
               </b-form-group>
             </b-col>
-            <b-col cols="4">
+            <b-col cols="3">
+              <b-form-group
+                label="RW"
+                class="text-capitalize"
+                style="position: relative"
+                :state="getDataError({ rawLabel: 'rw' })"
+                :invalid-feedback="
+                  renderInvalidFeedback({
+                    validationDesc: blindlyGetData({
+                      rawLabel: 'rw'
+                    })
+                  })
+                "
+              >
+                <b-form-input
+                  @keyup="
+                    setValue({
+                      rawLabel: 'rw',
+                      $event
+                    })
+                  "
+                  :state="getDataError({ rawLabel: 'rw' })"
+                  :disabled="disabledForm()"
+                />
+              </b-form-group>
+            </b-col>
+            <b-col cols="3">
               <b-form-group
                 label="Kel/Desa"
                 class="text-capitalize"
@@ -371,7 +449,7 @@
                 />
               </b-form-group>
             </b-col>
-            <b-col cols="4">
+            <b-col cols="3">
               <b-form-group
                 label="Kecamatan"
                 class="text-capitalize"
@@ -418,10 +496,12 @@
           >
             <b-form-select
               :options="
-                ['Kawin', 'Tidak Kawin', 'Janda/Duda'].map(item => ({
-                  value: item,
-                  text: item
-                }))
+                ['Belum Kawin', 'Kawin', 'Cerai Hidup', 'Cerai Mati'].map(
+                  (item, index) => ({
+                    value: index,
+                    text: item
+                  })
+                )
               "
               @change="
                 setValue({
@@ -517,6 +597,7 @@
 </template>
 
 <script>
+// import { Datetime } from "vue-datetime";
 import axios from "axios";
 import startCase from "lodash/startCase";
 import {
@@ -526,6 +607,8 @@ import {
   numeric,
   email
 } from "vuelidate/lib/validators";
+
+// import "vue-datetime/dist/vue-datetime.css";
 
 const tmp = [
   {
@@ -553,7 +636,13 @@ const tmp = [
     }
   },
   {
-    label: "tempat tanggal lahir",
+    label: "tempat lahir",
+    validations: {
+      required
+    }
+  },
+  {
+    label: "tanggal lahir",
     validations: {
       required
     }
@@ -589,7 +678,11 @@ const tmp = [
     validations: { required }
   },
   {
-    label: "rt/rw",
+    label: "rt",
+    validations: {}
+  },
+  {
+    label: "rw",
     validations: {}
   },
   {
@@ -611,6 +704,9 @@ const tmp = [
 ];
 
 export default {
+  // components: {
+  //   Datetime
+  // },
   props: {
     formType: {
       default: "add",

@@ -44,8 +44,10 @@
 <script>
 import axios from "axios";
 import startCase from "lodash/startCase";
+import pasienMixin from "./mixins";
 
 export default {
+  mixins: [pasienMixin],
   components: {
     vueDropzone: () => import("vue2-dropzone"),
     PasienForm: () => import("./PasienForm")
@@ -103,7 +105,10 @@ export default {
     },
     async addPasien(postData) {
       try {
-        const res = await axios.post(`${this.url_api}/pasien`, postData);
+        const res = await axios.post(
+          `${this.url_api}/pasien`,
+          this.mapPasienFormData(postData)
+        );
         const { status, data } = res.data;
         if (status) {
           this.goingPlaces();
