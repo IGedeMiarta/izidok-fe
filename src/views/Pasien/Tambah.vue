@@ -109,8 +109,8 @@ export default {
           `${this.url_api}/pasien`,
           this.mapPasienFormData(postData)
         );
-        const { status, data } = res.data;
-        if (status) {
+        const { success, data } = res.data;
+        if (success) {
           this.goingPlaces();
         }
       } catch (err) {
