@@ -63,18 +63,21 @@ export default {
       checkbox: false
     };
   },
-  methods: mapActions(["updatePostData"]),
+  methods: mapActions(["updatePostData", "updateSavingParams"]),
   watch:{
     selectedRadio: function (){
       if (this.selectedRadio != 99)
         this.updatePostData({key:'next_konsultasi', value: this.selectedRadio});
+        this.updateSavingParams({key:'is_next_konsul', value: true});
     },
     hari: function (){
       if (this.selectedRadio == 99)
         this.updatePostData({key:'next_konsultasi', value: this.hari});
+        this.updateSavingParams({key:'is_next_konsul', value: true});
     },
     checkbox: function (){
       this.updatePostData({key:'agreement', value: this.checkbox});
+      this.updateSavingParams({key:'is_agree', value: true});
     }
   }
 };

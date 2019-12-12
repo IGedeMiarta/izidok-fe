@@ -13,7 +13,7 @@
                     v-b-toggle.accordion-1
                   >
                     <span>Tanda - tanda Vital</span>
-                    <!-- <font-awesome-icon icon="angle-up" class="font-size-xl" /> -->
+                    <font-awesome-icon icon="angle-up" class="font-size-xl" />
                   </b-button>
                 </div>
                 <b-collapse id="accordion-1" visible accordion="accordion-example" role="tabpanel">
@@ -29,7 +29,7 @@
                     v-b-toggle.accordion-2
                   >
                     <span>Anamnesa</span>
-                    <!-- <font-awesome-icon icon="angle-up" class="font-size-xl" /> -->
+                    <font-awesome-icon icon="angle-up" class="font-size-xl" />
                   </b-button>
                 </div>
                 <b-collapse id="accordion-2" accordion="accordion-example" role="tabpanel">
@@ -45,7 +45,7 @@
                     v-b-toggle.accordion-3
                   >
                     <span>Pemeriksaan Fisik</span>
-                    <!-- <font-awesome-icon icon="angle-up" class="font-size-xl" /> -->
+                    <font-awesome-icon icon="angle-up" class="font-size-xl" />
                   </b-button>
                 </div>
                 <b-collapse id="accordion-3" accordion="accordion-example" role="tabpanel">
@@ -61,7 +61,7 @@
                     v-b-toggle.accordion-4
                   >
                     <span>Diagnosa</span>
-                    <!-- <font-awesome-icon icon="angle-up" class="font-size-xl" /> -->
+                    <font-awesome-icon icon="angle-up" class="font-size-xl" />
                   </b-button>
                 </div>
                 <b-collapse id="accordion-4" accordion="accordion-example" role="tabpanel">
@@ -72,12 +72,13 @@
               </div>
             </div>
             <Footer ref="footer" />
-            <div
-              class="col-xl-12 d-flex justify-content-xl-end"
-            >
-            <button class="btn btn-success m-2">Download</button>
+            <div class="col-xl-12 d-flex justify-content-xl-end">
+              <button class="btn btn-success m-2">Download</button>
               <button class="btn btn-info m-2">Keluar</button>
-              <button @click="saveRekamMedis" class="btn btn-primary m-2">Simpan</button>
+              <button @click="save()" class="btn btn-primary m-2 btn-spinner">
+                <b-spinner v-show="saving_params.is_saving" class="btn-wrapper--icon" small></b-spinner>
+                <span class="btn-wrapper--label">Simpan</span>
+              </button>
             </div>
           </div>
         </div>
@@ -98,12 +99,14 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faPenAlt,
   faKeyboard,
-  faEraser
+  faEraser,
+  faAngleUp
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-library.add(faPenAlt, faKeyboard, faEraser);
+library.add(faPenAlt, faKeyboard, faEraser, faAngleUp);
 
 import { mapGetters, mapActions } from "vuex";
+import router from "@/router";
 
 export default {
   name: "RekamMedis",
@@ -115,8 +118,42 @@ export default {
     Diagnosa,
     Footer
   },
-  methods: mapActions(["fetchData", "saveRekamMedis"]),
-  computed: mapGetters(["pasien"]),
+  methods: {
+    ...mapActions(["fetchData", "saveRekamMedis"]),
+    async save() {
+      const saving = await this.saveRekamMedis();
+
+      if (!this.saving_params.is_next_konsul) {
+        return this.handleError('Anda belum memilih durasi konsultasi!');
+      }
+
+      if (!this.saving_params.is_agree) {
+        return this.handleError('Anda belum menyetujui pernyataan!');
+      }
+
+      if (!this.saving_params.is_saved) {
+        return this.handleError('Penyimpanan Rekam Medis gagal!');
+      }
+
+      return this.$swal(
+        "Rekam medis tersimpan!",
+        "Klik tombol untuk melanjutkan!",
+        "success"
+      ).then(res => {
+        router.push({
+          path: "/pembayaran"
+        });
+      });
+    },
+    handleError(message) {
+    return this.$swal({
+      type: "error",
+      title: "Oops...",
+      text: message
+    });
+  },
+  },
+  computed: mapGetters(["pasien", "saving_params"]),
   created() {
     this.fetchData();
   }
@@ -132,8 +169,8 @@ export default {
   display: inline-block;
 }
 
-.icon{
-  color:#cccccc;
+.icon {
+  color: #cccccc;
 }
 
 .grow {

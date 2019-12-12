@@ -1,19 +1,21 @@
 import axios from 'axios';
 import store from '@/store/';
-import router from '@/router'
+import router from '@/router';
 
-const state = {
-    CONST_PASIENID: 1,
-    CONST_TRANSKLINIKID: 1,
-
-    pasien: {},
-    organs: [],
-    penyakits: [],
-    postData: {},
-    canvas_pemeriksaan: null,
-    canvas_diagnosa: null,
-    canvas_anamnesa: null
+const getDefaultState = () => {
+    return {
+        asien: {},
+        organs: [],
+        penyakits: [],
+        postData: {},
+        canvas_pemeriksaan: null,
+        canvas_diagnosa: null,
+        canvas_anamnesa: null,
+        saving_params: { is_saving: false, is_saved: false, is_agree: false, is_next_konsul: false }
+    }
 };
+
+const state = getDefaultState();
 
 const getters = {
     pasien: state => state.pasien,
@@ -22,18 +24,24 @@ const getters = {
     canvas_pemeriksaan: state => state.canvas_pemeriksaan,
     canvas_diagnosa: state => state.canvas_diagnosa,
     canvas_anamnesa: state => state.canvas_anamnesa,
+    saving_params: state => state.saving_params,
 };
 
 const actions = {
-    async fetchData({ commit }) {
+    resetCartState({ commit }) {
+        console.log('reset state called...');
+        commit('resetState')
+    },
+    async fetchData({ commit, dispatch }) {
+        console.log('fetch data called...');
+
+        dispatch('resetCartState');
+
         const pasien_id = router.currentRoute.params.pasien_id;
 
         const res_pasien = await axios.get(store.state.URL_API + "/pasien/" + pasien_id);
 
-        const res_organs = await axios.get(store.state.URL_API + "/organ");
-
         commit('setPasien', res_pasien.data);
-        commit('setOrgans', res_organs.data);
     },
 
     updateAnamnesa({ commit }, payload) {
@@ -48,12 +56,19 @@ const actions = {
         commit('setCanvas', payload);
     },
 
-    async saveRekamMedis({ commit }) {
+    updateSavingParams({ commit }, payload) {
+        commit('setIsSaving', payload);
+    },
+
+    async saveRekamMedis({ commit, state }) {
+        console.log('save rekam-medis called...');
         const pasien_id = router.currentRoute.params.pasien_id;
         const transklinik_id = router.currentRoute.params.transklinik_id;
 
         state.postData['transklinik_id'] = transklinik_id;
         state.postData['pasien_id'] = pasien_id;
+
+        console.log('post data:', state.postData);
 
         if (state.postData['anamnesa_is_draw']) {
             state.postData['anamnesa_draw'] = state.canvas_anamnesa.toDataURL("image/png");
@@ -68,28 +83,30 @@ const actions = {
         }
 
         if (!state.postData['agreement']) {
-            return alert('Anda belum menyetujui pernyataan...');
+            commit('setIsSaving', { key: 'is_agree', value: false });
+            return;
         }
 
         if (!state.postData['next_konsultasi']) {
-            return alert('Anda belum mimilih waktu konsultasi selanjutnya...');
+            commit('setIsSaving', { key: 'is_next_konsul', value: false });
+            return;
         }
 
-        console.log('Postdata: ', state.postData);
-
         try {
+            commit('setIsSaving', { key: 'is_saving', value: true });
             const res = await axios.post(
                 store.state.URL_API + "/rekam_medis",
-                { ...state.postData  }
+                { ...state.postData }
             );
 
-            console.log('Response: ', res.data);
+            if (res.data.status) {
+                commit('setIsSaving', { key: 'is_saved', value: true });
+            }
 
-            router.push({
-              path: "/pembayaran"
-            });
+            commit('setIsSaving', { key: 'is_saving', value: false });
 
         } catch (err) {
+            commit('setIsSaving', { key: 'is_saving', value: false });
             console.log(err);
         }
 
@@ -98,11 +115,13 @@ const actions = {
 };
 
 const mutations = {
+    resetState(state) {
+        Object.assign(state, getDefaultState())
+    },
     setPasien: (state, pasien) => (state.pasien = pasien.data),
     setOrgans: (state, organs) => (state.organs = organs.data.organ),
     setPostData: (state, payload) => {
         state.postData[payload.key] = payload.value;
-        // console.log(state.postData);
     },
     setCanvas: (state, payload) => {
         if (payload.key === 'PEMERIKSAAN') {
@@ -116,6 +135,9 @@ const mutations = {
         if (payload.key === 'ANAMNESA') {
             state.canvas_anamnesa = payload.value;
         }
+    },
+    setIsSaving: (state, payload) => {
+        state.saving_params[payload.key] = payload.value;
     }
 };
 
