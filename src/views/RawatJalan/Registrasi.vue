@@ -50,6 +50,14 @@
                     <vue-select
                       :class="{ error: form.error }"
                       :options="options"
+                      @input="
+                        setValue({
+                          rawLabel: form.rawLabel,
+                          label: form.label,
+                          $event,
+                          tmpId: form.tmpId
+                        })
+                      "
                       v-if="form.type === 'select'"
                     ></vue-select>
                     <template v-if="form.type === 'radio'">
@@ -239,6 +247,7 @@ export default {
     submitForm() {
       const { formBasicData } = this;
       if (formBasicData.every(item => item.error !== null && !item.error)) {
+        console.log(this.formData);
         // console.log("good to go");
       } else {
         formBasicData.map(item => {
@@ -272,6 +281,7 @@ export default {
         const { target } = $event;
         value = target.value;
       }
+      console.log($event);
       this.formData[label] = value;
       this.triggerValidation({
         label,
