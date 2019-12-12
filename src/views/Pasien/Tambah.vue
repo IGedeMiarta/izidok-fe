@@ -104,6 +104,7 @@ export default {
       this.$router.push(tmp);
     },
     async addPasien(postData) {
+      postData.klinik_id = this.$store.state.user.klinik_id
       try {
         const res = await axios.post(
           `${this.url_api}/pasien`,

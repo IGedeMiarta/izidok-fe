@@ -163,16 +163,7 @@ export default {
       currentPage: 1,
       rows: 100,
       perPage: 10,
-      pasienList: [
-        {
-          id: 1,
-          nama: "relep",
-          nomor_polis: "asd",
-          jenis_kelamin: "perempuan",
-          tanggal_lahir: "20-10-2014",
-          nama_dokter: "meki"
-        }
-      ],
+      pasienList: [],
       namaPasien: "",
       noRekamMedis: ""
     };
