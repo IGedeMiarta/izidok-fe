@@ -156,6 +156,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import startCase from "lodash/startCase";
 import { Datetime } from "vue-datetime";
 import "vue-datetime/dist/vue-datetime.css";
@@ -269,7 +270,7 @@ export default {
     ]
   }),
   mounted() {
-    // this.fetchAntrean()
+    this.fetchAntrean();
   },
   methods: {
     assignDataRegistrasiPasien({
@@ -299,12 +300,19 @@ export default {
     },
     async fetchAntrean() {
       try {
-        const res = await axios.post(
-          `${this.url_api}/transaksi&status="QUEUED"`
+        const res = await axios.get(
+          `${this.url_api}/transaksi?limit=${
+            this.perPage
+          }&status=${"queued".toUpperCase()}`
         );
         const { status, data } = res.data;
+        if (status) {
+          const { total, data: antreanData } = data;
+          this.items = antreanData;
+          this.rows = total;
+        }
       } catch (err) {
-        // console.log(err);
+        console.log(err);
       }
     },
     clickBtnAction(icon) {

@@ -498,7 +498,7 @@
               :options="
                 ['Belum Kawin', 'Kawin', 'Cerai Hidup', 'Cerai Mati'].map(
                   (item, index) => ({
-                    value: index,
+                    value: item,
                     text: item
                   })
                 )
@@ -803,7 +803,7 @@ export default {
     },
     setFormData() {
       return this.setFormBasicData().reduce((arr, val) => {
-        arr[val.label.split(" ").join("_")] = null;
+        arr[val.label.split(" ").join("_")] = '';
         return arr;
       }, {});
     },

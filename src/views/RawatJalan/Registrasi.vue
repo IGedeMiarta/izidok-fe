@@ -49,9 +49,21 @@
                     />
                     <vue-select
                       :class="{ error: form.error }"
-                      :options="options"
+                      :options="options[form.label]"
+                      @input="
+                        setValue({
+                          rawLabel: form.rawLabel,
+                          label: form.label,
+                          $event,
+                          tmpId: form.tmpId
+                        })
+                      "
                       v-if="form.type === 'select'"
-                    ></vue-select>
+                    >
+                      <template v-if="form.label == 'dokter'" v-slot:option="option">
+                        dr. {{ option.id }}
+                      </template>
+                    </vue-select>
                     <template v-if="form.type === 'radio'">
                       <b-form-radio-group
                         id="radio-group-1"
@@ -97,6 +109,7 @@ import {
   maxLength,
   numeric
 } from "vuelidate/lib/validators";
+import axios from 'axios';
 
 const tmp = [
   {
@@ -201,8 +214,12 @@ export default {
   data: () => ({
     formBasicData: null,
     formData: null,
-    options: ["foo", "bar", "baz"],
-    selected: null
+    options: {
+      dokter: [],
+      nama_lengkap: []
+    },
+    selected: null,
+    pasiens: []
   }),
   validations() {
     return {
@@ -217,6 +234,8 @@ export default {
   mounted() {
     this.formBasicData = this.setFormBasicData();
     this.formData = this.setFormData();
+    this.fetchDokter()
+    this.fetchPasien()
   },
   methods: {
     overwriteAntrean() {
@@ -239,6 +258,7 @@ export default {
     submitForm() {
       const { formBasicData } = this;
       if (formBasicData.every(item => item.error !== null && !item.error)) {
+        console.log(this.formData);
         // console.log("good to go");
       } else {
         formBasicData.map(item => {
@@ -272,6 +292,7 @@ export default {
         const { target } = $event;
         value = target.value;
       }
+      console.log($event);
       this.formData[label] = value;
       this.triggerValidation({
         label,
@@ -279,6 +300,37 @@ export default {
         $vm: this,
         rawLabel
       });
+    },
+    async fetchDokter() {
+      try {
+        const res = await axios.get(`${this.url_api}/dokter`)
+        if(res.data.data.dokter.data.map) {
+          this.options.dokter = res.data.data.dokter.data.map(item => {
+            return {
+              label: item.dokter.nama,
+              value: item.dokter.id,
+            }
+          })
+        }
+      } catch(err) {
+        alert(err)
+      }
+    },
+    async fetchPasien() {
+      try {
+        const res = await axios.get(`${this.url_api}/pasien`)
+        if(res.data.data.pasien.data.map) {
+          this.pasiens = res.data.data.pasien.data
+          this.options.nama_lengkap = res.data.data.pasien.data.map(item => {
+            return {
+              label: item.nama,
+              value: item.id,
+            }
+          })
+        }
+      } catch(err) {
+        alert(err)
+      }
     }
   }
 };

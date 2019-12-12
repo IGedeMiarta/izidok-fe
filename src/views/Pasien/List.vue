@@ -77,7 +77,6 @@
                   <th>no. rekam medis</th>
                   <th>jenis kelamin</th>
                   <th>tanggal lahir</th>
-                  <th>nama dokter</th>
                   <th class="no-sort text-center">Actions</th>
                 </tr>
               </thead>
@@ -88,7 +87,6 @@
                   <td>{{ data.nomor_polis }}</td>
                   <td>{{ data.jenis_kelamin }}</td>
                   <td>{{ data.tanggal_lahir }}</td>
-                  <td>{{ data.nama_dokter }}</td>
                   <td class="text-center">
                     <b-link
                       @click.prevent="
@@ -157,29 +155,15 @@ import {
   faPencilAlt
 } from "@fortawesome/free-solid-svg-icons";
 
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-
 library.add(faArrowRight, faArrowUp, faTrashAlt, faSearch, faPencilAlt);
 
 export default {
-  components: {
-    "font-awesome-icon": FontAwesomeIcon
-  },
   data() {
     return {
       currentPage: 1,
       rows: 100,
       perPage: 10,
-      pasienList: [
-        {
-          id: 1,
-          nama: "relep",
-          nomor_polis: "asd",
-          jenis_kelamin: "perempuan",
-          tanggal_lahir: "20-10-2014",
-          nama_dokter: "meki"
-        }
-      ],
+      pasienList: [],
       namaPasien: "",
       noRekamMedis: ""
     };
@@ -198,7 +182,7 @@ export default {
       }).then(async res => {
         if (res.value) {
           // console.log(res);
-          await this.deletePasien();
+          await this.deletePasien(id);
         }
       });
     },
@@ -248,11 +232,12 @@ export default {
         const res = await axios.get(
           `${this.url_api}/pasien?limit=10&page=${this.currentPage}`
         );
-        const { status, data } = res.data;
+        const { success, data } = res.data;
         if (success) {
-          const { data: pasienData, total } = data;
+          const { pasien: pasienData, total } = data;
+          const { data: listPasien } = pasienData;
+          this.pasienList = [...listPasien];
           this.rows = total;
-          this.pasienList = [...pasienData];
         }
       } catch (err) {
         // console.log(err);

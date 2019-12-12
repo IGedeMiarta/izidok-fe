@@ -1,6 +1,6 @@
 import axios from 'axios';
 import store from '@/store/';
-import router from '../../router'
+import router from '@/router'
 
 const state = {
     CONST_PASIENID: 1,
@@ -26,7 +26,9 @@ const getters = {
 
 const actions = {
     async fetchData({ commit }) {
-        const res_pasien = await axios.get(store.state.URL_API + "/pasien/" + state.CONST_PASIENID);
+        const pasien_id = router.currentRoute.params.pasien_id;
+
+        const res_pasien = await axios.get(store.state.URL_API + "/pasien/" + pasien_id);
 
         const res_organs = await axios.get(store.state.URL_API + "/organ");
 
@@ -47,8 +49,11 @@ const actions = {
     },
 
     async saveRekamMedis({ commit }) {
-        state.postData['transklinik_id'] = state.CONST_TRANSKLINIKID;
-        state.postData['pasien_id'] = state.CONST_PASIENID;
+        const pasien_id = router.currentRoute.params.pasien_id;
+        const transklinik_id = router.currentRoute.params.transklinik_id;
+
+        state.postData['transklinik_id'] = transklinik_id;
+        state.postData['pasien_id'] = pasien_id;
 
         if (state.postData['anamnesa_is_draw']) {
             state.postData['anamnesa_draw'] = state.canvas_anamnesa.toDataURL("image/png");
@@ -75,14 +80,7 @@ const actions = {
         try {
             const res = await axios.post(
                 store.state.URL_API + "/rekam_medis",
-                { ...state.postData  },
-                {
-                    headers: {
-                        Authorization:
-                            "Bearer " + store.state.BEARER_TOKEN,
-                        "Content-Type": "application/json"
-                    }
-                }
+                { ...state.postData  }
             );
 
             console.log('Response: ', res.data);

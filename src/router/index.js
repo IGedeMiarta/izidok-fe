@@ -6,7 +6,7 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/rekam-medis",
+    path: "/rekam-medis/:transklinik_id/:pasien_id",
     name: "rekam-medis",
     component: () => import("../views/RekamMedis.vue")
   },

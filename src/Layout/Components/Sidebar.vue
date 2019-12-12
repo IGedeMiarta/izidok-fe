@@ -142,7 +142,7 @@ export default {
               title: "Registrasi"
             },
             {
-              href: "/rekam-medis",
+              href: "/rekam-medis/1/1",
               title: "Rekam Medis"
             },
             {

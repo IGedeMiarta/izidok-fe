@@ -1,68 +1,93 @@
 <template>
   <div>
-    <form>
-      <div class="form-row">
-        <div class="col-md-6">
-          <multiselect
-            v-model="selectedOrgan"
-            :options="organs"
-            placeholder="Pilih Organ*"
-            label="nama"
-            track-by="nama"
-            open-direction="bottom"
-            :multiple="false"
-            :loading="isLoading"
-            :clear-on-select="true"
-            :close-on-select="true"
-            :options-limit="10"
-            :hide-selected="true"
-            @search-change="asyncFind"
-          ></multiselect>
-        </div>
-        <div
-          class="col-md-6 d-flex align-items-center justify-content-start mt-4 mt-xl-0 justify-content-xl-end"
-        >
-          <div>
-            <font-awesome-icon
-              icon="eraser"
-              class="font-size-xl m-2 grow icon"
-              v-on:click="isPen = false; 
+    <div class="row">
+      <div class="col-md-6">
+        <multiselect
+          v-model="selectedOrgan"
+          :options="organs"
+          placeholder="Pilih Organ*"
+          label="nama"
+          track-by="nama"
+          open-direction="bottom"
+          :multiple="false"
+          :loading="isLoading"
+          :clear-on-select="true"
+          :close-on-select="true"
+          :options-limit="10"
+          :hide-selected="true"
+          @search-change="asyncFind"
+        ></multiselect>
+      </div>
+      <div class="col-md-4 offset-md-2">
+        <div class="row d-flex justify-content-end mr-2">
+          <font-awesome-icon
+            icon="eraser"
+            class="font-size-xl m-2 grow icon"
+            v-on:click="isPen = false; 
               isActive = 'eraser'"
-              v-show="!isHidden"
-              :class="{ active: isActive === 'eraser' }"
-            />
-            <font-awesome-icon
-              icon="pen-alt"
-              class="font-size-xl m-2 grow icon"
-              v-on:click="isHidden = false;
+            v-show="!isHidden"
+            :class="{ active: isActive === 'eraser' }"
+          />
+          <font-awesome-icon
+            icon="pen-alt"
+            class="font-size-xl m-2 grow icon"
+            v-on:click="isHidden = false;
               isPen = true;
               updatePostData({key:'pemeriksaan_is_draw', value: true});
               isActive = 'pen'"
-              :class="{ active: isActive === 'pen' }"
-            />
-            <font-awesome-icon
-              icon="keyboard"
-              class="font-size-xl m-2 grow icon"
-              v-on:click="isHidden = true;
+            :class="{ active: isActive === 'pen' }"
+          />
+          <font-awesome-icon
+            icon="keyboard"
+            class="font-size-xl m-2 grow icon"
+            v-on:click="isHidden = true;
               updatePostData({key:'pemeriksaan_is_draw', value: false});
               isActive = 'keyboard'"
-              :class="{ active: isActive === 'keyboard' }"
-            />
+            :class="{ active: isActive === 'keyboard' }"
+          />
+        </div>
+        <div class="row d-flex justify-content-end mr-2">
+          <div>
+            <input type="range" class="custom-range" min="1" max="50" v-model.number="penWidth" />
           </div>
         </div>
-        <div
-          class="col-md-12 d-flex align-items-center justify-content-start mt-4 mt-xl-0 justify-content-xl-end"
-        >
+        <div class="row d-flex justify-content-end mr-2">
           <div>
-            <span @click="penColor('blue');isColorActive = 'blue'" class="dot grow" style="background-color: blue;" :class="{ color_active: isColorActive === 'blue' }"></span>
-            <span @click="penColor('red');isColorActive = 'red'" class="dot grow" style="background-color: red;" :class="{ color_active: isColorActive === 'red' }"></span>
-            <span @click="penColor('#54c756');isColorActive = 'green'" class="dot grow" style="background-color: #54c756;" :class="{ color_active: isColorActive === 'green' }"></span>
-            <span @click="penColor('#555');isColorActive = 'black'" class="dot grow" style="background-color: #555;" :class="{ color_active: isColorActive === 'black' }"></span>
-            <span @click="penColor('orange');isColorActive = 'yellow'" class="dot grow" style="background-color: orange;" :class="{ color_active: isColorActive === 'yellow' }"></span>
+            <span
+              @click="penColor('blue');isColorActive = 'blue'"
+              class="dot grow"
+              style="background-color: blue;"
+              :class="{ color_active: isColorActive === 'blue' }"
+            ></span>
+            <span
+              @click="penColor('red');isColorActive = 'red'"
+              class="dot grow"
+              style="background-color: red;"
+              :class="{ color_active: isColorActive === 'red' }"
+            ></span>
+            <span
+              @click="penColor('#54c756');isColorActive = 'green'"
+              class="dot grow"
+              style="background-color: #54c756;"
+              :class="{ color_active: isColorActive === 'green' }"
+            ></span>
+            <span
+              @click="penColor('#555');isColorActive = 'black'"
+              class="dot grow"
+              style="background-color: #555;"
+              :class="{ color_active: isColorActive === 'black' }"
+            ></span>
+            <span
+              @click="penColor('orange');isColorActive = 'yellow'"
+              class="dot grow"
+              style="background-color: orange;"
+              :class="{ color_active: isColorActive === 'yellow' }"
+            ></span>
           </div>
         </div>
       </div>
-    </form>
+    </div>
+
     <div class="row">
       <div class="col-md-12" v-show="!isHidden">
         <canvas
@@ -77,6 +102,9 @@
           width="1000"
           height="500"
         >Your browser does not support the HTML 5 Canvas.</canvas>
+        <div class="col-md-4">
+          <b-button @click="clear" variant="warning" size="sm" class="m-1">Clear</b-button>
+        </div>
       </div>
       <div v-show="isHidden" class="col-md-4">
         <div id="img_organ"></div>
@@ -113,8 +141,9 @@ export default {
       selectedOrgan: [],
       organs: [],
       isPen: true,
-      isActive: 'pen',
-       isColorActive: 'black',
+      isActive: "pen",
+      isColorActive: "black",
+      penWidth: 2
     };
   },
   computed: {
@@ -172,11 +201,12 @@ export default {
         }
       };
     },
-    handleMousedown(event) {
+     handleMousedown(e) {
+      this.lastPos = this.getMousePos(e);
+      this.ctx.lineWidth = this.penWidth;
       this.drawing = true;
-      this.lastPos = this.getMousePos(event);
     },
-    handleMouseup(event) {
+    handleMouseup(e) {
       this.drawing = false;
     },
     handleMousemove(e) {
@@ -193,7 +223,7 @@ export default {
           this.ctx.arc(
             this.mousePos.x,
             this.mousePos.y,
-            8,
+            this.penWidth,
             0,
             Math.PI * 2,
             false
@@ -248,13 +278,13 @@ export default {
       this.isLoading = true;
 
       axios
-        .get(store.state.URL_API + "/organ/name/" + query, {
+        .get(store.state.URL_API + "/organ/name?query=" + query, {
           headers: {
             Authorization: "Bearer " + store.state.BEARER_TOKEN,
             "Content-Type": "application/json"
           }
         })
-        .then(function(response) {
+        .then(response => {
           let res = response.data;
 
           if (!res.status) {
@@ -270,16 +300,20 @@ export default {
 
           self.isLoading = false;
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+          self.isLoading = false;
+          console.log(err)});
     },
     clear() {
       this.canvas.width = this.canvas.width;
-    },
-
+    }
   },
   mounted() {
     this.ctx = this.canvas.getContext("2d");
     this.ctx.strokeStyle = "#222222";
+    this.ctx.lineWidth = this.penWidth;
+    this.ctx.lineJoin = "round";
+    this.ctx.lineCap = "round";
 
     //append data canvas to vuex global state
     this.updateCanvas({ key: "PEMERIKSAAN", value: this.canvas });
@@ -346,5 +380,4 @@ canvas {
 #editor {
   /* display: none; */
 }
-
 </style>

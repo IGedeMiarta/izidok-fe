@@ -1,85 +1,110 @@
 <template>
   <div>
-    <form>
-      <div class="form-row">
-        <div class="form-group col-md-4">
-          <multiselect
-            v-model="selectedKodePenyakit"
-            :options="kodePenyakit"
-            placeholder="Pilih Kode Diagnosis*"
-            label="kode"
-            track-by="kode"
-            open-direction="bottom"
-            :multiple="true"
-            :loading="isLoading"
-            :clear-on-select="false"
-            :close-on-select="false"
-            :options-limit="10"
-            :hide-selected="true"
-            @search-change="asyncFind"
-          ></multiselect>
-        </div>
-        <div class="form-group col-md-4">
-          <multiselect
-            v-model="selectedKodePenyakit"
-            :options="kodePenyakit"
-            :multiple="true"
-            placeholder="Pilih Diagnosis*"
-            label="description"
-            track-by="description"
-            :loading="isLoading"
-            :hide-selected="true"
-            :options-limit="10"
-            :limit="3"
-            open-direction="bottom"
-            :limit-text="limitText"
-            @search-change="asyncFind"
-          ></multiselect>
-        </div>
-        <div
-          class="col-md-4 d-flex align-items-center justify-content-start mt-4 mt-xl-0 justify-content-xl-end"
-        >
-          <div>
-            <font-awesome-icon
-              icon="eraser"
-              class="font-size-xl m-2 grow icon"
-              v-on:click="isPen = false; 
+    <div class="row">
+      <div class="col-md-4">
+        <multiselect
+          v-model="selectedKodePenyakit"
+          :options="kodePenyakit"
+          placeholder="Pilih Kode Diagnosis*"
+          label="kode"
+          track-by="kode"
+          open-direction="bottom"
+          :multiple="true"
+          :loading="isLoading"
+          :clear-on-select="false"
+          :close-on-select="false"
+          :options-limit="10"
+          :hide-selected="true"
+          @search-change="asyncFind"
+        ></multiselect>
+      </div>
+      <div class="col-md-4">
+        <multiselect
+          v-model="selectedKodePenyakit"
+          :options="kodePenyakit"
+          :multiple="true"
+          placeholder="Pilih Diagnosis*"
+          label="description"
+          track-by="description"
+          :loading="isLoading"
+          :hide-selected="true"
+          :options-limit="10"
+          :limit="3"
+          open-direction="bottom"
+          :limit-text="limitText"
+          @search-change="asyncFind"
+        ></multiselect>
+      </div>
+      <div class="col-md-4">
+        <div class="row d-flex justify-content-end mr-2">
+          <font-awesome-icon
+            icon="eraser"
+            class="font-size-xl m-2 grow icon"
+            v-on:click="isPen = false; 
               isActive = 'eraser'"
-              v-show="!isHidden"
-              :class="{ active: isActive === 'eraser' }"
-            />
-            <font-awesome-icon
-              icon="pen-alt"
-              class="font-size-xl m-2 grow icon"
-              v-on:click="isHidden = false;
+            v-show="!isHidden"
+            :class="{ active: isActive === 'eraser' }"
+          />
+          <font-awesome-icon
+            icon="pen-alt"
+            class="font-size-xl m-2 grow icon"
+            v-on:click="isHidden = false;
               isPen = true;
               updatePostData({key:'diagnosa_is_draw', value: true});
               isActive = 'pen'"
-              :class="{ active: isActive === 'pen' }"
-            />
-            <font-awesome-icon
-              icon="keyboard"
-              class="font-size-xl m-2 grow icon"
-              v-on:click="isHidden = true;
+            :class="{ active: isActive === 'pen' }"
+          />
+          <font-awesome-icon
+            icon="keyboard"
+            class="font-size-xl m-2 grow icon"
+            v-on:click="isHidden = true;
               updatePostData({key:'diagnosa_is_draw', value: false});
               isActive = 'keyboard'"
-              :class="{ active: isActive === 'keyboard' }"
-            />
+            :class="{ active: isActive === 'keyboard' }"
+          />
+        </div>
+        <div class="row d-flex justify-content-end mr-2">
+          <div>
+            <input type="range" class="custom-range" min="1" max="50" v-model.number="penWidth" />
           </div>
         </div>
-        <div
-          class="col-md-12 d-flex align-items-center justify-content-start mt-4 mt-xl-0 justify-content-xl-end"
-        >
+        <div class="row d-flex justify-content-end mr-2">
           <div>
-            <span @click="penColor('blue');isColorActive = 'blue'" class="dot grow" style="background-color: blue;" :class="{ color_active: isColorActive === 'blue' }"></span>
-            <span @click="penColor('red');isColorActive = 'red'" class="dot grow" style="background-color: red;" :class="{ color_active: isColorActive === 'red' }"></span>
-            <span @click="penColor('#54c756');isColorActive = 'green'" class="dot grow" style="background-color: #54c756;" :class="{ color_active: isColorActive === 'green' }"></span>
-            <span @click="penColor('#555');isColorActive = 'black'" class="dot grow" style="background-color: #555;" :class="{ color_active: isColorActive === 'black' }"></span>
-            <span @click="penColor('orange');isColorActive = 'yellow'" class="dot grow" style="background-color: orange;" :class="{ color_active: isColorActive === 'yellow' }"></span>
+            <span
+              @click="penColor('blue');isColorActive = 'blue'"
+              class="dot grow"
+              style="background-color: blue;"
+              :class="{ color_active: isColorActive === 'blue' }"
+            ></span>
+            <span
+              @click="penColor('red');isColorActive = 'red'"
+              class="dot grow"
+              style="background-color: red;"
+              :class="{ color_active: isColorActive === 'red' }"
+            ></span>
+            <span
+              @click="penColor('#54c756');isColorActive = 'green'"
+              class="dot grow"
+              style="background-color: #54c756;"
+              :class="{ color_active: isColorActive === 'green' }"
+            ></span>
+            <span
+              @click="penColor('#555');isColorActive = 'black'"
+              class="dot grow"
+              style="background-color: #555;"
+              :class="{ color_active: isColorActive === 'black' }"
+            ></span>
+            <span
+              @click="penColor('orange');isColorActive = 'yellow'"
+              class="dot grow"
+              style="background-color: orange;"
+              :class="{ color_active: isColorActive === 'yellow' }"
+            ></span>
           </div>
         </div>
       </div>
-    </form>
+    </div>
+
     <div class="row">
       <div class="col-md-2">
         <label>Catatan :</label>
@@ -99,6 +124,9 @@
           width="1000"
           height="500"
         >Your browser does not support the HTML 5 Canvas.</canvas>
+        <div class="col-md-4">
+          <b-button @click="clear" variant="warning" size="sm" class="m-1">Clear</b-button>
+        </div>
       </div>
       <div class="col-md-12" v-show="isHidden">
         <label></label>
@@ -131,8 +159,9 @@ export default {
       selectedKodePenyakit: [],
       kodePenyakit: [],
       isPen: true,
-      isActive: 'pen',
-       isColorActive: 'black',
+      isActive: "pen",
+      isColorActive: "black",
+      penWidth: 2
     };
   },
   watch: {
@@ -153,11 +182,12 @@ export default {
     updateContent(content) {
       this.updatePostData({ key: "diagnosa_text", value: content });
     },
-    handleMousedown(event) {
+     handleMousedown(e) {
+      this.lastPos = this.getMousePos(e);
+      this.ctx.lineWidth = this.penWidth;
       this.drawing = true;
-      this.lastPos = this.getMousePos(event);
     },
-    handleMouseup(event) {
+    handleMouseup(e) {
       this.drawing = false;
     },
     handleMousemove(e) {
@@ -174,7 +204,7 @@ export default {
           this.ctx.arc(
             this.mousePos.x,
             this.mousePos.y,
-            8,
+            this.penWidth,
             0,
             Math.PI * 2,
             false
@@ -228,13 +258,8 @@ export default {
       this.isLoading = true;
 
       axios
-        .get(store.state.URL_API + "/kode_penyakit/name/" + query, {
-          headers: {
-            Authorization: "Bearer " + store.state.BEARER_TOKEN,
-            "Content-Type": "application/json"
-          }
-        })
-        .then(function(response) {
+        .get(store.state.URL_API + "/kode_penyakit/name?query=" + query)
+        .then(response => {
           let res = response.data;
 
           if (!res.status) {
@@ -250,19 +275,27 @@ export default {
 
           self.isLoading = false;
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+          self.isLoading = false;
+          console.log(err);
+          });
     },
-    clearAll() {
-      this.selectedKodePenyakit = [];
-    },
+    // clearAll() {
+    //   this.selectedKodePenyakit = [];
+    // },
     penColor(color) {
       this.ctx.strokeStyle = color;
+    },
+    clear() {
+      this.canvas.width = this.canvas.width;
     }
   },
   mounted() {
     this.ctx = this.canvas.getContext("2d");
     this.ctx.strokeStyle = "#222222";
-    this.ctx.lineWith = 2;
+    this.ctx.lineWidth = this.penWidth;
+    this.ctx.lineJoin = "round";
+    this.ctx.lineCap = "round";
 
     //append data canvas to vuex global state
     this.updateCanvas({ key: "DIAGNOSA", value: this.canvas });
@@ -324,7 +357,6 @@ canvas {
   touch-action: none;
   /* position: relative; */
 }
-
 </style>
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
