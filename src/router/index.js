@@ -157,7 +157,23 @@ const routes = [
         component: () => import("../views/Operator/Tambah.vue")
       }
     ]
-  }
+  },
+  {
+    path: "/tarif",
+    name: "tarif",
+    component: () => import("../views/Tarif.vue"),
+    children: [
+      {
+        path: "/tarif/list",
+        name: "tarif-list",
+        component: () => import("../views/Tarif/List.vue")
+      },
+      {
+        path: "/tarif/tambah",
+        name: "tarif-tambah",
+        component: () => import("../views/Tarif/Tambah.vue")
+      }
+    ]
   // {
   //   path: "/pembayaran",
   //   name: "pembayaran",
