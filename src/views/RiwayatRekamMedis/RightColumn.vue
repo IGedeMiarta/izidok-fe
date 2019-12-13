@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pr-3 py-4">
     <template v-if="loading">
       <div class="d-flex align-items-center justify-content-center min-vh-100">
         <b-spinner
@@ -63,6 +63,9 @@
             </b-col>
           </b-row>
         </b-col>
+        <b-col cols="12">
+          <b-button variant="primary" class="text-capitalize float-right">download</b-button>
+        </b-col>
       </b-row>
     </template>
   </div>
@@ -114,11 +117,11 @@ export default {
           value: `${this.randomNumber()} Kali/Menit`
         },
         {
-          label: "tr".toUpperCase(),
+          label: "tb".toUpperCase(),
           value: this.randomNumber()
         },
         {
-          label: "uu".toUpperCase(),
+          label: "bb".toUpperCase(),
           value: this.randomNumber()
         }
       ];
