@@ -157,6 +157,11 @@ const routes = [
         component: () => import("../views/Operator/Tambah.vue")
       }
     ]
+  },
+  {
+    path: "/riwayat-rekam-medis",
+    name: "riwayat-rekam-medis",
+    component: () => import("../views/RiwayatRekamMedis.vue")
   }
   // {
   //   path: "/pembayaran",
@@ -178,16 +183,16 @@ router.beforeEach((to, from, next) => {
   const { name } = to;
   const isAuthenticated = store.state.BEARER_TOKEN !== null;
   const isRouteAuth = [
-    'login-page',
-    'register-page',
-    'forgot-password',
-    'verification-process',
-    'verification-operator',
-    'verification-result'
-  ].includes(name)
+    "login-page",
+    "register-page",
+    "forgot-password",
+    "verification-process",
+    "verification-operator",
+    "verification-result"
+  ].includes(name);
 
-  if (!isAuthenticated && !isRouteAuth) next('/login');
-  else if(isAuthenticated && isRouteAuth) next('/');
+  if (!isAuthenticated && !isRouteAuth) next("/login");
+  else if (isAuthenticated && isRouteAuth) next("/");
   else next();
 });
 
