@@ -34,6 +34,13 @@
                     style="position: relative"
                     :state="renderError({ error: form.error })"
                   >
+                    <Datetime
+                      input-class="form-control"
+                      zone="Asia/Jakarta"
+                      format="yyyy-LL-dd"
+                      v-if="form.label == 'waktu_konsultasi'"
+                      @input="waktuKonsultasiSelected"
+                    />
                     <b-form-input
                       :type="form.type || 'text'"
                       v-model="formData[form.label]"
@@ -46,7 +53,7 @@
                         })
                       "
                       :state="renderError({ error: form.error })"
-                      v-if="form.type === 'text'"
+                      v-if="form.type === 'text' && form.label != 'waktu_konsultasi'"
                     />
                     <vue-select
                       :class="{ error: form.error }"
@@ -109,6 +116,9 @@ import {
   numeric
 } from "vuelidate/lib/validators";
 import axios from 'axios';
+import { Datetime } from "vue-datetime";
+import "vue-datetime/dist/vue-datetime.css";
+import moment from 'moment'
 
 const tmp = [
   {
@@ -208,7 +218,8 @@ const tmp = [
 
 export default {
   components: {
-    "vue-select": () => import("vue-select")
+    "vue-select": () => import("vue-select"),
+    Datetime
   },
   data: () => ({
     formBasicData: null,
@@ -237,6 +248,13 @@ export default {
     this.fetchPasien()
   },
   methods: {
+    waktuKonsultasiSelected($event) {
+      this.setValue({
+        label: 'waktu_konsultasi',
+        rawLabel: 'waktu konsultasi',
+        $event: moment($event).format('YYYY-MM-DD')
+      })
+    },
     overwriteAntrean() {
       this.$swal({
         title: "Pasien telah berada pada list antrean",
@@ -293,6 +311,7 @@ export default {
       }
       // console.log($event);
       this.formData[label] = value;
+      if(label == 'jenis_kelamin') this.formData[label] = '' + value;
       this.triggerValidation({
         label,
         $v: this.$v,
@@ -316,8 +335,11 @@ export default {
         'nomor_hp': 'nomor_handphone'
       }
       for(let prop in pasien) {
-        if(prop == filler || !autoFillForm[prop] || !pasien[prop]) continue;
-        
+        if(prop == filler || !autoFillForm[prop]) continue;
+        if(prop != 'jenis_kelamin' && !pasien[prop]) continue;
+
+        if(prop == 'nomor_rekam_medis') pasien[prop] = '' + pasien[prop]
+
         this.setValue({
           label: autoFillForm[prop], 
           rawLabel: autoFillForm[prop].split('_').join(' '), 

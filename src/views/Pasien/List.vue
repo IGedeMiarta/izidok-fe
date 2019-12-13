@@ -82,9 +82,9 @@
               </thead>
               <tbody>
                 <tr v-for="(data, index) in pasienList" :key="data.id">
-                  <td>{{ index + 1 }}</td>
+                  <td>{{ ((currentPage-1) * perPage) + index + 1 }}</td>
                   <td>{{ data.nama }}</td>
-                  <td>{{ data.nomor_polis }}</td>
+                  <td>{{ data.nomor_rekam_medis }}</td>
                   <td>{{ jenisKelamin(data.jenis_kelamin) }}</td>
                   <td>{{ data.tanggal_lahir }}</td>
                   <td class="text-center">
@@ -161,7 +161,7 @@ export default {
   data() {
     return {
       currentPage: 1,
-      rows: 100,
+      rows: 0,
       perPage: 10,
       pasienList: [],
       namaPasien: "",
@@ -170,6 +170,11 @@ export default {
   },
   mounted() {
     this.fetchListPasien();
+  },
+  watch: {
+    currentPage() {
+      this.fetchListPasien();
+    }
   },
   methods: {
     removePasien({ id, nama = null } = {}) {
@@ -237,7 +242,7 @@ export default {
           const { pasien: pasienData, total } = data;
           const { data: listPasien } = pasienData;
           this.pasienList = [...listPasien];
-          this.rows = total;
+          this.rows = pasienData.total;
         }
       } catch (err) {
         // console.log(err);

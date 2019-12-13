@@ -41,7 +41,7 @@
                         <Datetime
                           input-class="form-control"
                           zone="Asia/Jakarta"
-                          format="dd-LL-yyyy"
+                          format="yyyy-LL-dd"
                         />
                       </b-form-group>
                     </b-col>
@@ -148,6 +148,7 @@
             v-model="currentPage"
             :total-rows="rows"
             :per-page="perPage"
+            @input="changePage"
           ></b-pagination>
         </div>
       </div>
@@ -211,7 +212,7 @@ export default {
   data: () => ({
     dataRegistrasiPasien: null,
     currentPage: 1,
-    rows: 100,
+    rows: 0,
     perPage: 10,
     fields: [
       "no",
@@ -237,6 +238,9 @@ export default {
     this.fetchAntrean();
   },
   methods: {
+    changePage(page) {
+      this.fetchAntrean(page)
+    },
     assignDataRegistrasiPasien({
       rekam_medis = null,
       ktp = null,
@@ -266,20 +270,20 @@ export default {
       // when the modal has hidden
       this.$refs["my-modal"].toggle("#toggle-btn");
     },
-    async fetchAntrean() {
+    async fetchAntrean(page = 1) {
       let dt = moment().format('YYYY-MM-DD');
       try {
         const res = await axios.get(
           `${this.url_api}/transaksi?limit=${
             this.perPage
-          }&status=${"queued".toUpperCase()}&from=2019-12-01&to=2019-12-31`
+          }&status=${"queued".toUpperCase()}&from=2019-12-01&to=2019-12-31&page=${page}`
         );
         const { status, data } = res.data;
         if (status) {
           const { total, data: antreanData } = data;
           this.items = antreanData.map((item, index) => {
             return {
-              "no": index+1,
+              "no": ((page-1)*this.perPage)+index+1,
               "nomor rekam medis": item.pasien.nomor_rekam_medis,
               'nama pasien': item.pasien.nama,
               "jenis kelamin": this.jenisKelamin(item.pasien.jenis_kelamin),
@@ -289,11 +293,11 @@ export default {
               transaksi_id: item.id
             }
           });
-          console.log(this.items)
+          // console.log(this.items)
           this.rows = total;
         }
       } catch (err) {
-        console.log(err);
+        alert(err);
       }
     },
     clickBtnAction(icon, data) {

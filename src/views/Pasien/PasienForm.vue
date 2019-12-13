@@ -144,31 +144,12 @@
                   })
                 "
               >
-                <b-form-input
-                  @keyup="
-                    setValue({
-                      rawLabel: 'tanggal lahir',
-                      $event
-                    })
-                  "
-                  :state="getDataError({ rawLabel: 'tanggal lahir' })"
-                  :disabled="disabledForm()"
-                />
-                <!-- <Datetime
-                  v-model.lazy="formData['tanggal_lahir']"
-                  :input-class="[
-                    getDataError({ rawLabel: 'tanggal lahir' }) === null
-                      ? ''
-                      : getDataError({ rawLabel: 'tanggal lahir' })
-                      ? 'is-valid'
-                      : 'is-invalid',
-                    'form-control'
-                  ]"
-                  :state="getDataError({ rawLabel: 'tanggal lahir' })"
-                  :disabled="disabledForm()"
+                <Datetime
+                  input-class="form-control"
                   zone="Asia/Jakarta"
-                  format="dd-LL-yyyy"
-                /> -->
+                  format="yyyy-LL-dd"
+                  @input="tanggalLahirSelected"
+                />
               </b-form-group>
             </b-col>
           </b-row>
@@ -597,7 +578,7 @@
 </template>
 
 <script>
-// import { Datetime } from "vue-datetime";
+import { Datetime } from "vue-datetime";
 import axios from "axios";
 import startCase from "lodash/startCase";
 import {
@@ -607,8 +588,8 @@ import {
   numeric,
   email
 } from "vuelidate/lib/validators";
-
-// import "vue-datetime/dist/vue-datetime.css";
+import "vue-datetime/dist/vue-datetime.css";
+import moment from 'moment'
 
 const tmp = [
   {
@@ -704,9 +685,9 @@ const tmp = [
 ];
 
 export default {
-  // components: {
-  //   Datetime
-  // },
+  components: {
+    Datetime
+  },
   props: {
     formType: {
       default: "add",
@@ -736,6 +717,7 @@ export default {
     if (this.formType !== "detail") {
       this.formBasicData = this.setFormBasicData();
       this.formData = this.setFormData();
+      // console.log(this.formBasicData, this.formData)
     }
     await this.getPasienData();
   },
@@ -764,6 +746,13 @@ export default {
     },
     disabledForm() {
       return this.formType === "detail";
+    },
+    tanggalLahirSelected($event) {
+      if(!$event) return
+      this.setValue({
+        rawLabel: 'tanggal lahir',
+        $event: moment($event).format('YYYY-MM-DD')
+      })
     },
     async getPasienData() {
       if (this.idPasien) {

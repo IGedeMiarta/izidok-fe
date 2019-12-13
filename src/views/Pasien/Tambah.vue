@@ -90,7 +90,7 @@ export default {
     },
     submitForm(data) {
       this.beingSubmit = true;
-      this.addPasien(data);
+      this.beforeAddPasien(data);
     },
     goingPlaces() {
       const tmp = {
@@ -103,8 +103,17 @@ export default {
 
       this.$router.push(tmp);
     },
-    async addPasien(postData) {
+    beforeAddPasien(postData) {
+      // sementara untuk demo nomor rekam medis di buat urutan dulu
       postData.klinik_id = this.$store.state.user.klinik_id
+      axios.get(`${this.url_api}/pasien`).then(res => {
+        let totalCurrentPasien = res.data.data.pasien.total
+        postData.nomor_rekam_medis = 100000 + (totalCurrentPasien + 1)
+
+        this.addPasien(postData)
+      })
+    },
+    async addPasien(postData) {
       try {
         const res = await axios.post(
           `${this.url_api}/pasien`,
