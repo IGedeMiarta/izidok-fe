@@ -118,7 +118,7 @@
                       { variant: 'danger', icon: 'trash-alt' }
                     ]"
                     :key="index"
-                    @click="clickBtnAction(item.icon)"
+                    @click="clickBtnAction(item.icon, data)"
                   >
                     <span class="btn-wrapper--icon">
                       <font-awesome-icon :icon="item.icon" />
@@ -169,6 +169,7 @@ import {
   faTrashAlt,
   faRedo
 } from "@fortawesome/free-solid-svg-icons";
+import moment from 'moment';
 
 library.add(faAngleUp, faSearch, faSignInAlt, faTrashAlt, faRedo);
 
@@ -221,53 +222,16 @@ export default {
       "dokter tujuan",
       { key: "actions", label: "actions" }
     ],
-    items: [
-      {
-        no: 1,
-        "nomor rekam medis": "00011",
-        "nama pasien": "Adisty Zara",
-        "jenis kelamin": "P",
-        "nomor hp": "08900001113",
-        "dokter tujuan": "dr. Aviandra",
-        actions: 1
-      },
-      {
-        no: 2,
-        "nomor rekam medis": "00012",
-        "nama pasien": "Ario Bayu",
-        "jenis kelamin": "L",
-        "nomor hp": "08900001214",
-        "dokter tujuan": "dr. Aviandra",
-        actions: 1
-      },
-      {
-        no: 3,
-        "nomor rekam medis": "00013",
-        "nama pasien": "Ernest Prakasa",
-        "jenis kelamin": "L",
-        "nomor hp": "08900101316",
-        "dokter tujuan": "dr. Aviandra",
-        actions: 1
-      },
-      {
-        no: 4,
-        "nomor rekam medis": "00014",
-        "nama pasien": "Raditya Dika",
-        "jenis kelamin": "L",
-        "nomor hp": "08900121517",
-        "dokter tujuan": "dr. Aviandra",
-        actions: 1
-      },
-      {
-        no: 5,
-        "nomor rekam medis": "00015",
-        "nama pasien": "Maudy Ayunda",
-        "jenis kelamin": "P",
-        "nomor hp": "08900111192",
-        "dokter tujuan": "dr. Aviandra",
-        actions: 1
-      }
-    ]
+    items: [{
+      no: 1,
+      'nama pasien': 'Test',
+      'nomor rekam medis': 123,
+      'jenis kelamin': 'P',
+      'nomor hp': '0812637183',
+      'dokter tujuan': 'sss',
+      actions: 1
+    }],
+    pasiens: []
   }),
   mounted() {
     this.fetchAntrean();
@@ -293,37 +257,48 @@ export default {
       this.dataRegistrasiPasien = x;
       this.toggleModal();
     },
+    rekamMedis(data) {
+      const { item } = data
+      this.$router.push(`/rekam-medis/${item.transaksi_id}/${item.pasien_id}`);
+    },
     toggleModal() {
       // We pass the ID of the button that we want to return focus to
       // when the modal has hidden
       this.$refs["my-modal"].toggle("#toggle-btn");
     },
     async fetchAntrean() {
+      let dt = moment().format('YYYY-MM-DD');
       try {
         const res = await axios.get(
           `${this.url_api}/transaksi?limit=${
             this.perPage
-          }&status=${"queued".toUpperCase()}`
+          }&status=${"queued".toUpperCase()}&from=2019-12-01&to=2019-12-31`
         );
         const { status, data } = res.data;
         if (status) {
           const { total, data: antreanData } = data;
-          this.items = antreanData;
+          this.items = antreanData.map(item => {
+            return {
+              'nama pasien': item.pasien_id,
+              pasien_id: item.pasien_id,
+              transaksi_id: item.id
+            }
+          });
           this.rows = total;
         }
       } catch (err) {
         console.log(err);
       }
     },
-    clickBtnAction(icon) {
-      const { pembatalanAntrean, assignDataRegistrasiPasien } = this;
+    clickBtnAction(icon, data) {
+      const { pembatalanAntrean, assignDataRegistrasiPasien, rekamMedis } = this;
 
       switch (icon) {
         case "search":
-          return assignDataRegistrasiPasien();
+          return assignDataRegistrasiPasien(data);
 
         case "sign-in-alt":
-          break;
+          return rekamMedis(data);
 
         case "trash-alt":
           return pembatalanAntrean("dawai pagi");

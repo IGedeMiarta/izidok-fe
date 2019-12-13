@@ -162,13 +162,29 @@ const routes = [
     path: "/riwayat-rekam-medis",
     name: "riwayat-rekam-medis",
     component: () => import("../views/RiwayatRekamMedis.vue")
-  }
+  },
+  {
+    path: "/tarif",
+    name: "tarif",
+    component: () => import("../views/Tarif.vue"),
+    children: [
+      {
+        path: "/tarif/list",
+        name: "tarif-list",
+        component: () => import("../views/Tarif/List.vue")
+      },
+      {
+        path: "/tarif/tambah",
+        name: "tarif-tambah",
+        component: () => import("../views/Tarif/Tambah.vue")
+      }
+    ]
   // {
   //   path: "/pembayaran",
   //   name: "pembayaran",
   //   component: () => import("../views/Pembayaran.vue")
   // }
-];
+  }];
 
 const router = new VueRouter({
   mode: "history",
