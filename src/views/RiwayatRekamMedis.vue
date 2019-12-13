@@ -32,7 +32,7 @@
           cols="5"
           class="d-flex align-items-center justify-content-around"
         >
-          <b-button variant="primary" class="text-uppercase">kembali</b-button>
+          <b-button variant="primary" class="text-uppercase" @click="kembali()">kembali</b-button>
           <b-button variant="info" class="text-uppercase"
             >tulis rekam medis</b-button
           >
@@ -74,6 +74,9 @@ export default {
           value: "00000001-01"
         }
       ];
+    },
+    kembali() {
+      window.close()
     }
   }
 };

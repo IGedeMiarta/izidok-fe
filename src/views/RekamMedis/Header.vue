@@ -24,7 +24,7 @@
       >
         <div class="mx-auto mx-xl-0">
           <a
-            href="https://demo.uifort.com/bamburgh-vue-admin-dashboard-pro-docs/"
+            href="/riwayat-rekam-medis"
             class="btn btn-primary"
             target="_blank"
             v-b-tooltip.hover
