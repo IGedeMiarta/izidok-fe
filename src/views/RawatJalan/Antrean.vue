@@ -277,13 +277,19 @@ export default {
         const { status, data } = res.data;
         if (status) {
           const { total, data: antreanData } = data;
-          this.items = antreanData.map(item => {
+          this.items = antreanData.map((item, index) => {
             return {
-              'nama pasien': item.pasien_id,
+              "no": index+1,
+              "nomor rekam medis": item.pasien.nomor_rekam_medis,
+              'nama pasien': item.pasien.nama,
+              "jenis kelamin": this.jenisKelamin(item.pasien.jenis_kelamin),
+              "nomor hp": item.pasien.nomor_hp,
+              "dokter tujuan": 'dr. Aviandra',
               pasien_id: item.pasien_id,
               transaksi_id: item.id
             }
           });
+          console.log(this.items)
           this.rows = total;
         }
       } catch (err) {

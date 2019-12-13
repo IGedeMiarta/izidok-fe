@@ -36,6 +36,7 @@
                   >
                     <b-form-input
                       :type="form.type || 'text'"
+                      v-model="formData[form.label]"
                       @keyup="
                         setValue({
                           rawLabel: form.rawLabel,
@@ -60,9 +61,6 @@
                       "
                       v-if="form.type === 'select'"
                     >
-                      <template v-if="form.label == 'dokter'" v-slot:option="option">
-                        dr. {{ option.id }}
-                      </template>
                     </vue-select>
                     <template v-if="form.type === 'radio'">
                       <b-form-radio-group
@@ -103,6 +101,7 @@
 
 <script>
 import startCase from "lodash/startCase";
+import find from "lodash/find";
 import {
   required,
   minLength,
@@ -139,7 +138,7 @@ const tmp = [
     label: "jenis kelamin",
     type: "radio",
     col: 6,
-    data: ["laki-laki", "perempuan"],
+    data: ["perempuan", "laki-laki"],
     validations: {
       required
     }
@@ -209,7 +208,7 @@ const tmp = [
 
 export default {
   components: {
-    "vue-select": () => import("@/components/VueSelect.vue")
+    "vue-select": () => import("vue-select")
   },
   data: () => ({
     formBasicData: null,
@@ -257,18 +256,18 @@ export default {
     },
     submitForm() {
       const { formBasicData } = this;
-      if (formBasicData.every(item => item.error !== null && !item.error)) {
-        console.log(this.formData);
-        // console.log("good to go");
-      } else {
-        formBasicData.map(item => {
-          this.triggerValidation({
-            label: item.label,
-            $v: this.$v,
-            $vm: this,
-            rawLabel: item.rawLabel
-          });
+
+      formBasicData.map(item => {
+        this.triggerValidation({
+          label: item.label,
+          $v: this.$v,
+          $vm: this,
+          rawLabel: item.rawLabel
         });
+      });
+
+      if (formBasicData.every(item => item.error !== null && !item.error)) {
+        this.saveRegister()
       }
     },
     setFormData() {
@@ -288,11 +287,11 @@ export default {
     },
     setValue({ label, rawLabel, $event = null } = {}) {
       let value = $event;
-      if (typeof $event === "object") {
+      if (typeof $event === "object" && $event.target && $event.target.value) {
         const { target } = $event;
         value = target.value;
       }
-      console.log($event);
+      // console.log($event);
       this.formData[label] = value;
       this.triggerValidation({
         label,
@@ -300,6 +299,65 @@ export default {
         $vm: this,
         rawLabel
       });
+
+      if(label == 'nama_lengkap') {
+        const pasien = find(this.pasiens, {id: $event.value})
+        if(pasien) {
+          this.autoFill(pasien, 'nama_lengkap')
+        }
+      }
+    },
+    autoFill(pasien, filler) {
+      let autoFillForm = {
+        'nomor_rekam_medis': 'no._rekam_medis',
+        'nik': 'no._ktp',
+        'nama_lengkap': 'nama_lengkap',
+        'jenis_kelamin': 'jenis_kelamin',
+        'nomor_hp': 'nomor_handphone'
+      }
+      for(let prop in pasien) {
+        if(prop == filler || !autoFillForm[prop] || !pasien[prop]) continue;
+        
+        this.setValue({
+          label: autoFillForm[prop], 
+          rawLabel: autoFillForm[prop].split('_').join(' '), 
+          $event: pasien[prop]
+        })
+      }
+    },
+    async saveRegister() {
+      let postData = {
+        pasien_id: this.formData.nama_lengkap.value || '',
+        klinik_id: this.$store.state.user.klinik_id || '',
+        examination_by: this.formData.dokter.value || '',
+        nomor_rekam_medis: this.formData['no._rekam_medis'] || '',
+        nama_lengkap: this.formData.nama_lengkap.label || '',
+        nik: this.formData['no._ktp'] || '123',
+        jenis_kelamin: this.formData.jenis_kelamin || '',
+        nomor_telp: this.formData.nomor_handphone || '',
+        waktu_konsultasi: this.formData.waktu_konsultasi || '',
+        tinggi_badan: this.formData.tinggi_badan || 0,
+        berat_badan:  this.formData.berat_badan || 0,
+        suhu:  this.formData.suhu_badan || 0,
+        tensi_sistole:  this.formData.tensi_sistole || 0,
+        tensi_diastole: this.formData.tensi_diastole || 0,
+        nadi: this.formData.nadi || 0,
+        respirasi: 0
+      }
+
+      try {
+        const res = await axios.post(`${this.url_api}/transaksi`, postData)
+        if(res.data.status === true) {
+          this.$swal({
+            text: `Data Berhasil di simpan`,
+            type: "success"
+          });
+
+          this.$router.push('/rawat-jalan/antrean')
+        }
+      } catch(err) {
+        alert(err)
+      }
     },
     async fetchDokter() {
       try {
@@ -335,3 +393,17 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+.v-select {
+  & > .vs__dropdown-toggle {
+    height: 41.75px !important;
+  }
+
+  &.error {
+    & > .vs__dropdown-toggle {
+      border-color: red;
+    }
+  }
+}
+</style>

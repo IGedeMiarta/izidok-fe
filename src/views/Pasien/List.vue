@@ -85,7 +85,7 @@
                   <td>{{ index + 1 }}</td>
                   <td>{{ data.nama }}</td>
                   <td>{{ data.nomor_polis }}</td>
-                  <td>{{ data.jenis_kelamin }}</td>
+                  <td>{{ jenisKelamin(data.jenis_kelamin) }}</td>
                   <td>{{ data.tanggal_lahir }}</td>
                   <td class="text-center">
                     <b-link
