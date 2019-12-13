@@ -179,7 +179,7 @@ const routes = [
   //   name: "pembayaran",
   //   component: () => import("../views/Pembayaran.vue")
   // }
-];
+  }];
 
 const router = new VueRouter({
   mode: "history",
