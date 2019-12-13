@@ -67,11 +67,11 @@ export default {
       return [
         {
           label: "nama pasien",
-          value: "lorem ipsum dolor sit amet"
+          value: "mega ceriawaty"
         },
         {
           label: "no rm",
-          value: "123123123123"
+          value: "00000001-01"
         }
       ];
     }

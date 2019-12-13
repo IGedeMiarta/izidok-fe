@@ -25,18 +25,16 @@
         <h5 class="text-uppercase font-weight-bold">riwayat rekam medis</h5>
         <b-row class="pl-1 pr-4">
           <b-col
-            cols="4"
+            cols="6"
             v-for="(data, index) in [
-              'cat headache',
-              'cat sore',
-              'catfluenza',
-              'cat cough'
+              { label: 'tetanus', value: 'tetanus.jpeg' },
+              { label: 'cancer', value: 'cancer.jpeg' }
             ]"
             :key="index"
             class="mb-4"
           >
             <div class="my-4 mx-0 p-0 position-relative h-100">
-              <img src="@/assets/img/cat.jpg" class="img-fluid" />
+              <img :src="getImage(data.value)" class="img-fluid" />
               <div
                 class="card card-box position-absolute w-100 rounded-0 border-0"
                 style="bottom: 0; background-color: #214179; color: #fff; cursor: pointer"
@@ -45,7 +43,7 @@
                 <div class="card-body text-capitalize text-center py-1">
                   <b-row>
                     <b-col cols="12"> 1{{ index }}/12/2019</b-col>
-                    <b-col cols="12">{{ data }}</b-col>
+                    <b-col cols="12">{{ data.label }}</b-col>
                   </b-row>
                 </div>
               </div>
@@ -62,6 +60,9 @@ import moment from "moment";
 
 export default {
   methods: {
+    getImage(data) {
+      return require(`@/assets/img/${data}`);
+    },
     rerender() {
       this.$root.$emit("rerender");
     },

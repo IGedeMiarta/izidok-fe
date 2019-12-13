@@ -26,31 +26,23 @@
           <h5 class="text-uppercase font-weight-bold">anamnesa</h5>
           <b-row>
             <b-col cols="12">
-              <p>{{ randomSentence() }}</p>
+              <p>
+                Sudah 5 hari demam tidak turun. Sempat kejang dan kaku leher.
+                Minum obat paracetamol lupa di telan.
+              </p>
             </b-col>
           </b-row>
         </b-col>
         <b-col cols="12" class="ml-2 mt-4">
           <h5 class="text-uppercase font-weight-bold">pemeriksaan fisik</h5>
-          <b-row>
-            <b-col
-              cols="3"
-              class="text-capitalize m-2"
-              v-for="data in 5"
-              :key="data"
-            >
-              <img
-                src="http://lorempixel.com/250/300/cats/"
-                class="img-fluid"
-                alt="img"
-              />
-            </b-col>
-          </b-row>
+          <img src="@/assets/img/badan.jpeg" class="img-fluid" alt="img" />
         </b-col>
         <b-col cols="12" class="ml-2 mt-4">
           <h5 class="text-uppercase font-weight-bold">diagnosa</h5>
           <b-row>
-            <b-col cols="12">{{ randomSentence() }}</b-col>
+            <b-col cols="12">
+              <p>J010 : Tetanus</p>
+            </b-col>
           </b-row>
         </b-col>
         <b-col cols="12" class="ml-2 mt-4">
@@ -59,12 +51,14 @@
           </h5>
           <b-row>
             <b-col cols="12">
-              <p>06/09/2069</p>
+              <p>04/09/2010</p>
             </b-col>
           </b-row>
         </b-col>
         <b-col cols="12">
-          <b-button variant="primary" class="text-capitalize float-right">download</b-button>
+          <b-button variant="primary" class="text-capitalize float-right"
+            >download</b-button
+          >
         </b-col>
       </b-row>
     </template>
