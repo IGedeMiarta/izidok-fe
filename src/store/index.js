@@ -15,7 +15,7 @@ const vuexPersist = new VuexPersist({
 // Create store
 export default new Vuex.Store({
   state: {
-    URL_API: "http://149.129.239.15/api/v1",
+    URL_API: "http://api.izidok.id/api/v1",
     BEARER_TOKEN: null,
     user: null
   },
