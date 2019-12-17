@@ -53,7 +53,9 @@
                         })
                       "
                       :state="renderError({ error: form.error })"
-                      v-if="form.type === 'text' && form.label != 'waktu_konsultasi'"
+                      v-if="
+                        form.type === 'text' && form.label != 'waktu_konsultasi'
+                      "
                     />
                     <vue-select
                       :class="{ error: form.error }"
@@ -115,10 +117,10 @@ import {
   maxLength,
   numeric
 } from "vuelidate/lib/validators";
-import axios from 'axios';
+import axios from "axios";
 import { Datetime } from "vue-datetime";
 import "vue-datetime/dist/vue-datetime.css";
-import moment from 'moment'
+import moment from "moment";
 
 const tmp = [
   {
@@ -244,16 +246,16 @@ export default {
   mounted() {
     this.formBasicData = this.setFormBasicData();
     this.formData = this.setFormData();
-    this.fetchDokter()
-    this.fetchPasien()
+    this.fetchDokter();
+    this.fetchPasien();
   },
   methods: {
     waktuKonsultasiSelected($event) {
       this.setValue({
-        label: 'waktu_konsultasi',
-        rawLabel: 'waktu konsultasi',
-        $event: moment($event).format('YYYY-MM-DD')
-      })
+        label: "waktu_konsultasi",
+        rawLabel: "waktu konsultasi",
+        $event: moment($event).format("YYYY-MM-DD")
+      });
     },
     overwriteAntrean() {
       this.$swal({
@@ -285,7 +287,7 @@ export default {
       });
 
       if (formBasicData.every(item => item.error !== null && !item.error)) {
-        this.saveRegister()
+        this.saveRegister();
       }
     },
     setFormData() {
@@ -311,7 +313,7 @@ export default {
       }
       // console.log($event);
       this.formData[label] = value;
-      if(label == 'jenis_kelamin') this.formData[label] = '' + value;
+      if (label == "jenis_kelamin") this.formData[label] = "" + value;
       this.triggerValidation({
         label,
         $v: this.$v,
@@ -319,97 +321,104 @@ export default {
         rawLabel
       });
 
-      if(label == 'nama_lengkap') {
-        const pasien = find(this.pasiens, {id: $event.value})
-        if(pasien) {
-          this.autoFill(pasien, 'nama_lengkap')
+      if (label == "nama_lengkap") {
+        const pasien = find(this.pasiens, { id: $event.value });
+        if (pasien) {
+          this.autoFill(pasien, "nama_lengkap");
         }
       }
     },
     autoFill(pasien, filler) {
       let autoFillForm = {
-        'nomor_rekam_medis': 'no._rekam_medis',
-        'nik': 'no._ktp',
-        'nama_lengkap': 'nama_lengkap',
-        'jenis_kelamin': 'jenis_kelamin',
-        'nomor_hp': 'nomor_handphone'
-      }
-      for(let prop in pasien) {
-        if(prop == filler || !autoFillForm[prop]) continue;
-        if(prop != 'jenis_kelamin' && !pasien[prop]) continue;
+        nomor_rekam_medis: "no._rekam_medis",
+        nik: "no._ktp",
+        nama_lengkap: "nama_lengkap",
+        jenis_kelamin: "jenis_kelamin",
+        nomor_hp: "nomor_handphone"
+      };
+      for (let prop in pasien) {
+        if (prop == filler || !autoFillForm[prop]) continue;
+        if (prop != "jenis_kelamin" && !pasien[prop]) continue;
 
-        if(prop == 'nomor_rekam_medis') pasien[prop] = '' + pasien[prop]
+        if (prop == "nomor_rekam_medis") pasien[prop] = "" + pasien[prop];
 
         this.setValue({
-          label: autoFillForm[prop], 
-          rawLabel: autoFillForm[prop].split('_').join(' '), 
+          label: autoFillForm[prop],
+          rawLabel: autoFillForm[prop].split("_").join(" "),
           $event: pasien[prop]
-        })
+        });
       }
     },
     async saveRegister() {
+      const waktu_konsultasi = this.formData.waktu_konsultasi;
       let postData = {
-        pasien_id: this.formData.nama_lengkap.value || '',
-        klinik_id: this.$store.state.user.klinik_id || '',
-        examination_by: this.formData.dokter.value || '',
-        nomor_rekam_medis: this.formData['no._rekam_medis'] || '',
-        nama_lengkap: this.formData.nama_lengkap.label || '',
-        nik: this.formData['no._ktp'] || '123',
-        jenis_kelamin: this.formData.jenis_kelamin || '',
-        nomor_telp: this.formData.nomor_handphone || '',
-        waktu_konsultasi: this.formData.waktu_konsultasi || '',
+        pasien_id: this.formData.nama_lengkap.value || "",
+        klinik_id: this.$store.state.user.klinik_id || "",
+        examination_by: this.formData.dokter.value || "",
+        nomor_rekam_medis: this.formData["no._rekam_medis"] || "",
+        nama_lengkap: this.formData.nama_lengkap.label || "",
+        nik: this.formData["no._ktp"] || "123",
+        jenis_kelamin: this.formData.jenis_kelamin || "",
+        nomor_telp: this.formData.nomor_handphone || "",
+        waktu_konsultasi:
+          (waktu_konsultasi &&
+            waktu_konsultasi.toLowerCase() &&
+            waktu_konsultasi === "invalid date" &&
+            "") ||
+          waktu_konsultasi,
         tinggi_badan: this.formData.tinggi_badan || 0,
-        berat_badan:  this.formData.berat_badan || 0,
-        suhu:  this.formData.suhu_badan || 0,
-        tensi_sistole:  this.formData.tensi_sistole || 0,
+        berat_badan: this.formData.berat_badan || 0,
+        suhu: this.formData.suhu_badan || 0,
+        tensi_sistole: this.formData.tensi_sistole || 0,
         tensi_diastole: this.formData.tensi_diastole || 0,
         nadi: this.formData.nadi || 0,
         respirasi: 0
-      }
+      };
 
       try {
-        const res = await axios.post(`${this.url_api}/transaksi`, postData)
-        if(res.data.status === true) {
+        const res = await axios.post(`${this.url_api}/transaksi`, postData);
+        if (res.data.status === true) {
           this.$swal({
             text: `Data Berhasil di simpan`,
-            type: "success"
+            type: "success",
+            onOpen: () => {
+              this.$router.push("/rawat-jalan/antrean");
+            }
           });
-
-          this.$router.push('/rawat-jalan/antrean')
         }
-      } catch(err) {
-        alert(err)
+      } catch (err) {
+        alert(err);
       }
     },
     async fetchDokter() {
       try {
-        const res = await axios.get(`${this.url_api}/dokter`)
-        if(res.data.data.dokter.data.map) {
+        const res = await axios.get(`${this.url_api}/dokter`);
+        if (res.data.data.dokter.data.map) {
           this.options.dokter = res.data.data.dokter.data.map(item => {
             return {
               label: item.dokter.nama,
-              value: item.dokter.id,
-            }
-          })
+              value: item.dokter.id
+            };
+          });
         }
-      } catch(err) {
-        alert(err)
+      } catch (err) {
+        alert(err);
       }
     },
     async fetchPasien() {
       try {
-        const res = await axios.get(`${this.url_api}/pasien`)
-        if(res.data.data.pasien.data.map) {
-          this.pasiens = res.data.data.pasien.data
+        const res = await axios.get(`${this.url_api}/pasien`);
+        if (res.data.data.pasien.data.map) {
+          this.pasiens = res.data.data.pasien.data;
           this.options.nama_lengkap = res.data.data.pasien.data.map(item => {
             return {
               label: item.nama,
-              value: item.id,
-            }
-          })
+              value: item.id
+            };
+          });
         }
-      } catch(err) {
-        alert(err)
+      } catch (err) {
+        alert(err);
       }
     }
   }

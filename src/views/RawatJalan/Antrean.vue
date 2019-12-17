@@ -241,25 +241,31 @@ export default {
     changePage(page) {
       this.fetchAntrean(page)
     },
-    assignDataRegistrasiPasien({
+    async assignDataRegistrasiPasien({ item : {
       rekam_medis = null,
       ktp = null,
       nama = null,
       hp = null,
       kelamin = null,
       dokter = null,
-      waktu = null
-    } = {}) {
-      const x = __dataRegistrasiPasien;
-      x["rekam_medis"].value = rekam_medis;
-      x["ktp"].value = ktp;
-      x["nama"].value = nama;
-      x["hp"].value = hp;
-      x["kelamin"].value = kelamin;
-      x["dokter"].value = dokter;
-      x["waktu"].value = waktu;
-      this.dataRegistrasiPasien = x;
-      this.toggleModal();
+      waktu = null,
+      pasien_id = null
+    } = {} }) {
+      const { toggleModal, getPasien } = this
+      const res = await getPasien(pasien_id)
+      if (res) {
+        const { id, dokter_id, pasien_id, nomor_antrian, klinik_id, waktu_konsultasi }  = res
+        const x = __dataRegistrasiPasien;
+        x["rekam_medis"].value = rekam_medis;
+        x["ktp"].value = ktp;
+        x["nama"].value = nama;
+        x["hp"].value = hp;
+        x["kelamin"].value = kelamin;
+        x["dokter"].value = dokter;
+        x["waktu"].value = waktu;
+        this.dataRegistrasiPasien = x;
+        this.toggleModal();
+      }
     },
     rekamMedis(data) {
       const { item } = data
@@ -295,6 +301,24 @@ export default {
           });
           // console.log(this.items)
           this.rows = total;
+        }
+      } catch (err) {
+        alert(err);
+      }
+    },
+    async getPasien(id) {
+      if (!id) {
+        return false
+      }
+
+      try {
+        const res = await axios.get(
+          `${this.url_api}/transaksi/${id}`
+        );
+        const { status, data } = res.data;
+        if (status) {
+          const { data: pasienData } = data;
+          return pasienData
         }
       } catch (err) {
         alert(err);
