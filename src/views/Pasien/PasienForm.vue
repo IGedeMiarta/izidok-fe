@@ -589,17 +589,19 @@ import {
   email
 } from "vuelidate/lib/validators";
 import "vue-datetime/dist/vue-datetime.css";
-import moment from 'moment'
+import moment from "moment";
 
 const tmp = [
   {
     label: "nama lengkap",
+    alias: "nama",
     validations: {
       required
     }
   },
   {
     label: "no. handphone",
+    alias: "nomor_hp",
     validations: {
       required,
       numeric,
@@ -608,78 +610,95 @@ const tmp = [
   },
   {
     label: "nik",
+    alias: "nik",
     validations: {}
   },
   {
     label: "email",
+    alias: "email",
     validations: {
       email
     }
   },
   {
     label: "tempat lahir",
+    alias: "tempat_lahir",
     validations: {
       required
     }
   },
   {
     label: "tanggal lahir",
+    alias: "tanggal_lahir",
     validations: {
       required
     }
   },
   {
     label: "nama penjamin/asuransi",
+    alias: "nama_penjamin",
     validations: {}
   },
   {
     label: "jenis kelamin",
+    alias: "jenis_kelamin",
     validations: {
       required
     }
   },
   {
     label: "gol. darah",
+    alias: "golongan_darah",
     validations: {}
   },
   {
     label: "no. member/polis asuransi",
+    alias: "nomor_polis",
     validations: {}
   },
   {
     label: "nama penanggung jawab",
+    alias: "nama_penanggung_jawab",
     validations: {}
   },
   {
     label: "no. hp penanggung jawab",
+    alias: "no_hp_penanggung_jawab",
     validations: {}
   },
   {
     label: "alamat rumah",
+    alias: "alamat_rumah",
     validations: { required }
   },
   {
     label: "rt",
+    alias: "rt",
     validations: {}
   },
   {
     label: "rw",
+    alias: "rw",
     validations: {}
   },
   {
     label: "kel/desa",
+    alias: "kelurahan",
     validations: {}
   },
   {
     label: "kecamatan",
+    alias: "kecamatan",
     validations: {}
   },
   {
     label: "status perkawinan",
+    alias: "status perkawinan",
     validations: { required }
   },
   {
     label: "pekerjaan",
+    alias: "pekerjaan",
     validations: {}
   }
 ];
@@ -723,6 +742,16 @@ export default {
   },
   methods: {
     startCase: startCase,
+    // async getPasien() {
+    //   try {
+    //     const res = await axios.get(`${this.url_api}/layanan/${this.idPasien}`)
+    //     const { status, data } = res.data
+    //     const { id, nama, nik, tempat_lahir, tanggal_lahir, jenis_kelamin, golongan_darah, alamat_rumah, rt, rw, kelurahan, kecamatan, status_perkawinan, pekerjaan, nomor_hp, nama_penjamin, nomor_polis, email, nama_penanggung_jawab } = data
+
+    //   } catch (err) {
+    //     alert(err)
+    //   }
+    // },
     btnText() {
       switch (this.formType) {
         case "detail":
@@ -748,41 +777,49 @@ export default {
       return this.formType === "detail";
     },
     tanggalLahirSelected($event) {
-      if(!$event) return
+      if (!$event) return;
       this.setValue({
-        rawLabel: 'tanggal lahir',
-        $event: moment($event).format('YYYY-MM-DD')
-      })
+        rawLabel: "tanggal lahir",
+        $event: moment($event).format("YYYY-MM-DD")
+      });
     },
     async getPasienData() {
       if (this.idPasien) {
         try {
-          const res = await axios.get(`${this.url_api}/pasien`, this.idPasien);
+          const res = await axios.get(
+            `${this.url_api}/layanan/${this.idPasien}`,
+            this.idPasien
+          );
           const { status, data } = res.data;
           if (status) {
-            const {
-              nama,
-              nik,
-              tempat_lahir,
-              tanggal_lahir,
-              jenis_kelamin,
-              golongan_darah,
-              alamat_rumah,
-              rt,
-              rw,
-              kelurahan,
-              kecamatan,
-              status_perkawinan,
-              pekerjaan,
-              nomor_hp,
-              nama_penjamin,
-              nomor_polis,
-              email,
-              nama_penanggung_jawab
-            } = data;
-            // todo assign data
+            // const {
+            //   nama,
+            //   nik,
+            //   tempat_lahir,
+            //   tanggal_lahir,
+            //   jenis_kelamin,
+            //   golongan_darah,
+            //   alamat_rumah,
+            //   rt,
+            //   rw,
+            //   kelurahan,
+            //   kecamatan,
+            //   status_perkawinan,
+            //   pekerjaan,
+            //   nomor_hp,
+            //   nama_penjamin,
+            //   nomor_polis,
+            //   email,
+            //   nama_penanggung_jawab
+            // } = data;
+            Object.keys(data).map(
+              item =>
+                (this.formData[this.formBasicData.find(x => x.alias === item)] =
+                  data[item])
+            );
           }
         } catch (err) {
+          // alert(err)
           // console.log(err);
         }
       }
@@ -792,7 +829,7 @@ export default {
     },
     setFormData() {
       return this.setFormBasicData().reduce((arr, val) => {
-        arr[val.label.split(" ").join("_")] = '';
+        arr[val.label.split(" ").join("_")] = "";
         return arr;
       }, {});
     },
