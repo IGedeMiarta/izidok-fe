@@ -25,6 +25,7 @@
             "
             :state="getDataError({ rawLabel: 'nama lengkap' })"
             :disabled="disabledForm()"
+            :value="getValue('nama lengkap')"
           />
         </b-form-group>
         <b-form-group
@@ -49,6 +50,7 @@
             "
             :state="getDataError({ rawLabel: 'no. handphone' })"
             :disabled="disabledForm()"
+            :value="getValue('no. handphone')"
           />
         </b-form-group>
       </div>
@@ -75,6 +77,7 @@
             "
             :state="getDataError({ rawLabel: 'nik' })"
             :disabled="disabledForm()"
+            :value="getValue('nik')"
           />
         </b-form-group>
         <b-form-group
@@ -99,6 +102,7 @@
             "
             :state="getDataError({ rawLabel: 'email' })"
             :disabled="disabledForm()"
+            :value="getValue('email')"
           />
         </b-form-group>
       </div>
@@ -128,6 +132,7 @@
                   "
                   :state="getDataError({ rawLabel: 'tempat lahir' })"
                   :disabled="disabledForm()"
+                  :value="getValue('tempat lahir')"
                 /> </b-form-group
             ></b-col>
             <b-col cols="6">
@@ -177,6 +182,7 @@
               "
               :state="getDataError({ rawLabel: 'nama penjamin/asuransi' })"
               :disabled="disabledForm()"
+              :value="getValue('nama penjamin/asuransi')"
             />
           </b-form-group>
         </b-col>
@@ -210,6 +216,7 @@
                     { text: 'perempuan', value: 0 }
                   ]"
                   :disabled="disabledForm()"
+                  :checked="getValue('jenis kelamin')"
                 >
                 </b-form-radio-group>
               </b-form-group>
@@ -243,6 +250,7 @@
                   "
                   :state="getDataError({ rawLabel: 'gol. darah' })"
                   :disabled="disabledForm()"
+                  :value="getValue('gol. darah')"
                 />
               </b-form-group>
             </b-col>
@@ -271,6 +279,7 @@
               "
               :state="getDataError({ rawLabel: 'no. member/polis asuransi' })"
               :disabled="disabledForm()"
+              :value="getValue('no. member/polis asuransi')"
             />
           </b-form-group>
           <b-form-group
@@ -295,6 +304,7 @@
               "
               :state="getDataError({ rawLabel: 'nama penanggung jawab' })"
               :disabled="disabledForm()"
+              :value="getValue('nama penanggung jawab')"
             />
           </b-form-group>
         </div>
@@ -322,6 +332,7 @@
             "
             :state="getDataError({ rawLabel: 'alamat rumah' })"
             :disabled="disabledForm()"
+            :value="getValue('alamat rumah')"
           />
         </b-form-group>
         <b-form-group
@@ -346,6 +357,7 @@
             "
             :state="getDataError({ rawLabel: 'no. hp penanggung jawab' })"
             :disabled="disabledForm()"
+            :value="getValue('no. hp penanggung jawab')"
           />
         </b-form-group>
       </div>
@@ -375,6 +387,7 @@
                   "
                   :state="getDataError({ rawLabel: 'rt' })"
                   :disabled="disabledForm()"
+                  :value="getValue('rt')"
                 />
               </b-form-group>
             </b-col>
@@ -401,6 +414,7 @@
                   "
                   :state="getDataError({ rawLabel: 'rw' })"
                   :disabled="disabledForm()"
+                  :value="getValue('rw')"
                 />
               </b-form-group>
             </b-col>
@@ -427,6 +441,7 @@
                   "
                   :state="getDataError({ rawLabel: 'kel/desa' })"
                   :disabled="disabledForm()"
+                  :value="getValue('kel/desa')"
                 />
               </b-form-group>
             </b-col>
@@ -453,6 +468,7 @@
                   "
                   :state="getDataError({ rawLabel: 'kecamatan' })"
                   :disabled="disabledForm()"
+                  :value="getValue('kecamatan')"
                 />
               </b-form-group>
             </b-col>
@@ -492,6 +508,7 @@
               "
               :state="getDataError({ rawLabel: 'status perkawinan' })"
               :disabled="disabledForm()"
+              :value="getValue('status perkawinan')"
             />
           </b-form-group>
         </b-col>
@@ -537,6 +554,7 @@
               "
               :state="getDataError({ rawLabel: 'pekerjaan' })"
               :disabled="disabledForm()"
+              :value="getValue('pekerjaan')"
             />
           </b-form-group>
         </b-col>
@@ -578,6 +596,7 @@
 </template>
 
 <script>
+import Vue from "vue";
 import { Datetime } from "vue-datetime";
 import axios from "axios";
 import startCase from "lodash/startCase";
@@ -787,7 +806,7 @@ export default {
       if (this.idPasien) {
         try {
           const res = await axios.get(
-            `${this.url_api}/layanan/${this.idPasien}`,
+            `${this.url_api}/pasien/${this.idPasien}`,
             this.idPasien
           );
           const { status, data } = res.data;
@@ -812,15 +831,16 @@ export default {
             //   email,
             //   nama_penanggung_jawab
             // } = data;
-            Object.keys(data).map(
-              item =>
-                (this.formData[this.formBasicData.find(x => x.alias === item)] =
-                  data[item])
-            );
+            Object.keys(data).map(item => {
+              const y = this.formBasicData.find(x => x.alias === item);
+              if (y) {
+                Vue.set(this.formData, y.label, data[item]);
+              }
+            });
           }
         } catch (err) {
+          console.log(err);
           // alert(err)
-          // console.log(err);
         }
       }
     },

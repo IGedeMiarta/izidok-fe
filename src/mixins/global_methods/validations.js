@@ -128,6 +128,13 @@ const validations = {
     } else {
       return null;
     }
+  },
+  getValue(label, formData = this.formData) {
+    if (label && formData) {
+      const x = Object.keys(formData);
+      const tmp = x.find(item => item === label.split(" ").join("_"));
+      return tmp && formData[tmp];
+    }
   }
 };
 
