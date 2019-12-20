@@ -778,8 +778,9 @@ export default {
   },
   methods: {
     startCase: startCase,
-    ocrCompleted(e) {
-      console.log(e);
+    ocrCompleted(res) {
+      const { assignValuePasien } = this;
+      assignValuePasien(res);
     },
     dropzoneOptions() {
       const { klinik: { nama_klinik = null } = {} } = this.$store.state.user;
@@ -793,6 +794,16 @@ export default {
           nama_klinik
         }
       };
+    },
+    assignValuePasien(data) {
+      if (data) {
+        Object.keys(data).map(item => {
+          const y = this.formBasicData.find(x => x.alias === item);
+          if (y) {
+            Vue.set(this.formData, y.label, data[item]);
+          }
+        });
+      }
     },
     btnText() {
       switch (this.formType) {
@@ -834,12 +845,8 @@ export default {
           );
           const { status, data } = res.data;
           if (status) {
-            Object.keys(data).map(item => {
-              const y = this.formBasicData.find(x => x.alias === item);
-              if (y) {
-                Vue.set(this.formData, y.label, data[item]);
-              }
-            });
+            const { assignValuePasien } = this;
+            assignValuePasien(data);
           }
         } catch (err) {
           console.log(err);
