@@ -19,21 +19,6 @@
           <h4 class="text-capitalize my-2">edit pasien</h4>
         </div>
         <div class="card-body">
-          <div class="mb-4">
-            <vue-dropzone
-              ref="myVueDropzone"
-              id="dropzone"
-              :options="dropzoneOptions"
-              useCustomSlot
-              class="custom-dropzone"
-            >
-              <div class="dropzone-custom-content">
-                <h3 class="dropzone-custom-title text-capitalize">
-                  ambil foto <span class="text-uppercase">ktp</span>
-                </h3>
-              </div></vue-dropzone
-            >
-          </div>
           <PasienForm
             formType="edit"
             @keluar="goingPlaces"
@@ -55,7 +40,7 @@ export default {
     idPasien: [String, Number]
   },
   components: {
-    vueDropzone: () => import("vue2-dropzone"),
+    // vueDropzone: () => import("vue2-dropzone"),
     PasienForm: () => import("./PasienForm")
   },
   data: () => ({

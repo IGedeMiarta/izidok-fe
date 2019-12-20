@@ -19,21 +19,6 @@
           <h4 class="text-capitalize my-2">tambah pasien</h4>
         </div>
         <div class="card-body">
-          <div class="mb-4">
-            <vue-dropzone
-              ref="myVueDropzone"
-              id="dropzone"
-              :options="dropzoneOptions"
-              useCustomSlot
-              class="custom-dropzone"
-            >
-              <div class="dropzone-custom-content">
-                <h3 class="dropzone-custom-title text-capitalize">
-                  ambil foto <span class="text-uppercase">ktp</span>
-                </h3>
-              </div></vue-dropzone
-            >
-          </div>
           <PasienForm @keluar="goingPlaces" @submitForm="submitForm" />
         </div>
       </div>
@@ -49,7 +34,6 @@ import pasienMixin from "./mixins";
 export default {
   mixins: [pasienMixin],
   components: {
-    vueDropzone: () => import("vue2-dropzone"),
     PasienForm: () => import("./PasienForm")
   },
   data: () => ({
@@ -105,13 +89,13 @@ export default {
     },
     beforeAddPasien(postData) {
       // sementara untuk demo nomor rekam medis di buat urutan dulu
-      postData.klinik_id = this.$store.state.user.klinik_id
+      postData.klinik_id = this.$store.state.user.klinik_id;
       axios.get(`${this.url_api}/pasien`).then(res => {
-        let totalCurrentPasien = res.data.data.pasien.total
-        postData.nomor_rekam_medis = 100000 + (totalCurrentPasien + 1)
+        let totalCurrentPasien = res.data.data.pasien.total;
+        postData.nomor_rekam_medis = 100000 + (totalCurrentPasien + 1);
 
-        this.addPasien(postData)
-      })
+        this.addPasien(postData);
+      });
     },
     async addPasien(postData) {
       try {

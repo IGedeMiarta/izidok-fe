@@ -1,5 +1,21 @@
 <template>
   <div>
+    <div class="mb-4">
+      <vue-dropzone
+        ref="myVueDropzone"
+        id="dropzone"
+        :options="dropzoneOptions()"
+        useCustomSlot
+        class="custom-dropzone"
+        @vdropzone-complete="ocrCompleted"
+      >
+        <div class="dropzone-custom-content">
+          <h3 class="dropzone-custom-title text-capitalize">
+            ambil foto <span class="text-uppercase">ktp</span>
+          </h3>
+        </div></vue-dropzone
+      >
+    </div>
     <h4 class="text-capitalize mb-3">data pasien</h4>
     <b-form v-on:submit.prevent="submitForm">
       <div class="form-row">
@@ -724,7 +740,8 @@ const tmp = [
 
 export default {
   components: {
-    Datetime
+    Datetime,
+    vueDropzone: () => import("vue2-dropzone")
   },
   props: {
     formType: {
@@ -736,6 +753,7 @@ export default {
     }
   },
   data: () => ({
+    beingSubmit: false,
     formBasicData: null,
     formData: null,
     options: ["foo", "bar", "baz"],
@@ -755,22 +773,27 @@ export default {
     if (this.formType !== "detail") {
       this.formBasicData = this.setFormBasicData();
       this.formData = this.setFormData();
-      // console.log(this.formBasicData, this.formData)
     }
     await this.getPasienData();
   },
   methods: {
     startCase: startCase,
-    // async getPasien() {
-    //   try {
-    //     const res = await axios.get(`${this.url_api}/layanan/${this.idPasien}`)
-    //     const { status, data } = res.data
-    //     const { id, nama, nik, tempat_lahir, tanggal_lahir, jenis_kelamin, golongan_darah, alamat_rumah, rt, rw, kelurahan, kecamatan, status_perkawinan, pekerjaan, nomor_hp, nama_penjamin, nomor_polis, email, nama_penanggung_jawab } = data
+    ocrCompleted(e) {
+      console.log(e);
+    },
+    dropzoneOptions() {
+      const { klinik: { nama_klinik = null } = {} } = this.$store.state.user;
 
-    //   } catch (err) {
-    //     alert(err)
-    //   }
-    // },
+      return {
+        url: `${this.url_api}/pasien/ocr`,
+        thumbnailWidth: null,
+        maxFilesize: 5000,
+        headers: this.rawAuthHeader(),
+        params: {
+          nama_klinik
+        }
+      };
+    },
     btnText() {
       switch (this.formType) {
         case "detail":
@@ -811,26 +834,6 @@ export default {
           );
           const { status, data } = res.data;
           if (status) {
-            // const {
-            //   nama,
-            //   nik,
-            //   tempat_lahir,
-            //   tanggal_lahir,
-            //   jenis_kelamin,
-            //   golongan_darah,
-            //   alamat_rumah,
-            //   rt,
-            //   rw,
-            //   kelurahan,
-            //   kecamatan,
-            //   status_perkawinan,
-            //   pekerjaan,
-            //   nomor_hp,
-            //   nama_penjamin,
-            //   nomor_polis,
-            //   email,
-            //   nama_penanggung_jawab
-            // } = data;
             Object.keys(data).map(item => {
               const y = this.formBasicData.find(x => x.alias === item);
               if (y) {
