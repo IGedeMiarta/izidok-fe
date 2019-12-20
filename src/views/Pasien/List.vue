@@ -35,11 +35,11 @@
                 />
               </div>
               <div class="form-group col-md-4" style="float:left;">
-                <label for="inputPassword46">No. Rekam Medis</label>
+                <label for="inputNoRekamMedisCari">No. Rekam Medis</label>
                 <input
-                  type="password"
+                  type="text"
                   class="form-control"
-                  id="inputPassword46"
+                  id="inputNoRekamMedisCari"
                   v-model.lazy="noRekamMedis"
                 />
               </div>
@@ -217,6 +217,7 @@ export default {
             title: startCase("deleted"),
             text: startCase("pasien berhasil di hapus")
           });
+          this.fetchListPasien();
         } else {
           this.$swal({
             type: "error",
@@ -235,7 +236,7 @@ export default {
     async fetchListPasien() {
       try {
         const res = await axios.get(
-          `${this.url_api}/pasien?limit=10&page=${this.currentPage}`
+          `${this.url_api}/pasien?limit=10&page=${this.currentPage}&nama_pasien=${this.namaPasien}&no_rekam_medis=${this.noRekamMedis}`
         );
         const { success, data } = res.data;
         if (success) {
