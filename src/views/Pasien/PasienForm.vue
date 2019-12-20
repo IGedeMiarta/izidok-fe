@@ -42,6 +42,7 @@
             :state="getDataError({ rawLabel: 'nama lengkap' })"
             :disabled="disabledForm()"
             :value="getValue('nama lengkap')"
+            :maxlength="60"
           />
         </b-form-group>
         <b-form-group
@@ -67,6 +68,7 @@
             :state="getDataError({ rawLabel: 'no. handphone' })"
             :disabled="disabledForm()"
             :value="getValue('no. handphone')"
+            :maxlength="30"
           />
         </b-form-group>
       </div>
@@ -94,6 +96,7 @@
             :state="getDataError({ rawLabel: 'nik' })"
             :disabled="disabledForm()"
             :value="getValue('nik')"
+            :maxlength="25"
           />
         </b-form-group>
         <b-form-group
@@ -119,6 +122,7 @@
             :state="getDataError({ rawLabel: 'email' })"
             :disabled="disabledForm()"
             :value="getValue('email')"
+            :maxlength="30"
           />
         </b-form-group>
       </div>
@@ -149,6 +153,7 @@
                   :state="getDataError({ rawLabel: 'tempat lahir' })"
                   :disabled="disabledForm()"
                   :value="getValue('tempat lahir')"
+                  :maxlength="30"
                 /> </b-form-group
             ></b-col>
             <b-col cols="6">
@@ -199,6 +204,7 @@
               :state="getDataError({ rawLabel: 'nama penjamin/asuransi' })"
               :disabled="disabledForm()"
               :value="getValue('nama penjamin/asuransi')"
+              :maxlength="30"
             />
           </b-form-group>
         </b-col>
@@ -296,6 +302,7 @@
               :state="getDataError({ rawLabel: 'no. member/polis asuransi' })"
               :disabled="disabledForm()"
               :value="getValue('no. member/polis asuransi')"
+              :maxlength="30"
             />
           </b-form-group>
           <b-form-group
@@ -321,6 +328,7 @@
               :state="getDataError({ rawLabel: 'nama penanggung jawab' })"
               :disabled="disabledForm()"
               :value="getValue('nama penanggung jawab')"
+              :maxlength="30"
             />
           </b-form-group>
         </div>
@@ -349,6 +357,7 @@
             :state="getDataError({ rawLabel: 'alamat rumah' })"
             :disabled="disabledForm()"
             :value="getValue('alamat rumah')"
+            :maxlength="100"
           />
         </b-form-group>
         <b-form-group
@@ -374,6 +383,7 @@
             :state="getDataError({ rawLabel: 'no. hp penanggung jawab' })"
             :disabled="disabledForm()"
             :value="getValue('no. hp penanggung jawab')"
+            :maxlength="15"
           />
         </b-form-group>
       </div>
@@ -404,6 +414,7 @@
                   :state="getDataError({ rawLabel: 'rt' })"
                   :disabled="disabledForm()"
                   :value="getValue('rt')"
+                  :maxlength="10"
                 />
               </b-form-group>
             </b-col>
@@ -431,6 +442,7 @@
                   :state="getDataError({ rawLabel: 'rw' })"
                   :disabled="disabledForm()"
                   :value="getValue('rw')"
+                  :maxlength="10"
                 />
               </b-form-group>
             </b-col>
@@ -458,6 +470,7 @@
                   :state="getDataError({ rawLabel: 'kel/desa' })"
                   :disabled="disabledForm()"
                   :value="getValue('kel/desa')"
+                  :maxlength="20"
                 />
               </b-form-group>
             </b-col>
@@ -485,6 +498,7 @@
                   :state="getDataError({ rawLabel: 'kecamatan' })"
                   :disabled="disabledForm()"
                   :value="getValue('kecamatan')"
+                  :maxlength="20"
                 />
               </b-form-group>
             </b-col>
@@ -545,7 +559,8 @@
               })
             "
           >
-            <b-form-select
+            <vue-select taggable />
+            <!-- <b-form-select
               :options="
                 [
                   'Belum/Tidak Bekerja',
@@ -571,7 +586,7 @@
               :state="getDataError({ rawLabel: 'pekerjaan' })"
               :disabled="disabledForm()"
               :value="getValue('pekerjaan')"
-            />
+            /> -->
           </b-form-group>
         </b-col>
         <b-col cols="6" class="d-flex align-items-center justify-content-end">
@@ -741,7 +756,8 @@ const tmp = [
 export default {
   components: {
     Datetime,
-    vueDropzone: () => import("vue2-dropzone")
+    vueDropzone: () => import("vue2-dropzone"),
+    "vue-select": () => import("@/components/VueSelect.vue")
   },
   props: {
     formType: {

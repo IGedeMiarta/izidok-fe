@@ -3,6 +3,7 @@
     class="vue-select-custom"
     :options="options"
     :error="error"
+    :taggable="taggable"
   ></v-select>
 </template>
 
@@ -18,6 +19,10 @@ export default {
     options: {
       type: Array,
       default: () => []
+    },
+    taggable: {
+      type: Boolean,
+      default: false
     }
   }
 };
