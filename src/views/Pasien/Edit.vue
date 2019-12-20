@@ -34,11 +34,13 @@
 <script>
 import axios from "axios";
 import startCase from "lodash/startCase";
+import pasienMixin from "./mixins";
 
 export default {
   props: {
     idPasien: [String, Number]
   },
+  mixins: [pasienMixin],
   components: {
     // vueDropzone: () => import("vue2-dropzone"),
     PasienForm: () => import("./PasienForm")
@@ -107,10 +109,9 @@ export default {
     },
     async editPasien(postData) {
       try {
-        const { idPasien } = postData;
         const res = await axios.put(
-          `${this.url_api}/pasien/${idPasien}`,
-          postData
+          `${this.url_api}/pasien/${this.idPasien}`,
+          this.mapPasienFormData(postData)
         );
         const { status, data } = res.data;
         if (status) {
