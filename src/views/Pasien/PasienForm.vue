@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="mb-4">
+    <div class="mb-4" v-if="formType !== 'detail'">
       <vue-dropzone
         ref="myVueDropzone"
         id="dropzone"
@@ -870,10 +870,10 @@ export default {
     };
   },
   async mounted() {
-    if (this.formType !== "detail") {
+    // if (this.formType !== "detail") {
       this.formBasicData = this.setFormBasicData();
       this.formData = this.setFormData();
-    }
+    // }
     await this.getPasienData();
   },
   methods: {
