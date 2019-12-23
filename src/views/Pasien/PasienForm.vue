@@ -173,8 +173,9 @@
                 <Datetime
                   input-class="form-control"
                   zone="Asia/Jakarta"
-                  format="yyyy-LL-dd"
+                  format="d LLL yyyy"
                   @input="tanggalLahirSelected"
+                  :value="getValue('tanggal lahir')"
                 />
               </b-form-group>
             </b-col>
@@ -743,12 +744,17 @@ const tmp = [
   },
   {
     label: "status perkawinan",
-    alias: "status perkawinan",
+    alias: "status_perkawinan",
     validations: { required }
   },
   {
     label: "pekerjaan",
     alias: "pekerjaan",
+    validations: {}
+  },
+  {
+    label: "nomor rekam medis",
+    alias: "nomor_rekam_medis",
     validations: {}
   }
 ];
