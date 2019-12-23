@@ -176,6 +176,7 @@
                   format="d LLL yyyy"
                   @input="tanggalLahirSelected"
                   :value="getValue('tanggal lahir')"
+                  :disabled="disabledForm()"
                 />
               </b-form-group>
             </b-col>

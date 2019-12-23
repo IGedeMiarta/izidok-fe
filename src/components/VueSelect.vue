@@ -29,6 +29,10 @@ export default {
     },
     value: {
       default: null
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
