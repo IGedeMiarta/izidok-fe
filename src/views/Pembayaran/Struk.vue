@@ -15,10 +15,10 @@
           <span v-for="x in 10" :key="x">{{ x }}</span>
         </p>
       </div>
-      <div class="mt-4 mb-2 py-4">
+      <div class="mt-4 mb-2 pt-4">
         <p class="text-uppercase font-weight-bold mb-0">rawat jalan</p>
         <p class="text-uppercase font-weight-bold mb-0">pembayaran</p>
-        <div class="my-4">
+        <div class="my-2">
           <p class="text-uppercase mb-0">
             no rm: <span v-for="x in 10" :key="x">{{ x }}</span>
           </p>
@@ -61,7 +61,7 @@
           :fields="[
             {
               key: 'first_name',
-              label: 'first_name',
+              label: 'first name',
               thStyle: 'background-color: transparent'
             },
             {
@@ -76,6 +76,12 @@
             }
           ]"
         >
+          <template v-slot:head(first_name)="data">
+            <div class="d-flex flex-column">
+              <p class="text-capitalize mb-2">nama layanan</p>
+              <p class="text-capitalize mb-0">qty * harga layanan</p>
+            </div>
+          </template>
         </b-table-lite>
         <p class="text-right text-capitalize">
           jakarta, 17 oktober 2019
@@ -86,9 +92,9 @@
           </span>
         </p>
         <p class="mt-4 pt-4 d-flex justify-content-center">
-          <span class="pt-4 mt-4" v-for="data in 15" :key="data">*</span>
+          <span class="pt-4 mt-2" v-for="data in 15" :key="data">*</span>
         </p>
-        <p class="text-capitalize text-center">
+        <p class="text-capitalize text-center mb-1">
           semoga lekas sembuh dan sehat selalu
         </p>
       </div>
