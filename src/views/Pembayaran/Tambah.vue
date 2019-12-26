@@ -55,7 +55,10 @@
                 </b-col>
               </b-row>
               <div class="w-100 mt-2 d-flex">
-                <b-button variant="danger" class="text-uppercase mr-3"
+                <b-button
+                  variant="danger"
+                  class="text-uppercase mr-3"
+                  @click="previewStruk"
                   >preview struk</b-button
                 >
                 <b-button variant="success" class="text-uppercase mr-3"
@@ -74,6 +77,7 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
 import startCase from "lodash/startCase";
 import upperCase from "lodash/upperCase";
 
@@ -105,7 +109,8 @@ export default {
       }
     ],
     total: null,
-    potongan: null
+    potongan: null,
+    pembayaranVal: null
   }),
   computed: {
     nett() {
@@ -114,13 +119,23 @@ export default {
     }
   },
   methods: {
+    ...mapMutations({
+      setStrukVal: "struk/SET_STRUK_VAL"
+    }),
     calc(val) {
       const tmp = val;
       let total_tmp = 0;
       tmp.map(item => {
         total_tmp += item.qty * item.nilai;
       });
+      this.pembayaranVal = val;
       this.total = total_tmp;
+    },
+    previewStruk() {
+      this.setStrukVal(this.pembayaranVal);
+      this.$router.push({
+        name: "pembayaran-struk"
+      });
     }
   }
 };

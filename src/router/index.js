@@ -138,6 +138,11 @@ const routes = [
         path: "",
         name: "pembayaran-list",
         component: () => import("../views/Pembayaran/List.vue")
+      },
+      {
+        path: "struk",
+        name: "pembayaran-struk",
+        component: () => import("../views/Pembayaran/StrukWrapper.vue")
       }
     ]
   },
