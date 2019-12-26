@@ -30,7 +30,7 @@
           </div>
         </div>
         <div class="card-body">
-          <TablePembayaran />
+          <TablePembayaran @valueChanged="calc" />
         </div>
         <div class="card-footer">
           <div class="px-4 py-2 d-flex flex-row justify-content-end">
@@ -38,20 +38,20 @@
               <b-row class="d-flex align-items-center w-100 py-2">
                 <b-col cols="4">total</b-col>
                 <b-col cols="5">
-                  <b-form-input />
+                  <b-form-input v-model.lazy="total" disabled />
                 </b-col>
               </b-row>
               <b-row class="d-flex align-items-center w-100 py-2">
                 <b-col cols="4">potongan</b-col>
                 <b-col cols="5">
-                  <b-form-input />
+                  <b-form-input v-model.lazy="potongan" />
                 </b-col>
                 <b-col cols="auto">%</b-col>
               </b-row>
               <b-row class="d-flex align-items-center w-100 py-2">
                 <b-col cols="4">total nett</b-col>
                 <b-col cols="5">
-                  <b-form-input />
+                  <b-form-input disabled :value="nett" />
                 </b-col>
               </b-row>
               <div class="w-100 mt-2 d-flex">
@@ -103,8 +103,26 @@ export default {
         label: `${startCase("waktu masuk")}`,
         value: null
       }
-    ]
-  })
+    ],
+    total: null,
+    potongan: null
+  }),
+  computed: {
+    nett() {
+      const tmp = (this.potongan / 100) * this.total;
+      return this.total - tmp;
+    }
+  },
+  methods: {
+    calc(val) {
+      const tmp = val;
+      let total_tmp = 0;
+      tmp.map(item => {
+        total_tmp += item.qty * item.nilai;
+      });
+      this.total = total_tmp;
+    }
+  }
 };
 </script>
 

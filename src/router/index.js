@@ -135,7 +135,7 @@ const routes = [
         component: () => import("../views/Pembayaran/Tambah.vue")
       },
       {
-        path: "list",
+        path: "",
         name: "pembayaran-list",
         component: () => import("../views/Pembayaran/List.vue")
       }
@@ -179,12 +179,8 @@ const routes = [
         component: () => import("../views/Tarif/Tambah.vue")
       }
     ]
-  // {
-  //   path: "/pembayaran",
-  //   name: "pembayaran",
-  //   component: () => import("../views/Pembayaran.vue")
-  // }
-  }];
+  }
+];
 
 const router = new VueRouter({
   mode: "history",

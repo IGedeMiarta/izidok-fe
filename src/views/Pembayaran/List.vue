@@ -27,11 +27,7 @@
             <div class="col-md-9 no-padding">
               <div class="form-group col-md-5" style="float:left;">
                 <label for="inputEmail4">Nama Pasien</label>
-                <input
-                  type="email"
-                  class="form-control"
-                  id="inputEmail4"
-                />
+                <input type="email" class="form-control" id="inputEmail4" />
               </div>
               <div class="form-group col-md-4" style="float:left;">
                 <label for="inputPassword46">No. Rekam Medis</label>
@@ -45,9 +41,7 @@
                 class="form-group col-md-3"
                 style="float:left;padding-top:30px;padding-left:0;"
               >
-                <b-button variant="primary"
-                  >CARI</b-button
-                >
+                <b-button variant="primary">CARI</b-button>
               </div>
             </div>
           </div>
@@ -83,6 +77,7 @@
                   <td class="text-center">
                     <b-link
                       class="btn bg-info text-light font-size-md pl-5 pr-5 btn-sm ml-1 mr-1"
+                      :to="{ name: 'pembayaran-tambah' }"
                     >
                       Bayar
                     </b-link>
@@ -136,7 +131,7 @@ export default {
       rows: 100,
       perPage: 10
     };
-  },
+  }
 };
 </script>
 <style scoped lang="css">
