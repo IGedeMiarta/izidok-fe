@@ -37,7 +37,7 @@
                     <Datetime
                       input-class="form-control"
                       zone="Asia/Jakarta"
-                      format="yyyy-LL-dd"
+                      format="d LLL yyyy"
                       v-if="form.label == 'waktu_konsultasi'"
                       @input="waktuKonsultasiSelected"
                     />

@@ -41,7 +41,7 @@
                         <Datetime
                           input-class="form-control"
                           zone="Asia/Jakarta"
-                          format="yyyy-LL-dd"
+                          format="d LLL yyyy"
                         />
                       </b-form-group>
                     </b-col>

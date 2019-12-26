@@ -4,6 +4,9 @@
     :options="options"
     :error="error"
     :taggable="taggable"
+    :value="value"
+    :disabled="disabled"
+    @input="$emit('input', $event)"
   ></v-select>
 </template>
 
@@ -23,6 +26,18 @@ export default {
     taggable: {
       type: Boolean,
       default: false
+    },
+    value: {
+      default: null
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    }
+  },
+  methods: {
+    inputEvent($event) {
+      console.log($event)
     }
   }
 };
