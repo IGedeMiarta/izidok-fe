@@ -42,6 +42,8 @@
                           input-class="form-control"
                           zone="Asia/Jakarta"
                           format="d LLL yyyy"
+                          :value="tanggal"
+                          @input="tanggalSelected"
                         />
                       </b-form-group>
                     </b-col>
@@ -50,12 +52,12 @@
                         label="no rekam medis"
                         class="text-capitalize"
                       >
-                        <b-form-input />
+                        <b-form-input v-model="noRekamMedis" />
                       </b-form-group>
                     </b-col>
                     <b-col>
                       <b-form-group label="nama pasien" class="text-capitalize">
-                        <b-form-input />
+                        <b-form-input v-model="namaPasien" />
                       </b-form-group>
                     </b-col>
                   </b-row>
@@ -64,7 +66,7 @@
             </div>
           </div>
           <div class="d-flex justify-content-end mb-4">
-            <b-button variant="first" class="text-capitalize mr-2"
+            <b-button variant="first" class="text-capitalize mr-2" @click="fetchAntrean(1)"
               >cari</b-button
             >
             <b-button
@@ -232,9 +234,14 @@ export default {
       'dokter tujuan': 'sss',
       actions: 1
     }],
-    pasiens: []
+    pasiens: [],
+    noRekamMedis: '',
+    namaPasien: '',
+    tanggal: null
   }),
   mounted() {
+    moment.locale('id')
+    this.tanggal = moment().format("YYYY-MM-DD")
     this.fetchAntrean();
   },
   methods: {
@@ -280,9 +287,7 @@ export default {
       let dt = moment().format('YYYY-MM-DD');
       try {
         const res = await axios.get(
-          `${this.url_api}/transaksi?limit=${
-            this.perPage
-          }&status=${"queued".toUpperCase()}&from=2019-12-01&to=2019-12-31&page=${page}`
+          `${this.url_api}/transaksi?limit=${this.perPage}&status=QUEUED&from=2019-12-01&to=2019-12-31&page=${page}&no_rekam_medis=${this.noRekamMedis}&nama_pasien=${this.namaPasien}`
         );
         const { status, data } = res.data;
         if (status) {
@@ -368,6 +373,9 @@ export default {
           // console.log(res);
         }
       });
+    },
+    tanggalSelected($event) {
+      this.tanggal = moment($event).format("YYYY-MM-DD")
     }
   }
 };
