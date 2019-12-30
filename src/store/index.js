@@ -1,16 +1,17 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import VuexPersist from 'vuex-persist'
+import VuexPersist from "vuex-persist";
 import sidebar from "./modules/sidebar";
-import rekamMedis from './modules/rekamMedis';
+import rekamMedis from "./modules/rekamMedis";
+import struk from "./modules/struk";
 
 // Load Vuex
 Vue.use(Vuex);
 
 const vuexPersist = new VuexPersist({
-  key: 'izidok',
+  key: "izidok",
   storage: window.localStorage
-})
+});
 
 // Create store
 export default new Vuex.Store({
@@ -22,6 +23,7 @@ export default new Vuex.Store({
   modules: {
     sidebar,
     rekamMedis,
+    struk
   },
   mutations: {
     SET_BEARER_TOKEN(state, value) {
@@ -29,7 +31,7 @@ export default new Vuex.Store({
     },
     SET_USER(state, value) {
       state.user = value;
-    },
+    }
   },
   strict: process.env.NODE_ENV !== "production",
   plugins: [vuexPersist.plugin]

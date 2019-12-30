@@ -30,7 +30,7 @@
           </div>
         </div>
         <div class="card-body">
-          <TablePembayaran />
+          <TablePembayaran @valueChanged="calc" />
         </div>
         <div class="card-footer">
           <div class="px-4 py-2 d-flex flex-row justify-content-end">
@@ -38,24 +38,27 @@
               <b-row class="d-flex align-items-center w-100 py-2">
                 <b-col cols="4">total</b-col>
                 <b-col cols="5">
-                  <b-form-input />
+                  <b-form-input v-model.lazy="total" disabled />
                 </b-col>
               </b-row>
               <b-row class="d-flex align-items-center w-100 py-2">
                 <b-col cols="4">potongan</b-col>
                 <b-col cols="5">
-                  <b-form-input />
+                  <b-form-input v-model.lazy="potongan" />
                 </b-col>
                 <b-col cols="auto">%</b-col>
               </b-row>
               <b-row class="d-flex align-items-center w-100 py-2">
                 <b-col cols="4">total nett</b-col>
                 <b-col cols="5">
-                  <b-form-input />
+                  <b-form-input disabled :value="nett" />
                 </b-col>
               </b-row>
               <div class="w-100 mt-2 d-flex">
-                <b-button variant="danger" class="text-uppercase mr-3"
+                <b-button
+                  variant="danger"
+                  class="text-uppercase mr-3"
+                  @click="previewStruk"
                   >preview struk</b-button
                 >
                 <b-button variant="success" class="text-uppercase mr-3"
@@ -74,6 +77,7 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
 import startCase from "lodash/startCase";
 import upperCase from "lodash/upperCase";
 
@@ -103,8 +107,37 @@ export default {
         label: `${startCase("waktu masuk")}`,
         value: null
       }
-    ]
-  })
+    ],
+    total: null,
+    potongan: null,
+    pembayaranVal: null
+  }),
+  computed: {
+    nett() {
+      const tmp = (this.potongan / 100) * this.total;
+      return this.total - tmp;
+    }
+  },
+  methods: {
+    ...mapMutations({
+      setStrukVal: "struk/SET_STRUK_VAL"
+    }),
+    calc(val) {
+      const tmp = val;
+      let total_tmp = 0;
+      tmp.map(item => {
+        total_tmp += item.qty * item.nilai;
+      });
+      this.pembayaranVal = val;
+      this.total = total_tmp;
+    },
+    previewStruk() {
+      this.setStrukVal(this.pembayaranVal);
+      this.$router.push({
+        name: "pembayaran-struk"
+      });
+    }
+  }
 };
 </script>
 
