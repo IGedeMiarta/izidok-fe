@@ -54,9 +54,9 @@
         <b-table-lite
           class="my-3"
           :items="[
-            { age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
-            { age: 21, first_name: 'Larsen', last_name: 'Shaw' },
-            { age: 89, first_name: 'Geneva', last_name: 'Wilson' }
+            { first_name: 'Dickerson', last_name: 'Macdonald' },
+            { first_name: 'Larsen', last_name: 'Shaw' },
+            { first_name: 'Geneva', last_name: 'Wilson' }
           ]"
           :fields="[
             {
@@ -68,11 +68,6 @@
               key: 'last_name',
               label: 'last_name',
               thStyle: 'background-color: transparent'
-            },
-            {
-              key: 'age',
-              label: 'age',
-              thStyle: 'background-color: transparent'
             }
           ]"
         >
@@ -81,6 +76,44 @@
               <p class="text-capitalize mb-2">nama layanan</p>
               <p class="text-capitalize mb-0">qty * harga layanan</p>
             </div>
+          </template>
+          <template v-slot:head(last_name)="data">
+            <div class="d-flex flex-column text-right">
+              <p class="text-capitalize mb-0">subtotal layanan</p>
+            </div>
+          </template>
+
+          <template v-slot:cell(first_name)="data">
+            <div class="d-flex">
+              <span> {{ data.index + 1 }}. </span>
+              <div class="d-flex flex-column ml-3">
+                <span>
+                  {{ data.item.first_name }}
+                </span>
+                <span>
+                  1 * 200,000
+                </span>
+              </div>
+            </div>
+          </template>
+
+          <template v-slot:cell(last_name)="data">
+            <div class="text-right">{{ data.value }}</div>
+          </template>
+
+          <template v-slot:custom-foot>
+            <b-tr class="text-uppercase">
+              <b-td>total layanan</b-td>
+              <b-td class="text-right">520,000</b-td>
+            </b-tr>
+            <b-tr class="text-uppercase">
+              <b-td class="border-0">potongan</b-td>
+              <b-td class="border-0 text-right">0</b-td>
+            </b-tr>
+            <b-tr class="text-uppercase">
+              <b-td class="border-0">total nett</b-td>
+              <b-td class="border-0 text-right">0</b-td>
+            </b-tr>
           </template>
         </b-table-lite>
         <p class="text-right text-capitalize">
