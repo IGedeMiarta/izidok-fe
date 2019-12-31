@@ -26,10 +26,18 @@
       <b-col cols="6">
         <b-row>
           <b-col cols="6">
-            <CardDashboard title="pasien baru" :highlight="5" bg-color="bg-first" />
+            <CardDashboard
+              title="pasien baru"
+              :highlight="5"
+              bg-color="bg-first"
+            />
           </b-col>
           <b-col cols="6">
-            <CardDashboard title="pasien rawat jalan" :highlight="15" bg-color="bg-success" />
+            <CardDashboard
+              title="pasien rawat jalan"
+              :highlight="15"
+              bg-color="bg-success"
+            />
           </b-col>
         </b-row>
         <b-row>
@@ -37,7 +45,11 @@
             <CardDashboard title="antrean" :highlight="4" />
           </b-col>
           <b-col cols="6">
-            <CardDashboard title="pendapatan" highlight="1.500.000" bg-color="bg-warning" />
+            <CardDashboard
+              title="pendapatan"
+              highlight="1.500.000"
+              bg-color="bg-warning"
+            />
           </b-col>
         </b-row>
       </b-col>
@@ -56,12 +68,55 @@
 </template>
 
 <script>
+import axios from "axios";
+import moment from "moment";
+
 export default {
   name: "home",
   components: {
     CardDashboard: () => import("@/components/CardDashboard"),
     TableDashboard: () => import("@/components/TableDashboard"),
     TrendPasien: () => import("@/components/TrendPasien")
+  },
+  data() {
+    return {
+      nomor_antrian: 0
+    };
+  },
+  mounted() {
+    Promise.all([this.getAntrian(), this.getRawatJalan()]);
+  },
+  computed: {
+    now() {
+      return moment().format("YYYY-MM-DD");
+    }
+  },
+  methods: {
+    async getRawatJalan() {
+      try {
+        const res = await axios.get(
+          `${this.url_api}/dash-rawat-jalan?from=${this.now}&to=${this.now}`
+        );
+        const { status, data } = res.data;
+        console.log(data);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async getAntrian() {
+      try {
+        const res = await axios.get(`${this.url_api}/dash-antrian`);
+        const {
+          status,
+          data: { nomor_antrian = 0 }
+        } = res.data;
+        if (status) {
+          this.nomor_antrian = nomor_antrian;
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
   },
   data: () => ({
     dataSeries: [
