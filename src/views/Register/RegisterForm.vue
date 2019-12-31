@@ -24,8 +24,9 @@
                     Mengapa harus mendaftar iziDok?
                   </h1>
                   <p class="font-size-md mb-0 text-white-50">
-                    Kemudahan dalam mengelola klinik/tempat praktik dokter hanya dalam genggaman. 
-                    Anda hanya perlu menyisihkan waktu kurang dari sepuluh menit untuk dapat bergabung dengan IziDok.
+                    Kemudahan dalam mengelola klinik/tempat praktik dokter hanya
+                    dalam genggaman. Anda hanya perlu menyisihkan waktu kurang
+                    dari sepuluh menit untuk dapat bergabung dengan IziDok.
                   </p>
                   <div
                     class="divider border-2 my-4 border-light opacity-2 rounded w-25"
@@ -96,10 +97,14 @@
                   </b-form-group>
                 </template>
                 <div class="form-group mb-5">
-                  Dengan menekan tombol <strong>Daftar</strong>, 
+                  Dengan menekan tombol <strong>Daftar</strong>,
                   <span class="text-capitalize">Anda</span> setuju dengan semua
-                  <span class="text-capitalize">syarat {{ "&" }} ketentuan</span> serta
-                  <span class="text-capitalize">kebijakan privasi</span> yang berlaku
+                  <span class="text-capitalize"
+                    >syarat {{ "&" }} ketentuan</span
+                  >
+                  serta
+                  <span class="text-capitalize">kebijakan privasi</span> yang
+                  berlaku
                 </div>
                 <button
                   type="submit"
@@ -256,9 +261,9 @@ export default {
 
         const res = await axios.post(`${this.url_api}/klinik`, postData);
         const { status, data } = res.data;
-        if(status) {
+        if (status) {
           this.$router.push({
-            name: 'verification-process', 
+            name: "verification-process",
             params: {
               email: postData.email,
               user_id: data.user_id
@@ -266,7 +271,19 @@ export default {
           });
         }
       } catch (err) {
-        // console.log(err);
+        const { response } = err;
+        if (response) {
+          const {
+            response: { data = [] }
+          } = err;
+          const objKey = Object.keys(data);
+          this.$swal({
+            text: data[objKey[objKey.length - objKey.length]],
+            type: "error"
+          });
+        } else {
+          console.log(err);
+        }
       }
     },
     submitForm() {
@@ -284,7 +301,7 @@ export default {
     setFormData() {
       this.formData = this.setFormBasicData({ noFilter: false }).reduce(
         (arr, val) => {
-          arr[val.label.split(" ").join("_")] = '';
+          arr[val.label.split(" ").join("_")] = "";
           return arr;
         },
         {}
@@ -377,18 +394,17 @@ export default {
       const { value } = target;
       this.formData[label] = value && value.trim();
       if (!this.whitelistValidation().includes(label)) {
-        const confirms = ['password', 'konfirmasi_password'];
-        if(confirms.includes(label)) {
-          confirms.forEach((item) => {
-            this.triggerValidation({ 
-              label: item, 
-              $v: this.$v, 
-              $vm: this, 
-              rawLabel: item.split('_').join(' ') 
+        const confirms = ["password", "konfirmasi_password"];
+        if (confirms.includes(label)) {
+          confirms.forEach(item => {
+            this.triggerValidation({
+              label: item,
+              $v: this.$v,
+              $vm: this,
+              rawLabel: item.split("_").join(" ")
             });
-          })
-        }
-        else {
+          });
+        } else {
           this.triggerValidation({ label, $v: this.$v, $vm: this, rawLabel });
         }
         // const $v_object = this.$v.formData[label];

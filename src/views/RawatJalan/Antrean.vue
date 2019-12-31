@@ -61,12 +61,26 @@
                       </b-form-group>
                     </b-col>
                   </b-row>
+                  <p class="text-center text-uppercase my-2">atau</p>
+                  <b-row>
+                    <b-col cols="4">
+                      <b-form-group label="status" class="text-capitalize">
+                        <b-form-select
+                          v-model="statusAntrean"
+                          :options="['Konsultasi', 'Menunggu', 'Selesai']"
+                        />
+                      </b-form-group>
+                    </b-col>
+                  </b-row>
                 </b-container>
               </b-collapse>
             </div>
           </div>
           <div class="d-flex justify-content-end mb-4">
-            <b-button variant="first" class="text-capitalize mr-2" @click="fetchAntrean(1)"
+            <b-button
+              variant="first"
+              class="text-capitalize mr-2"
+              @click="fetchAntrean(1)"
               >cari</b-button
             >
             <b-button
@@ -172,7 +186,7 @@ import {
   faTrashAlt,
   faRedo
 } from "@fortawesome/free-solid-svg-icons";
-import moment from 'moment';
+import moment from "moment";
 
 library.add(faAngleUp, faSearch, faSignInAlt, faTrashAlt, faRedo);
 
@@ -223,45 +237,59 @@ export default {
       "jenis kelamin",
       "nomor hp",
       "dokter tujuan",
-      { key: "actions", label: "actions" }
+      { key: "actions", label: "actions" },
+      "status"
     ],
-    items: [{
-      no: 1,
-      'nama pasien': 'Test',
-      'nomor rekam medis': 123,
-      'jenis kelamin': 'P',
-      'nomor hp': '0812637183',
-      'dokter tujuan': 'sss',
-      actions: 1
-    }],
+    items: [
+      {
+        no: 1,
+        "nama pasien": "Test",
+        "nomor rekam medis": 123,
+        "jenis kelamin": "P",
+        "nomor hp": "0812637183",
+        "dokter tujuan": "sss",
+        actions: 1,
+        status: "menunggu"
+      }
+    ],
     pasiens: [],
-    noRekamMedis: '',
-    namaPasien: '',
-    tanggal: null
+    noRekamMedis: "",
+    namaPasien: "",
+    tanggal: null,
+    statusAntrean: "Menunggu"
   }),
   mounted() {
-    moment.locale('id')
-    this.tanggal = moment().format("YYYY-MM-DD")
+    moment.locale("id");
+    this.tanggal = moment().format("YYYY-MM-DD");
     this.fetchAntrean();
   },
   methods: {
     changePage(page) {
-      this.fetchAntrean(page)
+      this.fetchAntrean(page);
     },
-    async assignDataRegistrasiPasien({ item : {
-      rekam_medis = null,
-      ktp = null,
-      nama = null,
-      hp = null,
-      kelamin = null,
-      dokter = null,
-      waktu = null,
-      pasien_id = null
-    } = {} }) {
-      const { toggleModal, getPasien } = this
-      const res = await getPasien(pasien_id)
+    async assignDataRegistrasiPasien({
+      item: {
+        rekam_medis = null,
+        ktp = null,
+        nama = null,
+        hp = null,
+        kelamin = null,
+        dokter = null,
+        waktu = null,
+        pasien_id = null
+      } = {}
+    }) {
+      const { toggleModal, getPasien } = this;
+      const res = await getPasien(pasien_id);
       if (res) {
-        const { id, dokter_id, pasien_id, nomor_antrian, klinik_id, waktu_konsultasi }  = res
+        const {
+          id,
+          dokter_id,
+          pasien_id,
+          nomor_antrian,
+          klinik_id,
+          waktu_konsultasi
+        } = res;
         const x = __dataRegistrasiPasien;
         x["rekam_medis"].value = rekam_medis;
         x["ktp"].value = ktp;
@@ -275,7 +303,7 @@ export default {
       }
     },
     rekamMedis(data) {
-      const { item } = data
+      const { item } = data;
       this.$router.push(`/rekam-medis/${item.transaksi_id}/${item.pasien_id}`);
     },
     toggleModal() {
@@ -284,7 +312,7 @@ export default {
       this.$refs["my-modal"].toggle("#toggle-btn");
     },
     async fetchAntrean(page = 1) {
-      let dt = moment().format('YYYY-MM-DD');
+      let dt = moment().format("YYYY-MM-DD");
       try {
         const res = await axios.get(
           `${this.url_api}/transaksi?limit=${this.perPage}&status=QUEUED&from=2019-12-01&to=2019-12-31&page=${page}&no_rekam_medis=${this.noRekamMedis}&nama_pasien=${this.namaPasien}`
@@ -294,15 +322,16 @@ export default {
           const { total, data: antreanData } = data;
           this.items = antreanData.map((item, index) => {
             return {
-              "no": ((page-1)*this.perPage)+index+1,
+              no: (page - 1) * this.perPage + index + 1,
               "nomor rekam medis": item.pasien.nomor_rekam_medis,
-              'nama pasien': item.pasien.nama,
+              "nama pasien": item.pasien.nama,
               "jenis kelamin": this.jenisKelamin(item.pasien.jenis_kelamin),
               "nomor hp": item.pasien.nomor_hp,
-              "dokter tujuan": 'dr. Aviandra',
+              "dokter tujuan": "dr. Aviandra",
               pasien_id: item.pasien_id,
-              transaksi_id: item.id
-            }
+              transaksi_id: item.id,
+              status: item.status
+            };
           });
           // console.log(this.items)
           this.rows = total;
@@ -313,24 +342,26 @@ export default {
     },
     async getPasien(id) {
       if (!id) {
-        return false
+        return false;
       }
 
       try {
-        const res = await axios.get(
-          `${this.url_api}/transaksi/${id}`
-        );
+        const res = await axios.get(`${this.url_api}/transaksi/${id}`);
         const { status, data } = res.data;
         if (status) {
           const { data: pasienData } = data;
-          return pasienData
+          return pasienData;
         }
       } catch (err) {
         alert(err);
       }
     },
     clickBtnAction(icon, data) {
-      const { pembatalanAntrean, assignDataRegistrasiPasien, rekamMedis } = this;
+      const {
+        pembatalanAntrean,
+        assignDataRegistrasiPasien,
+        rekamMedis
+      } = this;
 
       switch (icon) {
         case "search":
@@ -375,7 +406,7 @@ export default {
       });
     },
     tanggalSelected($event) {
-      this.tanggal = moment($event).format("YYYY-MM-DD")
+      this.tanggal = moment($event).format("YYYY-MM-DD");
     }
   }
 };

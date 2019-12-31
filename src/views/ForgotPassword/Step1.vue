@@ -134,6 +134,12 @@ export default {
         // console.log(postData);
         const res = await axios.post(`${this.url_api}/forgot`, postData);
         const { status, data, message } = res.data;
+        if (status) {
+          this.$swal({
+            text: `${startCase(message)}, silakan cek email anda`,
+            type: "error"
+          });
+        }
         // alert(message);
       } catch (err) {
         // console.log(err);

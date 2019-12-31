@@ -246,8 +246,7 @@ export default {
   mounted() {
     this.formBasicData = this.setFormBasicData();
     this.formData = this.setFormData();
-    this.fetchDokter();
-    this.fetchPasien();
+    Promise.all([this.fetchDokter(), this.fetchPasien()]);
   },
   methods: {
     waktuKonsultasiSelected($event) {
@@ -377,9 +376,13 @@ export default {
 
       try {
         const res = await axios.post(`${this.url_api}/transaksi`, postData);
-        if (res.data.status === true) {
+        const { status, data } = res.data;
+        if (status === true) {
+          const { nomor_antrian } = data;
+          const { nama_lengkap } = postData;
           this.$swal({
-            text: `Data Berhasil di simpan`,
+            title: `Data Berhasil di simpan`,
+            text: `Antrean atas nama ${nama_lengkap} tersimpan pada urutan ${nomor_antrian}`,
             type: "success",
             onOpen: () => {
               this.$router.push("/rawat-jalan/antrean");
