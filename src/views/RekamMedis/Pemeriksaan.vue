@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-6" @click="asyncFind('')">
         <multiselect
           v-model="selectedOrgan"
           :options="organs"
@@ -276,6 +276,8 @@ export default {
     asyncFind(query) {
       let self = this;
       this.isLoading = true;
+      
+      console.log(query);
 
       axios
         .get(store.state.URL_API + "/organ/name?query=" + query, {

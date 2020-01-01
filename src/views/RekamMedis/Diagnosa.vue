@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-4" @click="asyncFind('')">
         <multiselect
           v-model="selectedKodePenyakit"
           :options="kodePenyakit"
@@ -18,7 +18,7 @@
           @search-change="asyncFind"
         ></multiselect>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4" @click="asyncFind('')">
         <multiselect
           v-model="selectedKodePenyakit"
           :options="kodePenyakit"
