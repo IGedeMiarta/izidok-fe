@@ -137,7 +137,7 @@ export default {
         if (status) {
           this.$swal({
             text: `${startCase(message)}, silakan cek email anda`,
-            type: "error"
+            type: "success"
           });
         }
         // alert(message);
