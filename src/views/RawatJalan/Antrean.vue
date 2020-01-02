@@ -315,7 +315,7 @@ export default {
       let dt = moment().format("YYYY-MM-DD");
       try {
         const res = await axios.get(
-          `${this.url_api}/transaksi?limit=${this.perPage}&status=QUEUED&from=2019-12-01&to=2019-12-31&page=${page}&no_rekam_medis=${this.noRekamMedis}&nama_pasien=${this.namaPasien}`
+          `${this.url_api}/transaksi?limit=${this.perPage}&status=MENUNGGU&from=2019-12-01&to=2019-12-31&page=${page}&no_rekam_medis=${this.noRekamMedis}&nama_pasien=${this.namaPasien}`
         );
         const { status, data } = res.data;
         if (status) {
