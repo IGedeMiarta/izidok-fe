@@ -278,7 +278,8 @@ export default {
           } = err;
           const objKey = Object.keys(data);
           this.$swal({
-            text: data[objKey[objKey.length - objKey.length]],
+            title: `${startCase(objKey[0])} Tidak Dapat Digunakan`,
+            text: `${startCase(objKey[0])} telah terdaftar, Silakan gunakan ${objKey[0]} lain untuk melakukan registrasi!`,
             type: "error"
           });
         } else {

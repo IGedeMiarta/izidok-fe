@@ -136,7 +136,8 @@ export default {
         const { status, data, message } = res.data;
         if (status) {
           this.$swal({
-            text: `${startCase(message)}, silakan cek email anda`,
+            title: 'Link reset password telah terkirim',
+            text: `Silakan cek email anda!`,
             type: "success"
           });
         }
