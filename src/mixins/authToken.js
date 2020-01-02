@@ -1,6 +1,6 @@
 import store from "@/store";
 
 const getAuthorizationToken = () =>
-  `Bearer ${store.state.BEARER_TOKEN}` || null;
+  store.state.BEARER_TOKEN ? `Bearer ${store.state.BEARER_TOKEN}` : null;
 
 export default getAuthorizationToken;
