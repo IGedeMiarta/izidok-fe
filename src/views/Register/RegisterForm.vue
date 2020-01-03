@@ -277,11 +277,21 @@ export default {
             response: { data = [] }
           } = err;
           const objKey = Object.keys(data);
-          this.$swal({
-            title: `${startCase(objKey[0])} Tidak Dapat Digunakan`,
-            text: `${startCase(objKey[0])} telah terdaftar, Silakan gunakan ${objKey[0]} lain untuk melakukan registrasi!`,
-            type: "error"
-          });
+
+          let errorExists = false;
+          data[objKey[0]].forEach(item => {
+            if(item == `The ${objKey[0]} has already been taken.`) {
+              errorExists = true;
+            }
+          })
+          
+          if(errorExists) {
+            this.$swal({
+              title: `${startCase(objKey[0])} Tidak Dapat Digunakan`,
+              text: `${startCase(objKey[0])} telah terdaftar. Silakan gunakan ${objKey[0]} lain untuk melakukan registrasi!`,
+              type: "error"
+            });
+          }
         } else {
           console.log(err);
         }
