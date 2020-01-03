@@ -86,7 +86,7 @@
                   <td>{{ data.nama }}</td>
                   <td>{{ data.nomor_rekam_medis }}</td>
                   <td>{{ jenisKelamin(data.jenis_kelamin) }}</td>
-                  <td>{{ data.tanggal_lahir }}</td>
+                  <td>{{ formatedDate(data.tanggal_lahir) }}</td>
                   <td class="text-center">
                     <b-link
                       @click.prevent="
@@ -154,6 +154,7 @@ import {
   faSearch,
   faPencilAlt
 } from "@fortawesome/free-solid-svg-icons";
+import moment from 'moment';
 
 library.add(faArrowRight, faArrowUp, faTrashAlt, faSearch, faPencilAlt);
 
@@ -248,6 +249,10 @@ export default {
       } catch (err) {
         // console.log(err);
       }
+    },
+    formatedDate(d) {
+      console.log(d, moment(d).format('D MMM YYYY'))
+      return moment(d).format('D MMM YYYY')
     }
   }
 };
