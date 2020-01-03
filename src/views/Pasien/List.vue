@@ -251,7 +251,6 @@ export default {
       }
     },
     formatedDate(d) {
-      console.log(d, moment(d).format('D MMM YYYY'))
       return moment(d).format('D MMM YYYY')
     }
   }
