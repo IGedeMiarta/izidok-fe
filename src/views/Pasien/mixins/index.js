@@ -21,6 +21,9 @@ export default {
           case "no._member/polis_asuransi":
             return "nomor_polis";
 
+            case "no._hp_penanggung_jawab":
+              return "nomor_hp_penanggung_jawab";
+
           default:
             return key;
         }

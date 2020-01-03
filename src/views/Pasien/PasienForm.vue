@@ -699,8 +699,11 @@ const tmp = [
   },
   {
     label: "no. hp penanggung jawab",
-    alias: "no_hp_penanggung_jawab",
-    validations: {}
+    alias: "nomor_hp_penanggung_jawab",
+    validations: {
+      numeric,
+      minLength: minLength(10)
+    }
   },
   {
     label: "alamat rumah",
