@@ -144,9 +144,9 @@ export default {
         else {
           if(message == 'User tidak ditemukan') {
             this.$swal({
-              title: 'Link reset password telah terkirim',
-              text: `Silakan cek email anda!`,
-              type: "success"
+              title: 'Email tidak terdaftar',
+              text: `Silakan cek ulang penulisan email anda!`,
+              type: "error"
             });
           }
         }

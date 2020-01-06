@@ -173,7 +173,12 @@ export default {
           }
         }
         else {
-          alert('Login gagal');
+          this.$swal({
+            title: 'Login gagal',
+            text: `Silakan coba kembali!`,
+            type: "success"
+          });
+          
           this.failedCounter++;
 
           if(this.isTooMuchFailed()) {
