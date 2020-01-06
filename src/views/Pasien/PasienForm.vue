@@ -60,8 +60,8 @@
           "
         >
           <b-form-input
-            @keyup="
-              setValue({
+            @keypress="
+              onKeyInputNumber({
                 rawLabel: 'no. handphone',
                 $event
               })
@@ -88,8 +88,8 @@
           "
         >
           <b-form-input
-            @keyup="
-              setValue({
+            @keypress="
+              onKeyInputNumber({
                 rawLabel: 'nik',
                 $event
               })
