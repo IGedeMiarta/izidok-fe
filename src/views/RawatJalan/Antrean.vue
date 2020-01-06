@@ -135,6 +135,7 @@
                     ]"
                     :key="index"
                     @click="clickBtnAction(item.icon, data)"
+                    v-b-popover.hover.top="item.variant == 'success' ? 'Halaman Rekam Medis' : null"
                   >
                     <span class="btn-wrapper--icon">
                       <font-awesome-icon :icon="item.icon" />
