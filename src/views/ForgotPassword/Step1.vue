@@ -141,6 +141,15 @@ export default {
             type: "success"
           });
         }
+        else {
+          if(message == 'User tidak ditemukan') {
+            this.$swal({
+              title: 'Link reset password telah terkirim',
+              text: `Silakan cek email anda!`,
+              type: "success"
+            });
+          }
+        }
         // alert(message);
       } catch (err) {
         // console.log(err);
