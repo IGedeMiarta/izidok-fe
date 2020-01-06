@@ -6,12 +6,13 @@
         id="dropzone"
         :options="dropzoneOptions()"
         useCustomSlot
-        class="custom-dropzone"
+        class="custom-dropzone border-0"
         @vdropzone-complete="ocrCompleted"
       >
         <div class="dropzone-custom-content">
           <h3 class="dropzone-custom-title text-capitalize">
-            ambil foto <span class="text-uppercase">ktp</span>
+            <font-awesome-icon icon="camera" class="mr-2" /> ambil foto
+            <span class="text-uppercase">ktp</span>
           </h3>
         </div></vue-dropzone
       >
@@ -203,7 +204,6 @@
                   $event
                 })
               "
-              :state="getDataError({ rawLabel: 'nama penjamin/asuransi' })"
               :disabled="disabledForm()"
               :value="getValue('nama penjamin/asuransi')"
               :maxlength="30"
@@ -301,7 +301,6 @@
                   $event
                 })
               "
-              :state="getDataError({ rawLabel: 'no. member/polis asuransi' })"
               :disabled="disabledForm()"
               :value="getValue('no. member/polis asuransi')"
               :maxlength="30"
@@ -327,7 +326,6 @@
                   $event
                 })
               "
-              :state="getDataError({ rawLabel: 'nama penanggung jawab' })"
               :disabled="disabledForm()"
               :value="getValue('nama penanggung jawab')"
               :maxlength="30"
@@ -376,8 +374,8 @@
           "
         >
           <b-form-input
-            @keyup="
-              setValue({
+            @keypress="
+              onKeyInputNumber({
                 rawLabel: 'no. hp penanggung jawab',
                 $event
               })
@@ -392,7 +390,7 @@
       <b-row class="mb-3">
         <b-col cols="6">
           <b-row>
-            <b-col cols="3">
+            <b-col cols="6">
               <b-form-group
                 label="RT"
                 class="text-capitalize"
@@ -407,20 +405,19 @@
                 "
               >
                 <b-form-input
-                  @keyup="
-                    setValue({
+                  @keypress="
+                    onKeyInputNumber({
                       rawLabel: 'rt',
                       $event
                     })
                   "
-                  :state="getDataError({ rawLabel: 'rt' })"
                   :disabled="disabledForm()"
                   :value="getValue('rt')"
                   :maxlength="10"
                 />
               </b-form-group>
             </b-col>
-            <b-col cols="3">
+            <b-col cols="6">
               <b-form-group
                 label="RW"
                 class="text-capitalize"
@@ -435,20 +432,19 @@
                 "
               >
                 <b-form-input
-                  @keyup="
-                    setValue({
+                  @keypress="
+                    onKeyInputNumber({
                       rawLabel: 'rw',
                       $event
                     })
                   "
-                  :state="getDataError({ rawLabel: 'rw' })"
                   :disabled="disabledForm()"
                   :value="getValue('rw')"
                   :maxlength="10"
                 />
               </b-form-group>
             </b-col>
-            <b-col cols="3">
+            <b-col cols="6">
               <b-form-group
                 label="Kel/Desa"
                 class="text-capitalize"
@@ -469,14 +465,13 @@
                       $event
                     })
                   "
-                  :state="getDataError({ rawLabel: 'kel/desa' })"
                   :disabled="disabledForm()"
                   :value="getValue('kel/desa')"
                   :maxlength="20"
                 />
               </b-form-group>
             </b-col>
-            <b-col cols="3">
+            <b-col cols="6">
               <b-form-group
                 label="Kecamatan"
                 class="text-capitalize"
@@ -497,7 +492,6 @@
                       $event
                     })
                   "
-                  :state="getDataError({ rawLabel: 'kecamatan' })"
                   :disabled="disabledForm()"
                   :value="getValue('kecamatan')"
                   :maxlength="20"
@@ -561,8 +555,8 @@
               })
             "
           >
-            <vue-select 
-              taggable 
+            <vue-select
+              taggable
               :options="jobs"
               @input="
                 setValue({
@@ -625,7 +619,11 @@ import {
   email
 } from "vuelidate/lib/validators";
 import "vue-datetime/dist/vue-datetime.css";
+import "vue2-dropzone/dist/vue2Dropzone.min.css";
 import moment from "moment";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faCamera } from "@fortawesome/free-solid-svg-icons";
+library.add(faCamera);
 
 const tmp = [
   {
@@ -836,7 +834,7 @@ const jobs = [
   "Perangkat Desa",
   "Kepala Desa",
   "Biarawati",
-  "Wiraswasta",
+  "Wiraswasta"
 ];
 
 export default {
@@ -874,8 +872,8 @@ export default {
   },
   async mounted() {
     // if (this.formType !== "detail") {
-      this.formBasicData = this.setFormBasicData();
-      this.formData = this.setFormData();
+    this.formBasicData = this.setFormBasicData();
+    this.formData = this.setFormData();
     // }
     await this.getPasienData();
   },
@@ -890,12 +888,16 @@ export default {
 
       return {
         url: `${this.url_api}/pasien/ocr`,
-        thumbnailWidth: null,
         maxFilesize: 5000,
         headers: this.rawAuthHeader(),
+        maxFiles: 1,
         params: {
           nama_klinik
-        }
+        },
+        acceptedFiles: "image/*",
+        capture: "image/*",
+        thumbnailMethod: "contain",
+        uploadMultiple: false
       };
     },
     assignValuePasien(data) {
@@ -975,6 +977,20 @@ export default {
         rawLabel: item.label
       }));
     },
+    onKeyInputNumber({ rawLabel, $event }) {
+      var evt = $event;
+      evt = evt ? evt : window.event;
+      var charCode = evt.which ? evt.which : evt.keyCode;
+      if (
+        charCode > 31 &&
+        (charCode < 48 || charCode > 57) &&
+        charCode !== 46
+      ) {
+        evt.preventDefault();
+      } else {
+        void this.setValue({ rawLabel, $event });
+      }
+    },
     setValue({ rawLabel, $event = null } = {}) {
       let value = $event;
       const label = rawLabel.split(" ").join("_");
@@ -1008,3 +1024,15 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+#dropzone {
+  // &:hover {
+  //   background-color: transparent !important;
+  // }
+
+  & {
+    // cursor: default !important;
+  }
+}
+</style>
