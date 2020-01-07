@@ -151,7 +151,9 @@
                     ]"
                     :key="index"
                     @click="clickBtnAction(item.icon, data)"
-                    v-b-popover.hover.top="item.variant == 'success' ? 'Halaman Rekam Medis' : null"
+                    v-b-popover.hover.top="
+                      item.variant == 'success' ? 'Halaman Rekam Medis' : null
+                    "
                   >
                     <span class="btn-wrapper--icon">
                       <font-awesome-icon :icon="item.icon" />
@@ -162,7 +164,16 @@
             </template>
 
             <template v-slot:cell()="data">
-              <span>{{ data.value }}</span>
+              <template
+                v-if="
+                  data.item.status && data.item.status.toLowerCase() === 'batal'
+                "
+              >
+                <span style="color: red">{{ data.value }}</span>
+              </template>
+              <template v-else>
+                <span>{{ data.value }}</span>
+              </template>
             </template>
           </b-table>
           <b-pagination
@@ -332,7 +343,11 @@ export default {
       let dt = moment().format("YYYY-MM-DD");
       try {
         const res = await axios.get(
-          `${this.url_api}/transaksi?limit=${this.perPage}&status=MENUNGGU&from=2019-12-01&to=2019-12-31&page=${page}&no_rekam_medis=${this.noRekamMedis}&nama_pasien=${this.namaPasien}`
+          `${this.url_api}/transaksi?limit=${
+            this.perPage
+          }&status=${this.statusAntrean.toUpperCase()}&from=2019-12-01&to=2019-12-31&page=${page}&no_rekam_medis=${
+            this.noRekamMedis
+          }&nama_pasien=${this.namaPasien}`
         );
         const { status, data } = res.data;
         if (status) {
