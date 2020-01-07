@@ -18,12 +18,18 @@ export default new Vuex.Store({
   state: {
     URL_API: "http://api.izidok.id/api/v1",
     BEARER_TOKEN: null,
-    user: null
+    user: null,
+    loading: false
   },
   modules: {
     sidebar,
     rekamMedis,
     struk
+  },
+  getters: {
+    isLoading(state) {
+      return state.loading;
+    }
   },
   mutations: {
     SET_BEARER_TOKEN(state, value) {
@@ -31,6 +37,9 @@ export default new Vuex.Store({
     },
     SET_USER(state, value) {
       state.user = value;
+    },
+    SET_LOADING(state, value) {
+      state.loading = value || false;
     }
   },
   strict: process.env.NODE_ENV !== "production",

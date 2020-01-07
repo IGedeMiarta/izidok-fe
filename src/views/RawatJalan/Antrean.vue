@@ -124,7 +124,23 @@
           <b-table bordered striped hover :fields="fields" :items="items">
             <template v-slot:cell(actions)="data">
               <div class="d-flex justify-content-around">
-                <template v-if="true">
+                <template
+                  v-if="
+                    data.item.status &&
+                      data.item.status.toLowerCase() === 'batal'
+                  "
+                >
+                  <b-button
+                    variant="warning"
+                    size="sm"
+                    @click="restorePembatalanAntrean(data)"
+                  >
+                    <span class="btn-wrapper--icon">
+                      <font-awesome-icon icon="redo" />
+                    </span>
+                  </b-button>
+                </template>
+                <template v-else>
                   <b-button
                     :variant="item.variant"
                     size="sm"
@@ -138,17 +154,6 @@
                   >
                     <span class="btn-wrapper--icon">
                       <font-awesome-icon :icon="item.icon" />
-                    </span>
-                  </b-button>
-                </template>
-                <template v-else>
-                  <b-button
-                    variant="warning"
-                    size="sm"
-                    @click="restorePembatalanAntrean('dawai pagi')"
-                  >
-                    <span class="btn-wrapper--icon">
-                      <font-awesome-icon icon="redo" />
                     </span>
                   </b-button>
                 </template>
@@ -279,27 +284,38 @@ export default {
         pasien_id = null
       } = {}
     }) {
-      const { toggleModal, getPasien } = this;
-      const res = await getPasien(pasien_id);
-      if (res) {
-        const {
-          id,
-          dokter_id,
-          pasien_id,
-          nomor_antrian,
-          klinik_id,
-          waktu_konsultasi
-        } = res;
-        const x = __dataRegistrasiPasien;
-        x["rekam_medis"].value = rekam_medis;
-        x["ktp"].value = ktp;
-        x["nama"].value = nama;
-        x["hp"].value = hp;
-        x["kelamin"].value = kelamin;
-        x["dokter"].value = dokter;
-        x["waktu"].value = waktu;
-        this.dataRegistrasiPasien = x;
-        this.toggleModal();
+      try {
+        const { toggleModal, getPasien } = this;
+        const res = await getPasien(pasien_id);
+        if (res) {
+          const {
+            id,
+            dokter_id: dokter,
+            pasien_id,
+            nomor_antrian,
+            klinik_id,
+            waktu_konsultasi: waktu,
+            pasien: {
+              nomor_rekam_medis,
+              nik: ktp,
+              nama,
+              nomor_hp: hp,
+              jenis_kelamin: kelamin
+            }
+          } = res;
+          const x = __dataRegistrasiPasien;
+          x["rekam_medis"].value = nomor_rekam_medis;
+          x["ktp"].value = ktp;
+          x["nama"].value = nama;
+          x["hp"].value = hp;
+          x["kelamin"].value = kelamin;
+          x["dokter"].value = dokter;
+          x["waktu"].value = moment(waktu).format("DD-MM-YYYY HH:mm:ss");
+          this.dataRegistrasiPasien = x;
+          this.toggleModal();
+        }
+      } catch (err) {
+        console.log(err);
       }
     },
     rekamMedis(data) {
@@ -347,10 +363,15 @@ export default {
 
       try {
         const res = await axios.get(`${this.url_api}/transaksi/${id}`);
-        const { status, data } = res.data;
+        const { status, data, message } = res.data;
         if (status) {
-          const { data: pasienData } = data;
-          return pasienData;
+          const { waktu_konsultasi, examination_by: dokter_id, pasien } = data;
+          return { waktu_konsultasi, dokter_id, pasien };
+        } else {
+          this.$swal({
+            text: message,
+            type: "warning"
+          });
         }
       } catch (err) {
         alert(err);
@@ -362,6 +383,9 @@ export default {
         assignDataRegistrasiPasien,
         rekamMedis
       } = this;
+      const {
+        item: { "nama pasien": nama_pasien }
+      } = data;
 
       switch (icon) {
         case "search":
@@ -371,23 +395,28 @@ export default {
           return rekamMedis(data);
 
         case "trash-alt":
-          return pembatalanAntrean("dawai pagi");
+          return pembatalanAntrean(nama_pasien);
 
         default:
           break;
       }
     },
-    restorePembatalanAntrean(namaPasien = null) {
+    restorePembatalanAntrean(data) {
+      const {
+        item: { "nama pasien": nama_pasien }
+      } = data;
+
       this.$swal({
         title: startCase("restore antrean"),
-        text: `Apakah anda yakin akan mengembalikan ${namaPasien} pada antrean?`,
+        text: `Apakah anda yakin akan mengembalikan ${nama_pasien} pada antrean?`,
         type: "question",
         showCancelButton: true,
         cancelButtonText: startCase("tidak"),
         confirmButtonText: startCase("ya")
       }).then(res => {
-        if (res.value) {
-          // console.log(res);
+        const { value } = res;
+        if (value) {
+          this.updateStatusAntrean("menunggu");
         }
       });
     },
@@ -400,10 +429,29 @@ export default {
         cancelButtonText: startCase("tidak"),
         confirmButtonText: startCase("ya")
       }).then(res => {
-        if (res.value) {
-          // console.log(res);
+        const { value } = res;
+        if (value) {
+          this.updateStatusAntrean("batal");
         }
       });
+    },
+    async updateStatusAntrean(status) {
+      try {
+        const res = await axios.put(`${this.url_api}/transaksi/${id}`, {
+          status: status.toUpperCase()
+        });
+        const { status, data, message } = res.data;
+        if (status) {
+          this.fetchAntrean();
+        } else {
+          this.$swal({
+            text: message,
+            type: "warning"
+          });
+        }
+      } catch (err) {
+        alert(err);
+      }
     },
     tanggalSelected($event) {
       this.tanggal = moment($event).format("YYYY-MM-DD");
