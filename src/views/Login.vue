@@ -176,7 +176,7 @@ export default {
           this.$swal({
             title: 'Login gagal',
             text: `Silakan coba kembali!`,
-            type: "success"
+            type: "error"
           });
           
           this.failedCounter++;

@@ -142,7 +142,14 @@ export default {
           });
         }
         else {
-          if(message == 'User tidak ditemukan') {
+          if(message == 'User tidak ditemukan' || message == 'User not found') {
+            this.$swal({
+              title: 'Email tidak terdaftar',
+              text: `Silakan cek ulang penulisan email anda!`,
+              type: "error"
+            });
+          }
+          else {
             this.$swal({
               title: 'Email tidak terdaftar',
               text: `Silakan cek ulang penulisan email anda!`,
