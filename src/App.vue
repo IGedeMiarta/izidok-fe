@@ -1,6 +1,8 @@
 <template>
   <div id="app" class="d-flex flex-fill">
-    <loading :active.sync="isLoading" :is-full-page="true" />
+    <loading :active.sync="isLoading" :is-full-page="true">
+      <b-spinner style="width:5rem;height:5rem;color:#4b80b6 !important;" type="grow" label="Loading..." variant="info"></b-spinner>
+    </loading>
     <component :is="layout">
       <transition name="fade" mode="out-in">
         <router-view></router-view>
