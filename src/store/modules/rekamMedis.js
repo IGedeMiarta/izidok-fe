@@ -11,7 +11,12 @@ const getDefaultState = () => {
         canvas_pemeriksaan: null,
         canvas_diagnosa: null,
         canvas_anamnesa: null,
-        saving_params: { is_saving: false, is_saved: false, is_agree: false, is_next_konsul: false }
+        saving_params: {
+            is_saving: false,
+            is_saved: false,
+            is_agree: false,
+            is_next_konsul: false
+        }
     }
 };
 
@@ -38,6 +43,14 @@ const actions = {
         dispatch('resetCartState');
 
         const pasien_id = router.currentRoute.params.pasien_id;
+        const transklinik_id = router.currentRoute.params.transklinik_id;
+
+        const TransStatus = await axios.put(
+            store.state.URL_API + "/transaksi/" + transklinik_id, {
+            status: 'KONSULTASI'
+        });
+
+        console.log('Rawat Jalan Status: ', TransStatus.data.data.status);
 
         const res_pasien = await axios.get(store.state.URL_API + "/pasien/" + pasien_id);
 
@@ -94,6 +107,14 @@ const actions = {
 
         try {
             commit('setIsSaving', { key: 'is_saving', value: true });
+
+            const TransStatus = await axios.put(
+                store.state.URL_API + "/transaksi/" + transklinik_id, {
+                status: 'SELESAI'
+            });
+
+            console.log('Rawat Jalan Status: ', TransStatus.data.data.status);
+
             const res = await axios.post(
                 store.state.URL_API + "/rekam_medis",
                 { ...state.postData }

@@ -153,12 +153,12 @@ export default {
         }
         // console.log(postData);
         const res = await axios.post(`${this.url_api}/reset`, postData);
-        const { success, message } = res.data;
-        if (success) {
+        const { status, message } = res.data;
+        if (status && message == 'Password has ben updated') {
           this.$swal({
             type: "success",
-            title: "Sukses",
-            text: message
+            title: "Password berhasil diubah!",
+            text: "Silakan kembali ke halaman Login untuk masuk!"
           });
         } else {
           alert(message);

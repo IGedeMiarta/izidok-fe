@@ -173,7 +173,12 @@ export default {
           }
         }
         else {
-          alert('Login gagal');
+          this.$swal({
+            title: 'Login gagal',
+            text: `Email/username dengan Password yang anda masukkan tidak cocok!`,
+            type: "error"
+          });
+          
           this.failedCounter++;
 
           if(this.isTooMuchFailed()) {
