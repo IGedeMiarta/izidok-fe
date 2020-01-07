@@ -175,7 +175,7 @@ export default {
         else {
           this.$swal({
             title: 'Login gagal',
-            text: `Silakan coba kembali!`,
+            text: `Email/username dengan Password yang anda masukkan tidak cocok!`,
             type: "error"
           });
           
