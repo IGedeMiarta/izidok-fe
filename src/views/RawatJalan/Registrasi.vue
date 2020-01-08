@@ -399,8 +399,8 @@ export default {
         if (res.data.data.dokter.data.map) {
           this.options.dokter = res.data.data.dokter.data.map(item => {
             return {
-              label: item.dokter.nama,
-              value: item.dokter.id
+              label: item.nama,
+              value: item.id
             };
           });
         }
