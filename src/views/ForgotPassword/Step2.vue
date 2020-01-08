@@ -159,6 +159,10 @@ export default {
             type: "success",
             title: "Password berhasil diubah!",
             text: "Silakan kembali ke halaman Login untuk masuk!"
+          }).then((e) => {
+            if(e.value) {
+              this.$router.push('login')
+            }
           });
         } else {
           alert(message);
