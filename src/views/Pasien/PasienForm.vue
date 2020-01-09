@@ -19,7 +19,7 @@
     </div>
     <h4 class="text-capitalize mb-3">data pasien</h4>
     <b-form v-on:submit.prevent="submitForm">
-      <div class="form-row">
+      <div class="form-row" v-if="idPasien">
         <b-form-group
           label="No. Rekam Medis"
           class="text-capitalize col-md-12 pr-3"
