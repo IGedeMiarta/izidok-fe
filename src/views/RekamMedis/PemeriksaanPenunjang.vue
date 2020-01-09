@@ -115,12 +115,19 @@
         <span class="btn-wrapper--label">Dari Kamera</span>
       </b-button>
       <div class="col-md-auto">Atau</div>
-      <b-button variant="dark">
+      <b-button variant="dark" @click="$refs.fileInput.click()">
         <span class="btn-wrapper--icon">
           <font-awesome-icon icon="folder" />
         </span>
         <span class="btn-wrapper--label">Cari File</span>
       </b-button>
+      <input
+        type="file"
+        @change="onFileSelected"
+        style="display:none"
+        ref="fileInput"
+        multiple="multiple"
+      />
     </div>
     <div class="row">
       <div class="col-md-6">
@@ -133,12 +140,12 @@
         <label>Hasil Pemeriksaan Penunjang</label>
       </div>
     </div>
-    <div class="row file-upload">
+    <div v-for="item in selectedFiles" :key="item.name" class="row file-upload">
       <div class="col-md-4">
-        <label>Rekam medis.pdf</label>
+        <label>{{item.name}}</label>
       </div>
       <div class="col-md-2">
-        <label>98 KB</label>
+        <label>{{item.size / 1000}} KB</label>
       </div>
       <div class="col-md-3">
         <div class="progress">
@@ -189,7 +196,8 @@ export default {
       isPen: true,
       isActive: "pen",
       isColorActive: "black",
-      penWidth: 2
+      penWidth: 2,
+      selectedFiles: []
     };
   },
   computed: {
@@ -205,6 +213,36 @@ export default {
         value: content
       });
     },
+
+    onFileSelected(event) {
+      this.selectedFiles = event.target.files;
+
+      if (!this.selectedFiles.length > 0) {
+        return;
+      }
+
+      const formData = new FormData();
+
+      for (var i = 0; i < this.selectedFiles.length; i++) {
+        let file = this.selectedFiles[i];
+        console.log(file);
+        formData.append("files[" + i + "]", file, file.name);
+      }
+
+      axios
+        .post("http://localhost:9001/api/v1/test-upload", formData, {
+          onUploadProgress: uploadEvent => {
+            console.log(
+              "Upload Progress: " +
+                Math.round((uploadEvent.loaded / uploadEvent.total) * 100)
+            );
+          }
+        })
+        .then(res => {
+          console.log(res);
+        });
+    },
+
     handleMousedown(e) {
       this.lastPos = this.getMousePos(e);
       this.ctx.lineWidth = this.penWidth;
