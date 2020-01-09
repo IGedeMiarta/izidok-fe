@@ -11,6 +11,8 @@ const getDefaultState = () => {
         canvas_pemeriksaan: null,
         canvas_diagnosa: null,
         canvas_anamnesa: null,
+        canvas_tatalaksana: null,
+        canvas_pemeriksaan_penunjang: null,
         saving_params: {
             is_saving: false,
             is_saved: false,
@@ -29,6 +31,8 @@ const getters = {
     canvas_pemeriksaan: state => state.canvas_pemeriksaan,
     canvas_diagnosa: state => state.canvas_diagnosa,
     canvas_anamnesa: state => state.canvas_anamnesa,
+    canvas_tatalaksana: state => state.canvas_tatalaksana,
+    canvas_pemeriksaan_penunjang: state => state.canvas_pemeriksaan_penunjang,
     saving_params: state => state.saving_params,
 };
 
@@ -81,8 +85,6 @@ const actions = {
         state.postData['transklinik_id'] = transklinik_id;
         state.postData['pasien_id'] = pasien_id;
 
-        console.log('post data:', state.postData);
-
         if (state.postData['anamnesa_is_draw']) {
             state.postData['anamnesa_draw'] = state.canvas_anamnesa.toDataURL("image/png");
         }
@@ -95,6 +97,14 @@ const actions = {
             state.postData['diagnosa_draw'] = state.canvas_diagnosa.toDataURL("image/png");
         }
 
+        if (state.postData['tatalaksana_is_draw']) {
+            state.postData['tatalaksana_draw'] = state.canvas_tatalaksana.toDataURL("image/png");
+        }
+
+        if (state.postData['pemeriksaan_penunjang_is_draw']) {
+            state.postData['pemeriksaan_penunjang_draw'] = state.canvas_pemeriksaan_penunjang.toDataURL("image/png");
+        }
+
         if (!state.postData['agreement']) {
             commit('setIsSaving', { key: 'is_agree', value: false });
             return;
@@ -105,31 +115,33 @@ const actions = {
             return;
         }
 
-        try {
-            commit('setIsSaving', { key: 'is_saving', value: true });
+        console.log('post data:', state.postData);
 
-            const TransStatus = await axios.put(
-                store.state.URL_API + "/transaksi/" + transklinik_id, {
-                status: 'SELESAI'
-            });
+        // try {
+        //     commit('setIsSaving', { key: 'is_saving', value: true });
 
-            console.log('Rawat Jalan Status: ', TransStatus.data.data.status);
+        //     const TransStatus = await axios.put(
+        //         store.state.URL_API + "/transaksi/" + transklinik_id, {
+        //         status: 'SELESAI'
+        //     });
 
-            const res = await axios.post(
-                store.state.URL_API + "/rekam_medis",
-                { ...state.postData }
-            );
+        //     console.log('Rawat Jalan Status: ', TransStatus.data.data.status);
 
-            if (res.data.status) {
-                commit('setIsSaving', { key: 'is_saved', value: true });
-            }
+        //     const res = await axios.post(
+        //         store.state.URL_API + "/rekam_medis",
+        //         { ...state.postData }
+        //     );
 
-            commit('setIsSaving', { key: 'is_saving', value: false });
+        //     if (res.data.status) {
+        //         commit('setIsSaving', { key: 'is_saved', value: true });
+        //     }
 
-        } catch (err) {
-            commit('setIsSaving', { key: 'is_saving', value: false });
-            console.log(err);
-        }
+        //     commit('setIsSaving', { key: 'is_saving', value: false });
+
+        // } catch (err) {
+        //     commit('setIsSaving', { key: 'is_saving', value: false });
+        //     console.log(err);
+        // }
 
     }
 
@@ -155,6 +167,14 @@ const mutations = {
 
         if (payload.key === 'ANAMNESA') {
             state.canvas_anamnesa = payload.value;
+        }
+
+        if (payload.key === 'TATALAKSANA') {
+            state.canvas_tatalaksana = payload.value;
+        }
+
+        if (payload.key === 'PEMERIKSAAN_PENUNJANG') {
+            state.canvas_pemeriksaan_penunjang = payload.value;
         }
     },
     setIsSaving: (state, payload) => {
