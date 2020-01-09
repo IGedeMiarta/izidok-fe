@@ -380,7 +380,6 @@
                 $event
               })
             "
-            :state="getDataError({ rawLabel: 'no. hp penanggung jawab' })"
             :disabled="disabledForm()"
             :value="getValue('no. hp penanggung jawab')"
             :maxlength="15"
@@ -699,8 +698,8 @@ const tmp = [
     label: "no. hp penanggung jawab",
     alias: "nomor_hp_penanggung_jawab",
     validations: {
-      numeric,
-      minLength: minLength(10)
+      // numeric,
+      // minLength: minLength(10)
     }
   },
   {
@@ -1025,14 +1024,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-#dropzone {
-  // &:hover {
-  //   background-color: transparent !important;
-  // }
-
-  & {
-    // cursor: default !important;
-  }
-}
-</style>
+<style lang="scss" scoped></style>

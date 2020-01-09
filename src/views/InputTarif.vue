@@ -21,7 +21,7 @@
                   <b-row
                     class="d-flex align-items-center mb-3"
                     v-for="(inputTarif, index) in tmpInputTarifData"
-                    :key="index"
+                    :key="inputTarif.id"
                   >
                     <b-col cols="4">
                       <div role="group">
@@ -151,11 +151,13 @@ export default {
     },
     tmpInputTarifData: [
       {
+        id: 1,
         nama_layanan: startCase("registrasi awal"),
         kode_layanan: null,
         tarif_layanan: null
       },
       {
+        id: 2,
         nama_layanan: startCase("konsultasi dokter"),
         kode_layanan: null,
         tarif_layanan: null
@@ -344,6 +346,8 @@ export default {
               obj[keyChild] = generateErrorObj();
               return obj;
             }, {});
+        } else if (key === 'id') {
+          obj[key] = tmpInputTarifData.length + 1
         } else {
           obj[key] = null;
         }
