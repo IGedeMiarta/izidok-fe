@@ -17,7 +17,12 @@
         </div></vue-dropzone
       >
     </div>
-    <h4 class="text-capitalize mb-3">data pasien</h4>
+    <h4 class="text-capitalize mb-3">
+      data pasien
+      <span v-if="idPasien">
+        | no. rekam medis: {{ formData.nomor_rekam_medis }}
+      </span>
+    </h4>
     <b-form v-on:submit.prevent="submitForm">
       <div class="form-row">
         <b-form-group
@@ -119,7 +124,7 @@
                 $event
               })
             "
-            :state="getDataError({ rawLabel: 'email' })"
+            type="email"
             :disabled="disabledForm()"
             :value="getValue('email')"
             :maxlength="30"
@@ -647,9 +652,7 @@ const tmp = [
   {
     label: "email",
     alias: "email",
-    validations: {
-      email
-    }
+    validations: {}
   },
   {
     label: "tempat lahir",
