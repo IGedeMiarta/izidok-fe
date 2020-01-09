@@ -94,7 +94,6 @@
                 $event
               })
             "
-            :state="getDataError({ rawLabel: 'nik' })"
             :disabled="disabledForm()"
             :value="getValue('nik')"
             :maxlength="25"
@@ -272,7 +271,6 @@
                       $event
                     })
                   "
-                  :state="getDataError({ rawLabel: 'gol. darah' })"
                   :disabled="disabledForm()"
                   :value="getValue('gol. darah')"
                 />
