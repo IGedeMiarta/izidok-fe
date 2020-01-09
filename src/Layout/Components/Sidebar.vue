@@ -99,11 +99,11 @@ export default {
             title: "Manajemen Dokter",
             type: "klinik"
           },
-          {
-            // href: "/layouts/light-sidebar",
-            title: "Manajemen Operator",
-            type: ["klinik", "dokter praktek"]
-          },
+          // {
+          //   // href: "/layouts/light-sidebar",
+          //   title: "Manajemen Operator",
+          //   type: ["klinik", "dokter praktek"]
+          // },
           {
             // href: "/layouts/light-sidebar",
             title: "Manajemen Tarif",
@@ -145,14 +145,14 @@ export default {
               href: "/rekam-medis/1/1",
               title: "Rekam Medis"
             },
-            {
-              // href: "/layouts/gradient-sidebar-1",
-              title: "Resep"
-            },
-            {
-              // href: "/layouts/gradient-sidebar-2",
-              title: "Rujukan Lab"
-            }
+            // {
+            //   // href: "/layouts/gradient-sidebar-1",
+            //   title: "Resep"
+            // },
+            // {
+            //   // href: "/layouts/gradient-sidebar-2",
+            //   title: "Rujukan Lab"
+            // }
           ]
         },
         {
@@ -175,15 +175,15 @@ export default {
           },
           child: manajemenKlinikChild()
         },
-        {
-          title: "Halaman Farmasi",
-          icon: {
-            element: "font-awesome-icon",
-            attributes: {
-              icon: "plus-square"
-            }
-          }
-        },
+        // {
+        //   title: "Halaman Farmasi",
+        //   icon: {
+        //     element: "font-awesome-icon",
+        //     attributes: {
+        //       icon: "plus-square"
+        //     }
+        //   }
+        // },
         {
           title: "Halaman Pembayaran",
           href: "/pembayaran",
@@ -194,15 +194,15 @@ export default {
             }
           }
         },
-        {
-          title: "Laporan",
-          icon: {
-            element: "font-awesome-icon",
-            attributes: {
-              icon: "chart-bar"
-            }
-          }
-        }
+        // {
+        //   title: "Laporan",
+        //   icon: {
+        //     element: "font-awesome-icon",
+        //     attributes: {
+        //       icon: "chart-bar"
+        //     }
+        //   }
+        // }
       ];
 
       return tmp;
