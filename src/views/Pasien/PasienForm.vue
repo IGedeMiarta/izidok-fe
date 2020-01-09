@@ -17,20 +17,13 @@
         </div></vue-dropzone
       >
     </div>
-    <h4 class="text-capitalize mb-3">data pasien</h4>
+    <h4 class="text-capitalize mb-3">
+      data pasien
+      <span v-if="idPasien">
+        (no. rekam medis: {{ formData.nomor_rekam_medis }})
+      </span>
+    </h4>
     <b-form v-on:submit.prevent="submitForm">
-      <div class="form-row" v-if="idPasien">
-        <b-form-group
-          label="No. Rekam Medis"
-          class="text-capitalize col-md-12 pr-3"
-          style="position: relative"
-        >
-          <b-form-input
-            :disabled="true"
-            :value="getValue('nomor rekam medis')"
-          />
-        </b-form-group>
-      </div>
       <div class="form-row">
         <b-form-group
           label="Nama Lengkap"
