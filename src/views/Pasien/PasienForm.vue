@@ -71,6 +71,12 @@
                 $event
               })
             "
+            @keyup="
+              setValue({
+                rawLabel: 'no. handphone',
+                $event
+              })
+            "
             :state="getDataError({ rawLabel: 'no. handphone' })"
             :disabled="disabledForm()"
             :value="getValue('no. handphone')"
@@ -413,6 +419,12 @@
                       $event
                     })
                   "
+                  @keyup="
+                    setValue({
+                      rawLabel: 'rt',
+                      $event
+                    })
+                  "
                   :disabled="disabledForm()"
                   :value="getValue('rt')"
                   :maxlength="10"
@@ -436,6 +448,12 @@
                 <b-form-input
                   @keypress="
                     onKeyInputNumber({
+                      rawLabel: 'rw',
+                      $event
+                    })
+                  "
+                  @keyup="
+                    setValue({
                       rawLabel: 'rw',
                       $event
                     })
@@ -995,10 +1013,17 @@ export default {
       let value = $event;
       const label = rawLabel.split(" ").join("_");
       if (typeof $event === "object") {
-        const { target } = $event;
-        value = target.value;
+        if ($event) {
+          const {
+            target: { value }
+          } = $event;
+          this.formData[label] = value;
+        } else {
+          this.formData[label] = null;
+        }
+      } else {
+        this.formData[label] = value;
       }
-      this.formData[label] = value;
       this.triggerValidation({
         label,
         $v: this.$v,

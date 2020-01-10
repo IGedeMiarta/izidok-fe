@@ -100,6 +100,12 @@
                 class="text-capitalize my-2 float-right"
                 >simpan</b-button
               >
+              <b-button
+                :to="{ name: 'antrean-rawat-jalan' }"
+                variant="danger"
+                class="text-capitalize my-2 mr-4 float-right"
+                >batal</b-button
+              >
             </template>
           </b-form>
         </div>
@@ -270,6 +276,20 @@ export default {
         }
       });
     },
+    onKeyInputNumber({ rawLabel, $event }) {
+      var evt = $event;
+      evt = evt ? evt : window.event;
+      var charCode = evt.which ? evt.which : evt.keyCode;
+      if (
+        charCode > 31 &&
+        (charCode < 48 || charCode > 57) &&
+        charCode !== 46
+      ) {
+        evt.preventDefault();
+      } else {
+        void this.setValue({ rawLabel, $event });
+      }
+    },
     whitelistValidation() {
       return this.setFormBasicData().map(item => item.rawLabel);
     },
@@ -291,7 +311,8 @@ export default {
     },
     setFormData() {
       return this.setFormBasicData().reduce((arr, val) => {
-        arr[val.label.split(" ").join("_")] = null;
+        const tmp = val.label.split(" ").join("_");
+        arr[tmp] = "";
         return arr;
       }, {});
     },
@@ -306,12 +327,23 @@ export default {
     },
     setValue({ label, rawLabel, $event = null } = {}) {
       let value = $event;
-      if (typeof $event === "object" && $event.target && $event.target.value) {
-        const { target } = $event;
-        value = target.value;
+      if (typeof $event === "object") {
+        if ($event) {
+          if ($event && $event.target && $event.target.value) {
+            const {
+              target: { value }
+            } = $event;
+            this.formData[label] = value;
+          } else if ($event && $event.label && $event.value) {
+            this.formData[label] = $event;
+          }
+        } else {
+          this.formData[label] = "";
+        }
+      } else {
+        this.formData[label] = value;
       }
-      // console.log($event);
-      this.formData[label] = value;
+
       if (label == "jenis_kelamin") this.formData[label] = "" + value;
       this.triggerValidation({
         label,
