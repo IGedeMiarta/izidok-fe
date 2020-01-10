@@ -135,7 +135,7 @@
       </div>
     </div>
     <br />
-    <div class="row">
+    <div class="row" v-if="selectedFiles.length > 0">
       <div class="col-md-6">
         <label>Hasil Pemeriksaan Penunjang</label>
       </div>
@@ -148,16 +148,13 @@
         <label>{{item.size / 1000}} KB</label>
       </div>
       <div class="col-md-3">
-        <div class="progress">
-          <div
-            class="progress-bar"
-            role="progressbar"
-            style="width: 50%"
-            aria-valuenow="50"
-            aria-valuemin="0"
-            aria-valuemax="100"
-          ></div>
-        </div>
+        <!-- <b-progress :value="fileProgress[item.name]" :max="100" :label="`${fileProgress[item.name]}%`" show-value animated></b-progress> -->
+        <b-progress :max="100">
+          <b-progress-bar
+            :value="fileProgress[item.name]"
+            :label="`${Math.round(fileProgress[item.name])}%`"
+          ></b-progress-bar>
+        </b-progress>
       </div>
       <div class="col-md-3">
         <div class="row d-flex justify-content-end mr-2">
@@ -165,8 +162,14 @@
             icon="download"
             class="font-size-xl grow icon"
             style="margin-right:20px"
+             @click="downloadFile(item)"
           />
-          <font-awesome-icon icon="eye" class="font-size-xl grow icon" style="margin-right:20px" />
+          <font-awesome-icon
+            icon="eye"
+            class="font-size-xl grow icon"
+            style="margin-right:20px"
+            @click="readFile(item)"
+          />
           <font-awesome-icon icon="trash" class="font-size-xl grow icon" />
         </div>
       </div>
@@ -197,7 +200,9 @@ export default {
       isActive: "pen",
       isColorActive: "black",
       penWidth: 2,
-      selectedFiles: []
+      selectedFiles: [],
+      fileProgress: []
+      // progress: null
     };
   },
   computed: {
@@ -214,33 +219,50 @@ export default {
       });
     },
 
-    onFileSelected(event) {
+    async onFileSelected(event) {
       this.selectedFiles = event.target.files;
 
       if (!this.selectedFiles.length > 0) {
         return;
       }
 
-      const formData = new FormData();
+      const promises = [];
 
-      for (var i = 0; i < this.selectedFiles.length; i++) {
-        let file = this.selectedFiles[i];
-        console.log(file);
-        formData.append("files[" + i + "]", file, file.name);
+      for (let file of this.selectedFiles) {
+        let formData = new FormData();
+        formData.append(file["name"], file);
+
+        promises.push(
+          axios.post("http://localhost:9001/api/v1/test-upload", formData, {
+            onUploadProgress: progressEvent => {
+              let progress = (progressEvent.loaded * 100) / progressEvent.total;
+              this.$set(this.fileProgress, file.name, progress);
+            }
+          })
+        );
       }
 
-      axios
-        .post("http://localhost:9001/api/v1/test-upload", formData, {
-          onUploadProgress: uploadEvent => {
-            console.log(
-              "Upload Progress: " +
-                Math.round((uploadEvent.loaded / uploadEvent.total) * 100)
-            );
-          }
+      const uploads = await Promise.all(promises)
+        .then(values => {
+          return values;
         })
-        .then(res => {
-          console.log(res);
+        .catch(error => {
+          console.log(error);
         });
+    },
+    downloadFile(file) {
+      const data = window.URL.createObjectURL(file);
+      const link = document.createElement("a");
+      link.href = data;
+      link.download = file.name;
+      link.click();
+      setTimeout(function() {
+        window.URL.revokeObjectURL(data);
+      }, 100);
+    },
+    readFile(file) {
+      const data = window.URL.createObjectURL(file);
+      window.open(data);
     },
 
     handleMousedown(e) {
