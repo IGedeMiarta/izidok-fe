@@ -41,22 +41,54 @@
                       v-if="form.label == 'waktu_konsultasi'"
                       @input="waktuKonsultasiSelected"
                     />
-                    <b-form-input
-                      :type="form.type || 'text'"
-                      v-model="formData[form.label]"
-                      @keyup="
-                        setValue({
-                          rawLabel: form.rawLabel,
-                          label: form.label,
-                          $event,
-                          tmpId: form.tmpId
-                        })
-                      "
-                      :state="renderError({ error: form.error })"
+                    <template
                       v-if="
-                        form.type === 'text' && form.label != 'waktu_konsultasi'
+                        form.type === 'text' &&
+                          form.label !== 'waktu_konsultasi'
                       "
-                    />
+                    >
+                      <b-form-input
+                        v-if="
+                          !/(badan)/gi.test(form.label) &&
+                            [
+                              'tensi sistole',
+                              'tinggi diastole',
+                              'nadi'
+                            ].includes(form.label.toLowerCase())
+                        "
+                        :type="form.type || 'text'"
+                        v-model="formData[form.label]"
+                        @keyup="
+                          setValue({
+                            rawLabel: form.rawLabel,
+                            label: form.label,
+                            $event,
+                            tmpId: form.tmpId
+                          })
+                        "
+                        :state="renderError({ error: form.error })"
+                      />
+                      <b-form-input
+                        v-else
+                        :type="form.type || 'text'"
+                        v-model.lazy="formData[form.label]"
+                        @keyup="
+                          setValue({
+                            rawLabel: form.rawLabel,
+                            label: form.label,
+                            $event,
+                            tmpId: form.tmpId
+                          })
+                        "
+                        @keypress="
+                          onKeyInputNumber({
+                            label: form.label,
+                            rawLabel: form.rawLabel,
+                            $event
+                          })
+                        "
+                      />
+                    </template>
                     <vue-select
                       :class="{ error: form.error }"
                       :options="options[form.label]"
@@ -276,7 +308,7 @@ export default {
         }
       });
     },
-    onKeyInputNumber({ rawLabel, $event }) {
+    onKeyInputNumber({ label, rawLabel, $event }) {
       var evt = $event;
       evt = evt ? evt : window.event;
       var charCode = evt.which ? evt.which : evt.keyCode;
@@ -287,7 +319,7 @@ export default {
       ) {
         evt.preventDefault();
       } else {
-        void this.setValue({ rawLabel, $event });
+        void this.setValue({ label, rawLabel, $event });
       }
     },
     whitelistValidation() {
