@@ -107,13 +107,22 @@
         <label>* Unggah Hasil Pemeriksaan Penunjang (maks. 3 file)</label>
       </div>
     </div>
+
     <div id="upload-box" class="row justify-content-md-center">
-      <b-button variant="dark">
+      <b-button variant="dark" @click="$refs.cameraInput.click()">
         <span class="btn-wrapper--icon">
           <font-awesome-icon icon="camera" />
         </span>
         <span class="btn-wrapper--label">Dari Kamera</span>
       </b-button>
+      <input
+        type="file"
+        accept="image/*"
+        capture="environment"
+        style="display:none"
+        ref="cameraInput"
+        @change="onImageCaptured"
+      />
       <div class="col-md-auto">Atau</div>
       <b-button variant="dark" @click="$refs.fileInput.click()">
         <span class="btn-wrapper--icon">
@@ -162,7 +171,7 @@
             icon="download"
             class="font-size-xl grow icon"
             style="margin-right:20px"
-             @click="downloadFile(item)"
+            @click="downloadFile(item)"
           />
           <font-awesome-icon
             icon="eye"
@@ -230,10 +239,13 @@ export default {
 
       for (let file of this.selectedFiles) {
         let formData = new FormData();
-        formData.append(file["name"], file);
+        formData.append(file.name, file);
 
         promises.push(
           axios.post("http://localhost:9001/api/v1/test-upload", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data"
+            },
             onUploadProgress: progressEvent => {
               let progress = (progressEvent.loaded * 100) / progressEvent.total;
               this.$set(this.fileProgress, file.name, progress);
@@ -249,6 +261,11 @@ export default {
         .catch(error => {
           console.log(error);
         });
+
+        console.log(uploads);
+    },
+    onImageCaptured(event) {
+      //handle image from camera or from disk here...
     },
     downloadFile(file) {
       const data = window.URL.createObjectURL(file);
@@ -263,6 +280,9 @@ export default {
     readFile(file) {
       const data = window.URL.createObjectURL(file);
       window.open(data);
+    },
+    getImage(data) {
+      console.log(data);
     },
 
     handleMousedown(e) {
