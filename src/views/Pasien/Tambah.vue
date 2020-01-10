@@ -66,9 +66,10 @@ export default {
     }
   },
   methods: {
-    simpan() {
+    simpan(nomor_rekam_medis) {
       this.$swal({
-        text: `Data Berhasil di simpan`,
+        title: startCase("data berhasil di simpan"),
+        text: `Data berhasil di simpan, nomor rekem medis pasien adalah ${nomor_rekam_medis}`,
         type: "success"
       });
     },
@@ -76,13 +77,13 @@ export default {
       this.beingSubmit = true;
       this.beforeAddPasien(data);
     },
-    goingPlaces() {
+    goingPlaces(nomor_rekam_medis) {
       const tmp = {
         name: "pasien-list"
       };
 
       if (this.beingSubmit) {
-        tmp.onComplete = this.simpan();
+        tmp.onComplete = this.simpan(nomor_rekam_medis);
       }
 
       this.$router.push(tmp);
@@ -103,9 +104,12 @@ export default {
           `${this.url_api}/pasien`,
           this.mapPasienFormData(postData)
         );
-        const { success, data } = res.data;
+        const {
+          success,
+          data: { nomor_rekam_medis }
+        } = res.data;
         if (success) {
-          this.goingPlaces();
+          this.goingPlaces(nomor_rekam_medis);
         }
       } catch (err) {
         alert(err);
