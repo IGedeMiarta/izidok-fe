@@ -229,6 +229,7 @@ export default {
     },
 
     async onFileSelected(event) {
+      const fileSelected = [];
       this.selectedFiles = event.target.files;
 
       if (!this.selectedFiles.length > 0) {
@@ -256,13 +257,18 @@ export default {
 
       const uploads = await Promise.all(promises)
         .then(values => {
+          values.map(item => {
+            fileSelected.push(item.data);
+          });
+
+          this.updatePostData({key:'pemeriksaan_penunjang', value: fileSelected});
+
           return values;
         })
         .catch(error => {
           console.log(error);
         });
 
-        console.log(uploads);
     },
     onImageCaptured(event) {
       //handle image from camera or from disk here...

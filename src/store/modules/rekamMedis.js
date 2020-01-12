@@ -117,31 +117,31 @@ const actions = {
 
         console.log('post data:', state.postData);
 
-        // try {
-        //     commit('setIsSaving', { key: 'is_saving', value: true });
+        try {
+            commit('setIsSaving', { key: 'is_saving', value: true });
 
-        //     const TransStatus = await axios.put(
-        //         store.state.URL_API + "/transaksi/" + transklinik_id, {
-        //         status: 'SELESAI'
-        //     });
+            const TransStatus = await axios.put(
+                store.state.URL_API + "/transaksi/" + transklinik_id, {
+                status: 'SELESAI'
+            });
 
-        //     console.log('Rawat Jalan Status: ', TransStatus.data.data.status);
+            console.log('Rawat Jalan Status: ', TransStatus.data.data.status);
 
-        //     const res = await axios.post(
-        //         store.state.URL_API + "/rekam_medis",
-        //         { ...state.postData }
-        //     );
+            const res = await axios.post(
+                store.state.URL_API + "/rekam_medis",
+                { ...state.postData }
+            );
 
-        //     if (res.data.status) {
-        //         commit('setIsSaving', { key: 'is_saved', value: true });
-        //     }
+            if (res.data.status) {
+                commit('setIsSaving', { key: 'is_saved', value: true });
+            }
 
-        //     commit('setIsSaving', { key: 'is_saving', value: false });
+            commit('setIsSaving', { key: 'is_saving', value: false });
 
-        // } catch (err) {
-        //     commit('setIsSaving', { key: 'is_saving', value: false });
-        //     console.log(err);
-        // }
+        } catch (err) {
+            commit('setIsSaving', { key: 'is_saving', value: false });
+            console.log(err);
+        }
 
     }
 
