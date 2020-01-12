@@ -192,6 +192,7 @@ import axios from "axios";
 import store from "@/store/";
 import { mapGetters, mapActions } from "vuex";
 import Editor from "./Editor";
+import { ImageCompressor, getImageSize } from "compressor-img";
 
 export default {
   components: {
@@ -210,7 +211,8 @@ export default {
       isColorActive: "black",
       penWidth: 2,
       selectedFiles: [],
-      fileProgress: []
+      fileProgress: [],
+      promises: []
       // progress: null
     };
   },
@@ -228,51 +230,131 @@ export default {
       });
     },
 
-    async onFileSelected(event) {
-      const fileSelected = [];
-      this.selectedFiles = event.target.files;
+    //check is last item on loop
+    isLastItem(index){
+      if(index === (this.selectedFiles.length - 1)){
+        return true;
+      }
+      return false;
+    },
+    //convert b64 to blob
+    b64toBlob(b64Data, contentType, sliceSize) {
+      contentType = contentType || "";
+      sliceSize = sliceSize || 512;
 
-      if (!this.selectedFiles.length > 0) {
-        return;
+      var byteCharacters = atob(b64Data);
+      var byteArrays = [];
+
+      for (
+        var offset = 0;
+        offset < byteCharacters.length;
+        offset += sliceSize
+      ) {
+        var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+        var byteNumbers = new Array(slice.length);
+        for (var i = 0; i < slice.length; i++) {
+          byteNumbers[i] = slice.charCodeAt(i);
+        }
+
+        var byteArray = new Uint8Array(byteNumbers);
+
+        byteArrays.push(byteArray);
       }
 
-      const promises = [];
+      var blob = new Blob(byteArrays, { type: contentType });
+      return blob;
+    },
+    //check image files or not
+    isFileImage(file) {
+      const acceptedImageTypes = [
+        "image/gif",
+        "image/jpeg",
+        "image/png",
+        "image/jpg"
+      ];
+      return file && acceptedImageTypes.includes(file["type"]);
+    },
+    //prepare formData
+    async prepareUpload(filename, file, index) {
+      let formData = new FormData();
+      formData.append(filename, file);
 
-      for (let file of this.selectedFiles) {
-        let formData = new FormData();
-        formData.append(file.name, file);
-
-        promises.push(
-          axios.post("http://localhost:9001/api/v1/test-upload", formData, {
-            headers: {
-              "Content-Type": "multipart/form-data"
-            },
-            onUploadProgress: progressEvent => {
-              let progress = (progressEvent.loaded * 100) / progressEvent.total;
-              this.$set(this.fileProgress, file.name, progress);
-            }
-          })
-        );
-      }
-
-      const uploads = await Promise.all(promises)
+      this.promises.push(
+        axios.post("http://localhost:9001/api/v1/test-upload", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          },
+          onUploadProgress: progressEvent => {
+            let progress = (progressEvent.loaded * 100) / progressEvent.total;
+            this.$set(this.fileProgress, filename, progress);
+          }
+        })
+      );
+      
+      if(this.isLastItem(index)){
+        const fileSelected = [];
+        const uploads = await Promise.all(this.promises)
         .then(values => {
           values.map(item => {
             fileSelected.push(item.data);
           });
 
-          this.updatePostData({key:'pemeriksaan_penunjang', value: fileSelected});
+          console.log(values);
+
+          this.updatePostData({
+            key: "pemeriksaan_penunjang",
+            value: fileSelected
+          });
 
           return values;
         })
         .catch(error => {
           console.log(error);
         });
-
+      }
     },
+    //compress if file images
+    compressImage(file, index) {
+      if (this.isFileImage(file)) {
+        let reader = new FileReader();
+        reader.onloadend = () => {
+          let imageCompressor = new ImageCompressor({
+            onSuccess: response => {
+              let ImageURL = response.compressed;
+              let block = ImageURL.split(";");
+              let contentType = block[0].split(":")[1];
+              let realData = block[1].split(",")[1];
+              let blob = this.b64toBlob(realData, contentType);
+              this.prepareUpload(file.name, blob, index);
+            },
+            scale: 70,
+            quality: 70,
+            originalImage: reader.result
+          });
+        };
+        reader.readAsDataURL(file);
+      } else {
+        this.prepareUpload(file.name, file);
+      }
+    },
+    //on file selected handler
+    onFileSelected(event) {
+      this.selectedFiles = event.target.files;
+
+      if (!this.selectedFiles.length > 0) {
+        return;
+      }
+
+      Object.values(this.selectedFiles).forEach((file, index)=> {
+        this.compressImage(file, index);
+      });
+    },
+    //camera handler
     onImageCaptured(event) {
       //handle image from camera or from disk here...
     },
+    //download selected file
     downloadFile(file) {
       const data = window.URL.createObjectURL(file);
       const link = document.createElement("a");
@@ -283,12 +365,10 @@ export default {
         window.URL.revokeObjectURL(data);
       }, 100);
     },
+    //view selected file
     readFile(file) {
       const data = window.URL.createObjectURL(file);
       window.open(data);
-    },
-    getImage(data) {
-      console.log(data);
     },
 
     handleMousedown(e) {
