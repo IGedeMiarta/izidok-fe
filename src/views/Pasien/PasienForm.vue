@@ -130,7 +130,6 @@
                 $event
               })
             "
-            type="email"
             :disabled="disabledForm()"
             :value="getValue('email')"
             :maxlength="30"
