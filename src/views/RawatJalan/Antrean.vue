@@ -265,7 +265,7 @@ export default {
     items: [
       {
         no: 1,
-        "waktu_konsultasi": "2000-12-12",
+        waktu_konsultasi: "2000-12-12",
         "nama pasien": "Test",
         "nomor rekam medis": 123,
         "jenis kelamin": "P",
@@ -365,7 +365,9 @@ export default {
           this.items = antreanData.map((item, index) => {
             return {
               no: (page - 1) * this.perPage + index + 1,
-              waktu_konsultasi: moment(item.waktu_konsultasi).format('DD-MM-YYYY HH:mm:ss'),
+              waktu_konsultasi:
+                item.waktu_konsultasi &&
+                moment(item.waktu_konsultasi).format("DD-MM-YYYY HH:mm:ss"),
               "nomor rekam medis": item.pasien.nomor_rekam_medis,
               "nama pasien": item.pasien.nama,
               "jenis kelamin": this.jenisKelamin(item.pasien.jenis_kelamin),
