@@ -243,7 +243,7 @@ const tmp = [
     validations: {}
   },
   {
-    label: "tinggi diastole",
+    label: "tensi diastole",
     type: "text",
     col: 2,
     validations: {}
@@ -479,7 +479,9 @@ export default {
           this.pasiens = res.data.data.pasien.data;
           this.options.nama_lengkap = res.data.data.pasien.data.map(item => {
             return {
-              label: item.nama,
+              label: `${item.nama} ~ ${moment(item.tanggal_lahir).format(
+                "DD-MM-YYYY"
+              )}`,
               value: item.id
             };
           });
