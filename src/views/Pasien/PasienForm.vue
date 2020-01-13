@@ -1044,17 +1044,17 @@ export default {
     },
     submitForm() {
       const { formBasicData } = this;
+      formBasicData.map(item => {
+        this.triggerValidation({
+          label: item.label,
+          $v: this.$v,
+          $vm: this,
+          rawLabel: item.rawLabel
+        });
+      });
+      
       if (formBasicData.every(item => item.error !== null && !item.error)) {
         this.$emit("submitForm", this.formData);
-      } else {
-        formBasicData.map(item => {
-          this.triggerValidation({
-            label: item.label,
-            $v: this.$v,
-            $vm: this,
-            rawLabel: item.rawLabel
-          });
-        });
       }
     }
   }
