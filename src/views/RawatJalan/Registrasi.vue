@@ -136,7 +136,7 @@
                 :to="{ name: 'antrean-rawat-jalan' }"
                 variant="danger"
                 class="text-capitalize my-2 mr-4 float-right"
-                >batal</b-button
+                >keluar</b-button
               >
             </template>
           </b-form>

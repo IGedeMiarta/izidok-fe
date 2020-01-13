@@ -174,7 +174,7 @@ const routes = [
     component: () => import("../views/Tarif.vue"),
     children: [
       {
-        path: "/tarif/list",
+        path: "/tarif",
         name: "tarif-list",
         component: () => import("../views/Tarif/List.vue")
       },

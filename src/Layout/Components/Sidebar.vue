@@ -107,6 +107,7 @@ export default {
           {
             // href: "/layouts/light-sidebar",
             title: "Manajemen Tarif",
+            href: "/tarif",
             type: ["klinik", "dokter praktek"]
           }
         ];
