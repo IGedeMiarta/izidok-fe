@@ -105,6 +105,12 @@
                 $event
               })
             "
+            @keyup="
+              setValue({
+                rawLabel: 'nik',
+                $event
+              })
+            "
             :disabled="disabledForm()"
             :value="getValue('nik')"
             :maxlength="25"
@@ -384,6 +390,12 @@
           <b-form-input
             @keypress="
               onKeyInputNumber({
+                rawLabel: 'no. hp penanggung jawab',
+                $event
+              })
+            "
+            @keyup="
+              setValue({
                 rawLabel: 'no. hp penanggung jawab',
                 $event
               })
