@@ -68,8 +68,8 @@ export default {
   methods: {
     simpan(nomor_rekam_medis) {
       this.$swal({
-        title: startCase("data berhasil di simpan"),
-        text: `Data berhasil di simpan, nomor rekam medis pasien adalah ${nomor_rekam_medis}`,
+        title: startCase("data berhasil disimpan"),
+        text: `Data berhasil disimpan, nomor rekam medis pasien adalah ${nomor_rekam_medis}`,
         type: "success"
       });
     },
