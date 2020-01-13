@@ -75,7 +75,7 @@ export default {
     },
     submitForm(data) {
       this.beingSubmit = true;
-      this.beforeAddPasien(data);
+      this.addPasien(data);
     },
     goingPlaces(nomor_rekam_medis) {
       const tmp = {
