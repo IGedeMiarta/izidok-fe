@@ -120,11 +120,6 @@ const actions = {
         try {
             commit('setIsSaving', { key: 'is_saving', value: true });
 
-            const TransStatus = await axios.put(
-                store.state.URL_API + "/transaksi/" + transklinik_id, {
-                status: 'SELESAI'
-            });
-
             console.log('Rawat Jalan Status: ', TransStatus.data.data.status);
 
             const res = await axios.post(
@@ -137,6 +132,11 @@ const actions = {
             }
 
             commit('setIsSaving', { key: 'is_saving', value: false });
+            
+            const TransStatus = await axios.put(
+                store.state.URL_API + "/transaksi/" + transklinik_id, {
+                status: 'SELESAI'
+            });
 
         } catch (err) {
             commit('setIsSaving', { key: 'is_saving', value: false });
