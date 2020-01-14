@@ -149,7 +149,7 @@
         <label>Hasil Pemeriksaan Penunjang</label>
       </div>
     </div>
-    <div v-for="item in selectedFiles" :key="item.name" class="row file-upload">
+    <div v-for="(item, index) in selectedFiles" :key="item.name" class="row file-upload">
       <div class="col-md-4">
         <label>{{item.name}}</label>
       </div>
@@ -179,7 +179,11 @@
             style="margin-right:20px"
             @click="readFile(item)"
           />
-          <font-awesome-icon icon="trash" class="font-size-xl grow icon" />
+          <font-awesome-icon
+            icon="trash"
+            class="font-size-xl grow icon"
+            @click="removeFile(item, index)"
+          />
         </div>
       </div>
     </div>
@@ -212,7 +216,8 @@ export default {
       penWidth: 2,
       selectedFiles: [],
       fileProgress: [],
-      promises: []
+      promises: [],
+      uploadedFiles: []
       // progress: null
     };
   },
@@ -231,8 +236,8 @@ export default {
     },
 
     //check is last item on loop
-    isLastItem(index){
-      if(index === (this.selectedFiles.length - 1)){
+    isLastItem(index) {
+      if (index === this.selectedFiles.length - 1) {
         return true;
       }
       return false;
@@ -291,27 +296,24 @@ export default {
           }
         })
       );
-      
-      if(this.isLastItem(index)){
-        const fileSelected = [];
+
+      if (this.isLastItem(index)) {
         const uploads = await Promise.all(this.promises)
-        .then(values => {
-          values.map(item => {
-            fileSelected.push(item.data);
+          .then(values => {
+            values.map(item => {
+              this.uploadedFiles.push(item.data);
+            });
+
+            this.updatePostData({
+              key: "pemeriksaan_penunjang",
+              value: this.uploadedFiles
+            });
+
+            return values;
+          })
+          .catch(error => {
+            console.log(error);
           });
-
-          console.log(values);
-
-          this.updatePostData({
-            key: "pemeriksaan_penunjang",
-            value: fileSelected
-          });
-
-          return values;
-        })
-        .catch(error => {
-          console.log(error);
-        });
       }
     },
     //compress if file images
@@ -340,13 +342,15 @@ export default {
     },
     //on file selected handler
     onFileSelected(event) {
-      this.selectedFiles = event.target.files;
+      for (let i = 0; i < event.target.files.length; i++) {
+        this.selectedFiles.push(event.target.files[i]);
+      }
 
       if (!this.selectedFiles.length > 0) {
         return;
       }
 
-      Object.values(this.selectedFiles).forEach((file, index)=> {
+      Object.values(this.selectedFiles).forEach((file, index) => {
         this.compressImage(file, index);
       });
     },
@@ -369,6 +373,23 @@ export default {
     readFile(file) {
       const data = window.URL.createObjectURL(file);
       window.open(data);
+    },
+    removeFile(file, index) {
+      this.selectedFiles.splice(index, 1);
+      let filename = file.name;
+      filename = filename.split(' ').join('_');
+      filename = filename.split('.').join('_');
+
+      let removeIndex = this.uploadedFiles.map(item => {
+        return item.name;
+      }).indexOf(filename);
+      
+      this.uploadedFiles.splice(removeIndex, 1);
+      
+      this.updatePostData({
+        key: "pemeriksaan_penunjang",
+        value: this.uploadedFiles
+      });
     },
 
     handleMousedown(e) {
