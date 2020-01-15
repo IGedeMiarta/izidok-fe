@@ -63,6 +63,7 @@
     "@vue/cli-plugin-pwa": "^4.0.0",
     "@vue/cli-service": "^4.0.0",
     "babel-eslint": "^10.0.3",
+    "babel-plugin-component": "^1.1.1",
     "babel-plugin-object-to-json-parse": "^0.0.8",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",

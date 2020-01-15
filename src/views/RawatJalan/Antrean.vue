@@ -50,9 +50,9 @@
                         <date-picker
                           class="w-100"
                           type="daterange"
-                          range-separator="To"
                           start-placeholder="Start date"
                           end-placeholder="End date"
+                          :picker-options="pickerOptions"
                         />
                       </b-form-group>
                     </b-col>
@@ -203,6 +203,7 @@ import startCase from "lodash/startCase";
 import { Datetime } from "vue-datetime";
 import "vue-datetime/dist/vue-datetime.css";
 import { DatePicker } from "element-ui";
+import "element-ui/lib/theme-chalk/index.css";
 
 import { DateTime as LuxonDateTime } from "luxon";
 
@@ -256,7 +257,7 @@ const __dataRegistrasiPasien = {
 export default {
   components: {
     // Datetime,
-    DatePicker: DatePicker.name
+    DatePicker
   },
   data: () => ({
     dataRegistrasiPasien: null,
@@ -295,7 +296,14 @@ export default {
     minDatetime: LuxonDateTime.local().toISO(),
     maxDatetime: LuxonDateTime.local()
       .plus({ years: 3 })
-      .toISO()
+      .toISO(),
+    pickerOptions: {
+      disabledDate: date => {
+        const x = moment(date);
+        const day = moment().subtract(1, "day");
+        return x.isBefore(day);
+      }
+    }
   }),
   mounted() {
     moment.locale("id");
