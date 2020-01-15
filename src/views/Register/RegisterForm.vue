@@ -260,7 +260,7 @@ export default {
         // console.log(postData);
 
         const res = await axios.post(`${this.url_api}/klinik`, postData);
-        const { status, data } = res.data;
+        const { status, data, message } = res.data;
         if (status) {
           this.$router.push({
             name: "verification-process",
@@ -270,31 +270,18 @@ export default {
             }
           });
         }
-      } catch (err) {
-        const { response } = err;
-        if (response) {
-          const {
-            response: { data = [] }
-          } = err;
-          const objKey = Object.keys(data);
-
-          let errorExists = false;
-          data[objKey[0]].forEach(item => {
-            if(item == `The ${objKey[0]} has already been taken.`) {
-              errorExists = true;
-            }
-          })
-          
-          if(errorExists) {
+        else {
+          let match = message.match(/(email|username) is already in used/)
+          if(match) {
             this.$swal({
-              title: `${startCase(objKey[0])} Tidak Dapat Digunakan`,
-              text: `${startCase(objKey[0])} telah terdaftar. Silakan gunakan ${objKey[0]} lain untuk melakukan registrasi!`,
+              title: `${startCase(match[1])} Tidak Dapat Digunakan`,
+              text: `${startCase(match[1])} telah terdaftar. Silakan gunakan ${match[1]} lain untuk melakukan registrasi!`,
               type: "error"
             });
           }
-        } else {
-          console.log(err);
         }
+      } catch (err) {
+        // console.log(err);
       }
     },
     submitForm() {
