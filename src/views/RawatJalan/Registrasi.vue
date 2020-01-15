@@ -323,7 +323,9 @@ export default {
       }
     },
     whitelistValidation() {
-      return this.setFormBasicData().map(item => item.rawLabel);
+      return this.setFormBasicData()
+        .filter(item => item.validations && !item.validations.required)
+        .map(item => item.rawLabel);
     },
     submitForm() {
       const { formBasicData } = this;

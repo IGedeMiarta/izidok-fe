@@ -26,7 +26,7 @@
     <b-form v-on:submit.prevent="submitForm">
       <div class="form-row">
         <b-form-group
-          label="Nama Lengkap"
+          :label="renderLabel({ label: 'nama lengkap' })"
           class="text-capitalize col-md-6 pr-3"
           style="position: relative"
           :state="getDataError({ rawLabel: 'nama lengkap' })"
@@ -52,7 +52,7 @@
           />
         </b-form-group>
         <b-form-group
-          label="No. Handphone"
+          :label="renderLabel({ label: 'no. handphone' })"
           class="text-capitalize col-md-6 pr-3"
           style="position: relative"
           :state="getDataError({ rawLabel: 'no. handphone' })"
@@ -86,7 +86,7 @@
       </div>
       <div class="form-row">
         <b-form-group
-          label="No. KTP"
+          :label="renderLabel({ label: 'no. ktp' })"
           class="text-capitalize col-md-6 pr-3"
           style="position: relative"
           :state="getDataError({ rawLabel: 'nik' })"
@@ -117,7 +117,7 @@
           />
         </b-form-group>
         <b-form-group
-          label="Email"
+          :label="renderLabel({ label: 'email' })"
           class="text-capitalize col-md-6 pr-3"
           style="position: relative"
           :state="getDataError({ rawLabel: 'email' })"
@@ -147,7 +147,7 @@
           <b-row>
             <b-col cols="6"
               ><b-form-group
-                label="Tempat Lahir"
+                :label="renderLabel({ label: 'tempat lahir' })"
                 class="text-capitalize"
                 style="position: relative"
                 :state="getDataError({ rawLabel: 'tempat lahir' })"
@@ -174,7 +174,7 @@
             ></b-col>
             <b-col cols="6">
               <b-form-group
-                label="Tanggal Lahir"
+                :label="renderLabel({ label: 'tanggal lahir' })"
                 class="text-capitalize mr-2"
                 style="position: relative"
                 :state="getDataError({ rawLabel: 'tanggal lahir' })"
@@ -200,7 +200,7 @@
         </b-col>
         <b-col cols="6">
           <b-form-group
-            label="Nama Penjamin/Asuransi"
+            :label="renderLabel({ label: 'nama penjamin/asuransi' })"
             class="text-capitalize"
             style="position: relative"
             :state="getDataError({ rawLabel: 'nama penjamin/asuransi' })"
@@ -231,7 +231,7 @@
           <b-row>
             <b-col>
               <b-form-group
-                label="Jenis Kelamin"
+                :label="renderLabel({ label: 'jenis kelamin' })"
                 :state="getDataError({ rawLabel: 'jenis kelamin' })"
                 :invalid-feedback="
                   renderInvalidFeedback({
@@ -262,7 +262,7 @@
             </b-col>
             <b-col>
               <b-form-group
-                label="Gol. Darah"
+                :label="renderLabel({ label: 'gol. darah' })"
                 class="text-capitalize col-md-6 p-0 float-left"
                 style="position: relative"
                 :state="getDataError({ rawLabel: 'gol. darah' })"
@@ -296,7 +296,7 @@
         </div>
         <div class="col-md-6">
           <b-form-group
-            label="No. Member/Polis Asuransi"
+            :label="renderLabel({ label: 'no. member/polis asuransi' })"
             class="text-capitalize"
             style="position: relative"
             :state="getDataError({ rawLabel: 'no. member/polis asuransi' })"
@@ -321,7 +321,7 @@
             />
           </b-form-group>
           <b-form-group
-            label="Nama Penanggung Jawab"
+            :label="renderLabel({ label: 'nama penanggung jawab' })"
             class="text-capitalize"
             style="position: relative"
             :state="getDataError({ rawLabel: 'nama penanggung jawab' })"
@@ -349,7 +349,7 @@
       </div>
       <div class="form-row">
         <b-form-group
-          label="Alamat Rumah"
+          :label="renderLabel({ label: 'alamat rumah' })"
           class="text-capitalize col-md-6 pr-3"
           style="position: relative"
           :state="getDataError({ rawLabel: 'alamat rumah' })"
@@ -375,7 +375,7 @@
           />
         </b-form-group>
         <b-form-group
-          label="No. Hp Penanggung Jawab"
+          :label="renderLabel({ label: 'no. hp penanggung jawab' })"
           class="text-capitalize col-md-6"
           style="position: relative"
           :state="getDataError({ rawLabel: 'no. hp penanggung jawab' })"
@@ -536,7 +536,7 @@
       <b-row class="mb-3">
         <b-col cols="6">
           <b-form-group
-            label="Status Perkawinan"
+            :label="renderLabel({ label: 'status perkawinan' })"
             class="text-capitalize"
             style="position: relative"
             :state="getDataError({ rawLabel: 'status perkawinan' })"
@@ -989,7 +989,9 @@ export default {
       }
     },
     whitelistValidation() {
-      return this.setFormBasicData().map(item => item.rawLabel);
+      return this.setFormBasicData()
+        .filter(item => item.validations && !item.validations.required)
+        .map(item => item.rawLabel);
     },
     setFormData() {
       return this.setFormBasicData().reduce((arr, val) => {
@@ -1052,7 +1054,7 @@ export default {
           rawLabel: item.rawLabel
         });
       });
-      
+
       if (formBasicData.every(item => item.error !== null && !item.error)) {
         this.$emit("submitForm", this.formData);
       }

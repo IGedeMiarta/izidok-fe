@@ -38,7 +38,7 @@
                     <b-col>
                       <b-form-group label="tanggal" class="text-capitalize">
                         <!-- <b-form-input /> -->
-                        <Datetime
+                        <!-- <Datetime
                           input-class="form-control"
                           zone="Asia/Jakarta"
                           format="d LLL yyyy"
@@ -46,6 +46,13 @@
                           @input="tanggalSelected"
                           :min-datetime="minDatetime"
                           :max-datetime="maxDatetime"
+                        /> -->
+                        <date-picker
+                          class="w-100"
+                          type="daterange"
+                          range-separator="To"
+                          start-placeholder="Start date"
+                          end-placeholder="End date"
                         />
                       </b-form-group>
                     </b-col>
@@ -57,20 +64,19 @@
                         <b-form-input v-model="noRekamMedis" />
                       </b-form-group>
                     </b-col>
-                    <b-col>
-                      <b-form-group label="nama pasien" class="text-capitalize">
-                        <b-form-input v-model="namaPasien" />
-                      </b-form-group>
-                    </b-col>
                   </b-row>
-                  <p class="text-center text-uppercase my-2">atau</p>
                   <b-row>
-                    <b-col cols="4">
+                    <b-col>
                       <b-form-group label="status" class="text-capitalize">
                         <b-form-select
                           v-model="statusAntrean"
                           :options="['Konsultasi', 'Menunggu', 'Selesai']"
                         />
+                      </b-form-group>
+                    </b-col>
+                    <b-col>
+                      <b-form-group label="nama pasien" class="text-capitalize">
+                        <b-form-input v-model="namaPasien" />
                       </b-form-group>
                     </b-col>
                   </b-row>
@@ -196,6 +202,7 @@ import axios from "axios";
 import startCase from "lodash/startCase";
 import { Datetime } from "vue-datetime";
 import "vue-datetime/dist/vue-datetime.css";
+import { DatePicker } from "element-ui";
 
 import { DateTime as LuxonDateTime } from "luxon";
 
@@ -209,7 +216,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
 
+import lang from "element-ui/lib/locale/lang/en";
+import locale from "element-ui/lib/locale";
+
 library.add(faAngleUp, faSearch, faSignInAlt, faTrashAlt, faRedo);
+locale.use(lang);
 
 const __dataRegistrasiPasien = {
   rekam_medis: {
@@ -244,7 +255,8 @@ const __dataRegistrasiPasien = {
 
 export default {
   components: {
-    Datetime
+    // Datetime,
+    DatePicker: DatePicker.name
   },
   data: () => ({
     dataRegistrasiPasien: null,
