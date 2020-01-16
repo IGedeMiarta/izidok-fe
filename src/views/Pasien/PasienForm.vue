@@ -211,21 +211,53 @@
           </b-row>
         </div>
         <div class="col-md-6">
-          <b-form-group :label="renderLabel({ label: 'no. member/polis asuransi' })" class="text-capitalize"
-            style="position: relative" :state="getDataError({ rawLabel: 'no. member/polis asuransi' })"
+          <b-form-group
+            :label="renderLabel({ label: 'no. member asuransi' })"
+            class="text-capitalize"
+            style="position: relative"
+            :state="getDataError({ rawLabel: 'no. member asuransi' })"
             :invalid-feedback="
               renderInvalidFeedback({
                 validationDesc: blindlyGetData({
-                  rawLabel: 'no. member/polis asuransi'
+                  rawLabel: 'no. member asuransi'
                 })
               })
             ">
             <b-form-input @keyup="
                 setValue({
-                  rawLabel: 'no. member/polis asuransi',
+                  rawLabel: 'no. member asuransi',
                   $event
                 })
-              " :disabled="disabledForm()" :value="getValue('no. member/polis asuransi')" :maxlength="30" />
+              "
+              :disabled="disabledForm()"
+              :value="getValue('no. member asuransi')"
+              :maxlength="30"
+            />
+          </b-form-group>
+          <b-form-group
+            :label="renderLabel({ label: 'no. polis asuransi' })"
+            class="text-capitalize"
+            style="position: relative"
+            :state="getDataError({ rawLabel: 'no. polis asuransi' })"
+            :invalid-feedback="
+              renderInvalidFeedback({
+                validationDesc: blindlyGetData({
+                  rawLabel: 'no. polis asuransi'
+                })
+              })
+            "
+          >
+            <b-form-input
+              @keyup="
+                setValue({
+                  rawLabel: 'no. polis asuransi',
+                  $event
+                })
+              "
+              :disabled="disabledForm()"
+              :value="getValue('no. polis asuransi')"
+              :maxlength="30"
+            />
           </b-form-group>
           <b-form-group :label="renderLabel({ label: 'nama penanggung jawab' })" class="text-capitalize"
             style="position: relative" :state="getDataError({ rawLabel: 'nama penanggung jawab' })" :invalid-feedback="
@@ -429,30 +461,250 @@
 </template>
 
 <script>
-  import Vue from "vue";
-  import {
-    Datetime
-  } from "vue-datetime";
-  import axios from "axios";
-  import startCase from "lodash/startCase";
-  import {
-    required,
-    minLength,
-    maxLength,
-    numeric,
-    email
-  } from "vuelidate/lib/validators";
-  import "vue-datetime/dist/vue-datetime.css";
-  import ImageUploader from 'vue-image-upload-resize'
-  Vue.use(ImageUploader);
-  import moment from "moment";
-  import {
-    library
-  } from "@fortawesome/fontawesome-svg-core";
-  import {
-    faCamera
-  } from "@fortawesome/free-solid-svg-icons";
-  library.add(faCamera);
+
+  
+import Vue from "vue";
+import { Datetime } from "vue-datetime";
+import axios from "axios";
+import startCase from "lodash/startCase";
+import ImageUploader from 'vue-image-upload-resize';
+Vue.use(ImageUploader);
+import {
+  required,
+  minLength,
+  maxLength,
+  numeric,
+  email
+} from "vuelidate/lib/validators";
+import "vue-datetime/dist/vue-datetime.css";
+import "vue2-dropzone/dist/vue2Dropzone.min.css";
+import moment from "moment";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faCamera } from "@fortawesome/free-solid-svg-icons";
+library.add(faCamera);
+
+const tmp = [
+  {
+    label: "nama lengkap",
+    alias: "nama",
+    validations: {
+      required
+    }
+  },
+  {
+    label: "no. handphone",
+    alias: "nomor_hp",
+    validations: {
+      required,
+      numeric,
+      minLength: minLength(10)
+    }
+  },
+  {
+    label: "nik",
+    alias: "nik",
+    validations: {}
+  },
+  {
+    label: "email",
+    alias: "email",
+    validations: {
+      required
+    }
+  },
+  {
+    label: "tempat lahir",
+    alias: "tempat_lahir",
+    validations: {
+      required
+    }
+  },
+  {
+    label: "tanggal lahir",
+    alias: "tanggal_lahir",
+    validations: {
+      required
+    }
+  },
+  {
+    label: "nama penjamin/asuransi",
+    alias: "nama_penjamin",
+    validations: {}
+  },
+  {
+    label: "jenis kelamin",
+    alias: "jenis_kelamin",
+    validations: {
+      required
+    }
+  },
+  {
+    label: "gol. darah",
+    alias: "golongan_darah",
+    validations: {}
+  },
+  // {
+  //   label: "no. member/polis asuransi",
+  //   alias: "nomor_polis",
+  //   validations: {}
+  // },
+  {
+    label: "no. member asuransi",
+    alias: "nomor_member",
+    validations: {}
+  },
+  {
+    label: "no. polis asuransi",
+    alias: "nomor_polis",
+    validations: {}
+  },
+  {
+    label: "nama penanggung jawab",
+    alias: "nama_penanggung_jawab",
+    validations: {}
+  },
+  {
+    label: "no. hp penanggung jawab",
+    alias: "nomor_hp_penanggung_jawab",
+    validations: {
+      // numeric,
+      // minLength: minLength(10)
+    }
+  },
+  {
+    label: "alamat rumah",
+    alias: "alamat_rumah",
+    validations: { required }
+  },
+  {
+    label: "rt",
+    alias: "rt",
+    validations: {}
+  },
+  {
+    label: "rw",
+    alias: "rw",
+    validations: {}
+  },
+  {
+    label: "kel/desa",
+    alias: "kelurahan",
+    validations: {}
+  },
+  {
+    label: "kecamatan",
+    alias: "kecamatan",
+    validations: {}
+  },
+  {
+    label: "status perkawinan",
+    alias: "status_perkawinan",
+    validations: { required }
+  },
+  {
+    label: "pekerjaan",
+    alias: "pekerjaan",
+    validations: {}
+  },
+  {
+    label: "nomor rekam medis",
+    alias: "nomor_rekam_medis",
+    validations: {}
+  }
+];
+
+const jobs = [
+  "Belum/Tidak Bekerja",
+  "Mengurus Rumah Tangga",
+  "Pelajar/Mahasiswa",
+  "Pensiunan",
+  "Pegawai Negeri Sipil",
+  "Tentara Nasional Indonesia",
+  "Kepolisian RI",
+  "Perdagangan",
+  "Petani/Pekebun",
+  "Peternak",
+  "Nelayan/Perikanan",
+  "Industri",
+  "Konstruksi",
+  "Transportasi",
+  "Karyawan Swasta",
+  "Karyawan BUMN",
+  "Karyawan BUMD",
+  "Karyawan Honorer",
+  "Buruh Harian Lepas",
+  "Buruh Tani/Perkebunan",
+  "Buruh Nelayan/Perikanan",
+  "Buruh Peternakan",
+  "Pembantu Rumah Tangga",
+  "Tukang Cukur",
+  "Tukang Listrik",
+  "Tukang Batu",
+  "Tukang Kayu",
+  "Tukang Sol Sepatu",
+  "Tukang Las/Pandai Besi",
+  "Tukang Jahit",
+  "Penata Rambut",
+  "Penata Rias",
+  "Penata Busana",
+  "Mekanik",
+  "Tukang Gigi",
+  "Seniman",
+  "Tabib",
+  "Paraji",
+  "Perancang Busana",
+  "Penterjemah",
+  "Imam Masjid",
+  "Pendeta",
+  "Pastur",
+  "Wartawan",
+  "Ustadz/Mubaligh",
+  "Juru Masak",
+  "Promotor Acara",
+  "Anggota DPR-RI",
+  "Anggota DPD",
+  "Anggota BPK",
+  "Presiden",
+  "Wakil Presiden",
+  "Anggota Mahkamah",
+  "Konstitusi",
+  "Anggota Kabinet/Kementrian",
+  "Duta Besar",
+  "Gubernur",
+  "Wakil Gubernur",
+  "Bupati",
+  "Wakil Bupati",
+  "Walikota",
+  "Wakil Walikota",
+  "Anggota DPRD Propinsi",
+  "Anggota DPRD Kabupten/Kota",
+  "Dosen",
+  "Guru",
+  "Pilot",
+  "Pengacara",
+  "Notaris",
+  "Arsitek",
+  "Akuntan",
+  "Konsultan",
+  "Dokter",
+  "Bidan",
+  "Perawat",
+  "Apoteker",
+  "Psikiater/Psikolog",
+  "Penyiar Televisi",
+  "Penyiar Radio",
+  "Pelaut",
+  "Peneliti",
+  "Sopir",
+  "Pialang",
+  "Paranormal",
+  "Pedagang",
+  "Perangkat Desa",
+  "Kepala Desa",
+  "Biarawati",
+  "Wiraswasta"
+];
+>>>>>>> c1cc4a6bd2e566105ac059edd4fd1684ae541f59
 
   const tmp = [{
       label: "nama lengkap",

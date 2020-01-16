@@ -258,10 +258,9 @@ export default {
     async fetchListPasien() {
       try {
         const tanggalLahir =
-          this.tanggalLahir &&
-          `&tanggal_lahir=${moment(this.tanggalLahir).format("YYYY-MM-DD")}`;
+          this.tanggalLahir && moment(this.tanggalLahir).format("YYYY-MM-DD");
         const res = await axios.get(
-          `${this.url_api}/pasien?limit=10&page=${this.currentPage}&nama_pasien=${this.namaPasien}&no_rekam_medis=${this.noRekamMedis}${tanggalLahir}`
+          `${this.url_api}/pasien?limit=10&page=${this.currentPage}&nama_pasien=${this.namaPasien}&no_rekam_medis=${this.noRekamMedis}&tanggal_lahir=${tanggalLahir}`
         );
         const { success, data } = res.data;
         if (success) {
