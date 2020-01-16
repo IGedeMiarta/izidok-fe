@@ -50,11 +50,11 @@
                       <b-form-input
                         v-if="
                           !/(badan)/gi.test(form.label) &&
-                            [
+                            ![
                               'tensi sistole',
-                              'tinggi diastole',
+                              'tensi diastole',
                               'nadi'
-                            ].includes(form.label.toLowerCase())
+                            ].includes(form.rawLabel.toLowerCase())
                         "
                         :type="form.type || 'text'"
                         v-model="formData[form.label]"

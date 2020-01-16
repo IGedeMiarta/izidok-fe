@@ -53,6 +53,9 @@
                           start-placeholder="Start date"
                           end-placeholder="End date"
                           :picker-options="pickerOptions"
+                          v-model="daterangeValue"
+                          format="dd-MM-yyyy"
+                          value-format="dd-MM-yyyy"
                         />
                       </b-form-group>
                     </b-col>
@@ -80,17 +83,21 @@
                       </b-form-group>
                     </b-col>
                   </b-row>
+                  <b-row class="my-2">
+                    <b-col>
+                      <b-button
+                        variant="first"
+                        class="text-capitalize float-right"
+                        @click="fetchAntrean(1)"
+                        >cari</b-button
+                      >
+                    </b-col>
+                  </b-row>
                 </b-container>
               </b-collapse>
             </div>
           </div>
           <div class="d-flex justify-content-end mb-4">
-            <b-button
-              variant="first"
-              class="text-capitalize mr-2"
-              @click="fetchAntrean(1)"
-              >cari</b-button
-            >
             <b-button
               :to="{ name: 'registrasi-rawat-jalan' }"
               variant="primary"
@@ -303,7 +310,8 @@ export default {
         const day = moment().subtract(1, "day");
         return x.isBefore(day);
       }
-    }
+    },
+    daterangeValue: Array(2).fill(new Date(), 0, 2)
   }),
   mounted() {
     moment.locale("id");
@@ -372,12 +380,17 @@ export default {
     async fetchAntrean(page = 1) {
       let dt = moment().format("YYYY-MM-DD");
       try {
+        const reverseDate = date => moment(date).format("YYYY-MM-DD");
         const res = await axios.get(
           `${this.url_api}/transaksi?limit=${
             this.perPage
-          }&status=${this.statusAntrean.toUpperCase()}&from=2019-12-01&to=2019-12-31&page=${page}&no_rekam_medis=${
-            this.noRekamMedis
-          }&nama_pasien=${this.namaPasien}`
+          }&status=${this.statusAntrean.toUpperCase()}&from=${reverseDate(
+            this.daterangeValue[0]
+          )}&to=${reverseDate(
+            this.daterangeValue[1]
+          )}&page=${page}&no_rekam_medis=${this.noRekamMedis}&nama_pasien=${
+            this.namaPasien
+          }`
         );
         const { status, data } = res.data;
         if (status) {
