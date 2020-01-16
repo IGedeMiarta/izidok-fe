@@ -346,31 +346,6 @@
               :maxlength="30"
             />
           </b-form-group>
-          <b-form-group
-            :label="renderLabel({ label: 'nama penanggung jawab' })"
-            class="text-capitalize"
-            style="position: relative"
-            :state="getDataError({ rawLabel: 'nama penanggung jawab' })"
-            :invalid-feedback="
-              renderInvalidFeedback({
-                validationDesc: blindlyGetData({
-                  rawLabel: 'nama penanggung jawab'
-                })
-              })
-            "
-          >
-            <b-form-input
-              @keyup="
-                setValue({
-                  rawLabel: 'nama penanggung jawab',
-                  $event
-                })
-              "
-              :disabled="disabledForm()"
-              :value="getValue('nama penanggung jawab')"
-              :maxlength="30"
-            />
-          </b-form-group>
         </div>
       </div>
       <div class="form-row">
@@ -401,34 +376,28 @@
           />
         </b-form-group>
         <b-form-group
-          :label="renderLabel({ label: 'no. hp penanggung jawab' })"
+          :label="renderLabel({ label: 'nama penanggung jawab' })"
           class="text-capitalize col-md-6"
           style="position: relative"
-          :state="getDataError({ rawLabel: 'no. hp penanggung jawab' })"
+          :state="getDataError({ rawLabel: 'nama penanggung jawab' })"
           :invalid-feedback="
             renderInvalidFeedback({
               validationDesc: blindlyGetData({
-                rawLabel: 'no. hp penanggung jawab'
+                rawLabel: 'nama penanggung jawab'
               })
             })
           "
         >
           <b-form-input
-            @keypress="
-              onKeyInputNumber({
-                rawLabel: 'no. hp penanggung jawab',
-                $event
-              })
-            "
             @keyup="
               setValue({
-                rawLabel: 'no. hp penanggung jawab',
+                rawLabel: 'nama penanggung jawab',
                 $event
               })
             "
             :disabled="disabledForm()"
-            :value="getValue('no. hp penanggung jawab')"
-            :maxlength="15"
+            :value="getValue('nama penanggung jawab')"
+            :maxlength="30"
           />
         </b-form-group>
       </div>
@@ -557,7 +526,39 @@
             </b-col>
           </b-row>
         </b-col>
-        <b-col cols="6"></b-col>
+        <b-col cols="6" class="pl-1">
+          <b-form-group
+            :label="renderLabel({ label: 'no. hp penanggung jawab' })"
+            class="text-capitalize"
+            style="position: relative"
+            :state="getDataError({ rawLabel: 'no. hp penanggung jawab' })"
+            :invalid-feedback="
+              renderInvalidFeedback({
+                validationDesc: blindlyGetData({
+                  rawLabel: 'no. hp penanggung jawab'
+                })
+              })
+            "
+          >
+            <b-form-input
+              @keypress="
+                onKeyInputNumber({
+                  rawLabel: 'no. hp penanggung jawab',
+                  $event
+                })
+              "
+              @keyup="
+                setValue({
+                  rawLabel: 'no. hp penanggung jawab',
+                  $event
+                })
+              "
+              :disabled="disabledForm()"
+              :value="getValue('no. hp penanggung jawab')"
+              :maxlength="15"
+            />
+          </b-form-group>
+        </b-col>
       </b-row>
       <b-row class="mb-3">
         <b-col cols="6">
