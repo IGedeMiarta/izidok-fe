@@ -86,7 +86,7 @@
       </div>
       <div class="form-row">
         <b-form-group
-          :label="renderLabel({ label: 'no. ktp' })"
+          label="No. KTP"
           class="text-capitalize col-md-6 pr-3"
           style="position: relative"
           :state="getDataError({ rawLabel: 'nik' })"
@@ -136,6 +136,7 @@
                 $event
               })
             "
+            :state="getDataError({ rawLabel: 'email' })"
             :disabled="disabledForm()"
             :value="getValue('email')"
             :maxlength="30"
@@ -681,7 +682,9 @@ const tmp = [
   {
     label: "email",
     alias: "email",
-    validations: {}
+    validations: {
+      required
+    }
   },
   {
     label: "tempat lahir",
