@@ -38,15 +38,6 @@
                     <b-col>
                       <b-form-group label="tanggal" class="text-capitalize">
                         <!-- <b-form-input /> -->
-                        <!-- <Datetime
-                          input-class="form-control"
-                          zone="Asia/Jakarta"
-                          format="d LLL yyyy"
-                          :value="tanggal"
-                          @input="tanggalSelected"
-                          :min-datetime="minDatetime"
-                          :max-datetime="maxDatetime"
-                        /> -->
                         <date-picker
                           class="w-100"
                           type="daterange"
@@ -207,8 +198,6 @@
 <script>
 import axios from "axios";
 import startCase from "lodash/startCase";
-import { Datetime } from "vue-datetime";
-import "vue-datetime/dist/vue-datetime.css";
 import { DatePicker } from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 
@@ -282,19 +271,7 @@ export default {
       { key: "actions", label: "actions" },
       "status"
     ],
-    items: [
-      {
-        no: 1,
-        waktu_konsultasi: "2000-12-12",
-        "nama pasien": "Test",
-        "nomor rekam medis": 123,
-        "jenis kelamin": "P",
-        "nomor hp": "0812637183",
-        "dokter tujuan": "sss",
-        actions: 1,
-        status: "menunggu"
-      }
-    ],
+    items: [],
     pasiens: [],
     noRekamMedis: "",
     namaPasien: "",
