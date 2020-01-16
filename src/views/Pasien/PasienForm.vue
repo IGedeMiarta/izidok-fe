@@ -297,14 +297,14 @@
         </div>
         <div class="col-md-6">
           <b-form-group
-            :label="renderLabel({ label: 'no. member/polis asuransi' })"
+            :label="renderLabel({ label: 'no. member asuransi' })"
             class="text-capitalize"
             style="position: relative"
-            :state="getDataError({ rawLabel: 'no. member/polis asuransi' })"
+            :state="getDataError({ rawLabel: 'no. member asuransi' })"
             :invalid-feedback="
               renderInvalidFeedback({
                 validationDesc: blindlyGetData({
-                  rawLabel: 'no. member/polis asuransi'
+                  rawLabel: 'no. member asuransi'
                 })
               })
             "
@@ -312,12 +312,37 @@
             <b-form-input
               @keyup="
                 setValue({
-                  rawLabel: 'no. member/polis asuransi',
+                  rawLabel: 'no. member asuransi',
                   $event
                 })
               "
               :disabled="disabledForm()"
-              :value="getValue('no. member/polis asuransi')"
+              :value="getValue('no. member asuransi')"
+              :maxlength="30"
+            />
+          </b-form-group>
+          <b-form-group
+            :label="renderLabel({ label: 'no. polis asuransi' })"
+            class="text-capitalize"
+            style="position: relative"
+            :state="getDataError({ rawLabel: 'no. polis asuransi' })"
+            :invalid-feedback="
+              renderInvalidFeedback({
+                validationDesc: blindlyGetData({
+                  rawLabel: 'no. polis asuransi'
+                })
+              })
+            "
+          >
+            <b-form-input
+              @keyup="
+                setValue({
+                  rawLabel: 'no. polis asuransi',
+                  $event
+                })
+              "
+              :disabled="disabledForm()"
+              :value="getValue('no. polis asuransi')"
               :maxlength="30"
             />
           </b-form-group>
@@ -717,8 +742,18 @@ const tmp = [
     alias: "golongan_darah",
     validations: {}
   },
+  // {
+  //   label: "no. member/polis asuransi",
+  //   alias: "nomor_polis",
+  //   validations: {}
+  // },
   {
-    label: "no. member/polis asuransi",
+    label: "no. member asuransi",
+    alias: "nomor_member",
+    validations: {}
+  },
+  {
+    label: "no. polis asuransi",
     alias: "nomor_polis",
     validations: {}
   },
