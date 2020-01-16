@@ -39,14 +39,15 @@
                     <b-col>
                       <b-form-group label="tanggal" class="text-capitalize">
                         <!-- <b-form-input /> -->
-                        <Datetime
-                          input-class="form-control"
-                          zone="Asia/Jakarta"
-                          format="d LLL yyyy"
-                          :value="tanggal"
-                          @input="tanggalSelected"
-                          :min-datetime="minDatetime"
-                          :max-datetime="maxDatetime"
+                        <date-picker
+                          class="w-100"
+                          type="daterange"
+                          start-placeholder="Start date"
+                          end-placeholder="End date"
+                          :picker-options="pickerOptions"
+                          v-model="daterangeValue"
+                          format="dd-MM-yyyy"
+                          value-format="dd-MM-yyyy"
                         />
                       </b-form-group>
                     </b-col>
@@ -58,15 +59,9 @@
                         <b-form-input v-model="noRekamMedis" />
                       </b-form-group>
                     </b-col>
-                    <b-col>
-                      <b-form-group label="nama pasien" class="text-capitalize">
-                        <b-form-input v-model="namaPasien" />
-                      </b-form-group>
-                    </b-col>
                   </b-row>
-                  <p class="text-center text-uppercase my-2">atau</p>
                   <b-row>
-                    <b-col cols="4">
+                    <b-col>
                       <b-form-group label="status" class="text-capitalize">
                         <b-form-select
                           v-model="statusAntrean"
@@ -74,18 +69,27 @@
                         />
                       </b-form-group>
                     </b-col>
+                    <b-col>
+                      <b-form-group label="nama pasien" class="text-capitalize">
+                        <b-form-input v-model="namaPasien" />
+                      </b-form-group>
+                    </b-col>
+                  </b-row>
+                  <b-row class="my-2">
+                    <b-col>
+                      <b-button
+                        variant="first"
+                        class="text-capitalize float-right"
+                        @click="fetchAntrean(1)"
+                        >cari</b-button
+                      >
+                    </b-col>
                   </b-row>
                 </b-container>
               </b-collapse>
             </div>
           </div>
           <div class="d-flex justify-content-end mb-4">
-            <b-button
-              variant="first"
-              class="text-capitalize mr-2"
-              @click="fetchAntrean(1)"
-              >cari</b-button
-            >
             <b-button
               :to="{ name: 'registrasi-rawat-jalan' }"
               variant="primary"
@@ -195,8 +199,8 @@
 <script>
 import axios from "axios";
 import startCase from "lodash/startCase";
-import { Datetime } from "vue-datetime";
-import "vue-datetime/dist/vue-datetime.css";
+import { DatePicker } from "element-ui";
+import "element-ui/lib/theme-chalk/index.css";
 
 import { DateTime as LuxonDateTime } from "luxon";
 
@@ -210,7 +214,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
 
+import lang from "element-ui/lib/locale/lang/en";
+import locale from "element-ui/lib/locale";
+
 library.add(faAngleUp, faSearch, faSignInAlt, faTrashAlt, faRedo);
+locale.use(lang);
 
 const __dataRegistrasiPasien = {
   rekam_medis: {
@@ -245,7 +253,8 @@ const __dataRegistrasiPasien = {
 
 export default {
   components: {
-    Datetime
+    // Datetime,
+    DatePicker
   },
   data: () => ({
     dataRegistrasiPasien: null,
@@ -263,19 +272,7 @@ export default {
       { key: "actions", label: "actions" },
       "status"
     ],
-    items: [
-      {
-        no: 1,
-        waktu_konsultasi: "2000-12-12",
-        "nama pasien": "Test",
-        "nomor rekam medis": 123,
-        "jenis kelamin": "P",
-        "nomor hp": "0812637183",
-        "dokter tujuan": "sss",
-        actions: 1,
-        status: "menunggu"
-      }
-    ],
+    items: [],
     pasiens: [],
     noRekamMedis: "",
     namaPasien: "",
@@ -284,7 +281,15 @@ export default {
     minDatetime: LuxonDateTime.local().toISO(),
     maxDatetime: LuxonDateTime.local()
       .plus({ years: 3 })
-      .toISO()
+      .toISO(),
+    pickerOptions: {
+      disabledDate: date => {
+        const x = moment(date);
+        const day = moment().subtract(1, "day");
+        return x.isBefore(day);
+      }
+    },
+    daterangeValue: Array(2).fill(new Date(), 0, 2)
   }),
   mounted() {
     moment.locale("id");
@@ -353,12 +358,17 @@ export default {
     async fetchAntrean(page = 1) {
       let dt = moment().format("YYYY-MM-DD");
       try {
+        const reverseDate = date => moment(date).format("YYYY-MM-DD");
         const res = await axios.get(
           `${this.url_api}/transaksi?limit=${
             this.perPage
-          }&status=${this.statusAntrean.toUpperCase()}&from=2019-12-01&to=2019-12-31&page=${page}&no_rekam_medis=${
-            this.noRekamMedis
-          }&nama_pasien=${this.namaPasien}`
+          }&status=${this.statusAntrean.toUpperCase()}&from=${reverseDate(
+            this.daterangeValue[0]
+          )}&to=${reverseDate(
+            this.daterangeValue[1]
+          )}&page=${page}&no_rekam_medis=${this.noRekamMedis}&nama_pasien=${
+            this.namaPasien
+          }`
         );
         const { status, data } = res.data;
         if (status) {

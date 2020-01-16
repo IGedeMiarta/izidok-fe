@@ -36,8 +36,8 @@
     </h4>
     <b-form v-on:submit.prevent="submitForm">
       <div class="form-row">
-        <b-form-group label="Nama Lengkap" class="text-capitalize col-md-6 pr-3" style="position: relative"
-          :state="getDataError({ rawLabel: 'nama lengkap' })" :invalid-feedback="
+        <b-form-group :label="renderLabel({ label: 'nama lengkap' })" class="text-capitalize col-md-6 pr-3"
+          style="position: relative" :state="getDataError({ rawLabel: 'nama lengkap' })" :invalid-feedback="
             renderInvalidFeedback({
               validationDesc: blindlyGetData({
                 rawLabel: 'nama lengkap'
@@ -52,8 +52,8 @@
             " :state="getDataError({ rawLabel: 'nama lengkap' })" :disabled="disabledForm()"
             :value="getValue('nama lengkap')" :maxlength="60" />
         </b-form-group>
-        <b-form-group label="No. Handphone" class="text-capitalize col-md-6 pr-3" style="position: relative"
-          :state="getDataError({ rawLabel: 'no. handphone' })" :invalid-feedback="
+        <b-form-group :label="renderLabel({ label: 'no. handphone' })" class="text-capitalize col-md-6 pr-3"
+          style="position: relative" :state="getDataError({ rawLabel: 'no. handphone' })" :invalid-feedback="
             renderInvalidFeedback({
               validationDesc: blindlyGetData({
                 rawLabel: 'no. handphone'
@@ -90,8 +90,8 @@
               })
             " :disabled="disabledForm()" :value="getValue('nik')" :maxlength="25" />
         </b-form-group>
-        <b-form-group label="Email" class="text-capitalize col-md-6 pr-3" style="position: relative"
-          :state="getDataError({ rawLabel: 'email' })" :invalid-feedback="
+        <b-form-group :label="renderLabel({ label: 'email' })" class="text-capitalize col-md-6 pr-3"
+          style="position: relative" :state="getDataError({ rawLabel: 'email' })" :invalid-feedback="
             renderInvalidFeedback({
               validationDesc: blindlyGetData({
                 rawLabel: 'email'
@@ -103,15 +103,16 @@
                 rawLabel: 'email',
                 $event
               })
-            " :disabled="disabledForm()" :value="getValue('email')" :maxlength="30" />
+            " :state="getDataError({ rawLabel: 'email' })" :disabled="disabledForm()" :value="getValue('email')"
+            :maxlength="30" />
         </b-form-group>
       </div>
       <div class="form-row">
         <b-col cols="6">
           <b-row>
             <b-col cols="6">
-              <b-form-group label="Tempat Lahir" class="text-capitalize" style="position: relative"
-                :state="getDataError({ rawLabel: 'tempat lahir' })" :invalid-feedback="
+              <b-form-group :label="renderLabel({ label: 'tempat lahir' })" class="text-capitalize"
+                style="position: relative" :state="getDataError({ rawLabel: 'tempat lahir' })" :invalid-feedback="
                   renderInvalidFeedback({
                     validationDesc: blindlyGetData({
                       rawLabel: 'tempat lahir'
@@ -128,8 +129,8 @@
               </b-form-group>
             </b-col>
             <b-col cols="6">
-              <b-form-group label="Tanggal Lahir" class="text-capitalize mr-2" style="position: relative"
-                :state="getDataError({ rawLabel: 'tanggal lahir' })" :invalid-feedback="
+              <b-form-group :label="renderLabel({ label: 'tanggal lahir' })" class="text-capitalize mr-2"
+                style="position: relative" :state="getDataError({ rawLabel: 'tanggal lahir' })" :invalid-feedback="
                   renderInvalidFeedback({
                     validationDesc: blindlyGetData({
                       rawLabel: 'tanggal lahir'
@@ -143,8 +144,8 @@
           </b-row>
         </b-col>
         <b-col cols="6">
-          <b-form-group label="Nama Penjamin/Asuransi" class="text-capitalize" style="position: relative"
-            :state="getDataError({ rawLabel: 'nama penjamin/asuransi' })" :invalid-feedback="
+          <b-form-group :label="renderLabel({ label: 'nama penjamin/asuransi' })" class="text-capitalize"
+            style="position: relative" :state="getDataError({ rawLabel: 'nama penjamin/asuransi' })" :invalid-feedback="
               renderInvalidFeedback({
                 validationDesc: blindlyGetData({
                   rawLabel: 'nama penjamin/asuransi'
@@ -164,8 +165,8 @@
         <div class="col-md-6">
           <b-row>
             <b-col>
-              <b-form-group label="Jenis Kelamin" :state="getDataError({ rawLabel: 'jenis kelamin' })"
-                :invalid-feedback="
+              <b-form-group :label="renderLabel({ label: 'jenis kelamin' })"
+                :state="getDataError({ rawLabel: 'jenis kelamin' })" :invalid-feedback="
                   renderInvalidFeedback({
                     validationDesc: blindlyGetData({
                       rawLabel: 'jenis kelamin'
@@ -185,8 +186,9 @@
               </b-form-group>
             </b-col>
             <b-col>
-              <b-form-group label="Gol. Darah" class="text-capitalize col-md-6 p-0 float-left"
-                style="position: relative" :state="getDataError({ rawLabel: 'gol. darah' })" :invalid-feedback="
+              <b-form-group :label="renderLabel({ label: 'gol. darah' })"
+                class="text-capitalize col-md-6 p-0 float-left" style="position: relative"
+                :state="getDataError({ rawLabel: 'gol. darah' })" :invalid-feedback="
                   renderInvalidFeedback({
                     validationDesc: blindlyGetData({
                       rawLabel: 'gol. darah'
@@ -209,8 +211,9 @@
           </b-row>
         </div>
         <div class="col-md-6">
-          <b-form-group label="No. Member/Polis Asuransi" class="text-capitalize" style="position: relative"
-            :state="getDataError({ rawLabel: 'no. member/polis asuransi' })" :invalid-feedback="
+          <b-form-group :label="renderLabel({ label: 'no. member/polis asuransi' })" class="text-capitalize"
+            style="position: relative" :state="getDataError({ rawLabel: 'no. member/polis asuransi' })"
+            :invalid-feedback="
               renderInvalidFeedback({
                 validationDesc: blindlyGetData({
                   rawLabel: 'no. member/polis asuransi'
@@ -224,8 +227,8 @@
                 })
               " :disabled="disabledForm()" :value="getValue('no. member/polis asuransi')" :maxlength="30" />
           </b-form-group>
-          <b-form-group label="Nama Penanggung Jawab" class="text-capitalize" style="position: relative"
-            :state="getDataError({ rawLabel: 'nama penanggung jawab' })" :invalid-feedback="
+          <b-form-group :label="renderLabel({ label: 'nama penanggung jawab' })" class="text-capitalize"
+            style="position: relative" :state="getDataError({ rawLabel: 'nama penanggung jawab' })" :invalid-feedback="
               renderInvalidFeedback({
                 validationDesc: blindlyGetData({
                   rawLabel: 'nama penanggung jawab'
@@ -242,8 +245,8 @@
         </div>
       </div>
       <div class="form-row">
-        <b-form-group label="Alamat Rumah" class="text-capitalize col-md-6 pr-3" style="position: relative"
-          :state="getDataError({ rawLabel: 'alamat rumah' })" :invalid-feedback="
+        <b-form-group :label="renderLabel({ label: 'alamat rumah' })" class="text-capitalize col-md-6 pr-3"
+          style="position: relative" :state="getDataError({ rawLabel: 'alamat rumah' })" :invalid-feedback="
             renderInvalidFeedback({
               validationDesc: blindlyGetData({
                 rawLabel: 'alamat rumah'
@@ -258,8 +261,8 @@
             " :state="getDataError({ rawLabel: 'alamat rumah' })" :disabled="disabledForm()"
             :value="getValue('alamat rumah')" :maxlength="100" />
         </b-form-group>
-        <b-form-group label="No. Hp Penanggung Jawab" class="text-capitalize col-md-6" style="position: relative"
-          :state="getDataError({ rawLabel: 'no. hp penanggung jawab' })" :invalid-feedback="
+        <b-form-group :label="renderLabel({ label: 'no. hp penanggung jawab' })" class="text-capitalize col-md-6"
+          style="position: relative" :state="getDataError({ rawLabel: 'no. hp penanggung jawab' })" :invalid-feedback="
             renderInvalidFeedback({
               validationDesc: blindlyGetData({
                 rawLabel: 'no. hp penanggung jawab'
@@ -361,8 +364,8 @@
       </b-row>
       <b-row class="mb-3">
         <b-col cols="6">
-          <b-form-group label="Status Perkawinan" class="text-capitalize" style="position: relative"
-            :state="getDataError({ rawLabel: 'status perkawinan' })" :invalid-feedback="
+          <b-form-group :label="renderLabel({ label: 'status perkawinan' })" class="text-capitalize"
+            style="position: relative" :state="getDataError({ rawLabel: 'status perkawinan' })" :invalid-feedback="
               renderInvalidFeedback({
                 validationDesc: blindlyGetData({
                   rawLabel: 'status perkawinan'
@@ -440,6 +443,8 @@
     email
   } from "vuelidate/lib/validators";
   import "vue-datetime/dist/vue-datetime.css";
+  import ImageUploader from 'vue-image-upload-resize'
+  Vue.use(ImageUploader);
   import moment from "moment";
   import {
     library
@@ -448,8 +453,6 @@
     faCamera
   } from "@fortawesome/free-solid-svg-icons";
   library.add(faCamera);
-  import ImageUploader from 'vue-image-upload-resize';
-  Vue.use(ImageUploader);
 
   const tmp = [{
       label: "nama lengkap",
@@ -475,7 +478,9 @@
     {
       label: "email",
       alias: "email",
-      validations: {}
+      validations: {
+        required
+      }
     },
     {
       label: "tempat lahir",
@@ -722,12 +727,9 @@
         // this.output.info.newHeight = heightFoto;
         // console.log(heightFoto);
         this.heightFoto = output.info.newHeight;
-        console.log('Info', output);
-        console.log('Info', output.info.dataUrl);
-        console.log('Exif', output.exif);
 
         axios.post(`${this.url_api}/pasien/ocr`, {
-            file: output.dataUrl ,
+            file: output.dataUrl,
           })
           .then(function (response) {
             console.log(response);
@@ -735,9 +737,7 @@
           .catch(function (error) {
             console.log(error);
           });
-
       },
-
       assignValuePasien(data) {
         if (data) {
           Object.keys(data).map(item => {
@@ -803,7 +803,9 @@
         }
       },
       whitelistValidation() {
-        return this.setFormBasicData().map(item => item.rawLabel);
+        return this.setFormBasicData()
+          .filter(item => item.validations && !item.validations.required)
+          .map(item => item.rawLabel);
       },
       setFormData() {
         return this.setFormBasicData().reduce((arr, val) => {
@@ -885,7 +887,7 @@
         }
       }
     }
-  };
+  }
 </script>
 
 <style>
