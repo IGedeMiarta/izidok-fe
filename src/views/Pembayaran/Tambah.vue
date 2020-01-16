@@ -4,7 +4,8 @@
       heading="Pembayaran"
       :breadcrumb="[
         {
-          label: 'Manajemen Pembayaran'
+          label: 'Manajemen Pembayaran',
+          link : '/pembayaran'
         },
         {
           label: 'Pembayaran',

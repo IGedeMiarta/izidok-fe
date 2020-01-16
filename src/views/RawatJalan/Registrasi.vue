@@ -4,7 +4,8 @@
       heading="Registrasi Rawat Jalan"
       :breadcrumb="[
         {
-          label: 'rawat jalan'
+          label: 'rawat jalan',
+          link : '/antrean'
         },
         { label: 'registrasi', active: true }
       ]"

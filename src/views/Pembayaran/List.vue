@@ -4,7 +4,8 @@
       heading="Pembayaran"
       :breadcrumb="[
         {
-          label: 'Pembayaran'
+          label: 'Pembayaran',
+          link : '/pembayaran'
         },
         {
           label: 'List Pembayaran',

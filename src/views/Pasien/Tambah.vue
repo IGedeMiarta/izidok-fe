@@ -4,7 +4,8 @@
       heading="Manajemen Pasien"
       :breadcrumb="[
         {
-          label: 'Manajemen Pasien'
+          label: 'Manajemen Pasien',
+          link : '/pasien'
         },
         {
           label: 'Tambah Pasien',

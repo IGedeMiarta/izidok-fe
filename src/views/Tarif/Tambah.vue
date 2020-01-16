@@ -4,7 +4,8 @@
       heading="Manajemen Tarif"
       :breadcrumb="[
         {
-          label: 'Manajemen Tarif'
+          label: 'Manajemen Tarif',
+          link : '/tarif'
         },
         {
           label: 'Tambah Tarif',

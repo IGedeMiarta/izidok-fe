@@ -5,7 +5,8 @@
       :breadcrumb="[
         {
           label: 'rawat jalan',
-          active: true
+          active: true,
+          link : '/antrean'
         }
       ]"
     />
