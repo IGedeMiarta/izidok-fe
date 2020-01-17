@@ -115,7 +115,7 @@ const actions = {
             return;
         }
 
-        console.log('post data:', state.postData);
+        console.log('post data:', state.postData);return;
 
         try {
             commit('setIsSaving', { key: 'is_saving', value: true });

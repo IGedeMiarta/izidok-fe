@@ -149,7 +149,7 @@
         <label>Hasil Pemeriksaan Penunjang</label>
       </div>
     </div>
-    <div v-for="(item, index) in selectedFiles" :key="item.index" class="row file-upload">
+    <div v-for="(item, index) in selectedFiles" :key="item.name" class="row file-upload">
       <div class="col-md-4">
         <label>{{item.name}}</label>
       </div>
@@ -217,9 +217,9 @@ export default {
       selectedFiles: [],
       fileProgress: [],
       promises: [],
-      fileReaderPromises: [],
       uploadedFiles: [],
-      supportedFiles: ["png", "jpg", "jpeg", "png"]
+      compressedIndex: 0
+      // progress: null
     };
   },
   computed: {
@@ -281,98 +281,13 @@ export default {
       ];
       return file && acceptedImageTypes.includes(file["type"]);
     },
-    //on file selected handler
-    async onFileSelected(event) {
-      this.fileReaderPromises = [];
-
-      for (let i = 0; i < event.target.files.length; i++) {
-        let file = event.target.files[i];
-        let extension = file.name.split(".").pop();
-
-        if (this.supportedFiles.includes(extension.toLowerCase())) {
-          if (this.isFileImage(file)) {
-            this.compressImage(file);
-          } else {
-            file = { name: file.name, file: file, size: file.size };
-            this.selectedFiles.push(file);
-          }
-        }else{
-          this.$swal({
-              type: "error",
-              title: "Oops...",
-              text: 'file ' + file.name + ' not supported, please upload PNG, JPG or PDF file...'
-            })
-        }
-      }
-
-      await Promise.all(this.fileReaderPromises).then(res => {
-        res.map(item => {
-          this.selectedFiles.push(item);
-        });
-      });
-
-      if (this.selectedFiles.length > 0) {
-        this.selectedFiles.map(item => {
-          if (!item.isUploading) {
-            this.prepareUpload(item.name, item.file);
-            item.isUploading = true;
-          }
-        });
-      }
-
-      await Promise.all(this.promises).then(res => {
-        res.map((item, index) => {
-          if (!item.data.status) {
-            return this.$swal({
-              type: "error",
-              title: "Oops...",
-              text: item.data.message
-            }).then(() => {
-              console.log(index);
-            });
-          } else {
-            this.uploadedFiles.push(item.data);
-            this.updatePostData({
-              key: "pemeriksaan_penunjang",
-              value: this.uploadedFiles
-            });
-
-            console.log(this.uploadedFiles);
-          }
-        });
-      });
-    },
-    //compress if file images
-    compressImage(file) {
-      this.fileReaderPromises.push(
-        new Promise((resolve, reject) => {
-          let reader = new FileReader();
-          reader.onloadend = () => {
-            let imageCompressor = new ImageCompressor({
-              onSuccess: response => {
-                let ImageURL = response.compressed;
-                let block = ImageURL.split(";");
-                let contentType = block[0].split(":")[1];
-                let realData = block[1].split(",")[1];
-                let blob = this.b64toBlob(realData, contentType);
-                resolve({ name: file.name, file: blob, size: blob.size });
-              },
-              scale: 70,
-              quality: 70,
-              originalImage: reader.result
-            });
-          };
-          reader.readAsDataURL(file);
-        })
-      );
-    },
     //prepare formData
-    prepareUpload(filename, file) {
+    async prepareUpload(filename, file, index) {
       let formData = new FormData();
       formData.append(filename, file);
 
       this.promises.push(
-        axios.post("http://localhost:9001/api/v1/upload-cloud", formData, {
+        axios.post("http://localhost:9001/api/v1/test-upload", formData, {
           headers: {
             "Content-Type": "multipart/form-data"
           },
@@ -382,29 +297,95 @@ export default {
           }
         })
       );
+
+      if (this.isLastItem(index)) {
+        const uploads = await Promise.all(this.promises)
+          .then(values => {
+            values.map(item => {
+              console.log(item);
+              if (!item.data.status) {
+                return this.$swal({
+                  type: "error",
+                  title: "Oops...",
+                  text: item.data.message
+                }).then(() => {
+                  this.removeFile(file, index);
+                });
+              }
+
+              this.uploadedFiles.push(item.data);
+            });
+
+            this.updatePostData({
+              key: "pemeriksaan_penunjang",
+              value: this.uploadedFiles
+            });
+
+            return values;
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }
+    },
+    //compress if file images
+    compressImage(file, index) {
+      if (this.isFileImage(file)) {
+        let reader = new FileReader();
+        reader.onloadend = () => {
+          let imageCompressor = new ImageCompressor({
+            onSuccess: response => {
+              let ImageURL = response.compressed;
+              let block = ImageURL.split(";");
+              let contentType = block[0].split(":")[1];
+              let realData = block[1].split(",")[1];
+              let blob = this.b64toBlob(realData, contentType);
+              this.prepareUpload(file.name, blob, index);
+            },
+            scale: 70,
+            quality: 70,
+            originalImage: reader.result
+          });
+        };
+        reader.readAsDataURL(file);
+      } else {
+        this.prepareUpload(file.name, file);
+      }
+    },
+    //on file selected handler
+    onFileSelected(event) {
+      for (let i = 0; i < event.target.files.length; i++) {
+        this.selectedFiles.push(event.target.files[i]);
+      }
+
+      if (!this.selectedFiles.length > 0) {
+        return;
+      }
+
+      Object.values(this.selectedFiles).forEach((file, index) => {
+        this.compressImage(file, index);
+      });
     },
     //camera handler
     onImageCaptured(event) {
       //handle image from camera or from disk here...
-      this.onFileSelected(event);
     },
     //download selected file
-    downloadFile(item) {
-      const data = window.URL.createObjectURL(item.file);
+    downloadFile(file) {
+      const data = window.URL.createObjectURL(file);
       const link = document.createElement("a");
       link.href = data;
-      link.download = item.name;
+      link.download = file.name;
       link.click();
       setTimeout(function() {
         window.URL.revokeObjectURL(data);
       }, 100);
     },
     //view selected file
-    readFile(item) {
-      const data = window.URL.createObjectURL(item.file);
+    readFile(file) {
+      const data = window.URL.createObjectURL(file);
       window.open(data);
     },
-    //remove selected file
     removeFile(file, index) {
       this.selectedFiles.splice(index, 1);
       let filename = file.name;
@@ -423,6 +404,9 @@ export default {
         key: "pemeriksaan_penunjang",
         value: this.uploadedFiles
       });
+
+      // console.log(this.selectedFiles);
+      // console.log(this.uploadedFiles);
     },
 
     handleMousedown(e) {
