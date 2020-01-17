@@ -92,7 +92,12 @@
                       </div>
                       <div class="form-group col-md-3">
                         <label for="inputLayanan">Tarif Layanan</label>
-                        <input type="number" class="form-control" v-model="editData.tarif">
+                        
+                        <b-form-input
+                          v-model.lazy="editData.tarif"
+                          v-money="money"
+                          maxlength="12"
+                        ></b-form-input>
                       </div>
                       <div class="form-group col-md-2 " style="margin-top:30px;">
                         <b-button variant="primary" class="float-right" @click="updateTarif(editData)">Simpan
@@ -249,6 +254,7 @@
 
       async updateTarif(dataEdit) {
         try {
+          dataEdit.tarif = parseInt(dataEdit.tarif.replace(/\D/g, ""));
           const res = await axios.put(
             `${this.url_api}/layanan/${dataEdit.id}`,
             dataEdit
