@@ -296,12 +296,15 @@ export default {
             file = { name: file.name, file: file, size: file.size };
             this.selectedFiles.push(file);
           }
-        }else{
+        } else {
           this.$swal({
-              type: "error",
-              title: "Oops...",
-              text: 'file ' + file.name + ' not supported, please upload PNG, JPG or PDF file...'
-            })
+            type: "error",
+            title: "Oops...",
+            text:
+              "file " +
+              file.name +
+              " not supported, please upload PNG, JPG or PDF file..."
+          });
         }
       }
 
@@ -417,11 +420,18 @@ export default {
         })
         .indexOf(filename);
 
-      this.uploadedFiles.splice(removeIndex, 1);
+      const doDelete = axios.post("http://localhost:9001/api/v1/delete-cloud", {
+          filenames: [this.uploadedFiles[removeIndex].uploaded_name]
+        });
 
-      this.updatePostData({
-        key: "pemeriksaan_penunjang",
-        value: this.uploadedFiles
+      doDelete.then(res => {
+        console.log("delete", res);
+        this.uploadedFiles.splice(removeIndex, 1);
+
+        this.updatePostData({
+          key: "pemeriksaan_penunjang",
+          value: this.uploadedFiles
+        });
       });
     },
 
