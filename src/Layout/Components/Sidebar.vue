@@ -135,12 +135,12 @@ export default {
           },
           child: [
             {
-              href: "/rawat-jalan/antrean",
-              title: "Antrean"
-            },
-            {
               href: "/rawat-jalan/registrasi",
               title: "Registrasi"
+            },
+            {
+              href: "/rawat-jalan/antrean",
+              title: "Antrean"
             },
             {
               href: "/rekam-medis/1/1",
