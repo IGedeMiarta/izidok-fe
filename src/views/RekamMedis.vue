@@ -73,7 +73,7 @@
             </div>
             <Footer ref="footer" />
             <div class="col-xl-12 d-flex justify-content-xl-end">
-              <button class="btn btn-success m-2">Download</button>
+              <button class="btn btn-success m-2">Print</button>
               <button class="btn btn-info m-2">Keluar</button>
               <button @click="save()" class="btn btn-primary m-2 btn-spinner">
                 <b-spinner v-show="saving_params.is_saving" class="btn-wrapper--icon" small></b-spinner>
