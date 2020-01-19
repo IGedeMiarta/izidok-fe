@@ -34,7 +34,8 @@
             v-on:click="isHidden = false;
               isPen = true;
               updatePostData({key:'pemeriksaan_is_draw', value: true});
-              isActive = 'pen'"
+              isActive = 'pen';
+              selectedOrgan = []"
             :class="{ active: isActive === 'pen' }"
           />
           <font-awesome-icon
@@ -42,7 +43,8 @@
             class="font-size-xl m-2 grow icon"
             v-on:click="isHidden = true;
               updatePostData({key:'pemeriksaan_is_draw', value: false});
-              isActive = 'keyboard'"
+              isActive = 'keyboard';
+              selectedOrgan = []"
             :class="{ active: isActive === 'keyboard' }"
           />
         </div>
@@ -177,7 +179,7 @@ export default {
       let backgroundURL = image_url;
 
       var background = new Image();
-      background.crossOrigin = "Anonymous";
+      // background.crossOrigin = "Anonymous";
       background.src = backgroundURL;
 
       //remove existing image
@@ -186,22 +188,36 @@ export default {
       }
 
       background.onload = function() {
+        let newSize = { width: background.width, height: background.height };
+        if (background.width > 700) {
+          newSize = self.resizeImage(background);
+        }
+
         if (self.isHidden) {
-          img_organ.appendChild(background);
+
+          let img = document.createElement("img");
+          img.src = backgroundURL;
+          img.style.height = newSize.height + 'px';
+          img.style.width = newSize.width + 'px';
+          img_organ.appendChild(img);
+
+          // img_organ.appendChild(background);
         } else {
-          var width = background.width,
-            height = background.height;
-
-          if (width > 700) {
-            width = 0.5 * width;
-            height = 0.5 * height;
-          }
-
-          ctx.drawImage(background, 0, 0, width, height);
+          ctx.drawImage(background, 0, 0, newSize.width, newSize.height);
         }
       };
     },
-     handleMousedown(e) {
+    resizeImage(background) {
+      let width = background.width,
+        height = background.height,
+        screen_width = screen.width;
+
+      width = 0.5 * screen_width;
+      height = height * (width / background.width); //0.5 * height;
+
+      return { width, height };
+    },
+    handleMousedown(e) {
       this.lastPos = this.getMousePos(e);
       this.ctx.lineWidth = this.penWidth;
       this.drawing = true;
@@ -276,7 +292,7 @@ export default {
     asyncFind(query) {
       let self = this;
       this.isLoading = true;
-      
+
       console.log(query);
 
       axios
@@ -304,7 +320,8 @@ export default {
         })
         .catch(err => {
           self.isLoading = false;
-          console.log(err)});
+          console.log(err);
+        });
     },
     clear() {
       this.canvas.width = this.canvas.width;
