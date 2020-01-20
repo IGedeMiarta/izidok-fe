@@ -3,7 +3,7 @@
     <form>
       <div class="form-row">
         <div class="form-group col-md-2">
-          <label for="tdSistole">TD Sistole*</label>
+          <label for="tdSistole">TD Sistole</label>
           <input
             type="text"
             class="form-control"
@@ -13,7 +13,7 @@
           />
         </div>
         <div class="form-group col-md-2">
-          <label for="tdDiastole">TD Diastole*</label>
+          <label for="tdDiastole">TD Diastole</label>
           <input
             type="text"
             class="form-control"
@@ -23,7 +23,7 @@
           />
         </div>
         <div class="form-group col-md-2">
-          <label for="tinggiBadan">TB*</label>
+          <label for="tinggiBadan">TB</label>
           <input
             type="text"
             class="form-control"
@@ -33,7 +33,7 @@
           />
         </div>
         <div class="form-group col-md-2">
-          <label for="beratBadan">BB*</label>
+          <label for="beratBadan">BB</label>
           <input
             type="text"
             class="form-control"
@@ -45,15 +45,15 @@
       </div>
       <div class="form-row">
         <div class="form-group col-md-2">
-          <label for="nadi">Nadi*</label>
+          <label for="nadi">Nadi</label>
           <input type="text" class="form-control" id="nadi" :value="pasien.nadi" @input="updateAnamnesa({key:$event.target.id, value: $event.target.value});"/>
         </div>
         <div class="form-group col-md-2">
-          <label for="suhu">Suhu*</label>
+          <label for="suhu">Suhu</label>
           <input type="text" class="form-control" id="suhu" :value="pasien.suhu" @input="updateAnamnesa({key:$event.target.id, value: $event.target.value});"/>
         </div>
         <div class="form-group col-md-4">
-          <label for="respirasi">Respirasi*</label>
+          <label for="respirasi">Respirasi</label>
           <input type="text" class="form-control" id="respirasi" :value="pasien.respirasi" @input="updateAnamnesa({key:$event.target.id, value: $event.target.value});"/>
         </div>
       </div>
