@@ -1,24 +1,11 @@
 <template>
   <div>
     <div class="row">
-      <div class="col-md-6" @click="asyncFind('')">
-        <multiselect
-          v-model="selectedOrgan"
-          :options="organs"
-          placeholder="Pilih Organ*"
-          label="nama"
-          track-by="nama"
-          open-direction="bottom"
-          :multiple="false"
-          :loading="isLoading"
-          :clear-on-select="true"
-          :close-on-select="true"
-          :options-limit="10"
-          :hide-selected="true"
-          @search-change="asyncFind"
-        ></multiselect>
+      <div class="col-md-4">
       </div>
-      <div class="col-md-4 offset-md-2">
+      <div class="col-md-4" >
+      </div>
+      <div class="col-md-4">
         <div class="row d-flex justify-content-end mr-2">
           <font-awesome-icon
             icon="eraser"
@@ -33,18 +20,16 @@
             class="font-size-xl m-2 grow icon"
             v-on:click="isHidden = false;
               isPen = true;
-              updatePostData({key:'pemeriksaan_is_draw', value: true});
-              isActive = 'pen';
-              selectedOrgan = []"
+              updatePostData({key:'tatalaksana_is_draw', value: true});
+              isActive = 'pen'"
             :class="{ active: isActive === 'pen' }"
           />
           <font-awesome-icon
             icon="keyboard"
             class="font-size-xl m-2 grow icon"
             v-on:click="isHidden = true;
-              updatePostData({key:'pemeriksaan_is_draw', value: false});
-              isActive = 'keyboard';
-              selectedOrgan = []"
+              updatePostData({key:'tatalaksana_is_draw', value: false});
+              isActive = 'keyboard'"
             :class="{ active: isActive === 'keyboard' }"
           />
         </div>
@@ -91,9 +76,14 @@
     </div>
 
     <div class="row">
+      <div class="col-md-6">
+        <label>Tindakan, Terapi, dan Saran</label>
+      </div>
+    </div>
+    <div class="row">
       <div class="col-md-12" v-show="!isHidden">
         <canvas
-          id="pemeriksaan-canvas"
+          id="tatalaksana-canvas"
           ref="canvas"
           @mousedown="handleMousedown"
           @mouseup="handleMouseup"
@@ -108,27 +98,23 @@
           <b-button @click="clear" variant="warning" size="sm" class="m-1">Clear</b-button>
         </div>
       </div>
-      <div v-show="isHidden" class="col-md-4">
-        <div id="img_organ"></div>
-      </div>
-      <div v-show="isHidden" class="col-md-8">
-        <Editor id="editor" v-on:update-content="updateContent" />
+      <div class="col-md-12" v-show="isHidden">
+        <label></label>
+        <Editor v-on:update-content="updateContent" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import Multiselect from "vue-multiselect";
 import axios from "axios";
 import store from "@/store/";
 import { mapGetters, mapActions } from "vuex";
 import Editor from "./Editor";
-import Multiselect from "vue-multiselect";
 
 export default {
-  name: "Pemeriksaan",
   components: {
-    Multiselect,
     Editor
   },
   data() {
@@ -138,10 +124,7 @@ export default {
       mousePos: { x: 0, y: 0 },
       lastPos: { x: 0, y: 0 },
       ctx: null,
-      image_url: null,
       isLoading: false,
-      selectedOrgan: [],
-      organs: [],
       isPen: true,
       isActive: "pen",
       isColorActive: "black",
@@ -149,75 +132,16 @@ export default {
     };
   },
   computed: {
-    canvas: function() {
+    canvas() {
       return this.$refs.canvas;
-    }
-  },
-  watch: {
-    selectedOrgan: function() {
-      this.updatePostData({ key: "organ_id", value: this.selectedOrgan.id });
-      this.organChanged();
     }
   },
   methods: {
     ...mapActions(["updatePostData", "updateCanvas"]),
     updateContent(content) {
-      this.updatePostData({ key: "pemeriksaan_text", value: content });
+      this.updatePostData({ key: "tatalaksana_text", value: content });
     },
-    organChanged() {
-      let self = this;
-      self.image_url = self.selectedOrgan.gambar;
-      self.clear();
-      self.drawBackground(self.image_url);
-    },
-    drawBackground(image_url) {
-      let self = this;
-      var canvas = document.getElementById("pemeriksaan-canvas"),
-        ctx = canvas.getContext("2d"),
-        img_organ = document.getElementById("img_organ");
-
-      let backgroundURL = image_url;
-
-      var background = new Image();
-      // background.crossOrigin = "Anonymous";
-      background.src = backgroundURL;
-
-      //remove existing image
-      if (img_organ.hasChildNodes()) {
-        img_organ.innerHTML = "";
-      }
-
-      background.onload = function() {
-        let newSize = { width: background.width, height: background.height };
-        if (background.width > 700) {
-          newSize = self.resizeImage(background);
-        }
-
-        if (self.isHidden) {
-
-          let img = document.createElement("img");
-          img.src = backgroundURL;
-          img.style.height = newSize.height + 'px';
-          img.style.width = newSize.width + 'px';
-          img_organ.appendChild(img);
-
-          // img_organ.appendChild(background);
-        } else {
-          ctx.drawImage(background, 0, 0, newSize.width, newSize.height);
-        }
-      };
-    },
-    resizeImage(background) {
-      let width = background.width,
-        height = background.height,
-        screen_width = screen.width;
-
-      width = 0.5 * screen_width;
-      height = height * (width / background.width); //0.5 * height;
-
-      return { width, height };
-    },
-    handleMousedown(e) {
+     handleMousedown(e) {
       this.lastPos = this.getMousePos(e);
       this.ctx.lineWidth = this.penWidth;
       this.drawing = true;
@@ -277,7 +201,6 @@ export default {
         y: mouseEvent.clientY - rect.top
       };
     },
-    // Get the position of a touch relative to the canvas
     getTouchPos(touchEvent) {
       const rect = this.canvas.getBoundingClientRect();
       return {
@@ -286,42 +209,7 @@ export default {
       };
     },
     penColor(color) {
-      this.ispen = true;
       this.ctx.strokeStyle = color;
-    },
-    asyncFind(query) {
-      let self = this;
-      this.isLoading = true;
-
-      console.log(query);
-
-      axios
-        .get(store.state.URL_API + "/organ/name?query=" + query, {
-          headers: {
-            Authorization: "Bearer " + store.state.BEARER_TOKEN,
-            "Content-Type": "application/json"
-          }
-        })
-        .then(response => {
-          let res = response.data;
-
-          if (!res.status) {
-            self.isLoading = false;
-            return;
-          }
-
-          let organs = res.data.organs;
-
-          if (organs) {
-            self.organs = organs;
-          }
-
-          self.isLoading = false;
-        })
-        .catch(err => {
-          self.isLoading = false;
-          console.log(err);
-        });
     },
     clear() {
       this.canvas.width = this.canvas.width;
@@ -335,8 +223,8 @@ export default {
     this.ctx.lineCap = "round";
 
     //append data canvas to vuex global state
-    this.updateCanvas({ key: "PEMERIKSAAN", value: this.canvas });
-    this.updatePostData({ key: "pemeriksaan_is_draw", value: true });
+    this.updateCanvas({ key: "TATALAKSANA", value: this.canvas });
+    this.updatePostData({ key: "tatalaksana_is_draw", value: true });
 
     // Get a regular interval for drawing to the screen
     window.requestAnimFrame = (function(callback) {
@@ -351,12 +239,11 @@ export default {
         }
       );
     })();
-
     // Prevent scrolling when touching the canvas
     document.body.addEventListener(
       "touchstart",
       function(e) {
-        if (e.target == document.getElementById("pemeriksaan-canvas")) {
+        if (e.target == document.getElementById("tatalaksana-canvas")) {
           e.preventDefault();
         }
       },
@@ -365,7 +252,7 @@ export default {
     document.body.addEventListener(
       "touchend",
       function(e) {
-        if (e.target == document.getElementById("pemeriksaan-canvas")) {
+        if (e.target == document.getElementById("tatalaksana-canvas")) {
           e.preventDefault();
         }
       },
@@ -374,7 +261,7 @@ export default {
     document.body.addEventListener(
       "touchmove",
       function(e) {
-        if (e.target == document.getElementById("pemeriksaan-canvas")) {
+        if (e.target == document.getElementById("tatalaksana-canvas")) {
           e.preventDefault();
         }
       },
@@ -386,17 +273,16 @@ export default {
 
 <style scoped>
 canvas {
-  /* border: 1px solid rgb(212, 212, 212); */
+  border: 1px solid rgb(212, 212, 212);
+  border-radius: 20px;
   cursor: crosshair;
+  /* width: 100%; */
 }
 
-#pemeriksaan-canvas {
+#tatalaksana-canvas {
   touch-action: none;
-  /* position: absolute; */
-  /* display: none; */
-}
-
-#editor {
-  /* display: none; */
+  /* position: relative; */
 }
 </style>
+
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>

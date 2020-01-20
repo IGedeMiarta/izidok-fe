@@ -70,6 +70,38 @@
                   </div>
                 </b-collapse>
               </div>
+              <div class="card card-box">
+                <div class="card-header">
+                  <b-button
+                    class="btn-link btn-lg d-flex align-items-center justify-content-between shadow-none collapsed"
+                    v-b-toggle.accordion-5
+                  >
+                    <span>Tata Laksana</span>
+                    <font-awesome-icon icon="angle-up" class="font-size-xl" />
+                  </b-button>
+                </div>
+                <b-collapse id="accordion-5" accordion="accordion-example" role="tabpanel">
+                  <div class="card-body">
+                    <TataLaksana ref="tata-laksana" />
+                  </div>
+                </b-collapse>
+              </div>
+              <div class="card card-box">
+                <div class="card-header">
+                  <b-button
+                    class="btn-link btn-lg d-flex align-items-center justify-content-between shadow-none collapsed"
+                    v-b-toggle.accordion-6
+                  >
+                    <span>Pemeriksaan Penunjang</span>
+                    <font-awesome-icon icon="angle-up" class="font-size-xl" />
+                  </b-button>
+                </div>
+                <b-collapse id="accordion-6" accordion="accordion-example" role="tabpanel">
+                  <div class="card-body">
+                    <PemeriksaanPenunjang ref="pemeriksaan-penunjang" />
+                  </div>
+                </b-collapse>
+              </div>
             </div>
             <Footer ref="footer" />
             <div class="col-xl-12 d-flex justify-content-xl-end">
@@ -93,6 +125,8 @@ import TandaVital from "./RekamMedis/TandaVital";
 import Anamnesa from "./RekamMedis/Anamnesa";
 import Pemeriksaan from "./RekamMedis/Pemeriksaan.vue";
 import Diagnosa from "./RekamMedis/Diagnosa";
+import TataLaksana from "./RekamMedis/TataLaksana";
+import PemeriksaanPenunjang from "./RekamMedis/PemeriksaanPenunjang";
 import Footer from "./RekamMedis/Footer.vue";
 import axios from "axios";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -100,10 +134,15 @@ import {
   faPenAlt,
   faKeyboard,
   faEraser,
-  faAngleUp
+  faAngleUp,
+  faCamera,
+  faFolder,
+  faDownload,
+  faEye,
+  faTrash
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-library.add(faPenAlt, faKeyboard, faEraser, faAngleUp);
+library.add(faPenAlt, faKeyboard, faEraser, faAngleUp, faCamera, faFolder, faDownload, faEye, faTrash);
 
 import { mapGetters, mapActions } from "vuex";
 import router from "@/router";
@@ -116,6 +155,8 @@ export default {
     Anamnesa,
     Pemeriksaan,
     Diagnosa,
+    TataLaksana,
+    PemeriksaanPenunjang,
     Footer
   },
   methods: {
