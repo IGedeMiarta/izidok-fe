@@ -137,6 +137,15 @@ import {
 
 library.add(faArrowLeft);
 
+const verifyEmail = async val => {
+  console.log(val);
+  try {
+    const res = await axios.post(`${this.url_api}/klinik`);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export default {
   data: () => ({
     tipeFaskesData: ["klinik", "tempat praktik"],
@@ -156,7 +165,8 @@ export default {
       email: {
         email,
         required,
-        maxLength: maxLength(50)
+        maxLength: maxLength(50),
+        verifyEmail
       },
       nama_dokter: {
         required,
@@ -221,6 +231,14 @@ export default {
 
       return opts === "raw" ? tmp : tmp.map(item => item.split(" ").join("_"));
     },
+    async ve(val) {
+      console.log(val);
+      // try {
+      //   const res = await axios.post(`${this.url_api}/klinik`, postData);
+      // } catch (err) {
+      //   console.log(err);
+      // }
+    },
     async addKlinik() {
       try {
         const { formData, formBasicData } = this;
@@ -269,13 +287,14 @@ export default {
               user_id: data.user_id
             }
           });
-        }
-        else {
-          let match = message.match(/(email|username) is already in used/)
-          if(match) {
+        } else {
+          let match = message.match(/(email|username) is already in used/);
+          if (match) {
             this.$swal({
               title: `${startCase(match[1])} Tidak Dapat Digunakan`,
-              text: `${startCase(match[1])} telah terdaftar. Silakan gunakan ${match[1]} lain untuk melakukan registrasi!`,
+              text: `${startCase(match[1])} telah terdaftar. Silakan gunakan ${
+                match[1]
+              } lain untuk melakukan registrasi!`,
               type: "error"
             });
           }

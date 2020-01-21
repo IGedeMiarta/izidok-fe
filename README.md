@@ -6,6 +6,11 @@ yarn install
 ```
 
 ### Compiles and hot-reloads for development
+####Caution:
+Please do create your own env file for backend url as follows:
+```
+VUE_BACKEND_URL=http://localhost
+```
 ```
 yarn run serve
 ```
