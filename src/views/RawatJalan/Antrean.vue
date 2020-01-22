@@ -6,7 +6,7 @@
         {
           label: 'rawat jalan',
           active: true,
-          link : '/antrean'
+          link: '/antrean'
         }
       ]"
     />
@@ -358,7 +358,8 @@ export default {
     async fetchAntrean(page = 1) {
       let dt = moment().format("YYYY-MM-DD");
       try {
-        const reverseDate = date => moment(date).format("YYYY-MM-DD");
+        const reverseDate = date =>
+          moment(date, "DD-MM-YYYY").format("YYYY-MM-DD");
         const res = await axios.get(
           `${this.url_api}/transaksi?limit=${
             this.perPage

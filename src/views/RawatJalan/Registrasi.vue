@@ -5,7 +5,7 @@
       :breadcrumb="[
         {
           label: 'rawat jalan',
-          link : '/antrean'
+          link: '/antrean'
         },
         { label: 'registrasi', active: true }
       ]"
@@ -41,6 +41,7 @@
                       format="d LLL yyyy"
                       v-if="form.label == 'waktu_konsultasi'"
                       @input="waktuKonsultasiSelected"
+                      :min-datetime="minimumDatetime"
                     />
                     <template
                       v-if="
@@ -55,7 +56,11 @@
                               'tensi sistole',
                               'tensi diastole',
                               'nadi'
-                            ].includes(form.rawLabel.toLowerCase())
+                            ].includes(form.rawLabel.toLowerCase()) &&
+                            whitelistValidation &&
+                            !whitelistValidation().includes(
+                              form.rawLabel.toLowerCase()
+                            )
                         "
                         :type="form.type || 'text'"
                         v-model="formData[form.label]"
@@ -68,6 +73,19 @@
                           })
                         "
                         :state="renderError({ error: form.error })"
+                      />
+                      <b-form-input
+                        v-else-if="/(ktp|identitas)/gi.test(form.rawLabel)"
+                        :type="form.type || 'text'"
+                        v-model="formData[form.label]"
+                        @keyup="
+                          setValue({
+                            rawLabel: form.rawLabel,
+                            label: form.label,
+                            $event,
+                            tmpId: form.tmpId
+                          })
+                        "
                       />
                       <b-form-input
                         v-else
@@ -287,13 +305,20 @@ export default {
     this.formData = this.setFormData();
     Promise.all([this.fetchDokter(), this.fetchPasien()]);
   },
+  computed: {
+    minimumDatetime() {
+      return moment().format("YYYY-MM-DD");
+    }
+  },
   methods: {
     waktuKonsultasiSelected($event) {
-      this.setValue({
-        label: "waktu_konsultasi",
-        rawLabel: "waktu konsultasi",
-        $event: moment($event).format("YYYY-MM-DD")
-      });
+      if ($event) {
+        this.setValue({
+          label: "waktu_konsultasi",
+          rawLabel: "waktu konsultasi",
+          $event: moment($event).format("YYYY-MM-DD")
+        });
+      }
     },
     overwriteAntrean() {
       this.$swal({
