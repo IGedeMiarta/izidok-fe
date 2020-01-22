@@ -16,7 +16,7 @@ const vuexPersist = new VuexPersist({
 // Create store
 export default new Vuex.Store({
   state: {
-    URL_API: process.env.VUE_BACKEND_URL,
+    URL_API: process.env.VUE_APP_API_URL,
     BEARER_TOKEN: null,
     user: null,
     loading: false
