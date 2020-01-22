@@ -30,7 +30,7 @@
             </div>
             <div class="col-md-3 no-padding">
               <div class="form-group col-md-12" style="padding-top: 30px; padding-left: 0px;">
-                <b-button variant="info" class="float-right">TAMBAH</b-button>
+                <b-button variant="info" class="float-right" >TAMBAH</b-button>
               </div>
             </div>
           </div>
@@ -88,16 +88,13 @@
                       </div>
                       <div class="form-group col-md-3">
                         <label for="inputKode">Kode Layanan</label>
-                        <input type="text" class="form-control" v-model="editData.kode_layanan">
+                        <input type="text" class="form-control" maxlength="5" v-model="editData.kode_layanan" @input="onInputCode($event)">
                       </div>
                       <div class="form-group col-md-3">
                         <label for="inputLayanan">Tarif Layanan</label>
-                        
-                        <b-form-input
-                          v-model.lazy="editData.tarif"
-                          v-money="money"
-                          maxlength="12"
-                        ></b-form-input>
+
+                        <b-form-input v-model.lazy="editData.tarif" v-money="money" validated="true" maxlength="12">
+                        </b-form-input>
                       </div>
                       <div class="form-group col-md-2 " style="margin-top:30px;">
                         <b-button variant="primary" class="float-right" @click="updateTarif(editData)">Simpan
@@ -177,6 +174,8 @@
         n: 0,
         tarifList: [],
         namaLayanan: "",
+        kodeList: [],
+        kodeLayananBeforeEdit: "",
         kodeTarif: "",
         editmode: false,
         editData: {
@@ -214,6 +213,10 @@
       }
     },
     methods: {
+      onInputCode($event){
+        console.log($event);
+        this.editData.kode_layanan = $event.target.value.toUpperCase();
+      },
       removeTarif({
         id,
         tarif = null
@@ -226,33 +229,58 @@
           confirmButtonText: startCase("ya")
         }).then(async res => {
           if (res.value) {
-            // console.log(res);
             await this.deleteTarif(id);
           }
         });
       },
       editModal(data) {
         this.$refs['modal-edit'].show();
-
         this.editData = {
           id: data.id,
           kode_layanan: data.kode_layanan,
           nama_layanan: data.nama_layanan,
           tarif: data.tarif
         }
-        var sidata = this.tarifList;
-        // Object.keys(sidata).forEach(function(key) {
-        //   console.log(sidata[key]);
-        // });
-
-        // sidata.forEach(function (item) {
-        //   console.log(item);
-        // });
-
-        // if(data.kode_layanan ==  )
+        this.kodeLayananBeforeEdit = data.kode_layanan;
       },
-
       async updateTarif(dataEdit) {
+        if (this.kodeLayananBeforeEdit == dataEdit.kode_layanan) {
+          this.updateProsesTarif(dataEdit);
+        } else {
+          const {
+            updateProsesTarif,
+            kodeLayananSwal
+          } = this;
+          let listKode = axios.get(`${this.url_api}/layanan/${dataEdit.kode_layanan}/kode`)
+            .then(function (response) {
+              // console.log(response);
+            })
+            .catch(function (error) {
+              console.log(error, error.response.data);
+              // return;
+              //kalo ada yang sama 
+              // kalo true layanan tidak ada maka di buat
+              if (error.response.data) {
+                if (error.response.data.success == true) {
+                  updateProsesTarif(dataEdit);
+                } else {
+                  kodeLayananSwal();
+                }
+              }
+            })
+            .finally(function () {
+
+            });
+        }
+      },
+      kodeLayananSwal() {
+        this.$swal({
+          type: "error",
+          title: "Gagal",
+          text: "Kode Layanan Tidak Boleh Sama / Kosong"
+        });
+      },
+      async updateProsesTarif(dataEdit) {
         try {
           dataEdit.tarif = parseInt(dataEdit.tarif.replace(/\D/g, ""));
           const res = await axios.put(
@@ -263,21 +291,17 @@
             status,
             data
           } = res.data;
-
           this.$swal({
             title: 'Edit Tarif Berhasil',
             text: 'Data berhasil tersimpan',
             icon: 'success',
             confirmButtonText: startCase("ya")
           });
-
           this.$refs['modal-edit'].hide();
-
           this.fetchListTarif();
-
         } catch (err) {
           alert(err);
-        } finally {}
+        }
       },
       async deleteTarif(id) {
         try {
@@ -292,7 +316,7 @@
               title: startCase("deleted"),
               text: startCase("Tarif berhasil di hapus")
             });
-            this.$router.push('tarif/list');
+            this.$router.push('/tarif');
           } else {
             this.$swal({
               type: "error",
