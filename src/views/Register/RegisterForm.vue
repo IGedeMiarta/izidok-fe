@@ -132,15 +132,22 @@ import {
   maxLength,
   sameAs,
   email,
-  numeric
+  numeric,
+  helpers
 } from "vuelidate/lib/validators";
 
 library.add(faArrowLeft);
 
-const verifyEmail = async val => {
-  console.log(val);
+const verifyEmail = async function(val) {
   try {
-    const res = await axios.post(`${this.url_api}/klinik`);
+    const { required: re, email: em, maxLength: ml } = this.$v.formData.email;
+
+    if (re && em && ml) {
+      const res = await axios.get(`${this.url_api}/email/verify?email=${val}`);
+      return false;
+    } else {
+      return true;
+    }
   } catch (err) {
     console.log(err);
   }
@@ -151,7 +158,9 @@ export default {
     tipeFaskesData: ["klinik", "tempat praktik"],
     selectedTipeFaskes: null,
     formBasicData: null,
-    formData: null
+    formData: null,
+    validateEmail: false,
+    validateUsername: false
   }),
   watch: {
     selectedTipeFaskes(newVal, oldVal) {
@@ -160,53 +169,55 @@ export default {
       }
     }
   },
-  validations: {
-    formData: {
-      email: {
-        email,
-        required,
-        maxLength: maxLength(50),
-        verifyEmail
-      },
-      nama_dokter: {
-        required,
-        maxLength: maxLength(50)
-      },
-      nama_klinik: {
-        required,
-        maxLength: maxLength(50)
-      },
-      nama_pic: {
-        required,
-        maxLength: maxLength(50)
-      },
-      "no._handphone": {
-        numeric,
-        required,
-        maxLength: maxLength(15),
-        minLength: minLength(10)
-      },
-      // "no._izin_klinik": {
-      //   maxLength: maxLength(50)
-      // },
-      // "no._sip": {
-      //   maxLength: maxLength(30)
-      // },
-      password: {
-        required,
-        minLength: minLength(6)
-      },
-      konfirmasi_password: {
-        required,
-        sameAsPassword: sameAs("password"),
-        minLength: minLength(6)
-      },
-      username: {
-        required,
-        maxLength: maxLength(20),
-        minLength: minLength(3)
+  validations() {
+    return {
+      formData: {
+        email: {
+          required,
+          email,
+          maxLength: maxLength(50)
+          // verifyEmail
+        },
+        nama_dokter: {
+          required,
+          maxLength: maxLength(50)
+        },
+        nama_klinik: {
+          required,
+          maxLength: maxLength(50)
+        },
+        nama_pic: {
+          required,
+          maxLength: maxLength(50)
+        },
+        "no._handphone": {
+          numeric,
+          required,
+          maxLength: maxLength(15),
+          minLength: minLength(10)
+        },
+        // "no._izin_klinik": {
+        //   maxLength: maxLength(50)
+        // },
+        // "no._sip": {
+        //   maxLength: maxLength(30)
+        // },
+        password: {
+          required,
+          minLength: minLength(6)
+        },
+        konfirmasi_password: {
+          required,
+          sameAsPassword: sameAs("password"),
+          minLength: minLength(6)
+        },
+        username: {
+          required,
+          maxLength: maxLength(20),
+          minLength: minLength(3)
+        }
       }
-    }
+    };
   },
   created() {
     const tipeFaskesDataLength = this.tipeFaskesData.length;
@@ -223,6 +234,22 @@ export default {
         value: item,
         disabled: item === "klinik"
       }));
+    },
+    emailValidation() {
+      const x = {
+        email,
+        required,
+        maxLength: maxLength(50)
+      };
+
+      const { required: re, email: em, maxLength: ml } = this.$v.formData.email;
+
+      return re && em && ml
+        ? {
+            ...x,
+            verifyEmail
+          }
+        : x;
     }
   },
   methods: {
@@ -230,14 +257,6 @@ export default {
       const tmp = ["no. izin klinik", "No. SIP"];
 
       return opts === "raw" ? tmp : tmp.map(item => item.split(" ").join("_"));
-    },
-    async ve(val) {
-      console.log(val);
-      // try {
-      //   const res = await axios.post(`${this.url_api}/klinik`, postData);
-      // } catch (err) {
-      //   console.log(err);
-      // }
     },
     async addKlinik() {
       try {

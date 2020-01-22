@@ -11,7 +11,6 @@ const validations = {
     }
   },
   renderValidationError({ formLabel, key, params, ignoreTransform }) {
-    const { max, min, eq, type } = params;
     const label = !ignoreTransform
       ? startCase(formLabel)
       : !formLabel
@@ -22,9 +21,11 @@ const validations = {
         return `${label} harus diisi`;
 
       case "maxLength":
+        const { max } = params;
         return `${label} maksimal ${max} karakter`;
 
       case "minLength":
+        const { min } = params;
         return `${label} minimal ${min} karakter`;
 
       case "sameAsPassword":
@@ -36,6 +37,9 @@ const validations = {
 
       case "email":
         return `format ${label} tidak sesuai`;
+
+      case "verifyEmail":
+        return "Email tidak dapat digunakan";
 
       default:
         return "";
