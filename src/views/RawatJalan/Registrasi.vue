@@ -119,9 +119,39 @@
                           tmpId: form.tmpId
                         })
                       "
-                      v-if="form.type === 'select'"
+                      v-if="
+                        form.type === 'select' &&
+                          form.rawLabel === 'nama lengkap'
+                      "
+                      :filterable="false"
+                      @search="searchPasien"
                     >
+                      <template
+                        slot="no-options"
+                        v-if="form.rawLabel === 'nama lengkap'"
+                      >
+                        tulis nama lengkap pasien
+                      </template>
+                      <template slot="option" slot-scope="option">
+                        {{ option.label }}
+                      </template>
+                      <template slot="selected-option" slot-scope="option">
+                        {{ option.label }}
+                      </template>
                     </vue-select>
+                    <vue-select
+                      :class="{ error: form.error }"
+                      :options="options[form.label]"
+                      @input="
+                        setValue({
+                          rawLabel: form.rawLabel,
+                          label: form.label,
+                          $event,
+                          tmpId: form.tmpId
+                        })
+                      "
+                      v-else-if="form.type === 'select'"
+                    />
                     <template v-if="form.type === 'radio'">
                       <b-form-radio-group
                         id="radio-group-1"
@@ -303,7 +333,7 @@ export default {
   mounted() {
     this.formBasicData = this.setFormBasicData();
     this.formData = this.setFormData();
-    Promise.all([this.fetchDokter(), this.fetchPasien()]);
+    Promise.all([this.fetchDokter()]);
   },
   computed: {
     minimumDatetime() {
@@ -500,12 +530,22 @@ export default {
         alert(err);
       }
     },
-    async fetchPasien() {
+    async searchPasien(val) {
       try {
-        const res = await axios.get(`${this.url_api}/pasien`);
-        if (res.data.data.pasien.data.map) {
-          this.pasiens = res.data.data.pasien.data;
-          this.options.nama_lengkap = res.data.data.pasien.data.map(item => {
+        const res = await axios.get(
+          `${this.url_api}/pasien?nama_pasien=${val}`
+        );
+        const {
+          data: {
+            data: {
+              pasien: { data: pasienData }
+            }
+          }
+        } = res;
+        // console.log(pasienData)
+        if (pasienData) {
+          this.pasiens = pasienData;
+          this.options.nama_lengkap = pasienData.map(item => {
             return {
               label: `${item.nama} ~ ${moment(item.tanggal_lahir).format(
                 "DD-MM-YYYY"
