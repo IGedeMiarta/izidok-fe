@@ -542,7 +542,6 @@ export default {
             }
           }
         } = res;
-        // console.log(pasienData)
         if (pasienData) {
           this.pasiens = pasienData;
           this.options.nama_lengkap = pasienData.map(item => {

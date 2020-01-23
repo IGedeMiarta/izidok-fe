@@ -1,6 +1,9 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import VuexPersist from "vuex-persist";
+import sidebar from "./modules/sidebar";
+import rekamMedis from "./modules/rekamMedis";
+import struk from "./modules/struk";
 
 // Load Vuex
 Vue.use(Vuex);
@@ -19,9 +22,9 @@ export default new Vuex.Store({
     loading: false
   },
   modules: {
-    sidebar: () => import("./modules/sidebar"),
-    rekamMedis: () => import("./modules/rekamMedis"),
-    struk: () => import("./modules/struk")
+    sidebar,
+    rekamMedis,
+    struk
   },
   getters: {
     isLoading(state) {
