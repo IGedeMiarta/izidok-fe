@@ -42,6 +42,11 @@
                       v-if="form.label == 'waktu_konsultasi'"
                       @input="waktuKonsultasiSelected"
                       :min-datetime="minimumDatetime"
+                      :input-style="
+                        renderError({ error: form.error }) !== null
+                          ? 'border-color: red'
+                          : null
+                      "
                     />
                     <template
                       v-if="
