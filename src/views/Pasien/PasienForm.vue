@@ -195,6 +195,11 @@
                   @input="tanggalLahirSelected"
                   :value="getValue('tanggal lahir')"
                   :disabled="disabledForm()"
+                  :input-style="
+                    getDataError({ rawLabel: 'tanggal lahir' }) !== null
+                      ? 'border-color: red'
+                      : null
+                  "
                 />
               </b-form-group>
             </b-col>
