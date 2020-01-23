@@ -110,7 +110,7 @@
       </div>
       <div class="form-row">
         <b-form-group
-          label="No. KTP"
+          label="No. KTP/Pengenal Lainnya"
           class="text-capitalize col-md-6 pr-3"
           style="position: relative"
           :state="getDataError({ rawLabel: 'nik' })"
@@ -138,14 +138,6 @@
           :label="renderLabel({ label: 'email' })"
           class="text-capitalize col-md-6 pr-3"
           style="position: relative"
-          :state="getDataError({ rawLabel: 'email' })"
-          :invalid-feedback="
-            renderInvalidFeedback({
-              validationDesc: blindlyGetData({
-                rawLabel: 'email'
-              })
-            })
-          "
         >
           <b-form-input
             @keyup="
@@ -154,7 +146,6 @@
                 $event
               })
             "
-            :state="getDataError({ rawLabel: 'email' })"
             :disabled="disabledForm()"
             :value="getValue('email')"
             :maxlength="30"
@@ -169,14 +160,6 @@
                 :label="renderLabel({ label: 'tempat lahir' })"
                 class="text-capitalize"
                 style="position: relative"
-                :state="getDataError({ rawLabel: 'tempat lahir' })"
-                :invalid-feedback="
-                  renderInvalidFeedback({
-                    validationDesc: blindlyGetData({
-                      rawLabel: 'tempat lahir'
-                    })
-                  })
-                "
               >
                 <b-form-input
                   @keyup="
@@ -185,7 +168,6 @@
                       $event
                     })
                   "
-                  :state="getDataError({ rawLabel: 'tempat lahir' })"
                   :disabled="disabledForm()"
                   :value="getValue('tempat lahir')"
                   :maxlength="30"
@@ -251,7 +233,7 @@
           <b-row>
             <b-col>
               <b-form-group
-                :label="renderLabel({ label: 'jenis kelamin' })"
+                :label="renderLabel({ label: 'Jenis kelamin' })"
                 :state="getDataError({ rawLabel: 'jenis kelamin' })"
                 :invalid-feedback="
                   renderInvalidFeedback({
@@ -585,14 +567,6 @@
             :label="renderLabel({ label: 'status perkawinan' })"
             class="text-capitalize"
             style="position: relative"
-            :state="getDataError({ rawLabel: 'status perkawinan' })"
-            :invalid-feedback="
-              renderInvalidFeedback({
-                validationDesc: blindlyGetData({
-                  rawLabel: 'status perkawinan'
-                })
-              })
-            "
           >
             <b-form-select
               :options="
@@ -609,7 +583,6 @@
                   $event
                 })
               "
-              :state="getDataError({ rawLabel: 'status perkawinan' })"
               :disabled="disabledForm()"
               :value="getValue('status perkawinan')"
             />
@@ -729,16 +702,12 @@ const tmp = [
   {
     label: "email",
     alias: "email",
-    validations: {
-      required
-    }
+    validations: {}
   },
   {
     label: "tempat lahir",
     alias: "tempat_lahir",
-    validations: {
-      required
-    }
+    validations: {}
   },
   {
     label: "tanggal lahir",
@@ -820,7 +789,7 @@ const tmp = [
   {
     label: "status perkawinan",
     alias: "status_perkawinan",
-    validations: { required }
+    validations: {}
   },
   {
     label: "pekerjaan",
