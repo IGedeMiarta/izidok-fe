@@ -41,6 +41,9 @@ const validations = {
       case "verifyEmail":
         return "Email tidak dapat digunakan";
 
+      case "verifyUsername":
+        return "Username tidak dapat digunakan";
+
       default:
         return "";
     }
@@ -83,6 +86,17 @@ const validations = {
         formLabel: formBasicData[tmpIndex].ignoreTransform ? rawLabel : label,
         validationLabel: $v_object
       })
+    );
+    // todo: merge this func
+    this.triggerNewValidation({ $vm, $v: $v_object, tmpIndex });
+  },
+  triggerNewValidation({ $vm, $v, tmpIndex }) {
+    Vue.set(
+      $vm.formBasicData[tmpIndex],
+      "error",
+      Object.keys($v)
+        .filter(val => !/(\$)/gi.test(val))
+        .some(val => !$v[val])
     );
   },
   renderLabel({ label }) {

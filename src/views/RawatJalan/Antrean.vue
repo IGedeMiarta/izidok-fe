@@ -425,7 +425,7 @@ export default {
         rekamMedis
       } = this;
       const {
-        item: { "nama pasien": nama_pasien, pasien_id }
+        item: { "nama pasien": nama_pasien, pasien_id, transaksi_id }
       } = data;
 
       switch (icon) {
@@ -438,7 +438,7 @@ export default {
         case "trash-alt":
           return pembatalanAntrean({
             namaPasien: nama_pasien,
-            pasienId: pasien_id
+            transaksi_id
           });
 
         default:
@@ -447,7 +447,7 @@ export default {
     },
     restorePembatalanAntrean(data) {
       const {
-        item: { "nama pasien": nama_pasien, pasien_id }
+        item: { "nama pasien": nama_pasien, pasien_id, transaksi_id }
       } = data;
 
       this.$swal({
@@ -460,11 +460,11 @@ export default {
       }).then(res => {
         const { value } = res;
         if (value) {
-          this.updateStatusAntrean("menunggu", pasien_id);
+          this.updateStatusAntrean("menunggu", transaksi_id);
         }
       });
     },
-    pembatalanAntrean({ namaPasien = null, pasienId } = {}) {
+    pembatalanAntrean({ namaPasien = null, transaksi_id } = {}) {
       this.$swal({
         title: startCase("pembatalan antrean"),
         text: `Apakah antrean pasien ${namaPasien} benar akan dibatalkan?`,
@@ -475,7 +475,7 @@ export default {
       }).then(res => {
         const { value } = res;
         if (value) {
-          this.updateStatusAntrean("batal", pasienId);
+          this.updateStatusAntrean("batal", transaksi_id);
         }
       });
     },
