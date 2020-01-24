@@ -91,11 +91,6 @@ const validations = {
     this.triggerNewValidation({ $vm, $v: $v_object, tmpIndex });
   },
   triggerNewValidation({ $vm, $v, tmpIndex }) {
-    console.log(
-      Object.keys($v)
-        .filter(val => !/(\$)/gi.test(val))
-        .map(val => $v[val])
-    );
     Vue.set(
       $vm.formBasicData[tmpIndex],
       "error",
