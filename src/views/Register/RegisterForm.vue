@@ -79,10 +79,18 @@
                     "
                     :state="renderError({ error: form.error })"
                   >
+                    <!-- <b-form-input
+                      :type="form.type || 'text'"
+                      :value="form.value"
+                      :state="renderError({ error: form.error })"
+                      :placeholder="form.placeholder"
+                      v-bind:maxlength="form.maxlength"
+                      v-if="form.rawLabel === 'email'"
+                    /> -->
                     <b-form-input
                       :type="form.type || 'text'"
                       :value="form.value"
-                      @keyup="
+                      @input="
                         setValue({
                           rawLabel: form.rawLabel,
                           label: form.label,
@@ -138,20 +146,23 @@ import {
 
 library.add(faArrowLeft);
 
-const verifyEmail = async function(val) {
-  try {
-    const { required: re, email: em, maxLength: ml } = this.$v.formData.email;
+// const verifyEmail = async function(val) {
+//   if (val === "") return true;
+//   else return false;
 
-    if (re && em && ml) {
-      const res = await axios.get(`${this.url_api}/email/verify?email=${val}`);
-      return false;
-    } else {
-      return true;
-    }
-  } catch (err) {
-    console.log(err);
-  }
-};
+//   try {
+//     const { required: re, email: em, maxLength: ml } = this.$v.formData.email;
+
+//     if (re && em && ml) {
+//       const res = await axios.get(`${this.url_api}/email/verify?email=${val}`);
+//       return false;
+//     } else {
+//       return false;
+//     }
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
 
 export default {
   data: () => ({
@@ -175,8 +186,42 @@ export default {
         email: {
           required,
           email,
-          maxLength: maxLength(50)
-          // verifyEmail
+          maxLength: maxLength(50),
+          verifyEmail(val) {
+            const { required: re, email: em } = this.$v.formData.email;
+            if (val === "" || !re || !em) return true;
+
+            return new Promise((resolve, reject) => {
+              axios
+                .get(`${this.url_api}/email/verify?email=${val}`)
+                .then(res => {
+                  const {
+                    data: { status, message }
+                  } = res;
+
+                  resolve(status);
+                })
+                .catch(err => {
+                  if (err.response) {
+                    const x = err.response.data;
+                    if (x && x.email) {
+                      resolve(false);
+                    }
+                  } else {
+                    resolve(true);
+                  }
+                })
+                .finally(() => {
+                  const x = "email";
+                  this.triggerValidation({
+                    label: x,
+                    $v: this.$v,
+                    $vm: this,
+                    rawLabel: x
+                  });
+                });
+            });
+          }
         },
         nama_dokter: {
           required,
@@ -214,7 +259,42 @@ export default {
         username: {
           required,
           maxLength: maxLength(20),
-          minLength: minLength(3)
+          minLength: minLength(3),
+          verifyUsername(val) {
+            const { required: re } = this.$v.formData.username;
+            if (val === "" || !re) return true;
+
+            return new Promise((resolve, reject) => {
+              axios
+                .get(`${this.url_api}/username/verify?username=${val}`)
+                .then(res => {
+                  const {
+                    data: { status, message }
+                  } = res;
+
+                  resolve(status);
+                })
+                .catch(err => {
+                  if (err.response) {
+                    const x = err.response.data;
+                    if (x && x.username) {
+                      resolve(false);
+                    }
+                  } else {
+                    resolve(true);
+                  }
+                })
+                .finally(() => {
+                  const x = "username";
+                  this.triggerValidation({
+                    label: x,
+                    $v: this.$v,
+                    $vm: this,
+                    rawLabel: x
+                  });
+                });
+            });
+          }
         }
       }
     };
@@ -426,8 +506,9 @@ export default {
         : tmp;
     },
     setValue({ label, rawLabel, $event = null } = {}) {
-      const { target } = $event;
-      const { value } = target;
+      // const { target } = $event;
+      // const { value } = target;
+      const value = $event;
       this.formData[label] = value && value.trim();
       if (!this.whitelistValidation().includes(label)) {
         const confirms = ["password", "konfirmasi_password"];
