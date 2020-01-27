@@ -4,8 +4,8 @@
       {{ data.index + 1 }}
     </template>
 
-    <template v-slot:cell(layanan)>
-      <vue-select :options="listLayanan"></vue-select>
+    <template v-slot:cell(layanan)="data">
+      <vue-select :options="listLayanan" v-model="data.item.layanan"></vue-select>
     </template>
 
     <template v-slot:cell(qty)="data">
@@ -13,7 +13,7 @@
     </template>
 
     <template v-slot:cell(nilai)="data">
-      <b-form-input v-model="data.item.nilai" />
+      <b-form-input v-model="data.item.nilai" /> 
     </template>
 
     <template v-slot:cell(subtotal)="data">
@@ -60,9 +60,9 @@
     data: () => ({
       listLayanan: {},
       items: [{
-        no: null,
+        no: 1,
         layanan: null,
-        qty: 0,
+        qty: 1,
         nilai: null,
         subtotal: null
       }, ],
@@ -77,6 +77,7 @@
         handler: function (newVal) {
           const tmp = newVal.map(item => {
             item.subtotal = item.qty * item.nilai;
+            item.nilai = item.layanan.tarif
             return item;
           });
           this.calcValue(tmp);
@@ -128,7 +129,7 @@
           "nilai",
           "subtotal"
         ];
-
+     
         return tmp.map(item => ({
           key: item.label ? item.label : item,
           label: item.label ? item.label : item,
@@ -136,22 +137,14 @@
         }));
       },
       async fetchLayanan() {
-        // try {
-        //   const res = await axios.get(`${this.url_api}/layanan`);
-        //   const { status, data } = res.data;
-        //   if (status) {
-        //     this.listLayanan = data.map(item => ({
-        //       label: `${item.nama_layanan} - ${item.kode_layanan}`,
-        //       code: item.kode_layanan
-        //     }));
-        //   }
-        // } catch (err) {
-        //   console.log(err);
-        // }
         try {
           const res = await axios.get(
             `${this.url_api}/layanan`
           );
+          const {
+            items
+          } = this;
+
           const {
             success,
             data
@@ -162,17 +155,20 @@
               layanan: tarifData,
               total
             } = data;
+            
             const {
               data: listTarif
             } = tarifData;
-            this.listLayanan = listTarif.map(val => ({
+
+            this.listLayanan = listTarif.map( val => ({
               ...val,
-              label: val.nama_layanan,
-              code: val.kode_layanan
+              label: `${val.nama_layanan} - ${val.kode_layanan}`,
+              code: val.kode_layanan,
             }));
             this.rows = tarifData.total;
+            console.log(items);
+            
           }
-          console.log(this.listLayanan)
         } catch (err) {
           // console.log(err);
         }
