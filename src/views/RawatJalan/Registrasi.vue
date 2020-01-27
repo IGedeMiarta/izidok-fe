@@ -43,9 +43,11 @@
                       @input="waktuKonsultasiSelected"
                       :min-datetime="minimumDatetime"
                       :input-style="
-                        renderError({ error: form.error }) !== null
-                          ? 'border-color: red'
-                          : null
+                        renderError({ error: form.error }) === null
+                          ? null
+                          : renderError({ error: form.error })
+                          ? null
+                          : 'border-color: red'
                       "
                     />
                     <template

@@ -196,9 +196,11 @@
                   :value="getValue('tanggal lahir')"
                   :disabled="disabledForm()"
                   :input-style="
-                    getDataError({ rawLabel: 'tanggal lahir' }) !== null
-                      ? 'border-color: red'
-                      : null
+                    renderError({ error: form.error }) === null
+                      ? null
+                      : renderError({ error: form.error })
+                      ? null
+                      : 'border-color: red'
                   "
                 />
               </b-form-group>
