@@ -4,7 +4,7 @@
       {{ data.index + 1 }}
     </template>
 
-    <template v-slot:cell(layanan)="data">
+    <template v-slot:cell(layanan)>
       <vue-select :options="listLayanan"></vue-select>
     </template>
 
@@ -165,7 +165,11 @@
             const {
               data: listTarif
             } = tarifData;
-            this.listLayanan = [...listTarif];
+            this.listLayanan = listTarif.map(val => ({
+              ...val,
+              label: val.nama_layanan,
+              code: val.kode_layanan
+            }));
             this.rows = tarifData.total;
           }
           console.log(this.listLayanan)
