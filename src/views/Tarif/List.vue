@@ -30,19 +30,20 @@
             </div>
             <div class="col-md-3 no-padding">
               <div class="form-group col-md-12" style="padding-top: 30px; padding-left: 0px;">
-                <b-button variant="info" class="float-right">TAMBAH</b-button>
+                <b-button variant="info" class="float-right"  :to="{
+                        name: 'tarif-tambah'}" >TAMBAH</b-button>
               </div>
             </div>
           </div>
           <div class="col-md-12 no-padding">
             <table class="table table-hover table-hover table-striped mb-5">
-              <colgroup width="200px"></colgroup>
+              <colgroup width="90px"></colgroup>
               <colgroup width="150px"></colgroup>
               <colgroup width="150px"></colgroup>
               <colgroup width="200px"></colgroup>
               <thead>
                 <tr class="text-capitalize">
-                  <th class="text-right pr-4">kode</th>
+                  <th class="text-left pr-4">kode</th>
                   <th>nama layanan</th>
                   <th class="no-sort text-center">tarif layanan</th>
                   <th class="no-sort text-center">Actions</th>
@@ -50,7 +51,7 @@
               </thead>
               <tbody>
                 <tr v-for="(data) in tarifList" :key="data.id">
-                  <td class="text-right pr-4">{{ data.kode_layanan }}</td>
+                  <td class="text-left pr-4">{{ data.kode_layanan }}</td>
                   <td>{{data.nama_layanan}}</td>
                   <td class="text-center">{{ data.tarif.toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")  }}</td>
                   <td class="text-center">
@@ -62,7 +63,7 @@
                     <b-link class="btn bg-danger text-light font-size-md pl-2 pr-2 btn-sm ml-1 mr-1" @click.prevent="
                         removeTarif({
                           id: data.id,
-                          tarif: data.tarif
+                          nama_layanan: data.nama_layanan
                         })
                       ">
                       <font-awesome-icon icon="trash-alt" />
@@ -72,13 +73,8 @@
               </tbody>
             </table>
             <!-- MODAL -->
-            <b-modal ref='modal-edit' :hide-footer="true" :hide-header="true" size="lg" centered>
+            <b-modal ref='modal-edit' title="Edit Layanan" :hide-footer="true" size="lg" centered>
               <div class="card shadow-none border-0">
-                <div class="card-header">
-                  <div class="text-muted text-center">
-                    <h3 style="color:#000;float:left">Edit Layanan</h3>
-                  </div>
-                </div>
                 <div class="card-body">
                   <form role="form">
                     <div class="form-row">
@@ -88,18 +84,15 @@
                       </div>
                       <div class="form-group col-md-3">
                         <label for="inputKode">Kode Layanan</label>
-                        <input type="text" class="form-control" v-model="editData.kode_layanan">
+                        <input type="text" class="form-control" maxlength="5" v-model="editData.kode_layanan" @input="onInputCode($event)">
                       </div>
                       <div class="form-group col-md-3">
                         <label for="inputLayanan">Tarif Layanan</label>
-                        
-                        <b-form-input
-                          v-model.lazy="editData.tarif"
-                          v-money="money"
-                          maxlength="12"
-                        ></b-form-input>
+
+                        <b-form-input v-model.lazy="editData.tarif" v-money="money" validated="true" maxlength="12">
+                        </b-form-input>
                       </div>
-                      <div class="form-group col-md-2 " style="margin-top:30px;">
+                      <div class="form-group col-md-2" style="margin-top:30px;">
                         <b-button variant="primary" class="float-right" @click="updateTarif(editData)">Simpan
                         </b-button>
                       </div>
@@ -177,6 +170,8 @@
         n: 0,
         tarifList: [],
         namaLayanan: "",
+        kodeList: [],
+        kodeLayananBeforeEdit: "",
         kodeTarif: "",
         editmode: false,
         editData: {
@@ -214,45 +209,74 @@
       }
     },
     methods: {
+      onInputCode($event){
+        console.log($event);
+        this.editData.kode_layanan = $event.target.value.toUpperCase();
+      },
       removeTarif({
         id,
-        tarif = null
+        nama_layanan = null
       } = {}) {
         this.$swal({
-          text: `Apakah anda yakin ingin menghapus data tarif ${tarif}?`,
+          text: `Apakah anda yakin ingin menghapus data tarif ${nama_layanan}?`,
           type: "question",
           showCancelButton: true,
           cancelButtonText: startCase("batal"),
           confirmButtonText: startCase("ya")
         }).then(async res => {
           if (res.value) {
-            // console.log(res);
             await this.deleteTarif(id);
           }
         });
       },
       editModal(data) {
         this.$refs['modal-edit'].show();
-
         this.editData = {
           id: data.id,
           kode_layanan: data.kode_layanan,
           nama_layanan: data.nama_layanan,
           tarif: data.tarif
         }
-        var sidata = this.tarifList;
-        // Object.keys(sidata).forEach(function(key) {
-        //   console.log(sidata[key]);
-        // });
-
-        // sidata.forEach(function (item) {
-        //   console.log(item);
-        // });
-
-        // if(data.kode_layanan ==  )
+        this.kodeLayananBeforeEdit = data.kode_layanan;
       },
-
       async updateTarif(dataEdit) {
+        if (this.kodeLayananBeforeEdit == dataEdit.kode_layanan) {
+          this.updateProsesTarif(dataEdit);
+        } else {
+          const {
+            updateProsesTarif,
+            kodeLayananSwal
+          } = this;
+          let listKode = axios.get(`${this.url_api}/layanan/${dataEdit.kode_layanan}/kode`)
+            .then(function (response) {
+              // console.log(response);
+            })
+            .catch(function (error) {
+              console.log(error, error.response.data);
+              // return;
+              //kalo ada yang sama 
+              // kalo true layanan tidak ada maka di buat
+              if (error.response.data) {
+                if (error.response.data.success == true) {
+                  updateProsesTarif(dataEdit);
+                } else {
+                  kodeLayananSwal();
+                }
+              }
+            })
+            .finally(function () {
+
+            });
+        }
+      },
+      kodeLayananSwal() {
+        this.$swal({
+          type: "error",
+          title: "Gagal",
+          text: "Kode Layanan Tidak Boleh Sama / Kosong"
+        });
+      },
+      async updateProsesTarif(dataEdit) {
         try {
           dataEdit.tarif = parseInt(dataEdit.tarif.replace(/\D/g, ""));
           const res = await axios.put(
@@ -263,21 +287,17 @@
             status,
             data
           } = res.data;
-
           this.$swal({
             title: 'Edit Tarif Berhasil',
             text: 'Data berhasil tersimpan',
             icon: 'success',
             confirmButtonText: startCase("ya")
           });
-
           this.$refs['modal-edit'].hide();
-
           this.fetchListTarif();
-
         } catch (err) {
           alert(err);
-        } finally {}
+        }
       },
       async deleteTarif(id) {
         try {
@@ -292,7 +312,7 @@
               title: startCase("deleted"),
               text: startCase("Tarif berhasil di hapus")
             });
-            this.$router.push('tarif/list');
+            this.$router.go('/tarif');
           } else {
             this.$swal({
               type: "error",
@@ -341,6 +361,10 @@
 <style scoped lang="css">
   .bg-kuning {
     background: #f7fc6b;
+  }
+
+  .modal fade show {
+    opacity: 0.9;
   }
 
   .bg-kuning,
