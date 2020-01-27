@@ -1,8 +1,6 @@
 <template>
   <div>
-    <page-title
-      heading="Pembayaran"
-      :breadcrumb="[
+    <page-title heading="Pembayaran" :breadcrumb="[
         {
           label: 'Pembayaran',
           link : '/pembayaran'
@@ -11,16 +9,13 @@
           label: 'List Pembayaran',
           active: true
         }
-      ]"
-    />
+      ]" />
 
     <div class="container">
       <div class="card card-box mb-3 ninja-shadow">
         <div class="card-header">
           <div class="card-header--title">
             <h3>Daftar Pembayaran</h3>
-            <!--  <small>Custom</small>
-              <b>Example widget with table inside.</b> -->
           </div>
         </div>
         <div class="card-body">
@@ -32,16 +27,9 @@
               </div>
               <div class="form-group col-md-4" style="float:left;">
                 <label for="inputPassword46">No. Rekam Medis</label>
-                <input
-                  type="password"
-                  class="form-control"
-                  id="inputPassword46"
-                />
+                <input type="password" class="form-control" id="inputPassword46" />
               </div>
-              <div
-                class="form-group col-md-3"
-                style="float:left;padding-top:30px;padding-left:0;"
-              >
+              <div class="form-group col-md-3" style="float:left;padding-top:30px;padding-left:0;">
                 <b-button variant="primary">CARI</b-button>
               </div>
             </div>
@@ -61,25 +49,21 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
+                <tr v-for="(data) in pembayaranList" :key="data.id">
                   <td>1</td>
-                  <td>test</td>
-                  <td>test</td>
-                  <td>test</td>
-                  <td>test</td>
+                  <td>{{data.transklinik_id}}</td>
+                  <td>{{data.detail[nama_layanan]}}</td>
+                  <td>{{data.detail[kode_layanan]}}</td>
+                  <td>{{data.created_by}}</td>
                   <td>test</td>
                   <td>
-                    <b-link
-                      class="btn bg-info text-light font-size-md pl-2 pr-2 btn-sm ml-1 mr-1"
-                    >
+                    <b-link class="btn bg-info text-light font-size-md pl-2 pr-2 btn-sm ml-1 mr-1">
                       <font-awesome-icon icon="search" />
                     </b-link>
                   </td>
                   <td class="text-center">
-                    <b-link
-                      class="btn bg-info text-light font-size-md pl-5 pr-5 btn-sm ml-1 mr-1"
-                      :to="{ name: 'pembayaran-tambah' }"
-                    >
+                    <b-link class="btn bg-info text-light font-size-md pl-5 pr-5 btn-sm ml-1 mr-1"
+                      :to="{ name: 'pembayaran-tambah' }">
                       Bayar
                     </b-link>
                   </td>
@@ -89,17 +73,10 @@
           </div>
         </div>
       </div>
-      <div
-        class="col-md-12 bg-neutral-second ninja-shadow"
-        style="border-radius:10px;"
-      >
+      <div class="col-md-12 bg-neutral-second ninja-shadow" style="border-radius:10px;">
         <div class="p-3">
-          <b-pagination
-            class="d-flex justify-content-center mt-4"
-            v-model="currentPage"
-            :total-rows="rows"
-            :per-page="perPage"
-          ></b-pagination>
+          <b-pagination class="d-flex justify-content-center mt-4" v-model="currentPage" :total-rows="rows"
+            :per-page="perPage"></b-pagination>
         </div>
       </div>
     </div>
@@ -107,51 +84,97 @@
 </template>
 
 <script>
-import startCase from "lodash/startCase";
-import axios from "axios";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faArrowRight,
-  faArrowUp,
-  faTrashAlt,
-  faSearch,
-  faPencilAlt
-} from "@fortawesome/free-solid-svg-icons";
+  import startCase from "lodash/startCase";
+  import axios from "axios";
+  import {
+    library
+  } from "@fortawesome/fontawesome-svg-core";
+  import {
+    faArrowRight,
+    faArrowUp,
+    faTrashAlt,
+    faSearch,
+    faPencilAlt
+  } from "@fortawesome/free-solid-svg-icons";
 
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+  import {
+    FontAwesomeIcon
+  } from "@fortawesome/vue-fontawesome";
 
-library.add(faArrowRight, faArrowUp, faTrashAlt, faSearch, faPencilAlt);
+  library.add(faArrowRight, faArrowUp, faTrashAlt, faSearch, faPencilAlt);
 
-export default {
-  components: {
-    "font-awesome-icon": FontAwesomeIcon
-  },
-  data() {
-    return {
-      currentPage: 1,
-      rows: 100,
-      perPage: 10
-    };
-  }
-};
+  export default {
+    components: {
+      "font-awesome-icon": FontAwesomeIcon
+    },
+    data() {
+      return {
+        currentPage: 1,
+        rows: 100,
+        perPage: 10,
+        pembayaranList: [],
+      };
+    },
+    mounted() {
+        this.fetchListpembayaran();
+    },
+    watch: {
+      currentPage() {
+        this.fetchListpembayaran();
+      }
+    },
+    methods: {
+      async fetchListpembayaran() {
+        try {
+          var today = new Date();
+          var date = today.getFullYear() + '-' + '0' +(today.getMonth() + 1) + '-' + today.getDate();
+          const res = await axios.get(
+            `${this.url_api}/pembayaran?from=${date}&to=${date}`
+          );
+          const {
+            success,
+            data
+          } = res.data;
+
+          if (success) {
+            const {
+              pembayaran: pembayaranData,
+              total
+            } = data;
+            const {
+              data: listPembayaran
+            } = pembayaranData;
+            this.pembayaranList = [...listPembayaran];
+            this.rows = pembayaranData.total;
+          }
+        } catch (err) {
+          // console.log(err);
+        }
+      },
+    }
+  };
 </script>
 <style scoped lang="css">
-.bg-kuning {
-  background: #f7fc6b;
-}
-.bg-kuning,
-.bg-danger,
-.bg-first {
-  color: black !important;
-}
-.no-padding {
-  padding: 0 !important;
-}
-.page-item.active a {
-  background: #3b86ff;
-  border: none !important;
-}
-.ninja-shadow {
-  box-shadow: 0px 8px 15px 0px lightgrey;
-}
+  .bg-kuning {
+    background: #f7fc6b;
+  }
+
+  .bg-kuning,
+  .bg-danger,
+  .bg-first {
+    color: black !important;
+  }
+
+  .no-padding {
+    padding: 0 !important;
+  }
+
+  .page-item.active a {
+    background: #3b86ff;
+    border: none !important;
+  }
+
+  .ninja-shadow {
+    box-shadow: 0px 8px 15px 0px lightgrey;
+  }
 </style>
