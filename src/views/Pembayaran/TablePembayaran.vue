@@ -167,7 +167,7 @@
             } = tarifData;
             this.listLayanan = listTarif.map(val => ({
               ...val,
-              label: val.nama_layanan,
+              label: `${val.nama_layanan} - ${val.kode_layanan}`,
               code: val.kode_layanan
             }));
             this.rows = tarifData.total;
