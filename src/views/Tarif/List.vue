@@ -184,7 +184,7 @@
       };
     },
     mounted() {
-      this.fetchListTarif();
+        this.fetchListTarif();
     },
     watch: {
       currentPage() {

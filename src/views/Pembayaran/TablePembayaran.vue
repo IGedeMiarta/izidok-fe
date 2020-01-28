@@ -13,7 +13,7 @@
     </template>
 
     <template v-slot:cell(nilai)="data">
-      <b-form-input v-model="data.item.nilai" /> 
+      <b-form-input v-model="data.item.nilai" disabled  /> 
     </template>
 
     <template v-slot:cell(subtotal)="data">
@@ -167,7 +167,6 @@
             }));
             this.rows = tarifData.total;
             console.log(items);
-            
           }
         } catch (err) {
           // console.log(err);

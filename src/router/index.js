@@ -6,10 +6,21 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/rekam-medis/:transklinik_id/:pasien_id",
-    name: "rekam-medis",
-    component: () => import("../views/RekamMedis.vue")
+    path: "/rekam-medis",
+    component: () => import("../views/RekamMedis/List.vue"),
+    children: [
+      {
+        path: ":transklinik_id/:pasien_id",
+        name: "rekam-medis-pasien",
+        component: () => import("../views/RekamMedis.vue")
+      },
+    ]
   },
+  // {
+  //   path: ":transklinik_id/:pasien_id",
+  //   name: "rekam-medis",
+  //   component: () => import("../views/RekamMedis.vue")
+  // },
   {
     path: "/",
     name: "home",

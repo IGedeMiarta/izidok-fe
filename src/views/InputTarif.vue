@@ -245,6 +245,7 @@ export default {
           });
         });
       });
+     
     },
     submitInputTarif() {
       const { tmpInputTarifData, validateAll } = this;
@@ -306,7 +307,6 @@ export default {
           $event
         });
       }
-
       if (label !== "tarif_layanan") {
         tmp[label] = $event;
         Vue.set(this.tmpInputTarifData, index, tmp);
@@ -363,7 +363,6 @@ export default {
           .slice(0, index)
           .concat(tmpInputTarifData.slice(index + 1, tmpInputTarifData.length));
         this.tmpInputTarifData = tmp;
-        
         // remap kodeContainer
         this.kodeContainer = tmp.map(item => {
           return item.kode_layanan
