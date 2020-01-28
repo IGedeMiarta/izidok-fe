@@ -35,14 +35,14 @@
           <b-col cols="6">
             <CardDashboard
               title="pasien rawat jalan"
-              :highlight="15"
+              :highlight="this.dataRawatJalan"
               bg-color="bg-success"
             />
           </b-col>
         </b-row>
         <b-row>
           <b-col cols="6">
-            <CardDashboard title="antrean" :highlight="4" />
+            <CardDashboard title="antrean" :highlight="this.antreanHarini" />
           </b-col>
           <b-col cols="6">
             <CardDashboard
@@ -80,11 +80,15 @@ export default {
   },
   data() {
     return {
-      nomor_antrian: 0
+      nomor_antrian: 0,
+      antreanHarini : 0,
+      pasienBaru: 0,
+      DataAntrean : [],
+      dataRawatJalan : 0
     };
   },
   mounted() {
-    Promise.all([this.getAntrian(), this.getRawatJalan()]);
+    Promise.all([this.getAntrian(), this.getRawatJalan(),this.getPasienBaru()]);
   },
   computed: {
     now() {
@@ -94,11 +98,26 @@ export default {
   methods: {
     async getRawatJalan() {
       try {
+        var today = new Date();
+        var dateToday = today.getDate();
         const res = await axios.get(
-          `${this.url_api}/dash-rawat-jalan?from=${this.now}&to=${this.now}`
+           `${this.url_api}/dash-rawat-jalan?from=${this.now}&to=${this.now}`
         );
         const { status, data } = res.data;
-        console.log(data);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async getPasienBaru(){
+      try {
+        var today = new Date();
+        var dateToday = today.getDate();
+        var date = today.getFullYear() + '-' + '0' +(today.getMonth() + 1) + '-' + today.getDate();
+        const res = await axios.get(`${this.url_api}/dash-pasien?type=date_range&from=${date}&to=${date}`);
+        const {
+          status,
+          data: { pasienBaru = 0 }
+        } = res.data;
       } catch (err) {
         console.log(err);
       }
@@ -113,6 +132,9 @@ export default {
         if (status) {
           this.nomor_antrian = nomor_antrian;
         }
+        const res1 = await axios.get(`${this.url_api}/transaksi?limit=10&status=MENUNGGU&from=${this.now}&to=${this.now}`);
+        this.dataRawatJalan = res1.data.data.total;
+        this.antreanHarini = res.data.data.nomor_antrian;
       } catch (err) {
         console.log(err);
       }
