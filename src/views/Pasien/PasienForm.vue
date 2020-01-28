@@ -196,9 +196,9 @@
                   :value="getValue('tanggal lahir')"
                   :disabled="disabledForm()"
                   :input-style="
-                    renderError({ error: form.error }) === null
+                    getDataError({ rawLabel: 'tanggal lahir' }) === null
                       ? null
-                      : renderError({ error: form.error })
+                      : getDataError({ rawLabel: 'tanggal lahir' })
                       ? null
                       : 'border-color: red'
                   "
