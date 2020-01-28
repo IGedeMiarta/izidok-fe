@@ -40,7 +40,7 @@
                   <div class="text-center d-flex align-items-center justify-content-between">
                     <span class="flex-grow-1">{{data.pasien['nomor_rekam_medis']}}</span>
                     <span>
-                      <b-button variant="dark" size="sm">
+                      <b-button variant="dark" size="sm" @click="rekamMedis(data)">
                         <span class="btn-wrapper--icon">
                           <font-awesome-icon icon="sign-in-alt" /> </span></b-button>
                     </span>
@@ -85,6 +85,10 @@ export default {
     }
   },
   methods: {
+    rekamMedis(data) {
+      const { id, pasien_id } = data;
+      this.$router.push(`/rekam-medis/${id}/${pasien_id}`);
+    },
     async getRawatJalanData() {
       try {
         const res = await axios.get(
