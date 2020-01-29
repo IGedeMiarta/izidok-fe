@@ -115,7 +115,7 @@ export default {
           "-" +
           today.getDate();
         const res = await axios.get(
-          `${this.url_api}/dash-pasien?type=mingguan&from=${date}&to=${date}`
+          `${this.url_api}/dash-pasien?type=date_range&from=${date}&to=${date}`
         );
         const { status, data } = res;
       } catch (err) {
