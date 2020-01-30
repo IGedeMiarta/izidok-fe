@@ -288,7 +288,7 @@
             this.$swal({
               type: "error",
               title: startCase("gagal"),
-              text: startCase("Tarif gagal di buat")
+              text: startCase("Silakan lengkapi seluruh kolom")
             });
           }
         });
@@ -305,6 +305,13 @@
             status,
             data
           } = res.data;
+          this.beingSubmit = true;
+          this.$swal({
+            title: 'Tambah Data Berhasil',
+            text: 'Data berhasil tersimpan',
+            icon: 'success',
+            confirmButtonText: startCase("ya")
+          });
           this.$router.push({
             path: "/tarif"
           });
@@ -443,7 +450,6 @@
                 //kasus inputan setelahnya
                 // console.log(error.response.data.success);
                 if (error.response.data.success == false) {
-
                   this.tmpInputTarifData[index].error['kode_layanan'].error = false
                   this.tmpInputTarifData[index].error['kode_layanan'].desc =
                     'Kode layanan Sudah Ada'
@@ -472,7 +478,6 @@
             obj[key] = x
               .filter(item => item !== "error")
               .reduce((obj, keyChild) => {
-                console.log(key);
                 obj[keyChild] = generateErrorObj();
                 return obj;
               }, {});
@@ -484,8 +489,6 @@
           return obj;
         }, {});
         this.tmpInputTarifData = [...tmpInputTarifData, tmp];
-        console.log(tmp);
-        console.log(generateErrorObj);
       },
       removeInputTarifData(index) {
         const {

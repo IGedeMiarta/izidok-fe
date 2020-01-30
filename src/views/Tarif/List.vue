@@ -17,7 +17,7 @@
           <div class="row no-padding">
             <div class="col-md-9 no-padding">
               <div class="form-group col-md-4" style="float:left;">
-                <label for="kodetarif">Kode Tarif</label>
+                <label for="kodetarif">Kode Layanan</label>
                 <input type="text" class="form-control" id="kodetarif" v-model.lazy="kodeTarif" />
               </div>
               <div class="form-group col-md-6" style="float:left;">
@@ -30,8 +30,8 @@
             </div>
             <div class="col-md-3 no-padding">
               <div class="form-group col-md-12" style="padding-top: 30px; padding-left: 0px;">
-                <b-button variant="info" class="float-right"  :to="{
-                        name: 'tarif-tambah'}" >TAMBAH</b-button>
+                <b-button variant="info" class="float-right" :to="{
+                        name: 'tarif-tambah'}">TAMBAH</b-button>
               </div>
             </div>
           </div>
@@ -80,15 +80,31 @@
                     <div class="form-row">
                       <div class="form-group col-md-4">
                         <label for="inputNama">Nama Layanan</label>
-                        <input type="text" class="form-control" v-model="editData.nama_layanan">
+                        <input type="text" class="form-control" v-model.trim="editData.nama_layanan"
+                          @input="setNameLayanan($event.target.value)">
+                        <template v-if="editData.nama_layanan === ''">
+                          <div class="error" v-if="!$v.nama_layanan.required">Nama layanan harus di isi</div>
+                        </template>
+                        <div class="error" v-if="!$v.nama_layanan.minLength">Nama Layanan terlalu pendek</div>
                       </div>
                       <div class="form-group col-md-3">
                         <label for="inputKode">Kode Layanan</label>
-                        <input type="text" class="form-control" maxlength="5" v-model="editData.kode_layanan" @input="onInputCode($event)">
+                        <input type="text" class="form-control" maxlength="5" v-model.trim="editData.kode_layanan"
+                          @input="onInputCode($event)">
+                        <template v-if="editData.kode_layanan === ''">
+                          <div class="error" v-if="!$v.kode_layanan.required">Kode layanan harus di isi</div>
+                        </template>
+                        <!-- <template v-if="editData.kode_layanan == $v.kode_layanan.$model"> -->
+                        <template v-if="this.checkDataKode == 1 ">
+                        </template>
+
+                        <template v-if="this.checkDataKode == 2 && $v.kode_layanan.required == true">
+                          <div class="error">Kode Layanan sudah ada</div>
+                        </template>
+
                       </div>
                       <div class="form-group col-md-3">
                         <label for="inputLayanan">Tarif Layanan</label>
-
                         <b-form-input v-model.lazy="editData.tarif" v-money="money" validated="true" maxlength="12">
                         </b-form-input>
                       </div>
@@ -171,9 +187,13 @@
         tarifList: [],
         namaLayanan: "",
         kodeList: [],
+        nama_layanan: '',
+        kode_layanan: '',
+        tarif: '',
         kodeLayananBeforeEdit: "",
         kodeTarif: "",
         editmode: false,
+        checkDataKode: 1,
         editData: {
           id: null,
           kode_layanan: null,
@@ -184,7 +204,7 @@
       };
     },
     mounted() {
-        this.fetchListTarif();
+      this.fetchListTarif();
     },
     watch: {
       currentPage() {
@@ -192,26 +212,28 @@
       }
     },
     validations: {
-      formData: {
-        kode_layanan: {
-          required,
-          maxLength: maxLength(5)
-        },
-        nama_layanan: {
-          required,
-          maxLength: maxLength(30)
-        },
-        tarif: {
-          required,
-          numeric,
-          maxLength: maxLength(12)
-        }
+      kode_layanan: {
+        required,
+        maxLength: maxLength(5),
+      },
+      nama_layanan: {
+        required,
+        minLength: minLength(3),
+        maxLength: maxLength(30)
+      },
+      tarif: {
+        required,
+        numeric,
+        maxLength: maxLength(12)
       }
     },
     methods: {
-      onInputCode($event){
-        console.log($event);
+      onInputCode($event) {
         this.editData.kode_layanan = $event.target.value.toUpperCase();
+      },
+      setNameLayanan(value) {
+        this.nama_layanan = value;
+        this.$v.nama_layanan.$touch()
       },
       removeTarif({
         id,
@@ -240,8 +262,19 @@
         this.kodeLayananBeforeEdit = data.kode_layanan;
       },
       async updateTarif(dataEdit) {
+
+        var checkError = this.$v.nama_layanan.$error;
+        var checkErrorKodeLayanan = this.$v.kode_layanan.$error;
+
+        console.log('hasil awal', checkErrorKodeLayanan);
+        var {
+          checkDataKode
+        } = this;
         if (this.kodeLayananBeforeEdit == dataEdit.kode_layanan) {
-          this.updateProsesTarif(dataEdit);
+          if (checkError == false) {
+            checkDataKode = 1;
+            this.updateProsesTarif(dataEdit);
+          }
         } else {
           const {
             updateProsesTarif,
@@ -252,15 +285,24 @@
               // console.log(response);
             })
             .catch(function (error) {
-              console.log(error, error.response.data);
               // return;
               //kalo ada yang sama 
               // kalo true layanan tidak ada maka di buat
+              // console.log('dari data edit',dataEdit.kode_layanan)
+              console.log(checkErrorKodeLayanan);
               if (error.response.data) {
                 if (error.response.data.success == true) {
+                  checkDataKode = 1;
                   updateProsesTarif(dataEdit);
+                } else if (checkErrorKodeLayanan == false) {
+                  checkErrorKodeLayanan = true;
+                  checkDataKode = 2;
+                  console.log('check data kode', checkDataKode, ' check error =', checkErrorKodeLayanan);
+                  return checkDataKode;
                 } else {
-                  kodeLayananSwal();
+                  checkErrorKodeLayanan = true;
+                  console.log('error kode layanan di else = ', checkErrorKodeLayanan);
+                  checkDataKode = 2;
                 }
               }
             })
@@ -365,6 +407,10 @@
 
   .modal fade show {
     opacity: 0.9;
+  }
+
+  .error {
+    color: red
   }
 
   .bg-kuning,
