@@ -687,7 +687,7 @@ library.add(faCamera);
 const tmp = [
   {
     label: "nama lengkap",
-    alias: "nama",
+    alias: "name",
     validations: {
       required
     }
@@ -713,7 +713,7 @@ const tmp = [
   },
   {
     label: "tempat lahir",
-    alias: "tempat_lahir",
+    alias: "birthdate",
     validations: {}
   },
   {
@@ -730,7 +730,7 @@ const tmp = [
   },
   {
     label: "jenis kelamin",
-    alias: "jenis_kelamin",
+    alias: "gender",
     validations: {
       required
     }
@@ -978,19 +978,51 @@ export default {
 
       axios
         .post(`${this.url_api}/pasien/ocr`, formData)
-        .then(function(response) {
-          console.log(response);
+        .then(response => {
+          const {
+            data: {
+              data: { result: res }
+            }
+          } = response;
+          this.ocrCompleted(res);
         })
         .catch(function(error) {
           console.log(error);
         });
+    },
+    stupidOcrHelper({ alias, val }) {
+      const mapGender = val => {
+        const x = 1;
+        return /empu|wan/gi.test(val) ? x * 0 : x;
+      };
+
+      switch (alias.toLowerCase()) {
+        case "gender":
+          return mapGender(val);
+
+        default:
+          return val;
+      }
     },
     assignValuePasien(data) {
       if (data) {
         Object.keys(data).map(item => {
           const y = this.formBasicData.find(x => x.alias === item);
           if (y) {
-            Vue.set(this.formData, y.label, data[item]);
+            const { stupidOcrHelper } = this;
+            Vue.set(
+              this.formData,
+              y.label,
+              stupidOcrHelper({
+                alias: y.alias,
+                val: (() => {
+                  return (
+                    (typeof data[item] === "string" && data[item].trim()) ||
+                    data[item]
+                  );
+                })()
+              })
+            );
           }
         });
       }
