@@ -98,7 +98,8 @@
                         <template v-if="this.checkDataKode == 1 ">
                         </template>
 
-                        <template v-if="this.checkDataKode == 2 && $v.kode_layanan.$params && $v.kode_layanan.$params.required">
+                        <template
+                          v-if="this.checkDataKode == 2 && $v.kode_layanan.$params && $v.kode_layanan.$params.required">
                           <div class="error">Kode Layanan sudah ada</div>
                         </template>
 
@@ -230,6 +231,7 @@
     methods: {
       onInputCode($event) {
         this.editData.kode_layanan = $event.target.value.toUpperCase();
+        this.checkDataKode = 1;
       },
       setNameLayanan(value) {
         this.nama_layanan = value;
@@ -278,7 +280,6 @@
         } else {
           const {
             updateProsesTarif,
-            kodeLayananSwal
           } = this;
           let listKode = axios.get(`${this.url_api}/layanan/${dataEdit.kode_layanan}/kode`)
             .then(function (response) {
@@ -310,13 +311,6 @@
               this.checkDataKode = checkDataKode
             });
         }
-      },
-      kodeLayananSwal() {
-        this.$swal({
-          type: "error",
-          title: "Gagal",
-          text: "Kode Layanan Tidak Boleh Sama / Kosong"
-        });
       },
       async updateProsesTarif(dataEdit) {
         try {
