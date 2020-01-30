@@ -98,7 +98,7 @@
                         <template v-if="this.checkDataKode == 1 ">
                         </template>
 
-                        <template v-if="this.checkDataKode == 2 && $v.kode_layanan.required == true">
+                        <template v-if="this.checkDataKode == 2 && $v.kode_layanan.$params && $v.kode_layanan.$params.required">
                           <div class="error">Kode Layanan sudah ada</div>
                         </template>
 
@@ -306,8 +306,8 @@
                 }
               }
             })
-            .finally(function () {
-
+            .finally(() => {
+              this.checkDataKode = checkDataKode
             });
         }
       },
