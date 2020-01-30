@@ -94,10 +94,8 @@
                         <template v-if="editData.kode_layanan === ''">
                           <div class="error" v-if="!$v.kode_layanan.required">Kode layanan harus di isi</div>
                         </template>
-                        <!-- <template v-if="editData.kode_layanan == $v.kode_layanan.$model"> -->
                         <template v-if="this.checkDataKode == 1 ">
                         </template>
-
                         <template
                           v-if="this.checkDataKode == 2 && $v.kode_layanan.$params && $v.kode_layanan.$params.required">
                           <div class="error">Kode Layanan sudah ada</div>
@@ -285,7 +283,7 @@
             .then(function (response) {
               // console.log(response);
             })
-            .catch(function (error) {
+            .catch((error) => {
               // return;
               //kalo ada yang sama 
               // kalo true layanan tidak ada maka di buat
@@ -297,12 +295,14 @@
                   updateProsesTarif(dataEdit);
                 } else if (checkErrorKodeLayanan == false) {
                   checkErrorKodeLayanan = true;
-                  checkDataKode = 2;
-                  console.log('check data kode', checkDataKode, ' check error =', checkErrorKodeLayanan);
+                  if(dataEdit.kode_layanan == ''){
+                    checkDataKode = 1;  
+                  } else {
+                    checkDataKode = 2;
+                  }
                   return checkDataKode;
                 } else {
                   checkErrorKodeLayanan = true;
-                  console.log('error kode layanan di else = ', checkErrorKodeLayanan);
                   checkDataKode = 2;
                 }
               }

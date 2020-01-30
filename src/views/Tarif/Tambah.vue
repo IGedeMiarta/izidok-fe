@@ -245,10 +245,11 @@
       validateInput({
         label,
         $event
-      }) {
+      }) 
+      { 
         return {
           error: ($event && true) || false,
-          desc: (!$event && "kolom harus di isi") || ""
+          desc: (!$event && `kolom ${label.replace("_", " ")} harus di isi`) || ""
         };
       },
       validateAll() {
