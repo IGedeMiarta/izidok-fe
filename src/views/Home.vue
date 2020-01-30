@@ -35,14 +35,14 @@
           <b-col cols="6">
             <CardDashboard
               title="pasien rawat jalan"
-              :highlight="this.dataRawatJalan"
+              :highlight="dataRawatJalan"
               bg-color="bg-success"
             />
           </b-col>
         </b-row>
         <b-row>
           <b-col cols="6">
-            <CardDashboard title="antrean" :highlight="this.antreanHarini" />
+            <CardDashboard title="antrean" :highlight="nomor_antrean" />
           </b-col>
           <b-col cols="6">
             <CardDashboard
@@ -62,7 +62,7 @@
       </b-col>
     </b-row>
     <div class="d-flex">
-      <TrendPasien class="flex-grow-1 my-2" :seriesData="dataSeries" />
+      <!-- <TrendPasien class="flex-grow-1 my-2" :seriesData="dataSeries" /> -->
     </div>
   </div>
 </template>
@@ -75,20 +75,15 @@ export default {
   name: "home",
   components: {
     CardDashboard: () => import("@/components/CardDashboard"),
-    TableDashboard: () => import("@/components/TableDashboard"),
-    TrendPasien: () => import("@/components/TrendPasien")
-  },
-  data() {
-    return {
-      nomor_antrian: 0,
-      antreanHarini : 0,
-      pasienBaru: 0,
-      DataAntrean : [],
-      dataRawatJalan : 0
-    };
+    TableDashboard: () => import("@/components/TableDashboard")
+    // TrendPasien: () => import("@/components/TrendPasien")
   },
   mounted() {
-    Promise.all([this.getAntrian(), this.getRawatJalan(),this.getPasienBaru()]);
+    Promise.all([
+      this.getAntrean(),
+      this.getRawatJalan(),
+      this.getPasienBaru()
+    ]);
   },
   computed: {
     now() {
@@ -101,28 +96,33 @@ export default {
         var today = new Date();
         var dateToday = today.getDate();
         const res = await axios.get(
-           `${this.url_api}/dash-rawat-jalan?from=${this.now}&to=${this.now}`
+          `${this.url_api}/dash-rawat-jalan?from=${this.now}&to=${this.now}`
         );
         const { status, data } = res.data;
       } catch (err) {
         console.log(err);
       }
     },
-    async getPasienBaru(){
+    async getPasienBaru() {
       try {
         var today = new Date();
         var dateToday = today.getDate();
-        var date = today.getFullYear() + '-' + '0' +(today.getMonth() + 1) + '-' + today.getDate();
-        const res = await axios.get(`${this.url_api}/dash-pasien?type=date_range&from=${date}&to=${date}`);
-        const {
-          status,
-          data: { pasienBaru = 0 }
-        } = res.data;
+        var date =
+          today.getFullYear() +
+          "-" +
+          "0" +
+          (today.getMonth() + 1) +
+          "-" +
+          today.getDate();
+        const res = await axios.get(
+          `${this.url_api}/dash-pasien?type=date_range&from=${date}&to=${date}`
+        );
+        const { status, data } = res;
       } catch (err) {
         console.log(err);
       }
     },
-    async getAntrian() {
+    async getAntrean() {
       try {
         const res = await axios.get(`${this.url_api}/dash-antrian`);
         const {
@@ -130,34 +130,34 @@ export default {
           data: { nomor_antrian = 0 }
         } = res.data;
         if (status) {
-          this.nomor_antrian = nomor_antrian;
+          this.nomor_antrean = nomor_antrian;
         }
-        const res1 = await axios.get(`${this.url_api}/transaksi?limit=10&status=MENUNGGU&from=${this.now}&to=${this.now}`);
-        this.dataRawatJalan = res1.data.data.total;
-        this.antreanHarini = res.data.data.nomor_antrian;
       } catch (err) {
         console.log(err);
       }
     }
   },
   data: () => ({
-    dataSeries: [
-      {
-        name: "Pasien Baru",
-        type: "column",
-        data: [1.4, 2, 2.5, 1.5, 2.5, 2.8, 3.8, 4.6]
-      },
-      {
-        name: "Pasien Rawat Jalan",
-        type: "column",
-        data: [1.1, 3, 3.1, 4, 4.1, 4.9, 6.5, 8.5]
-      },
-      {
-        name: "Pendapatan",
-        type: "line",
-        data: [20, 29, 37, 36, 44, 45, 50, 58]
-      }
-    ]
+    nomor_antrean: 0,
+    pasienBaru: 0,
+    dataRawatJalan: 0
+    // dataSeries: [
+    //   {
+    //     name: "Pasien Baru",
+    //     type: "column",
+    //     data: [1.4, 2, 2.5, 1.5, 2.5, 2.8, 3.8, 4.6]
+    //   },
+    //   {
+    //     name: "Pasien Rawat Jalan",
+    //     type: "column",
+    //     data: [1.1, 3, 3.1, 4, 4.1, 4.9, 6.5, 8.5]
+    //   },
+    //   {
+    //     name: "Pendapatan",
+    //     type: "line",
+    //     data: [20, 29, 37, 36, 44, 45, 50, 58]
+    //   }
+    // ]
   })
 };
 </script>

@@ -5,7 +5,7 @@
       :breadcrumb="[
         {
           label: 'Manajemen Pasien',
-          link : '/pasien'
+          link: '/pasien'
         },
         {
           label: 'Tambah Pasien',
@@ -113,7 +113,14 @@ export default {
           this.goingPlaces(nama, nomor_rekam_medis);
         }
       } catch (err) {
-        alert(err);
+        if (err.response) {
+          const { message } = err.response.data;
+          this.$swal({
+            text: `${message || "something went wrong"}`,
+            type: "error"
+          });
+        }
+        // console.log(err);
       } finally {
         this.beingSubmit = false;
       }
