@@ -292,8 +292,8 @@
             return o;
           });
           const p = y.every(h => h);
-          // console.log(p);
-          // return;
+          
+          return;
           if (p !== false) {
             this.doSubmitInputTarif();
           } else {
@@ -383,6 +383,9 @@
         this.tmpInputTarifData[0].error['tarif_layanan'].error = true;
         this.tmpInputTarifData[0].error['tarif_layanan'].desc = '';
         this.tmpInputTarifData[0].error['id'].error = true;
+
+        this.tmpInputTarifData[0].error['nama_layanan'].error = true;
+        this.tmpInputTarifData[0].error['nama_layanan'].desc = '';
 
         this.namaContainer.forEach((item, i) => {
           this.namaContainer.forEach((item, i) => {
