@@ -50,6 +50,17 @@
                 </tr>
               </thead>
               <tbody>
+                <template v-if="rows == 0">
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>
+                      <center>
+                        <h4 class="text-center">Data Tidak Ada</h4>
+                      </center>
+                    </td>
+                  </tr>
+                </template>
                 <tr v-for="(data) in tarifList" :key="data.id">
                   <td class="text-left pr-4">{{ data.kode_layanan }}</td>
                   <td>{{data.nama_layanan}}</td>
@@ -100,7 +111,6 @@
                           v-if="this.checkDataKode == 2 && $v.kode_layanan.$params && $v.kode_layanan.$params.required">
                           <div class="error">Kode Layanan sudah ada</div>
                         </template>
-
                       </div>
                       <div class="form-group col-md-3">
                         <label for="inputLayanan">Tarif Layanan</label>
@@ -217,7 +227,7 @@
       },
       nama_layanan: {
         required,
-        minLength: minLength(3),
+        minLength: minLength(2),
         maxLength: maxLength(30)
       },
       tarif: {
@@ -295,8 +305,8 @@
                   updateProsesTarif(dataEdit);
                 } else if (checkErrorKodeLayanan == false) {
                   checkErrorKodeLayanan = true;
-                  if(dataEdit.kode_layanan == ''){
-                    checkDataKode = 1;  
+                  if (dataEdit.kode_layanan == '') {
+                    checkDataKode = 1;
                   } else {
                     checkDataKode = 2;
                   }
@@ -386,6 +396,7 @@
             this.tarifList = [...listTarif];
             this.rows = tarifData.total;
           }
+          console.log();
         } catch (err) {
           // console.log(err);
         }
@@ -397,6 +408,10 @@
 <style scoped lang="css">
   .bg-kuning {
     background: #f7fc6b;
+  }
+
+  #kodetarif {
+    text-transform: uppercase;
   }
 
   .modal fade show {
