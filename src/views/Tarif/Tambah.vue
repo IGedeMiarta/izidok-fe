@@ -421,7 +421,7 @@
         } = this;
 
         const lastIndex = tmpInputTarifData[tmpInputTarifData.length - 1];
-        let listKode = axios.get(`${this.url_api}/layanan/${val}/kode`)
+        var listKode = axios.get(`${this.url_api}/layanan/${val}/kode`)
           .then(function (response) {
             console.log(response);
           })
@@ -431,7 +431,7 @@
               this.tmpInputTarifData[index].error['kode_layanan'].desc =
                 'Kode layanan Sudah Ada';
             } else {
-              this.tmpInputTarifData[index].error['kode_layanan'].error = !false
+              this.tmpInputTarifData[index].error['kode_layanan'].error = true
               this.tmpInputTarifData[index].error['kode_layanan'].desc = ''
             }
           })
@@ -447,9 +447,9 @@
                 if (error.response.data.success == false) {
                   this.tmpInputTarifData[index].error['kode_layanan'].error = false
                   this.tmpInputTarifData[index].error['kode_layanan'].desc =
-                    'Kode layanan Sudah Ada'
+                    'Kode layanan Sudah Ada '
                   this.tmpInputTarifData[i].error['kode_layanan'].error = false
-                  this.tmpInputTarifData[i].error['kode_layanan'].desc = 'Kode layanan Sudah Ada'
+                  this.tmpInputTarifData[i].error['kode_layanan'].desc = 'Kode layanan Sudah Ada '
 
                   this.tmpInputTarifData[i].error['tarif_layanan'].error = true
                   this.tmpInputTarifData[i].error['tarif_layanan'].desc = ''
@@ -460,8 +460,8 @@
                   this.tmpInputTarifData[index].error['kode_layanan'].error = false
                   this.tmpInputTarifData[index].error['kode_layanan'].desc =
                     'Kode layanan tidak boleh sama'
-                  this.tmpInputTarifData[i].error['kode_layanan'].error = false
-                  this.tmpInputTarifData[i].error['kode_layanan'].desc = 'Kode layanan tidak boleh sama '
+                  this.tmpInputTarifData[i].error['kode_layanan'].error = true
+                  this.tmpInputTarifData[i].error['kode_layanan'].desc = ''
 
                   this.tmpInputTarifData[i].error['tarif_layanan'].error = true
                   this.tmpInputTarifData[i].error['tarif_layanan'].desc = ''
@@ -469,7 +469,9 @@
                   this.tmpInputTarifData[index].error['tarif_layanan'].desc = ''
                 }
               })
-              .finally(() => {});
+              .finally(() => {
+                 
+              });
           } else {
             let listKode = axios.get(`${this.url_api}/layanan/${val}/kode`)
               .then(function (response) {})
