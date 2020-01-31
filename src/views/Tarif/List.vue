@@ -63,7 +63,7 @@
                 </template>
                 <tr v-for="(data) in tarifList" :key="data.id">
                   <td class="text-left pr-4">{{ data.kode_layanan }}</td>
-                  <td>{{data.nama_layanan}}</td>
+                  <td id='dt_nm_layanan'>{{data.nama_layanan}}</td>
                   <td class="text-center">{{ data.tarif.toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")  }}</td>
                   <td class="text-center">
                     <b-link class="btn bg-kuning text-light font-size-md pl-2 pr-2 btn-sm ml-1 mr-1"
@@ -91,7 +91,7 @@
                     <div class="form-row">
                       <div class="form-group col-md-4">
                         <label for="inputNama">Nama Layanan</label>
-                        <input type="text" class="form-control" v-model.trim="editData.nama_layanan"
+                        <input type="text" class="form-control" id="nm_layanan" v-model.trim="editData.nama_layanan"
                           @input="setNameLayanan($event.target.value)">
                         <template v-if="editData.nama_layanan === ''">
                           <div class="error" v-if="!$v.nama_layanan.required">Nama layanan harus di isi</div>
@@ -272,16 +272,13 @@
         this.kodeLayananBeforeEdit = data.kode_layanan;
       },
       async updateTarif(dataEdit) {
-
         var checkError = this.$v.nama_layanan.$error;
         var checkErrorKodeLayanan = this.$v.kode_layanan.$error;
-
-        console.log('hasil awal', checkErrorKodeLayanan);
         var {
           checkDataKode
         } = this;
         if (this.kodeLayananBeforeEdit == dataEdit.kode_layanan) {
-          if (checkError == false) {
+          if (checkError == false && dataEdit.namaLayanan !== '') {
             checkDataKode = 1;
             this.updateProsesTarif(dataEdit);
           }
@@ -290,15 +287,12 @@
             updateProsesTarif,
           } = this;
           let listKode = axios.get(`${this.url_api}/layanan/${dataEdit.kode_layanan}/kode`)
-            .then(function (response) {
-              // console.log(response);
-            })
+            .then(function (response) {})
             .catch((error) => {
-              // return;
               //kalo ada yang sama 
               // kalo true layanan tidak ada maka di buat
               // console.log('dari data edit',dataEdit.kode_layanan)
-              console.log(checkErrorKodeLayanan);
+              console.log('hasil kode check error', checkErrorKodeLayanan);
               if (error.response.data) {
                 if (error.response.data.success == true) {
                   checkDataKode = 1;
@@ -412,6 +406,11 @@
 
   #kodetarif {
     text-transform: uppercase;
+  }
+
+  #nm_layanan,
+  #dt_nm_layanan {
+    text-transform: capitalize;
   }
 
   .modal fade show {
