@@ -27,7 +27,8 @@
                     :key="inputTarif.id">
                     <b-col cols="4">
                       <div role="group">
-                        <b-form-input :value="inputTarif.nama_layanan" @change="
+                        <b-form-input :value="inputTarif.nama_layanan"
+                          @input="onInputNama($event, index, inputTarif, 'nama_layanan')" @change="
                             onChangeValue({
                               label: 'nama_layanan',
                               index,
@@ -145,6 +146,8 @@
         tarif_layanan: null
       }, ],
       kodeContainer: [],
+      namaContainer: [],
+      tarifContainer: [],
       beingSubmit: false
     }),
     beforeRouteLeave(to, from, next) {
@@ -245,8 +248,7 @@
       validateInput({
         label,
         $event
-      }) 
-      { 
+      }) {
         return {
           error: ($event && true) || false,
           desc: (!$event && `kolom ${label.replace("_", " ")} harus di isi`) || ""
@@ -366,10 +368,44 @@
             $event
           });
         }
-        if (label !== "tarif_layanan") {
-          tmp[label] = $event;
-          Vue.set(this.tmpInputTarifData, index, tmp);
-        }
+      },
+      onInputNama(val, index, o, p) {
+        val = val.toUpperCase();
+        Vue.set(o, p, val);
+        Vue.set(this.namaContainer, index, val);
+        let {
+          tmpInputTarifData,
+          validateAll,
+          generateErrorObj
+        } = this;
+        const lastIndex = tmpInputTarifData[tmpInputTarifData.length - 1];
+        const x = Object.keys(lastIndex);
+        this.tmpInputTarifData[0].error['tarif_layanan'].error = true;
+        this.tmpInputTarifData[0].error['tarif_layanan'].desc = '';
+        this.tmpInputTarifData[0].error['id'].error = true;
+
+        this.namaContainer.forEach((item, i) => {
+          this.namaContainer.forEach((item, i) => {
+            if (index == i) return;
+            if (item == val) {
+              this.tmpInputTarifData[index].error['nama_layanan'].error = false
+              this.tmpInputTarifData[index].error['nama_layanan'].desc = 'Nama layanan tidak boleh sama'
+
+              this.tmpInputTarifData[i].error['nama_layanan'].error = false
+              this.tmpInputTarifData[i].error['nama_layanan'].desc = 'Nama layanan tidak boleh sama'
+
+              this.tmpInputTarifData[i].error['id'].error = true;
+            } else {
+              this.tmpInputTarifData[index].error['nama_layanan'].error = true
+              this.tmpInputTarifData[index].error['nama_layanan'].desc = ''
+
+              this.tmpInputTarifData[i].error['nama_layanan'].error = true
+              this.tmpInputTarifData[i].error['nama_layanan'].desc = ''
+
+              this.tmpInputTarifData[i].error['id'].error = true;
+            }
+          })
+        });
       },
       onInputKode(val, index, o, p) {
         val = val.toUpperCase();
@@ -380,6 +416,7 @@
           validateAll,
           generateErrorObj
         } = this;
+
         const lastIndex = tmpInputTarifData[tmpInputTarifData.length - 1];
         let listKode = axios.get(`${this.url_api}/layanan/${val}/kode`)
           .then(function (response) {
@@ -395,9 +432,7 @@
               this.tmpInputTarifData[index].error['kode_layanan'].desc = ''
             }
           })
-          .finally(() => {
-
-          });
+          .finally(() => {});
         const x = Object.keys(lastIndex);
         this.kodeContainer.forEach((item, i) => {
           if (index == i) return;
@@ -413,17 +448,25 @@
                   this.tmpInputTarifData[i].error['kode_layanan'].error = false
                   this.tmpInputTarifData[i].error['kode_layanan'].desc = 'Kode layanan Sudah Ada'
 
+                  this.tmpInputTarifData[i].error['tarif_layanan'].error = true
+                  this.tmpInputTarifData[i].error['tarif_layanan'].desc = ''
+                  this.tmpInputTarifData[index].error['tarif_layanan'].error = true
+                  this.tmpInputTarifData[index].error['tarif_layanan'].desc = ''
+
                 } else {
                   this.tmpInputTarifData[index].error['kode_layanan'].error = false
                   this.tmpInputTarifData[index].error['kode_layanan'].desc =
                     'Kode layanan tidak boleh sama'
                   this.tmpInputTarifData[i].error['kode_layanan'].error = false
                   this.tmpInputTarifData[i].error['kode_layanan'].desc = 'Kode layanan tidak boleh sama '
+
+                  this.tmpInputTarifData[i].error['tarif_layanan'].error = true
+                  this.tmpInputTarifData[i].error['tarif_layanan'].desc = ''
+                  this.tmpInputTarifData[index].error['tarif_layanan'].error = true
+                  this.tmpInputTarifData[index].error['tarif_layanan'].desc = ''
                 }
               })
-              .finally(() => {
-                //  this.tmpInputTarifData[index].error['kode_layanan'].error = false
-              });
+              .finally(() => {});
           } else {
             let listKode = axios.get(`${this.url_api}/layanan/${val}/kode`)
               .then(function (response) {})
@@ -433,9 +476,18 @@
                 if (error.response.data.success == false) {
                   this.tmpInputTarifData[index].error['kode_layanan'].error = false
                   this.tmpInputTarifData[index].error['kode_layanan'].desc =
-                    'Kode layanan Sudah Ada'
-                } else {
+                    'Kode layanan Sudah Ada';
+                  this.tmpInputTarifData[i].error['tarif_layanan'].error = true
+                  this.tmpInputTarifData[i].error['tarif_layanan'].desc = ''
 
+                  this.tmpInputTarifData[index].error['tarif_layanan'].error = true
+                  this.tmpInputTarifData[index].error['tarif_layanan'].desc = ''
+                } else {
+                  this.tmpInputTarifData[i].error['tarif_layanan'].error = true
+                  this.tmpInputTarifData[i].error['tarif_layanan'].desc = ''
+
+                  this.tmpInputTarifData[index].error['tarif_layanan'].error = true
+                  this.tmpInputTarifData[index].error['tarif_layanan'].desc = ''
                 }
               })
               .finally(() => {
