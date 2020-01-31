@@ -370,7 +370,7 @@
         }
       },
       onInputNama(val, index, o, p) {
-        val = val.toUpperCase();
+        val = val.charAt(0).toUpperCase() + val.substring(1);;
         Vue.set(o, p, val);
         Vue.set(this.namaContainer, index, val);
         let {
