@@ -291,8 +291,6 @@
             return o;
           });
           const p = y.every(h => h);
-
-          return;
           if (p !== false) {
             this.doSubmitInputTarif();
           } else {
