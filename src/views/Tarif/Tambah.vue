@@ -147,7 +147,6 @@
       }, ],
       kodeContainer: [],
       namaContainer: [],
-      tarifContainer: [],
       beingSubmit: false
     }),
     beforeRouteLeave(to, from, next) {
@@ -292,7 +291,7 @@
             return o;
           });
           const p = y.every(h => h);
-          
+
           return;
           if (p !== false) {
             this.doSubmitInputTarif();
@@ -380,8 +379,10 @@
         } = this;
         const lastIndex = tmpInputTarifData[tmpInputTarifData.length - 1];
         const x = Object.keys(lastIndex);
+
         this.tmpInputTarifData[0].error['tarif_layanan'].error = true;
         this.tmpInputTarifData[0].error['tarif_layanan'].desc = '';
+
         this.tmpInputTarifData[0].error['id'].error = true;
 
         this.tmpInputTarifData[0].error['nama_layanan'].error = true;
@@ -398,6 +399,13 @@
               this.tmpInputTarifData[i].error['nama_layanan'].desc = 'Nama layanan tidak boleh sama'
 
               this.tmpInputTarifData[i].error['id'].error = true;
+              this.tmpInputTarifData[index].error['id'].error = true;
+
+              this.tmpInputTarifData[i].error['tarif_layanan'].error = true
+              this.tmpInputTarifData[i].error['tarif_layanan'].desc = ''
+              this.tmpInputTarifData[index].error['tarif_layanan'].error = true
+              this.tmpInputTarifData[index].error['tarif_layanan'].desc = ''    
+
             } else {
               this.tmpInputTarifData[index].error['nama_layanan'].error = true
               this.tmpInputTarifData[index].error['nama_layanan'].desc = ''
@@ -406,6 +414,13 @@
               this.tmpInputTarifData[i].error['nama_layanan'].desc = ''
 
               this.tmpInputTarifData[i].error['id'].error = true;
+              this.tmpInputTarifData[index].error['id'].error = true;
+
+              this.tmpInputTarifData[i].error['tarif_layanan'].error = true
+              this.tmpInputTarifData[i].error['tarif_layanan'].desc = ''
+              this.tmpInputTarifData[index].error['tarif_layanan'].error = true
+              this.tmpInputTarifData[index].error['tarif_layanan'].desc = ''    
+
             }
           })
         });
@@ -414,6 +429,7 @@
         val = val.toUpperCase();
         Vue.set(o, p, val);
         Vue.set(this.kodeContainer, index, val);
+      
         let {
           tmpInputTarifData,
           validateAll,
@@ -422,77 +438,62 @@
 
         const lastIndex = tmpInputTarifData[tmpInputTarifData.length - 1];
         var listKode = axios.get(`${this.url_api}/layanan/${val}/kode`)
-          .then(function (response) {
-            console.log(response);
-          })
-          .catch((error) => {
-            if (error.response.data.success == false) {
+          .then((response) => {
+            if (response.data.success == true) {
               this.tmpInputTarifData[index].error['kode_layanan'].error = false
               this.tmpInputTarifData[index].error['kode_layanan'].desc =
                 'Kode layanan Sudah Ada';
-            } else {
-              this.tmpInputTarifData[index].error['kode_layanan'].error = true
-              this.tmpInputTarifData[index].error['kode_layanan'].desc = ''
+            
             }
           })
-          .finally(() => {});
-        const x = Object.keys(lastIndex);
+          .catch((error) => {
+            if (error.response.data.success == false) {
+              this.tmpInputTarifData[index].error['kode_layanan'].error = true
+              this.tmpInputTarifData[index].error['kode_layanan'].desc =
+                '';
+            }
+          });
+        // const x = Object.keys(lastIndex);
         this.kodeContainer.forEach((item, i) => {
           if (index == i) return;
           if (item == val) {
             let listKode = axios.get(`${this.url_api}/layanan/${val}/kode`)
-              .then(function (response) {})
+              .then((response) => {
+                // kalo ada yang sama dalam api
+                if (response.data.success == true) {
+                  this.tmpInputTarifData[index].error['kode_layanan'].error = false
+                  this.tmpInputTarifData[index].error['kode_layanan'].desc =
+                    'Kode layanan Sudah Ada';
+                }
+              })
               .catch((error) => {
-                //kasus inputan yang pertama
+                //kalo tidak ada yang sama dari api
                 if (error.response.data.success == false) {
                   this.tmpInputTarifData[index].error['kode_layanan'].error = false
                   this.tmpInputTarifData[index].error['kode_layanan'].desc =
-                    'Kode layanan Sudah Ada '
-                  this.tmpInputTarifData[i].error['kode_layanan'].error = false
-                  this.tmpInputTarifData[i].error['kode_layanan'].desc = 'Kode layanan Sudah Ada '
-
-                  this.tmpInputTarifData[i].error['tarif_layanan'].error = true
-                  this.tmpInputTarifData[i].error['tarif_layanan'].desc = ''
-                  this.tmpInputTarifData[index].error['tarif_layanan'].error = true
-                  this.tmpInputTarifData[index].error['tarif_layanan'].desc = ''
-
-                } else {
-                  this.tmpInputTarifData[index].error['kode_layanan'].error = false
-                  this.tmpInputTarifData[index].error['kode_layanan'].desc =
-                    'Kode layanan tidak boleh sama'
-                  this.tmpInputTarifData[i].error['kode_layanan'].error = true
-                  this.tmpInputTarifData[i].error['kode_layanan'].desc = ''
-
-                  this.tmpInputTarifData[i].error['tarif_layanan'].error = true
-                  this.tmpInputTarifData[i].error['tarif_layanan'].desc = ''
-                  this.tmpInputTarifData[index].error['tarif_layanan'].error = true
-                  this.tmpInputTarifData[index].error['tarif_layanan'].desc = ''
+                    'Kode Layanan Tidak Boleh Sama'
                 }
               })
-              .finally(() => {
-                 
-              });
           } else {
             let listKode = axios.get(`${this.url_api}/layanan/${val}/kode`)
-              .then(function (response) {})
+              .then(function (response) {
+                if (response.data.success == true) {
+                  this.tmpInputTarifData[index].error['kode_layanan'].error = false
+                  this.tmpInputTarifData[index].error['kode_layanan'].desc =
+                    'Kode layanan Sudah Ada';
+                }
+              })
               .catch((error) => {
                 //kasus inputan setelahnya
                 // console.log(error.response.data.success);
                 if (error.response.data.success == false) {
+                  this.tmpInputTarifData[index].error['kode_layanan'].error = true
+                  this.tmpInputTarifData[index].error['kode_layanan'].desc =
+                    '';
+                } else {
                   this.tmpInputTarifData[index].error['kode_layanan'].error = false
                   this.tmpInputTarifData[index].error['kode_layanan'].desc =
-                    'Kode layanan Sudah Ada';
-                  this.tmpInputTarifData[i].error['tarif_layanan'].error = true
-                  this.tmpInputTarifData[i].error['tarif_layanan'].desc = ''
-
-                  this.tmpInputTarifData[index].error['tarif_layanan'].error = true
-                  this.tmpInputTarifData[index].error['tarif_layanan'].desc = ''
-                } else {
-                  this.tmpInputTarifData[i].error['tarif_layanan'].error = true
-                  this.tmpInputTarifData[i].error['tarif_layanan'].desc = ''
-
-                  this.tmpInputTarifData[index].error['tarif_layanan'].error = true
-                  this.tmpInputTarifData[index].error['tarif_layanan'].desc = ''
+                    'Kode Layanan Harus Di Isi';
                 }
               })
               .finally(() => {

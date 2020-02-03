@@ -109,7 +109,7 @@
                         </template>
                         <template
                           v-if="this.checkDataKode == 2 && $v.kode_layanan.$params && $v.kode_layanan.$params.required">
-                          <div class="error">Kode Layanan sudah ada</div>
+                          <div class="error">Kode Layanan Sudah Ada</div>
                         </template>
                       </div>
                       <div class="form-group col-md-3">
@@ -277,6 +277,7 @@
         var {
           checkDataKode
         } = this;
+        // jika kode layanan ada yang sama
         if (this.kodeLayananBeforeEdit == dataEdit.kode_layanan) {
           if (checkError == false && dataEdit.namaLayanan !== '') {
             checkDataKode = 1;
@@ -287,24 +288,26 @@
             updateProsesTarif,
           } = this;
           let listKode = axios.get(`${this.url_api}/layanan/${dataEdit.kode_layanan}/kode`)
-            .then(function (response) {})
+            .then(function (response) {
+              checkDataKode = 2;
+            })
             .catch((error) => {
               //kalo ada yang sama 
               // kalo true layanan tidak ada maka di buat
-              // console.log('dari data edit',dataEdit.kode_layanan)
-              console.log('hasil kode check error', checkErrorKodeLayanan);
               if (error.response.data) {
-                if (error.response.data.success == true) {
+                console.log(error.response.data.success)
+                if (error.response.data.success == false) {
                   checkDataKode = 1;
                   updateProsesTarif(dataEdit);
                 } else if (checkErrorKodeLayanan == false) {
                   checkErrorKodeLayanan = true;
                   if (dataEdit.kode_layanan == '') {
-                    checkDataKode = 1;
+                    this.$v.kode_layanan.required == true;
                   } else {
+                    // kalau 2 kode layanan sudah ada
                     checkDataKode = 2;
+                    this.updateProsesTarif(dataEdit);
                   }
-                  return checkDataKode;
                 } else {
                   checkErrorKodeLayanan = true;
                   checkDataKode = 2;
