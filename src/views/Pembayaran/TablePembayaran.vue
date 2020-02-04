@@ -166,7 +166,6 @@
               code: val.kode_layanan,
             }));
             this.rows = tarifData.total;
-            console.log(items);
           }
         } catch (err) {
           // console.log(err);

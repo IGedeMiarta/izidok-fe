@@ -141,7 +141,8 @@ const routes = [
     component: () => import("../views/Pembayaran.vue"),
     children: [
       {
-        path: "tambah",
+        path: ":bayar_id",
+        // path: "tambah",
         name: "pembayaran-tambah",
         component: () => import("../views/Pembayaran/Tambah.vue")
       },

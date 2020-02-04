@@ -49,21 +49,24 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(data) in pembayaranList" :key="data.id">
-                  <td>1</td>
-                  <td>{{data.transklinik_id}}</td>
-                  <td>{{data.detail[nama_layanan]}}</td>
-                  <td>{{data.detail[kode_layanan]}}</td>
-                  <td>{{data.created_by}}</td>
-                  <td>test</td>
-                  <td>
-                    <b-link class="btn bg-info text-light font-size-md pl-2 pr-2 btn-sm ml-1 mr-1">
+                <tr v-for="(data,index) in pembayaranList" :key="data.id">
+                  <td>{{ (currentPage - 1) * perPage + index + 1 }}</td>
+                  <td>{{data.transklinik.pasien.nama}}</td>
+                  <td>{{data.transklinik.pasien.nomor_rekam_medis}}</td>
+                  <td class="text-center">{{data.transklinik.pasien.jenis_kelamin == 0 ? 'P' : 'L' }}</td>
+                  <td>dr. {{data.created_by.nama}}</td>
+                  <td>{{data.status}}</td>
+                  <td class="text-center">
+                    <b-link class="btn bg-first font-size-md pl-2 pr-2 btn-sm ml-1 mr-1">
                       <font-awesome-icon icon="search" />
                     </b-link>
                   </td>
                   <td class="text-center">
-                    <b-link class="btn bg-info text-light font-size-md pl-5 pr-5 btn-sm ml-1 mr-1"
-                      :to="{ name: 'pembayaran-tambah' }">
+                    <b-link class="btn bg-info text-light font-size-md pl-5 pr-5 btn-sm ml-1 mr-1" @click.prevent="
+                        detailBayar({
+                          id: data.id
+                        })
+                      ">
                       Bayar
                     </b-link>
                   </td>
@@ -116,7 +119,7 @@
       };
     },
     mounted() {
-        this.fetchListpembayaran();
+      this.fetchListpembayaran();
     },
     watch: {
       currentPage() {
@@ -124,10 +127,22 @@
       }
     },
     methods: {
+      detailBayar({
+        id
+      } = {}) {
+        if (id) {
+          this.$router.push({
+            name: "pembayaran-tambah",
+            params: {
+              bayar_id: id
+            }
+          });
+        }
+      },
       async fetchListpembayaran() {
         try {
           var today = new Date();
-          var date = today.getFullYear() + '-' + '0' +(today.getMonth() + 1) + '-' + today.getDate();
+          var date = today.getFullYear() + '-' + '0' + (today.getMonth() + 1) + '-' + '0' + today.getDate();
           const res = await axios.get(
             `${this.url_api}/pembayaran?from=${date}&to=${date}`
           );
@@ -135,7 +150,6 @@
             success,
             data
           } = res.data;
-
           if (success) {
             const {
               pembayaran: pembayaranData,

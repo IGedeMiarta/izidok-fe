@@ -102,7 +102,7 @@
                         <label for="inputKode">Kode Layanan</label>
                         <input type="text" class="form-control" maxlength="5" v-model.trim="editData.kode_layanan"
                           @input="onInputCode($event)">
-                        <template v-if="editData.kode_layanan === ''">
+                        <template v-if="editData.kode_layanan === '' && editData.kode_layanan === ' '">
                           <div class="error" v-if="!$v.kode_layanan.required">Kode layanan harus di isi</div>
                         </template>
                         <template v-if="this.checkDataKode == 1 ">
@@ -279,7 +279,7 @@
         } = this;
         // jika kode layanan ada yang sama
         if (this.kodeLayananBeforeEdit == dataEdit.kode_layanan) {
-          if (checkError == false && dataEdit.namaLayanan !== '') {
+          if (checkError == false && dataEdit.namaLayanan !== ' ' && dataEdit.namaLayanan !== '') {
             checkDataKode = 1;
             this.updateProsesTarif(dataEdit);
           }
@@ -294,23 +294,27 @@
             .catch((error) => {
               //kalo ada yang sama 
               // kalo true layanan tidak ada maka di buat
+              //kalo ada data
               if (error.response.data) {
                 console.log(error.response.data.success)
-                if (error.response.data.success == false) {
+                if (error.response.data.success == false && dataEdit.namaLayanan == ' ' && dataEdit.namaLayanan ==
+                  '') {
                   checkDataKode = 1;
-                  updateProsesTarif(dataEdit);
-                } else if (checkErrorKodeLayanan == false) {
-                  checkErrorKodeLayanan = true;
+                } else if (checkErrorKodeLayanan == true) {
+                  // checkErrorKodeLayanan = true;
                   if (dataEdit.kode_layanan == '') {
                     this.$v.kode_layanan.required == true;
                   } else {
                     // kalau 2 kode layanan sudah ada
-                    checkDataKode = 2;
+                    checkDataKode = 1;
                     this.updateProsesTarif(dataEdit);
                   }
-                } else {
+                } else if (error.response.data.success == false && checkDataKode == 1) {
                   checkErrorKodeLayanan = true;
-                  checkDataKode = 2;
+                  checkDataKode = 1;
+                } else {
+                  checkDataKode = 1;
+                  this.updateProsesTarif(dataEdit);
                 }
               }
             })
