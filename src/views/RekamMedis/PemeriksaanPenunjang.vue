@@ -375,7 +375,7 @@ export default {
       formData.append(filename, file);
 
       this.promises.push(
-        axios.post("http://localhost:9001/api/v1/upload-cloud", formData, {
+        axios.post(store.state.URL_API + "/upload-cloud", formData, {
           headers: {
             "Content-Type": "multipart/form-data"
           },
@@ -420,7 +420,7 @@ export default {
         })
         .indexOf(filename);
 
-      const doDelete = axios.post("http://localhost:9001/api/v1/delete-cloud", {
+      const doDelete = axios.post(store.state.URL_API + "/delete-cloud", {
           filenames: [this.uploadedFiles[removeIndex].uploaded_name]
         });
 

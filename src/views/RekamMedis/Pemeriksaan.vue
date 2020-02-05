@@ -179,7 +179,7 @@ export default {
       let backgroundURL = image_url;
 
       var background = new Image();
-      // background.crossOrigin = "Anonymous";
+      background.crossOrigin = "Anonymous";
       background.src = backgroundURL;
 
       //remove existing image
@@ -203,6 +203,7 @@ export default {
 
           // img_organ.appendChild(background);
         } else {
+          console.log('draw on canvas pemeriksaan');
           ctx.drawImage(background, 0, 0, newSize.width, newSize.height);
         }
       };
