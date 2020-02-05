@@ -105,9 +105,9 @@
             </div>
             <Footer ref="footer" />
             <div class="col-xl-12 d-flex justify-content-xl-end">
-              <button class="btn btn-success m-2">Print</button>
+              <!-- <button class="btn btn-success m-2">Print</button> -->
               <button class="btn btn-info m-2">Keluar</button>
-              <button @click="save()" class="btn btn-primary m-2 btn-spinner">
+              <button @click="saveButton()" class="btn btn-primary m-2 btn-spinner">
                 <b-spinner v-show="saving_params.is_saving" class="btn-wrapper--icon" small></b-spinner>
                 <span class="btn-wrapper--label">Simpan</span>
               </button>
@@ -142,7 +142,17 @@ import {
   faTrash
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-library.add(faPenAlt, faKeyboard, faEraser, faAngleUp, faCamera, faFolder, faDownload, faEye, faTrash);
+library.add(
+  faPenAlt,
+  faKeyboard,
+  faEraser,
+  faAngleUp,
+  faCamera,
+  faFolder,
+  faDownload,
+  faEye,
+  faTrash
+);
 
 import { mapGetters, mapActions } from "vuex";
 import router from "@/router";
@@ -161,38 +171,58 @@ export default {
   },
   methods: {
     ...mapActions(["fetchData", "saveRekamMedis"]),
-    async save() {
-      const saving = await this.saveRekamMedis();
+    async saveButton() {
+      const swalWithBootstrapButtons = this.$swal.mixin({
+        customClass: {
+          confirmButton: "btn btn-success",
+          cancelButton: "btn btn-danger"
+        },
+        buttonsStyling: false
+      });
+      return this.$swal({
+        text: "Lanjutkan untuk simpan?",
+        title: "Data yang sudah disimpan tidak dapat diubah!",
+        showCancelButton: true,
+        confirmButtonText: "Ya, lanjut pembayaran",
+        cancelButtonText: "Tidak",
+        reverseButtons: true
+      }).then(async result => {
+        if (result.value) {
+          const saving = await this.saveRekamMedis();
 
-      if (!this.saving_params.is_next_konsul) {
-        return this.handleError('Anda belum memilih durasi konsultasi!');
-      }
+          if (!this.saving_params.is_next_konsul) {
+            return this.handleError("Anda belum memilih durasi konsultasi!");
+          }
 
-      if (!this.saving_params.is_agree) {
-        return this.handleError('Anda belum menyetujui pernyataan!');
-      }
+          if (!this.saving_params.is_agree) {
+            return this.handleError("Anda belum menyetujui pernyataan!");
+          }
 
-      if (!this.saving_params.is_saved) {
-        return this.handleError('Penyimpanan Rekam Medis gagal!');
-      }
+          if (!this.saving_params.is_saved) {
+            return this.handleError("Penyimpanan Rekam Medis gagal!");
+          }
 
-      return this.$swal(
-        "Rekam medis tersimpan!",
-        "Klik tombol untuk melanjutkan!",
-        "success"
-      ).then(res => {
-        router.push({
-          path: "/pembayaran"
-        });
+          this.$swal
+            .fire(
+              "Rekam medis tersimpan!",
+              "klik tombol ok untuk melanjutkan.",
+              "success"
+            )
+            .then(res => {
+              router.push({
+                path: "/pembayaran"
+              });
+            });
+        }
       });
     },
     handleError(message) {
-    return this.$swal({
-      type: "error",
-      title: "Oops...",
-      text: message
-    });
-  },
+      return this.$swal({
+        type: "error",
+        title: "Oops...",
+        text: message
+      });
+    }
   },
   computed: mapGetters(["pasien", "saving_params"]),
   created() {
