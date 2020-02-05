@@ -96,13 +96,12 @@
                         <template v-if="editData.nama_layanan === ''">
                           <div class="error" v-if="!$v.nama_layanan.required">Nama layanan harus di isi</div>
                         </template>
-                        <div class="error" v-if="!$v.nama_layanan.minLength">Nama Layanan terlalu pendek</div>
                       </div>
                       <div class="form-group col-md-3">
                         <label for="inputKode">Kode Layanan</label>
                         <input type="text" class="form-control" maxlength="5" v-model.trim="editData.kode_layanan"
                           @input="onInputCode($event)">
-                        <template v-if="editData.kode_layanan === '' && editData.kode_layanan === ' '">
+                        <template v-if="editData.kode_layanan == '' || editData.kode_layanan == ' '">
                           <div class="error" v-if="!$v.kode_layanan.required">Kode layanan harus di isi</div>
                         </template>
                         <template v-if="this.checkDataKode == 1 ">
@@ -296,14 +295,13 @@
               // kalo true layanan tidak ada maka di buat
               //kalo ada data
               if (error.response.data) {
-                console.log(error.response.data.success)
-                if (error.response.data.success == false && dataEdit.namaLayanan == ' ' && dataEdit.namaLayanan ==
+                if (error.response.data.success == false && dataEdit.namaLayanan == ' ' || dataEdit.namaLayanan ==
                   '') {
                   checkDataKode = 1;
-                } else if (checkErrorKodeLayanan == true) {
+                } else if (checkErrorKodeLayanan == false) {
                   // checkErrorKodeLayanan = true;
-                  if (dataEdit.kode_layanan == '') {
-                    this.$v.kode_layanan.required == true;
+                  if (dataEdit.kode_layanan == '' || dataEdit.kode_layanan == ' ') {
+                    this.$v.kode_layanan.required = true;
                   } else {
                     // kalau 2 kode layanan sudah ada
                     checkDataKode = 1;
@@ -397,7 +395,6 @@
             this.tarifList = [...listTarif];
             this.rows = tarifData.total;
           }
-          console.log();
         } catch (err) {
           // console.log(err);
         }
