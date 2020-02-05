@@ -687,7 +687,7 @@ library.add(faCamera);
 const tmp = [
   {
     label: "nama lengkap",
-    alias: "name",
+    alias: "nama",
     validations: {
       required
     }
