@@ -143,7 +143,7 @@ export default {
               title: "Antrean"
             },
             {
-              href: "/rekam-medis/1/1",
+              href: "/rekam-medis",
               title: "Rekam Medis"
             },
             // {
