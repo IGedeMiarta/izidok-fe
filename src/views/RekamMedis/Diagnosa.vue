@@ -166,6 +166,7 @@ export default {
   },
   watch: {
     selectedKodePenyakit: function() {
+      document.getElementById("box_diagnosa").style.setProperty('border-color', '');
       this.updatePostData({
         key: "kode_penyakit",
         value: this.selectedKodePenyakit

@@ -38,7 +38,7 @@
                   </div>
                 </b-collapse>
               </div>
-              <div class="card card-box">
+              <div class="card card-box" id="box_pemeriksaan_fisik">
                 <div class="card-header">
                   <b-button
                     class="btn-link btn-lg d-flex align-items-center justify-content-between shadow-none collapsed"
@@ -54,7 +54,7 @@
                   </div>
                 </b-collapse>
               </div>
-              <div class="card card-box">
+              <div class="card card-box" id="box_diagnosa">
                 <div class="card-header">
                   <b-button
                     class="btn-link btn-lg d-flex align-items-center justify-content-between shadow-none collapsed"
@@ -172,6 +172,7 @@ export default {
   methods: {
     ...mapActions(["fetchData", "saveRekamMedis"]),
     async saveButton() {
+      
       const swalWithBootstrapButtons = this.$swal.mixin({
         customClass: {
           confirmButton: "btn btn-success",
@@ -199,6 +200,7 @@ export default {
           }
 
           if (!this.saving_params.is_saved) {
+            this.validate();
             return this.handleError("Penyimpanan Rekam Medis gagal!");
           }
 
@@ -239,9 +241,23 @@ export default {
           });
         }
       });
+    },
+    validate() {
+      //only validate two field
+      if (!this.postData.organ_id) {
+        this.$root.$emit('bv::toggle::collapse', 'accordion-3');
+        document.getElementById("box_pemeriksaan_fisik").style.setProperty('border-color', 'red');
+        return;
+      }
+
+      if (!this.postData.kode_penyakit) {
+        this.$root.$emit('bv::toggle::collapse', 'accordion-4');
+        document.getElementById("box_diagnosa").style.setProperty('border-color', 'red');
+        return;
+      }
     }
   },
-  computed: mapGetters(["pasien", "saving_params"]),
+  computed: mapGetters(["pasien", "saving_params", "postData"]),
   created() {
     this.fetchData();
   }
