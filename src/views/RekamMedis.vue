@@ -106,7 +106,7 @@
             <Footer ref="footer" />
             <div class="col-xl-12 d-flex justify-content-xl-end">
               <!-- <button class="btn btn-success m-2">Print</button> -->
-              <button class="btn btn-info m-2">Keluar</button>
+              <button @click="exitButton()" class="btn btn-info m-2">Keluar</button>
               <button @click="saveButton()" class="btn btn-primary m-2 btn-spinner">
                 <b-spinner v-show="saving_params.is_saving" class="btn-wrapper--icon" small></b-spinner>
                 <span class="btn-wrapper--label">Simpan</span>
@@ -221,6 +221,23 @@ export default {
         type: "error",
         title: "Oops...",
         text: message
+      });
+    },
+    exitButton() {
+      return this.$swal({
+        text: "Apakah anda yakin untuk keluar?",
+        title: "Keluar",
+        showCancelButton: true,
+        confirmButtonText: "Ya",
+        cancelButtonText: "Tidak",
+        reverseButtons: true,
+        type: "warning"
+      }).then(res => {
+        if (res.value) {
+          router.push({
+            path: "/rawat-jalan/antrean"
+          });
+        }
       });
     }
   },
