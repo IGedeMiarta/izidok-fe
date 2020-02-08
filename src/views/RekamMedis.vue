@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Top />
+    <Header />
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
@@ -120,7 +120,7 @@
 </template>
 
 <script>
-import Top from "./RekamMedis/Header.vue";
+import Header from "./RekamMedis/Header.vue";
 import TandaVital from "./RekamMedis/TandaVital";
 import Anamnesa from "./RekamMedis/Anamnesa";
 import Pemeriksaan from "./RekamMedis/Pemeriksaan.vue";
@@ -160,7 +160,7 @@ import router from "@/router";
 export default {
   name: "RekamMedis",
   components: {
-    Top,
+    Header,
     TandaVital,
     Anamnesa,
     Pemeriksaan,
