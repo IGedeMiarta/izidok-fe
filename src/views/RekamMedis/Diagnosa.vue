@@ -259,7 +259,7 @@ export default {
       this.isLoading = true;
 
       axios
-        .get(store.state.URL_API + "/kode_penyakit/name?query=" + query)
+        .get(store.state.URL_API + "/kode_penyakit?name=" + query)
         .then(response => {
           let res = response.data;
 
