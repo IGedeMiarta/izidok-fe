@@ -79,10 +79,18 @@
                     "
                     :state="renderError({ error: form.error })"
                   >
+                    <!-- <b-form-input
+                      :type="form.type || 'text'"
+                      :value="form.value"
+                      :state="renderError({ error: form.error })"
+                      :placeholder="form.placeholder"
+                      v-bind:maxlength="form.maxlength"
+                      v-if="form.rawLabel === 'email'"
+                    /> -->
                     <b-form-input
                       :type="form.type || 'text'"
                       :value="form.value"
-                      @keyup="
+                      @input="
                         setValue({
                           rawLabel: form.rawLabel,
                           label: form.label,
@@ -132,17 +140,38 @@ import {
   maxLength,
   sameAs,
   email,
-  numeric
+  numeric,
+  helpers
 } from "vuelidate/lib/validators";
 
 library.add(faArrowLeft);
+
+// const verifyEmail = async function(val) {
+//   if (val === "") return true;
+//   else return false;
+
+//   try {
+//     const { required: re, email: em, maxLength: ml } = this.$v.formData.email;
+
+//     if (re && em && ml) {
+//       const res = await axios.get(`${this.url_api}/email/verify?email=${val}`);
+//       return false;
+//     } else {
+//       return false;
+//     }
+//   } catch (err) {
+//     console.log(err);
+//   }
+// };
 
 export default {
   data: () => ({
     tipeFaskesData: ["klinik", "tempat praktik"],
     selectedTipeFaskes: null,
     formBasicData: null,
-    formData: null
+    formData: null,
+    validateEmail: false,
+    validateUsername: false
   }),
   watch: {
     selectedTipeFaskes(newVal, oldVal) {
@@ -151,52 +180,124 @@ export default {
       }
     }
   },
-  validations: {
-    formData: {
-      email: {
-        email,
-        required,
-        maxLength: maxLength(50)
-      },
-      nama_dokter: {
-        required,
-        maxLength: maxLength(50)
-      },
-      nama_klinik: {
-        required,
-        maxLength: maxLength(50)
-      },
-      nama_pic: {
-        required,
-        maxLength: maxLength(50)
-      },
-      "no._handphone": {
-        numeric,
-        required,
-        maxLength: maxLength(15),
-        minLength: minLength(10)
-      },
-      // "no._izin_klinik": {
-      //   maxLength: maxLength(50)
-      // },
-      // "no._sip": {
-      //   maxLength: maxLength(30)
-      // },
-      password: {
-        required,
-        minLength: minLength(6)
-      },
-      konfirmasi_password: {
-        required,
-        sameAsPassword: sameAs("password"),
-        minLength: minLength(6)
-      },
-      username: {
-        required,
-        maxLength: maxLength(20),
-        minLength: minLength(3)
+  validations() {
+    return {
+      formData: {
+        email: {
+          required,
+          email,
+          maxLength: maxLength(50),
+          verifyEmail(val) {
+            const { required: re, email: em } = this.$v.formData.email;
+            if (val === "" || !re || !em) return true;
+
+            return new Promise((resolve, reject) => {
+              axios
+                .get(`${this.url_api}/email/verify?email=${val}`)
+                .then(res => {
+                  const {
+                    data: { status, message }
+                  } = res;
+
+                  resolve(status);
+                })
+                .catch(err => {
+                  if (err.response) {
+                    const x = err.response.data;
+                    if (x && x.email) {
+                      resolve(false);
+                    }
+                  } else {
+                    resolve(true);
+                  }
+                })
+                .finally(() => {
+                  const x = "email";
+                  this.triggerValidation({
+                    label: x,
+                    $v: this.$v,
+                    $vm: this,
+                    rawLabel: x
+                  });
+                });
+            });
+          }
+        },
+        nama_dokter: {
+          required,
+          maxLength: maxLength(50)
+        },
+        nama_klinik: {
+          required,
+          maxLength: maxLength(50)
+        },
+        nama_pic: {
+          required,
+          maxLength: maxLength(50)
+        },
+        "no._handphone": {
+          numeric,
+          required,
+          maxLength: maxLength(15),
+          minLength: minLength(10)
+        },
+        // "no._izin_klinik": {
+        //   maxLength: maxLength(50)
+        // },
+        // "no._sip": {
+        //   maxLength: maxLength(30)
+        // },
+        password: {
+          required,
+          minLength: minLength(6)
+        },
+        konfirmasi_password: {
+          required,
+          sameAsPassword: sameAs("password"),
+          minLength: minLength(6)
+        },
+        username: {
+          required,
+          maxLength: maxLength(20),
+          minLength: minLength(3),
+          verifyUsername(val) {
+            const { required: re } = this.$v.formData.username;
+            if (val === "" || !re) return true;
+
+            return new Promise((resolve, reject) => {
+              axios
+                .get(`${this.url_api}/username/verify?username=${val}`)
+                .then(res => {
+                  const {
+                    data: { status, message }
+                  } = res;
+
+                  resolve(status);
+                })
+                .catch(err => {
+                  if (err.response) {
+                    const x = err.response.data;
+                    if (x && x.username) {
+                      resolve(false);
+                    }
+                  } else {
+                    resolve(true);
+                  }
+                })
+                .finally(() => {
+                  const x = "username";
+                  this.triggerValidation({
+                    label: x,
+                    $v: this.$v,
+                    $vm: this,
+                    rawLabel: x
+                  });
+                });
+            });
+          }
+        }
       }
-    }
+    };
   },
   created() {
     const tipeFaskesDataLength = this.tipeFaskesData.length;
@@ -213,6 +314,22 @@ export default {
         value: item,
         disabled: item === "klinik"
       }));
+    },
+    emailValidation() {
+      const x = {
+        email,
+        required,
+        maxLength: maxLength(50)
+      };
+
+      const { required: re, email: em, maxLength: ml } = this.$v.formData.email;
+
+      return re && em && ml
+        ? {
+            ...x,
+            verifyEmail
+          }
+        : x;
     }
   },
   methods: {
@@ -260,7 +377,7 @@ export default {
         // console.log(postData);
 
         const res = await axios.post(`${this.url_api}/klinik`, postData);
-        const { status, data } = res.data;
+        const { status, data, message } = res.data;
         if (status) {
           this.$router.push({
             name: "verification-process",
@@ -269,32 +386,20 @@ export default {
               user_id: data.user_id
             }
           });
-        }
-      } catch (err) {
-        const { response } = err;
-        if (response) {
-          const {
-            response: { data = [] }
-          } = err;
-          const objKey = Object.keys(data);
-
-          let errorExists = false;
-          data[objKey[0]].forEach(item => {
-            if(item == `The ${objKey[0]} has already been taken.`) {
-              errorExists = true;
-            }
-          })
-          
-          if(errorExists) {
+        } else {
+          let match = message.match(/(email|username) is already in used/);
+          if (match) {
             this.$swal({
-              title: `${startCase(objKey[0])} Tidak Dapat Digunakan`,
-              text: `${startCase(objKey[0])} telah terdaftar. Silakan gunakan ${objKey[0]} lain untuk melakukan registrasi!`,
+              title: `${startCase(match[1])} Tidak Dapat Digunakan`,
+              text: `${startCase(match[1])} telah terdaftar. Silakan gunakan ${
+                match[1]
+              } lain untuk melakukan registrasi!`,
               type: "error"
             });
           }
-        } else {
-          console.log(err);
         }
+      } catch (err) {
+        // console.log(err);
       }
     },
     submitForm() {
@@ -401,8 +506,9 @@ export default {
         : tmp;
     },
     setValue({ label, rawLabel, $event = null } = {}) {
-      const { target } = $event;
-      const { value } = target;
+      // const { target } = $event;
+      // const { value } = target;
+      const value = $event;
       this.formData[label] = value && value.trim();
       if (!this.whitelistValidation().includes(label)) {
         const confirms = ["password", "konfirmasi_password"];

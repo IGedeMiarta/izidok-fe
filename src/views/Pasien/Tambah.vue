@@ -4,7 +4,8 @@
       heading="Manajemen Pasien"
       :breadcrumb="[
         {
-          label: 'Manajemen Pasien'
+          label: 'Manajemen Pasien',
+          link: '/pasien'
         },
         {
           label: 'Tambah Pasien',
@@ -66,23 +67,24 @@ export default {
     }
   },
   methods: {
-    simpan() {
+    simpan(nama_pasien, nomor_rekam_medis) {
       this.$swal({
-        text: `Data Berhasil di simpan`,
+        title: startCase("data berhasil disimpan"),
+        text: `Pasien atas nama '${nama_pasien}' tersimpan dengan nomor rekam medis ${nomor_rekam_medis}`,
         type: "success"
       });
     },
     submitForm(data) {
       this.beingSubmit = true;
-      this.beforeAddPasien(data);
+      this.addPasien(data);
     },
-    goingPlaces() {
+    goingPlaces(nama_pasien, nomor_rekam_medis) {
       const tmp = {
         name: "pasien-list"
       };
 
       if (this.beingSubmit) {
-        tmp.onComplete = this.simpan();
+        tmp.onComplete = this.simpan(nama_pasien, nomor_rekam_medis);
       }
 
       this.$router.push(tmp);
@@ -103,12 +105,22 @@ export default {
           `${this.url_api}/pasien`,
           this.mapPasienFormData(postData)
         );
-        const { success, data } = res.data;
+        const {
+          success,
+          data: { nama, nomor_rekam_medis }
+        } = res.data;
         if (success) {
-          this.goingPlaces();
+          this.goingPlaces(nama, nomor_rekam_medis);
         }
       } catch (err) {
-        alert(err);
+        if (err.response) {
+          const { message } = err.response.data;
+          this.$swal({
+            text: `${message || "something went wrong"}`,
+            type: "error"
+          });
+        }
+        // console.log(err);
       } finally {
         this.beingSubmit = false;
       }

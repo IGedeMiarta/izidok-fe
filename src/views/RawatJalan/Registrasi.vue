@@ -4,7 +4,8 @@
       heading="Registrasi Rawat Jalan"
       :breadcrumb="[
         {
-          label: 'rawat jalan'
+          label: 'rawat jalan',
+          link: '/antrean'
         },
         { label: 'registrasi', active: true }
       ]"
@@ -40,23 +41,80 @@
                       format="d LLL yyyy"
                       v-if="form.label == 'waktu_konsultasi'"
                       @input="waktuKonsultasiSelected"
-                    />
-                    <b-form-input
-                      :type="form.type || 'text'"
-                      v-model="formData[form.label]"
-                      @keyup="
-                        setValue({
-                          rawLabel: form.rawLabel,
-                          label: form.label,
-                          $event,
-                          tmpId: form.tmpId
-                        })
+                      :min-datetime="minimumDatetime"
+                      :input-style="
+                        renderError({ error: form.error }) === null
+                          ? null
+                          : renderError({ error: form.error })
+                          ? null
+                          : 'border-color: red'
                       "
-                      :state="renderError({ error: form.error })"
+                    />
+                    <template
                       v-if="
-                        form.type === 'text' && form.label != 'waktu_konsultasi'
+                        form.type === 'text' &&
+                          form.label !== 'waktu_konsultasi'
                       "
-                    />
+                    >
+                      <b-form-input
+                        v-if="
+                          !/(badan)/gi.test(form.label) &&
+                            ![
+                              'tensi sistole',
+                              'tensi diastole',
+                              'nadi'
+                            ].includes(form.rawLabel.toLowerCase()) &&
+                            whitelistValidation &&
+                            !whitelistValidation().includes(
+                              form.rawLabel.toLowerCase()
+                            )
+                        "
+                        :type="form.type || 'text'"
+                        v-model="formData[form.label]"
+                        @keyup="
+                          setValue({
+                            rawLabel: form.rawLabel,
+                            label: form.label,
+                            $event,
+                            tmpId: form.tmpId
+                          })
+                        "
+                        :state="renderError({ error: form.error })"
+                      />
+                      <b-form-input
+                        v-else-if="/(ktp|identitas)/gi.test(form.rawLabel)"
+                        :type="form.type || 'text'"
+                        v-model="formData[form.label]"
+                        @keyup="
+                          setValue({
+                            rawLabel: form.rawLabel,
+                            label: form.label,
+                            $event,
+                            tmpId: form.tmpId
+                          })
+                        "
+                      />
+                      <b-form-input
+                        v-else
+                        :type="form.type || 'text'"
+                        v-model.lazy="formData[form.label]"
+                        @keyup="
+                          setValue({
+                            rawLabel: form.rawLabel,
+                            label: form.label,
+                            $event,
+                            tmpId: form.tmpId
+                          })
+                        "
+                        @keypress="
+                          onKeyInputNumber({
+                            label: form.label,
+                            rawLabel: form.rawLabel,
+                            $event
+                          })
+                        "
+                      />
+                    </template>
                     <vue-select
                       :class="{ error: form.error }"
                       :options="options[form.label]"
@@ -68,9 +126,39 @@
                           tmpId: form.tmpId
                         })
                       "
-                      v-if="form.type === 'select'"
+                      v-if="
+                        form.type === 'select' &&
+                          form.rawLabel === 'nama lengkap'
+                      "
+                      :filterable="false"
+                      @search="searchPasien"
                     >
+                      <template
+                        slot="no-options"
+                        v-if="form.rawLabel === 'nama lengkap'"
+                      >
+                        tulis nama lengkap pasien
+                      </template>
+                      <template slot="option" slot-scope="option">
+                        {{ option.label }}
+                      </template>
+                      <template slot="selected-option" slot-scope="option">
+                        {{ option.label }}
+                      </template>
                     </vue-select>
+                    <vue-select
+                      :class="{ error: form.error }"
+                      :options="options[form.label]"
+                      @input="
+                        setValue({
+                          rawLabel: form.rawLabel,
+                          label: form.label,
+                          $event,
+                          tmpId: form.tmpId
+                        })
+                      "
+                      v-else-if="form.type === 'select'"
+                    />
                     <template v-if="form.type === 'radio'">
                       <b-form-radio-group
                         id="radio-group-1"
@@ -99,6 +187,12 @@
                 variant="primary"
                 class="text-capitalize my-2 float-right"
                 >simpan</b-button
+              >
+              <b-button
+                :to="{ name: 'antrean-rawat-jalan' }"
+                variant="danger"
+                class="text-capitalize my-2 mr-4 float-right"
+                >keluar</b-button
               >
             </template>
           </b-form>
@@ -205,7 +299,7 @@ const tmp = [
     validations: {}
   },
   {
-    label: "tinggi diastole",
+    label: "tensi diastole",
     type: "text",
     col: 2,
     validations: {}
@@ -246,15 +340,22 @@ export default {
   mounted() {
     this.formBasicData = this.setFormBasicData();
     this.formData = this.setFormData();
-    Promise.all([this.fetchDokter(), this.fetchPasien()]);
+    Promise.all([this.fetchDokter()]);
+  },
+  computed: {
+    minimumDatetime() {
+      return moment().format("YYYY-MM-DD");
+    }
   },
   methods: {
     waktuKonsultasiSelected($event) {
-      this.setValue({
-        label: "waktu_konsultasi",
-        rawLabel: "waktu konsultasi",
-        $event: moment($event).format("YYYY-MM-DD")
-      });
+      if ($event) {
+        this.setValue({
+          label: "waktu_konsultasi",
+          rawLabel: "waktu konsultasi",
+          $event: moment($event).format("YYYY-MM-DD")
+        });
+      }
     },
     overwriteAntrean() {
       this.$swal({
@@ -270,8 +371,24 @@ export default {
         }
       });
     },
+    onKeyInputNumber({ label, rawLabel, $event }) {
+      var evt = $event;
+      evt = evt ? evt : window.event;
+      var charCode = evt.which ? evt.which : evt.keyCode;
+      if (
+        charCode > 31 &&
+        (charCode < 48 || charCode > 57) &&
+        charCode !== 46
+      ) {
+        evt.preventDefault();
+      } else {
+        void this.setValue({ label, rawLabel, $event });
+      }
+    },
     whitelistValidation() {
-      return this.setFormBasicData().map(item => item.rawLabel);
+      return this.setFormBasicData()
+        .filter(item => item.validations && !item.validations.required)
+        .map(item => item.rawLabel);
     },
     submitForm() {
       const { formBasicData } = this;
@@ -291,7 +408,8 @@ export default {
     },
     setFormData() {
       return this.setFormBasicData().reduce((arr, val) => {
-        arr[val.label.split(" ").join("_")] = null;
+        const tmp = val.label.split(" ").join("_");
+        arr[tmp] = "";
         return arr;
       }, {});
     },
@@ -306,12 +424,23 @@ export default {
     },
     setValue({ label, rawLabel, $event = null } = {}) {
       let value = $event;
-      if (typeof $event === "object" && $event.target && $event.target.value) {
-        const { target } = $event;
-        value = target.value;
+      if (typeof $event === "object") {
+        if ($event) {
+          if ($event && $event.target && $event.target.value) {
+            const {
+              target: { value }
+            } = $event;
+            this.formData[label] = value;
+          } else if ($event && $event.label && $event.value) {
+            this.formData[label] = $event;
+          }
+        } else {
+          this.formData[label] = "";
+        }
+      } else {
+        this.formData[label] = value;
       }
-      // console.log($event);
-      this.formData[label] = value;
+
       if (label == "jenis_kelamin") this.formData[label] = "" + value;
       this.triggerValidation({
         label,
@@ -408,14 +537,25 @@ export default {
         alert(err);
       }
     },
-    async fetchPasien() {
+    async searchPasien(val) {
       try {
-        const res = await axios.get(`${this.url_api}/pasien`);
-        if (res.data.data.pasien.data.map) {
-          this.pasiens = res.data.data.pasien.data;
-          this.options.nama_lengkap = res.data.data.pasien.data.map(item => {
+        const res = await axios.get(
+          `${this.url_api}/pasien?nama_pasien=${val}`
+        );
+        const {
+          data: {
+            data: {
+              pasien: { data: pasienData }
+            }
+          }
+        } = res;
+        if (pasienData) {
+          this.pasiens = pasienData;
+          this.options.nama_lengkap = pasienData.map(item => {
             return {
-              label: item.nama,
+              label: `${item.nama} ~ ${moment(item.tanggal_lahir).format(
+                "DD-MM-YYYY"
+              )}`,
               value: item.id
             };
           });

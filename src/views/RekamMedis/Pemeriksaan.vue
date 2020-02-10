@@ -155,7 +155,6 @@ export default {
   },
   watch: {
     selectedOrgan: function() {
-      document.getElementById("box_pemeriksaan_fisik").style.setProperty('border-color', '');
       this.updatePostData({ key: "organ_id", value: this.selectedOrgan.id });
       this.organChanged();
     }

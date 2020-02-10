@@ -17,7 +17,7 @@
                   <template v-if="data.active">
                     {{ data.label }}
                   </template>
-                  <a href="javascript:void(0);" v-else>{{ data.label }}</a>
+                  <a :href="data.link" v-else>{{ data.label }}</a>
                 </li>
               </ol>
             </template>

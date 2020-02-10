@@ -4,7 +4,8 @@
       heading="Manajemen Pasien"
       :breadcrumb="[
         {
-          label: 'Manajemen Pasien'
+          label: 'Manajemen Pasien',
+          link : '/pasien'
         },
         {
           label: 'List Pasien',
@@ -23,49 +24,61 @@
           </div>
         </div>
         <div class="card-body">
-          <div class="row no-padding">
-            <div class="col-md-9 no-padding">
-              <div class="form-group col-md-5" style="float:left;">
-                <label for="inputEmail4">Nama Pasien</label>
-                <input
-                  type="email"
-                  class="form-control"
-                  id="inputEmail4"
-                  v-model.lazy="namaPasien"
-                />
-              </div>
-              <div class="form-group col-md-4" style="float:left;">
-                <label for="inputNoRekamMedisCari">No. Rekam Medis</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="inputNoRekamMedisCari"
-                  v-model.lazy="noRekamMedis"
-                />
-              </div>
-              <div
-                class="form-group col-md-3"
-                style="float:left;padding-top:30px;padding-left:0;"
-              >
-                <b-button variant="primary" @click="fetchListPasien"
-                  >CARI</b-button
-                >
-              </div>
+          <div class="row no-padding mb-3">
+            <div class="col-md-9">
+              <b-row>
+                <div class="form-group col-md-4">
+                  <label for="inputEmail4">Nama Pasien</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="inputEmail4"
+                    v-model.lazy="namaPasien"
+                  />
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="inputNoRekamMedisCari">No. Rekam Medis</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="inputNoRekamMedisCari"
+                    v-model.lazy="noRekamMedis"
+                  />
+                </div>
+                <div class="form-group col-md-4">
+                  <label>Tanggal Lahir</label>
+                  <Datetime
+                    input-class="form-control"
+                    zone="Asia/Jakarta"
+                    format="d LLL yyyy"
+                    v-model="tanggalLahir"
+                  />
+                </div>
+              </b-row>
             </div>
-            <div class="col-md-3 no-padding">
-              <div
-                class="form-group col-md-12"
-                style="padding-top:30px;padding-left:0;"
-              >
-                <b-button
-                  variant="first"
-                  :to="{
-                    name: 'pasien-tambah'
-                  }"
-                  style="float:right;"
-                  >TAMBAH</b-button
-                >
-              </div>
+            <div
+              class="col-md-3 no-padding d-flex align-items-end justify-content-center"
+            >
+              <b-row>
+                <b-col>
+                  <div class="form-group">
+                    <b-button variant="primary" @click="fetchListPasien"
+                      >CARI</b-button
+                    >
+                  </div>
+                </b-col>
+                <b-col>
+                  <div class="form-group">
+                    <b-button
+                      variant="first"
+                      :to="{
+                        name: 'pasien-tambah'
+                      }"
+                      >TAMBAH</b-button
+                    >
+                  </div>
+                </b-col>
+              </b-row>
             </div>
           </div>
           <div class="col-md-12 no-padding">
@@ -82,7 +95,7 @@
               </thead>
               <tbody>
                 <tr v-for="(data, index) in pasienList" :key="data.id">
-                  <td>{{ ((currentPage-1) * perPage) + index + 1 }}</td>
+                  <td>{{ (currentPage - 1) * perPage + index + 1 }}</td>
                   <td>{{ data.nama }}</td>
                   <td>{{ data.nomor_rekam_medis }}</td>
                   <td>{{ jenisKelamin(data.jenis_kelamin) }}</td>
@@ -154,11 +167,18 @@ import {
   faSearch,
   faPencilAlt
 } from "@fortawesome/free-solid-svg-icons";
-import moment from 'moment';
+import moment from "moment";
+import { Datetime } from "vue-datetime";
+import "vue-datetime/dist/vue-datetime.css";
+
+import { DateTime as LuxonDateTime } from "luxon";
 
 library.add(faArrowRight, faArrowUp, faTrashAlt, faSearch, faPencilAlt);
 
 export default {
+  components: {
+    Datetime
+  },
   data() {
     return {
       currentPage: 1,
@@ -166,7 +186,8 @@ export default {
       perPage: 10,
       pasienList: [],
       namaPasien: "",
-      noRekamMedis: ""
+      noRekamMedis: "",
+      tanggalLahir: ""
     };
   },
   mounted() {
@@ -236,8 +257,10 @@ export default {
     },
     async fetchListPasien() {
       try {
+        const tanggalLahir =
+          this.tanggalLahir && moment(this.tanggalLahir).format("YYYY-MM-DD");
         const res = await axios.get(
-          `${this.url_api}/pasien?limit=10&page=${this.currentPage}&nama_pasien=${this.namaPasien}&no_rekam_medis=${this.noRekamMedis}`
+          `${this.url_api}/pasien?limit=10&page=${this.currentPage}&nama_pasien=${this.namaPasien}&no_rekam_medis=${this.noRekamMedis}&tanggal_lahir=${tanggalLahir}`
         );
         const { success, data } = res.data;
         if (success) {
@@ -251,7 +274,7 @@ export default {
       }
     },
     formatedDate(d) {
-      return moment(d).format('D MMM YYYY')
+      return moment(d).format("D MMM YYYY");
     }
   }
 };

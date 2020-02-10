@@ -5,7 +5,8 @@
       :breadcrumb="[
         {
           label: 'rawat jalan',
-          active: true
+          active: true,
+          link: '/antrean'
         }
       ]"
     />
@@ -38,12 +39,15 @@
                     <b-col>
                       <b-form-group label="tanggal" class="text-capitalize">
                         <!-- <b-form-input /> -->
-                        <Datetime
-                          input-class="form-control"
-                          zone="Asia/Jakarta"
-                          format="d LLL yyyy"
-                          :value="tanggal"
-                          @input="tanggalSelected"
+                        <date-picker
+                          class="w-100"
+                          type="daterange"
+                          start-placeholder="Start date"
+                          end-placeholder="End date"
+                          :picker-options="pickerOptions"
+                          v-model="daterangeValue"
+                          format="dd-MM-yyyy"
+                          value-format="dd-MM-yyyy"
                         />
                       </b-form-group>
                     </b-col>
@@ -55,15 +59,9 @@
                         <b-form-input v-model="noRekamMedis" />
                       </b-form-group>
                     </b-col>
-                    <b-col>
-                      <b-form-group label="nama pasien" class="text-capitalize">
-                        <b-form-input v-model="namaPasien" />
-                      </b-form-group>
-                    </b-col>
                   </b-row>
-                  <p class="text-center text-uppercase my-2">atau</p>
                   <b-row>
-                    <b-col cols="4">
+                    <b-col>
                       <b-form-group label="status" class="text-capitalize">
                         <b-form-select
                           v-model="statusAntrean"
@@ -71,18 +69,27 @@
                         />
                       </b-form-group>
                     </b-col>
+                    <b-col>
+                      <b-form-group label="nama pasien" class="text-capitalize">
+                        <b-form-input v-model="namaPasien" />
+                      </b-form-group>
+                    </b-col>
+                  </b-row>
+                  <b-row class="my-2">
+                    <b-col>
+                      <b-button
+                        variant="first"
+                        class="text-capitalize float-right"
+                        @click="fetchAntrean(1)"
+                        >cari</b-button
+                      >
+                    </b-col>
                   </b-row>
                 </b-container>
               </b-collapse>
             </div>
           </div>
           <div class="d-flex justify-content-end mb-4">
-            <b-button
-              variant="first"
-              class="text-capitalize mr-2"
-              @click="fetchAntrean(1)"
-              >cari</b-button
-            >
             <b-button
               :to="{ name: 'registrasi-rawat-jalan' }"
               variant="primary"
@@ -192,8 +199,10 @@
 <script>
 import axios from "axios";
 import startCase from "lodash/startCase";
-import { Datetime } from "vue-datetime";
-import "vue-datetime/dist/vue-datetime.css";
+import { DatePicker } from "element-ui";
+import "element-ui/lib/theme-chalk/index.css";
+
+import { DateTime as LuxonDateTime } from "luxon";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
@@ -205,7 +214,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
 
+import lang from "element-ui/lib/locale/lang/en";
+import locale from "element-ui/lib/locale";
+
 library.add(faAngleUp, faSearch, faSignInAlt, faTrashAlt, faRedo);
+locale.use(lang);
 
 const __dataRegistrasiPasien = {
   rekam_medis: {
@@ -240,7 +253,8 @@ const __dataRegistrasiPasien = {
 
 export default {
   components: {
-    Datetime
+    // Datetime,
+    DatePicker
   },
   data: () => ({
     dataRegistrasiPasien: null,
@@ -249,6 +263,7 @@ export default {
     perPage: 10,
     fields: [
       "no",
+      { key: "waktu_konsultasi", label: "waktu konsultasi" },
       "nomor rekam medis",
       "nama pasien",
       "jenis kelamin",
@@ -257,23 +272,24 @@ export default {
       { key: "actions", label: "actions" },
       "status"
     ],
-    items: [
-      {
-        no: 1,
-        "nama pasien": "Test",
-        "nomor rekam medis": 123,
-        "jenis kelamin": "P",
-        "nomor hp": "0812637183",
-        "dokter tujuan": "sss",
-        actions: 1,
-        status: "menunggu"
-      }
-    ],
+    items: [],
     pasiens: [],
     noRekamMedis: "",
     namaPasien: "",
     tanggal: null,
-    statusAntrean: "Menunggu"
+    statusAntrean: "Menunggu",
+    minDatetime: LuxonDateTime.local().toISO(),
+    maxDatetime: LuxonDateTime.local()
+      .plus({ years: 3 })
+      .toISO(),
+    pickerOptions: {
+      disabledDate: date => {
+        const x = moment(date);
+        const day = moment().subtract(1, "day");
+        return x.isBefore(day);
+      }
+    },
+    daterangeValue: Array(2).fill(new Date(), 0, 2)
   }),
   mounted() {
     moment.locale("id");
@@ -342,24 +358,36 @@ export default {
     async fetchAntrean(page = 1) {
       let dt = moment().format("YYYY-MM-DD");
       try {
+        const reverseDate = date =>
+          moment(date, "DD-MM-YYYY").format("YYYY-MM-DD");
         const res = await axios.get(
           `${this.url_api}/transaksi?limit=${
             this.perPage
-          }&status=${this.statusAntrean.toUpperCase()}&from=2019-12-01&to=2019-12-31&page=${page}&no_rekam_medis=${
-            this.noRekamMedis
-          }&nama_pasien=${this.namaPasien}`
+          }&status=${this.statusAntrean.toUpperCase()}&from=${reverseDate(
+            this.daterangeValue[0]
+          )}&to=${reverseDate(
+            this.daterangeValue[1]
+          )}&page=${page}&no_rekam_medis=${this.noRekamMedis}&nama_pasien=${
+            this.namaPasien
+          }`
         );
         const { status, data } = res.data;
         if (status) {
           const { total, data: antreanData } = data;
           this.items = antreanData.map((item, index) => {
+            const {
+              examination_by: { nama: dokter_tujuan }
+            } = item;
             return {
               no: (page - 1) * this.perPage + index + 1,
+              waktu_konsultasi:
+                item.waktu_konsultasi &&
+                moment(item.waktu_konsultasi).format("DD-MM-YYYY HH:mm:ss"),
               "nomor rekam medis": item.pasien.nomor_rekam_medis,
               "nama pasien": item.pasien.nama,
               "jenis kelamin": this.jenisKelamin(item.pasien.jenis_kelamin),
               "nomor hp": item.pasien.nomor_hp,
-              "dokter tujuan": "dr. Aviandra",
+              "dokter tujuan": dokter_tujuan,
               pasien_id: item.pasien_id,
               transaksi_id: item.id,
               status: item.status
@@ -400,7 +428,7 @@ export default {
         rekamMedis
       } = this;
       const {
-        item: { "nama pasien": nama_pasien }
+        item: { "nama pasien": nama_pasien, pasien_id, transaksi_id }
       } = data;
 
       switch (icon) {
@@ -411,7 +439,10 @@ export default {
           return rekamMedis(data);
 
         case "trash-alt":
-          return pembatalanAntrean(nama_pasien);
+          return pembatalanAntrean({
+            namaPasien: nama_pasien,
+            transaksi_id
+          });
 
         default:
           break;
@@ -419,7 +450,7 @@ export default {
     },
     restorePembatalanAntrean(data) {
       const {
-        item: { "nama pasien": nama_pasien }
+        item: { "nama pasien": nama_pasien, pasien_id, transaksi_id }
       } = data;
 
       this.$swal({
@@ -432,11 +463,11 @@ export default {
       }).then(res => {
         const { value } = res;
         if (value) {
-          this.updateStatusAntrean("menunggu");
+          this.updateStatusAntrean("menunggu", transaksi_id);
         }
       });
     },
-    pembatalanAntrean(namaPasien = null) {
+    pembatalanAntrean({ namaPasien = null, transaksi_id } = {}) {
       this.$swal({
         title: startCase("pembatalan antrean"),
         text: `Apakah antrean pasien ${namaPasien} benar akan dibatalkan?`,
@@ -447,14 +478,14 @@ export default {
       }).then(res => {
         const { value } = res;
         if (value) {
-          this.updateStatusAntrean("batal");
+          this.updateStatusAntrean("batal", transaksi_id);
         }
       });
     },
-    async updateStatusAntrean(status) {
+    async updateStatusAntrean(antreanStatus, id) {
       try {
         const res = await axios.put(`${this.url_api}/transaksi/${id}`, {
-          status: status.toUpperCase()
+          status: antreanStatus.toUpperCase()
         });
         const { status, data, message } = res.data;
         if (status) {
@@ -466,7 +497,7 @@ export default {
           });
         }
       } catch (err) {
-        alert(err);
+        console.log(err);
       }
     },
     tanggalSelected($event) {

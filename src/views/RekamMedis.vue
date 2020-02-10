@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header />
+    <Top />
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
@@ -38,7 +38,7 @@
                   </div>
                 </b-collapse>
               </div>
-              <div class="card card-box" id="box_pemeriksaan_fisik">
+              <div class="card card-box">
                 <div class="card-header">
                   <b-button
                     class="btn-link btn-lg d-flex align-items-center justify-content-between shadow-none collapsed"
@@ -54,7 +54,7 @@
                   </div>
                 </b-collapse>
               </div>
-              <div class="card card-box" id="box_diagnosa">
+              <div class="card card-box">
                 <div class="card-header">
                   <b-button
                     class="btn-link btn-lg d-flex align-items-center justify-content-between shadow-none collapsed"
@@ -106,7 +106,7 @@
             <Footer ref="footer" />
             <div class="col-xl-12 d-flex justify-content-xl-end">
               <!-- <button class="btn btn-success m-2">Print</button> -->
-              <button @click="exitButton()" class="btn btn-info m-2">Keluar</button>
+              <button class="btn btn-info m-2">Keluar</button>
               <button @click="saveButton()" class="btn btn-primary m-2 btn-spinner">
                 <b-spinner v-show="saving_params.is_saving" class="btn-wrapper--icon" small></b-spinner>
                 <span class="btn-wrapper--label">Simpan</span>
@@ -120,7 +120,7 @@
 </template>
 
 <script>
-import Header from "./RekamMedis/Header.vue";
+import Top from "./RekamMedis/Header.vue";
 import TandaVital from "./RekamMedis/TandaVital";
 import Anamnesa from "./RekamMedis/Anamnesa";
 import Pemeriksaan from "./RekamMedis/Pemeriksaan.vue";
@@ -160,7 +160,7 @@ import router from "@/router";
 export default {
   name: "RekamMedis",
   components: {
-    Header,
+    Top,
     TandaVital,
     Anamnesa,
     Pemeriksaan,
@@ -172,7 +172,6 @@ export default {
   methods: {
     ...mapActions(["fetchData", "saveRekamMedis"]),
     async saveButton() {
-      
       const swalWithBootstrapButtons = this.$swal.mixin({
         customClass: {
           confirmButton: "btn btn-success",
@@ -200,7 +199,6 @@ export default {
           }
 
           if (!this.saving_params.is_saved) {
-            this.validate();
             return this.handleError("Penyimpanan Rekam Medis gagal!");
           }
 
@@ -224,40 +222,9 @@ export default {
         title: "Oops...",
         text: message
       });
-    },
-    exitButton() {
-      return this.$swal({
-        text: "Apakah anda yakin untuk keluar?",
-        title: "Keluar",
-        showCancelButton: true,
-        confirmButtonText: "Ya",
-        cancelButtonText: "Tidak",
-        reverseButtons: true,
-        type: "warning"
-      }).then(res => {
-        if (res.value) {
-          router.push({
-            path: "/rawat-jalan/antrean"
-          });
-        }
-      });
-    },
-    validate() {
-      //only validate two field
-      if (!this.postData.organ_id) {
-        this.$root.$emit('bv::toggle::collapse', 'accordion-3');
-        document.getElementById("box_pemeriksaan_fisik").style.setProperty('border-color', 'red');
-        return;
-      }
-
-      if (!this.postData.kode_penyakit) {
-        this.$root.$emit('bv::toggle::collapse', 'accordion-4');
-        document.getElementById("box_diagnosa").style.setProperty('border-color', 'red');
-        return;
-      }
     }
   },
-  computed: mapGetters(["pasien", "saving_params", "postData"]),
+  computed: mapGetters(["pasien", "saving_params"]),
   created() {
     this.fetchData();
   }

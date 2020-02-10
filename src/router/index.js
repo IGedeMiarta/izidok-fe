@@ -6,10 +6,19 @@ Vue.use(VueRouter);
 
 const routes = [
   {
+    path: "/rekam-medis",
+    component: () => import("../views/RekamMedis/List.vue"),
+  },
+  {
     path: "/rekam-medis/:transklinik_id/:pasien_id",
-    name: "rekam-medis",
+    name: "rekam-medis-pasien",
     component: () => import("../views/RekamMedis.vue")
   },
+  // {
+  //   path: ":transklinik_id/:pasien_id",
+  //   name: "rekam-medis",
+  //   component: () => import("../views/RekamMedis.vue")
+  // },
   {
     path: "/",
     name: "home",
@@ -130,7 +139,8 @@ const routes = [
     component: () => import("../views/Pembayaran.vue"),
     children: [
       {
-        path: "tambah",
+        path: ":bayar_id",
+        // path: "tambah",
         name: "pembayaran-tambah",
         component: () => import("../views/Pembayaran/Tambah.vue")
       },
@@ -174,7 +184,7 @@ const routes = [
     component: () => import("../views/Tarif.vue"),
     children: [
       {
-        path: "/tarif/list",
+        path: "/tarif",
         name: "tarif-list",
         component: () => import("../views/Tarif/List.vue")
       },

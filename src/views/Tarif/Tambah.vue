@@ -1,71 +1,106 @@
 <template>
   <div>
-    <page-title
-      heading="Manajemen Tarif"
-      :breadcrumb="[
-        {
-          label: 'Manajemen Tarif'
-        },
-        {
-          label: 'Tambah Tarif',
-          active: true
-        }
-      ]"
-    />
-
-    <div class="container">
-      <div class="card card-box mb-3 ninja-shadow">
-        <div class="card-header">
-          <div class="card-header--title">
-            <h4>Tambah Tarif</h4>
-            <!--  <small>Custom</small>
-              <b>Example widget with table inside.</b> -->
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="container custom-height pb-5" form-body>
-            <div class="form-row">
-              <b-form-group
-                label="Nama Layanan"
-                class="text-capitalize col-md-4 pr-3"
-                style="position: relative"
-              >
-                <b-form-input
-                />
-              </b-form-group>
-              <b-form-group
-                label="Kode Layanan"
-                class="text-capitalize col-md-3 pr-3"
-                style="position: relative"
-              >
-                <b-form-input
-                />
-              </b-form-group>
-              <b-form-group
-                label="Tarif Layanan"
-                class="text-capitalize col-md-4 pr-3"
-                style="position: relative"
-              >
-                <b-form-input
-                />
-              </b-form-group>
-              <div class="col-md-1 pr-3" style="padding-top:32px;">
-                <b-button
-                  class="d-50 rounded-circle tambah-tarif"
-                  >
-                  <font-awesome-icon icon="plus" />    
-                </b-button
-                >
-              </div>
-            </div>
-            <div class="col-md-6 bottom-button">
-              <b-button variant="first" class="float-right pr-5 pl-5"
-                >SIMPAN</b-button
-              >
-              <b-button variant="danger" class="float-right pr-5 pl-5 mr-3"
-                >KELUAR</b-button
-              >
-            </div>
+    <div class="app-content--inner p-0 d-flex flex-column">
+      <page-title heading="Tambah Tarif" subheading="Masukkan tarif berikut untuk dapat melakukan penggunaan iziDok."
+        :breadcrumb="[
+          {
+            label: 'Manajemen Tarif',
+            link : '/tarif'
+          },
+          {
+            label: 'Tambah Tarif',
+            active: true
+          }
+        ]" />
+      <div class="container">
+        <div class="card card-box mb-5">
+          <div class="card-body">
+            <b-form @submit.prevent="submitInputTarif">
+              <b-row class="d-flex align-items-center">
+                <b-col cols="12">
+                  <b-row class="d-flex align-items-center mb-4">
+                    <b-col cols="4" class="text-capitalize">Nama Layanan</b-col>
+                    <b-col cols="3" class="text-capitalize">Kode Layanan</b-col>
+                    <b-col cols="3" class="text-capitalize">Tarif Layanan</b-col>
+                  </b-row>
+                  <b-row class="d-flex align-items-center mb-3" v-for="(inputTarif, index) in tmpInputTarifData"
+                    :key="inputTarif.id">
+                    <b-col cols="4">
+                      <div role="group">
+                        <b-form-input :value="inputTarif.nama_layanan"
+                          @input="onInputNama($event, index, inputTarif, 'nama_layanan')" @change="
+                            onChangeValue({
+                              label: 'nama_layanan',
+                              index,
+                              $event
+                            })
+                          " :state="errorState({ label: 'nama_layanan', index })"
+                          :placeholder="placeholderInput('nama_layanan')" maxlength="30"></b-form-input>
+                        <b-form-invalid-feedback class="text-capitalize">
+                          {{
+                            inputTarif.error &&
+                              inputTarif.error.nama_layanan.desc
+                          }}
+                        </b-form-invalid-feedback>
+                      </div>
+                    </b-col>
+                    <b-col cols="3">
+                      <div role="group">
+                        <b-form-input :value="inputTarif.kode_layanan" @change="
+                            onChangeValue({
+                              label: 'kode_layanan',
+                              index,
+                              $event
+                            })
+                          " @input="onInputKode($event, index, inputTarif, 'kode_layanan')"
+                          :state="errorState({ label: 'kode_layanan', index })"
+                          :placeholder="placeholderInput('kode_layanan')" maxlength="5"></b-form-input>
+                        <b-form-invalid-feedback class="text-capitalize">
+                          {{
+                            inputTarif.error &&
+                              inputTarif.error.kode_layanan.desc
+                          }}
+                        </b-form-invalid-feedback>
+                      </div>
+                    </b-col>
+                    <b-col cols="3">
+                      <div role="group">
+                        <b-form-input v-model.lazy="inputTarif.tarif_layanan" v-money="money"
+                          :state="errorState({ label: 'tarif_layanan', index })"
+                          :placeholder="placeholderInput('tarif_layanan')" maxlength="12"></b-form-input>
+                        <b-form-invalid-feedback class="text-capitalize">
+                          {{
+                            inputTarif.error &&
+                              inputTarif.error.tarif_layanan.desc
+                          }}
+                        </b-form-invalid-feedback>
+                      </div>
+                    </b-col>
+                    <b-col cols="2" v-if="index > 0">
+                      <b-button variant="danger" style="padding: .5rem .8rem; border-radius: 100%"
+                        @click="removeInputTarifData(index)">
+                        <font-awesome-icon icon="minus" />
+                      </b-button>
+                    </b-col>
+                  </b-row>
+                </b-col>
+              </b-row>
+              <b-row class="d-flex align-items-center">
+                <b-col cols="9">
+                  <div class="d-flex justify-content-center">
+                    <b-button variant="first" style="padding: .5rem .8rem; border-radius: 100%"
+                      @click="addInputTarifData">
+                      <font-awesome-icon icon="plus" />
+                    </b-button>
+                  </div>
+                </b-col>
+                <b-col cols="3">
+                  <b-button variant="danger" :to="{
+                        name: 'tarif-list'}">Keluar</b-button>
+                  <b-button class="text-capitalize float-right" type="submit" variant="primary">Simpan</b-button>
+                </b-col>
+              </b-row>
+            </b-form>
           </div>
         </div>
       </div>
@@ -74,52 +109,457 @@
 </template>
 
 <script>
-import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faPlus
-} from "@fortawesome/free-solid-svg-icons";
+  import Vue from "vue";
+  import startCase from "lodash/startCase";
+  import {
+    library
+  } from "@fortawesome/fontawesome-svg-core";
+  import {
+    faPlus,
+    faMinus
+  } from "@fortawesome/free-solid-svg-icons";
 
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+  import axios from "axios";
+  import {
+    VMoney
+  } from 'v-money';
+  library.add(faPlus, faMinus);
 
-library.add(faPlus);
-export default {
-  components: {
-    "font-awesome-icon": FontAwesomeIcon
-  },
-  data() {
-    return {
-      formRow: 10,
-    };
-  }
-};
+  export default {
+    directives: {
+      money: VMoney
+    },
+    data: () => ({
+      money: {
+        decimal: "",
+        thousands: ",",
+        prefix: "",
+        suffix: "",
+        precision: 0
+      },
+      errorKodeLayanan: null,
+      errorsKodeLayanan: [],
+      tmpInputTarifData: [{
+        id: 1,
+        nama_layanan: null,
+        kode_layanan: null,
+        tarif_layanan: null
+      }, ],
+      kodeContainer: [],
+      namaContainer: [],
+      beingSubmit: false
+    }),
+    beforeRouteLeave(to, from, next) {
+      if (!this.beingSubmit) {
+        this.$swal({
+          title: startCase("keluar"),
+          text: `Apakah anda yakin untuk keluar dari halaman tarif?`,
+          type: "warning",
+          showCancelButton: true,
+          cancelButtonText: startCase("tidak"),
+          confirmButtonText: startCase("ya")
+        }).then(res => {
+          if (res.value) {
+            next();
+          } else {
+            next(false);
+          }
+        });
+      } else {
+        next();
+      }
+    },
+    mounted() {
+      this.tmpInputTarifData = this.setTmpInputTarifData();
+    },
+    methods: {
+      setTmpInputTarifData() {
+        return this.tmpInputTarifData.map(item => {
+          const tmp = Object.keys(item).reduce((obj, key) => {
+            if (key !== "error") {
+              obj[key] = this.generateErrorObj();
+            }
+            return obj;
+          }, {});
+          return {
+            ...item,
+            error: tmp
+          };
+        });
+      },
+      generateErrorObj() {
+        return {
+          error: null,
+          desc: null
+        };
+      },
+      errorState({
+        label,
+        index
+      }) {
+        const {
+          tmpInputTarifData
+        } = this;
+        if (
+          tmpInputTarifData[index].error &&
+          tmpInputTarifData[index].error[label]
+        ) {
+          return tmpInputTarifData[index].error[label].error;
+        } else {
+          return null;
+        }
+      },
+      errorDesc({
+        label,
+        index
+      }) {
+        const {
+          tmpInputTarifData
+        } = this;
+        if (
+          tmpInputTarifData[index].error &&
+          tmpInputTarifData[index].error[label]
+        ) {
+          return tmpInputTarifData[index].error[label].desc;
+        }
+      },
+      onKeyupTarif($event, index) {
+        const {
+          tmpInputTarifData
+        } = this;
+
+        var evt = $event;
+        evt = evt ? evt : window.event;
+        var charCode = evt.which ? evt.which : evt.keyCode;
+        if (
+          charCode > 31 &&
+          (charCode < 48 || charCode > 57) &&
+          charCode !== 46
+        ) {
+          evt.preventDefault();
+        } else {
+          return true;
+        }
+      },
+      placeholderInput(label = "") {
+        return startCase(`input ${label}`);
+      },
+      validateInput({
+        label,
+        $event
+      }) {
+        return {
+          error: ($event && true) || false,
+          desc: (!$event && `kolom ${label.replace("_", " ")} harus di isi`) || ""
+        };
+      },
+      validateAll() {
+        const {
+          tmpInputTarifData,
+          validateInput
+        } = this;
+        const all = tmpInputTarifData.map(item => {
+          const x = Object.keys(item).filter(z => z !== "error");
+          const d = item.error.kode_layanan.error;
+          if (d == false) {
+            this.$swal({
+              type: "error",
+              title: startCase("gagal"),
+              text: startCase("Silakan Benarkan seluruh kolom")
+            });
+          } else {
+            x.map(y => {
+              item.error[y] = validateInput({
+                label: y,
+                $event: item[y]
+              });
+            });
+          }
+        });
+      },
+      submitInputTarif() {
+        const {
+          tmpInputTarifData,
+          validateAll
+        } = this;
+        this.$nextTick(() => {
+          const z = tmpInputTarifData.map(item => item.error);
+          const y = z.map(x => {
+            const v = Object.keys(x);
+            const o = v.every(z => x[z].error);
+            validateAll();
+            return o;
+          });
+          const p = y.every(h => h);
+          if (p !== false) {
+            this.doSubmitInputTarif();
+          } else {
+            this.$swal({
+              type: "error",
+              title: startCase("gagal"),
+              text: startCase("Silakan lengkapi seluruh kolom")
+            });
+          }
+        });
+      },
+      async doSubmitInputTarif() {
+        const {
+          constructPostData
+        } = this;
+        try {
+          const res = await axios.post(`${this.url_api}/layanan`, {
+            arr: constructPostData()
+          });
+          const {
+            status,
+            data
+          } = res.data;
+          this.beingSubmit = true;
+          this.$swal({
+            title: 'Tambah Data Berhasil',
+            text: 'Data berhasil tersimpan',
+            icon: 'success',
+            confirmButtonText: startCase("ya")
+          });
+          this.$router.push({
+            path: "/tarif"
+          });
+        } catch (errror) {
+          const x = errror.response.data
+          const y = Object.keys(x)
+          console.log(y.length - 1)
+          console.log(errror.response.data);
+          y.map(item => {
+            const z = item.split('.')
+            this.tmpInputTarifData[z[1]].error.nama_layanan.desc = x[item][x[item].length - x[item].length]
+          })
+          var d = errror.response.data.length;
+          console.log(d);
+          // this.tmpInputTarifData[i].error['nama_layanan'].error = false;
+          // this.tmpInputTarifData[i].error['nama_layanan'].desc = 'Kode Layanan Sudah Ada';
+       
+        }
+      },
+      constructPostData() {
+        const {
+          tmpInputTarifData
+        } = this;
+        const tmp = tmpInputTarifData.map(item => {
+          const x = Object.keys(item).filter(y => !["error"].includes(y));
+          const z = x.reduce((obj, key) => {
+            let q = key
+            if (key == 'tarif_layanan') {
+              q = 'tarif';
+              // hapus separator ribuan dan jadikan int
+              item[key] = parseInt(item[key].replace(/\D/g, ""))
+            }
+            obj[q] = item[key];
+            return obj;
+          }, {});
+          z.klinik_id = this.$store.state.user.klinik_id;
+          return z;
+        });
+        return tmp;
+      },
+      onChangeValue({
+        index,
+        label,
+        $event
+      }) {
+        const {
+          tmpInputTarifData,
+          validateInput
+        } = this;
+        const tmp = tmpInputTarifData[index];
+        if (tmp.error[label].error !== false) {
+          tmp.error[label] = validateInput({
+            label,
+            $event
+          });
+        }
+      },
+      onInputNama(val, index, o, p) {
+        val = val.charAt(0).toUpperCase() + val.substring(1);;
+        Vue.set(o, p, val);
+        Vue.set(this.namaContainer, index, val);
+        let {
+          tmpInputTarifData,
+          validateAll,
+          generateErrorObj
+        } = this;
+        const lastIndex = tmpInputTarifData[tmpInputTarifData.length - 1];
+        const x = Object.keys(lastIndex);
+
+        this.tmpInputTarifData[0].error['tarif_layanan'].error = true;
+        this.tmpInputTarifData[0].error['tarif_layanan'].desc = '';
+
+        this.tmpInputTarifData[0].error['id'].error = true;
+
+        this.tmpInputTarifData[0].error['nama_layanan'].error = true;
+        this.tmpInputTarifData[0].error['nama_layanan'].desc = '';
+
+        this.namaContainer.forEach((item, i) => {
+          this.namaContainer.forEach((item, i) => {
+            if (index == i) return;
+            if (item == val) {
+              this.tmpInputTarifData[index].error['nama_layanan'].error = false
+              this.tmpInputTarifData[index].error['nama_layanan'].desc = 'Nama layanan tidak boleh sama'
+
+              this.tmpInputTarifData[i].error['nama_layanan'].error = false
+              this.tmpInputTarifData[i].error['nama_layanan'].desc = 'Nama layanan tidak boleh sama'
+
+              this.tmpInputTarifData[i].error['id'].error = true;
+              this.tmpInputTarifData[index].error['id'].error = true;
+
+              this.tmpInputTarifData[i].error['tarif_layanan'].error = true
+              this.tmpInputTarifData[i].error['tarif_layanan'].desc = ''
+              this.tmpInputTarifData[index].error['tarif_layanan'].error = true
+              this.tmpInputTarifData[index].error['tarif_layanan'].desc = ''    
+
+            } else {
+              this.tmpInputTarifData[index].error['nama_layanan'].error = true
+              this.tmpInputTarifData[index].error['nama_layanan'].desc = ''
+
+              this.tmpInputTarifData[i].error['nama_layanan'].error = true
+              this.tmpInputTarifData[i].error['nama_layanan'].desc = ''
+
+              this.tmpInputTarifData[i].error['id'].error = true;
+              this.tmpInputTarifData[index].error['id'].error = true;
+
+              this.tmpInputTarifData[i].error['tarif_layanan'].error = true
+              this.tmpInputTarifData[i].error['tarif_layanan'].desc = ''
+              this.tmpInputTarifData[index].error['tarif_layanan'].error = true
+              this.tmpInputTarifData[index].error['tarif_layanan'].desc = ''    
+
+            }
+          })
+        });
+      },
+      onInputKode(val, index, o, p) {
+        val = val.toUpperCase();
+        Vue.set(o, p, val);
+        Vue.set(this.kodeContainer, index, val);
+      
+        let {
+          tmpInputTarifData,
+          validateAll,
+          generateErrorObj
+        } = this;
+
+        const lastIndex = tmpInputTarifData[tmpInputTarifData.length - 1];
+        var listKode = axios.get(`${this.url_api}/layanan/${val}/kode`)
+          .then((response) => {
+            if (response.data.success == true) {
+              this.tmpInputTarifData[index].error['kode_layanan'].error = false
+              this.tmpInputTarifData[index].error['kode_layanan'].desc =
+                'Kode layanan Sudah Ada';
+            }
+          })
+          .catch((error) => {
+            if (error.response.data.success == false) {
+              this.tmpInputTarifData[index].error['kode_layanan'].error = true
+              this.tmpInputTarifData[index].error['kode_layanan'].desc =
+                '';
+            }
+          });
+        // const x = Object.keys(lastIndex);
+        this.kodeContainer.forEach((item, i) => {
+          if (index == i) return;
+          if (item == val) {
+            let listKode = axios.get(`${this.url_api}/layanan/${val}/kode`)
+              .then((response) => {
+                // kalo ada yang sama dalam api
+                if (response.data.success == true) {
+                  this.tmpInputTarifData[index].error['kode_layanan'].error = false
+                  this.tmpInputTarifData[index].error['kode_layanan'].desc =
+                    'Kode layanan Sudah Ada';
+                }
+              })
+              .catch((error) => {
+                //kalo tidak ada yang sama dari api
+                if (error.response.data.success == false) {
+                  this.tmpInputTarifData[index].error['kode_layanan'].error = false
+                  this.tmpInputTarifData[index].error['kode_layanan'].desc =
+                    'Kode Layanan Tidak Boleh Sama'
+                    //disini
+                }
+              })
+          } else {
+            let listKode = axios.get(`${this.url_api}/layanan/${val}/kode`)
+              .then(function (response) {
+                if (response.data.success == true) {
+                  this.tmpInputTarifData[index].error['kode_layanan'].error = false
+                  this.tmpInputTarifData[index].error['kode_layanan'].desc =
+                    'Kode layanan Sudah Ada';
+                }
+              })
+              .catch((error) => {
+                //kasus inputan setelahnya
+                // console.log(error.response.data.success);
+                
+                if (error.response.data.success == false) {
+                  this.tmpInputTarifData[index].error['kode_layanan'].error = true
+                  this.tmpInputTarifData[index].error['kode_layanan'].desc =
+                    '';
+                } else {
+                  this.tmpInputTarifData[index].error['kode_layanan'].error = false
+                  this.tmpInputTarifData[index].error['kode_layanan'].desc =
+                    'Kode Layanan Harus Di Isi';
+                }
+              })
+              .finally(() => {
+
+              });
+          }
+        })
+      },
+      addInputTarifData() {
+        const {
+          tmpInputTarifData,
+          validateAll,
+          generateErrorObj
+        } = this;
+        const lastIndex = tmpInputTarifData[tmpInputTarifData.length - 1];
+        const x = Object.keys(lastIndex);
+        const tmp = x.reduce((obj, key) => {
+          if (key === "error") {
+            obj[key] = x
+              .filter(item => item !== "error")
+              .reduce((obj, keyChild) => {
+                obj[keyChild] = generateErrorObj();
+                return obj;
+              }, {});
+          } else if (key === 'id') {
+            obj[key] = tmpInputTarifData.length + 1
+          } else {
+            obj[key] = null;
+          }
+          return obj;
+        }, {});
+        this.tmpInputTarifData = [...tmpInputTarifData, tmp];
+      },
+      removeInputTarifData(index) {
+        const {
+          tmpInputTarifData
+        } = this;
+        if (tmpInputTarifData.length > 1) {
+          const tmp = tmpInputTarifData
+            .slice(0, index)
+            .concat(tmpInputTarifData.slice(index + 1, tmpInputTarifData.length));
+          this.tmpInputTarifData = tmp;
+          // remap kodeContainer
+          this.kodeContainer = tmp.map(item => {
+            return item.kode_layanan
+          })
+        }
+      }
+    }
+  };
 </script>
-<style scoped lang="css">
-.no-padding {
-  padding: 0 !important;
-}
-.tambah-tarif{
-  box-shadow: none;
-  border: 4px solid rgb(86, 157, 197);
-  padding: 0px;
-  padding-left:1px;
-  background: #C1E3F7;
-  color: rgb(86, 157, 197);
-  line-height: 30px !important;
-  height: 40px !important;
-  width: 40px !important;
-}
-.tambah-tarif:hover{
-  border: 4px solid rgb(86, 157, 197);
-  background: #fff;
-  color: rgb(86, 157, 197);
-}
-.custom-height[form-body]{
-  height: 400px;
-  overflow: auto;
-}
-.bottom-button{
-  position:absolute;
-  bottom:20px;
-  right:20px;
-}
+
+<style lang="scss" scoped>
+  .invalid-feedback {
+    min-height: 18px;
+    display: block;
+  }
 </style>

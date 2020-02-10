@@ -1,27 +1,56 @@
 <template>
   <div>
-    <div class="mb-4" v-if="formType !== 'detail'">
-      <vue-dropzone
-        ref="myVueDropzone"
-        id="dropzone"
-        :options="dropzoneOptions()"
-        useCustomSlot
-        class="custom-dropzone border-0"
-        @vdropzone-complete="ocrCompleted"
+    <div
+      class="text-center col-md-12 foto-upload mb-4"
+      v-if="formType !== 'detail' && formType !== 'edit'"
+    >
+      <!-- <template v-if="this.hasImage == true">
+        <div class="overlay-upload" :style="{ height: 250 +'px', position : 'absolute' }" >
+            
+        </div>
+      </template> -->
+
+      <image-uploader
+        :preview="true"
+        :className="['fileinput', { 'fileinput--loaded': hasImage }]"
+        capture="environment"
+        :debug="1"
+        :maxSize="5000"
+        doNotResize="gif"
+        :autoRotate="true"
+        outputFormat="verbose"
+        @input="setImage"
       >
-        <div class="dropzone-custom-content">
-          <h3 class="dropzone-custom-title text-capitalize">
-            <font-awesome-icon icon="camera" class="mr-2" /> ambil foto
-            <span class="text-uppercase">ktp</span>
-          </h3>
-        </div></vue-dropzone
-      >
+        <label for="fileInput" class="text-foto" slot="upload-label">
+          <figure>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              viewBox="0 0 32 32"
+            >
+              <path
+                class="path1"
+                d="M9.5 19c0 3.59 2.91 6.5 6.5 6.5s6.5-2.91 6.5-6.5-2.91-6.5-6.5-6.5-6.5 2.91-6.5 6.5zM30 8h-7c-0.5-2-1-4-3-4h-8c-2 0-2.5 2-3 4h-7c-1.1 0-2 0.9-2 2v18c0 1.1 0.9 2 2 2h28c1.1 0 2-0.9 2-2v-18c0-1.1-0.9-2-2-2zM16 27.875c-4.902 0-8.875-3.973-8.875-8.875s3.973-8.875 8.875-8.875c4.902 0 8.875 3.973 8.875 8.875s-3.973 8.875-8.875 8.875zM30 14h-4v-2h4v2z"
+              ></path>
+            </svg>
+          </figure>
+          <span class="upload-caption">{{
+            hasImage ? "Ganti Gambar KTP" : "Klik untuk upload KTP"
+          }}</span>
+        </label>
+      </image-uploader>
     </div>
-    <h4 class="text-capitalize mb-3">data pasien</h4>
+    <h4 class="text-capitalize mb-3">
+      data pasien
+      <span v-if="idPasien">
+        (no. rekam medis: {{ formData.nomor_rekam_medis }})
+      </span>
+    </h4>
     <b-form v-on:submit.prevent="submitForm">
       <div class="form-row">
         <b-form-group
-          label="Nama Lengkap"
+          :label="renderLabel({ label: 'nama lengkap' })"
           class="text-capitalize col-md-6 pr-3"
           style="position: relative"
           :state="getDataError({ rawLabel: 'nama lengkap' })"
@@ -47,7 +76,7 @@
           />
         </b-form-group>
         <b-form-group
-          label="No. Handphone"
+          :label="renderLabel({ label: 'no. handphone' })"
           class="text-capitalize col-md-6 pr-3"
           style="position: relative"
           :state="getDataError({ rawLabel: 'no. handphone' })"
@@ -66,6 +95,12 @@
                 $event
               })
             "
+            @keyup="
+              setValue({
+                rawLabel: 'no. handphone',
+                $event
+              })
+            "
             :state="getDataError({ rawLabel: 'no. handphone' })"
             :disabled="disabledForm()"
             :value="getValue('no. handphone')"
@@ -75,7 +110,7 @@
       </div>
       <div class="form-row">
         <b-form-group
-          label="No. KTP"
+          label="No. KTP/Pengenal Lainnya"
           class="text-capitalize col-md-6 pr-3"
           style="position: relative"
           :state="getDataError({ rawLabel: 'nik' })"
@@ -94,24 +129,15 @@
                 $event
               })
             "
-            :state="getDataError({ rawLabel: 'nik' })"
             :disabled="disabledForm()"
             :value="getValue('nik')"
             :maxlength="25"
           />
         </b-form-group>
         <b-form-group
-          label="Email"
+          :label="renderLabel({ label: 'email' })"
           class="text-capitalize col-md-6 pr-3"
           style="position: relative"
-          :state="getDataError({ rawLabel: 'email' })"
-          :invalid-feedback="
-            renderInvalidFeedback({
-              validationDesc: blindlyGetData({
-                rawLabel: 'email'
-              })
-            })
-          "
         >
           <b-form-input
             @keyup="
@@ -120,7 +146,6 @@
                 $event
               })
             "
-            :state="getDataError({ rawLabel: 'email' })"
             :disabled="disabledForm()"
             :value="getValue('email')"
             :maxlength="30"
@@ -130,19 +155,11 @@
       <div class="form-row">
         <b-col cols="6">
           <b-row>
-            <b-col cols="6"
-              ><b-form-group
-                label="Tempat Lahir"
+            <b-col cols="6">
+              <b-form-group
+                :label="renderLabel({ label: 'tempat lahir' })"
                 class="text-capitalize"
                 style="position: relative"
-                :state="getDataError({ rawLabel: 'tempat lahir' })"
-                :invalid-feedback="
-                  renderInvalidFeedback({
-                    validationDesc: blindlyGetData({
-                      rawLabel: 'tempat lahir'
-                    })
-                  })
-                "
               >
                 <b-form-input
                   @keyup="
@@ -151,15 +168,15 @@
                       $event
                     })
                   "
-                  :state="getDataError({ rawLabel: 'tempat lahir' })"
                   :disabled="disabledForm()"
                   :value="getValue('tempat lahir')"
                   :maxlength="30"
-                /> </b-form-group
-            ></b-col>
+                />
+              </b-form-group>
+            </b-col>
             <b-col cols="6">
               <b-form-group
-                label="Tanggal Lahir"
+                :label="renderLabel({ label: 'tanggal lahir' })"
                 class="text-capitalize mr-2"
                 style="position: relative"
                 :state="getDataError({ rawLabel: 'tanggal lahir' })"
@@ -178,6 +195,13 @@
                   @input="tanggalLahirSelected"
                   :value="getValue('tanggal lahir')"
                   :disabled="disabledForm()"
+                  :input-style="
+                    getDataError({ rawLabel: 'tanggal lahir' }) === null
+                      ? null
+                      : getDataError({ rawLabel: 'tanggal lahir' })
+                      ? null
+                      : 'border-color: red'
+                  "
                 />
               </b-form-group>
             </b-col>
@@ -185,7 +209,7 @@
         </b-col>
         <b-col cols="6">
           <b-form-group
-            label="Nama Penjamin/Asuransi"
+            :label="renderLabel({ label: 'nama penjamin/asuransi' })"
             class="text-capitalize"
             style="position: relative"
             :state="getDataError({ rawLabel: 'nama penjamin/asuransi' })"
@@ -216,7 +240,7 @@
           <b-row>
             <b-col>
               <b-form-group
-                label="Jenis Kelamin"
+                :label="renderLabel({ label: 'Jenis kelamin' })"
                 :state="getDataError({ rawLabel: 'jenis kelamin' })"
                 :invalid-feedback="
                   renderInvalidFeedback({
@@ -247,7 +271,7 @@
             </b-col>
             <b-col>
               <b-form-group
-                label="Gol. Darah"
+                :label="renderLabel({ label: 'gol. darah' })"
                 class="text-capitalize col-md-6 p-0 float-left"
                 style="position: relative"
                 :state="getDataError({ rawLabel: 'gol. darah' })"
@@ -272,7 +296,6 @@
                       $event
                     })
                   "
-                  :state="getDataError({ rawLabel: 'gol. darah' })"
                   :disabled="disabledForm()"
                   :value="getValue('gol. darah')"
                 />
@@ -282,14 +305,14 @@
         </div>
         <div class="col-md-6">
           <b-form-group
-            label="No. Member/Polis Asuransi"
+            :label="renderLabel({ label: 'no. member asuransi' })"
             class="text-capitalize"
             style="position: relative"
-            :state="getDataError({ rawLabel: 'no. member/polis asuransi' })"
+            :state="getDataError({ rawLabel: 'no. member asuransi' })"
             :invalid-feedback="
               renderInvalidFeedback({
                 validationDesc: blindlyGetData({
-                  rawLabel: 'no. member/polis asuransi'
+                  rawLabel: 'no. member asuransi'
                 })
               })
             "
@@ -297,24 +320,24 @@
             <b-form-input
               @keyup="
                 setValue({
-                  rawLabel: 'no. member/polis asuransi',
+                  rawLabel: 'no. member asuransi',
                   $event
                 })
               "
               :disabled="disabledForm()"
-              :value="getValue('no. member/polis asuransi')"
+              :value="getValue('no. member asuransi')"
               :maxlength="30"
             />
           </b-form-group>
           <b-form-group
-            label="Nama Penanggung Jawab"
+            :label="renderLabel({ label: 'no. polis asuransi' })"
             class="text-capitalize"
             style="position: relative"
-            :state="getDataError({ rawLabel: 'nama penanggung jawab' })"
+            :state="getDataError({ rawLabel: 'no. polis asuransi' })"
             :invalid-feedback="
               renderInvalidFeedback({
                 validationDesc: blindlyGetData({
-                  rawLabel: 'nama penanggung jawab'
+                  rawLabel: 'no. polis asuransi'
                 })
               })
             "
@@ -322,12 +345,12 @@
             <b-form-input
               @keyup="
                 setValue({
-                  rawLabel: 'nama penanggung jawab',
+                  rawLabel: 'no. polis asuransi',
                   $event
                 })
               "
               :disabled="disabledForm()"
-              :value="getValue('nama penanggung jawab')"
+              :value="getValue('no. polis asuransi')"
               :maxlength="30"
             />
           </b-form-group>
@@ -335,7 +358,7 @@
       </div>
       <div class="form-row">
         <b-form-group
-          label="Alamat Rumah"
+          :label="renderLabel({ label: 'alamat rumah' })"
           class="text-capitalize col-md-6 pr-3"
           style="position: relative"
           :state="getDataError({ rawLabel: 'alamat rumah' })"
@@ -361,29 +384,28 @@
           />
         </b-form-group>
         <b-form-group
-          label="No. Hp Penanggung Jawab"
+          :label="renderLabel({ label: 'nama penanggung jawab' })"
           class="text-capitalize col-md-6"
           style="position: relative"
-          :state="getDataError({ rawLabel: 'no. hp penanggung jawab' })"
+          :state="getDataError({ rawLabel: 'nama penanggung jawab' })"
           :invalid-feedback="
             renderInvalidFeedback({
               validationDesc: blindlyGetData({
-                rawLabel: 'no. hp penanggung jawab'
+                rawLabel: 'nama penanggung jawab'
               })
             })
           "
         >
           <b-form-input
-            @keypress="
-              onKeyInputNumber({
-                rawLabel: 'no. hp penanggung jawab',
+            @keyup="
+              setValue({
+                rawLabel: 'nama penanggung jawab',
                 $event
               })
             "
-            :state="getDataError({ rawLabel: 'no. hp penanggung jawab' })"
             :disabled="disabledForm()"
-            :value="getValue('no. hp penanggung jawab')"
-            :maxlength="15"
+            :value="getValue('nama penanggung jawab')"
+            :maxlength="30"
           />
         </b-form-group>
       </div>
@@ -411,6 +433,12 @@
                       $event
                     })
                   "
+                  @keyup="
+                    setValue({
+                      rawLabel: 'rt',
+                      $event
+                    })
+                  "
                   :disabled="disabledForm()"
                   :value="getValue('rt')"
                   :maxlength="10"
@@ -434,6 +462,12 @@
                 <b-form-input
                   @keypress="
                     onKeyInputNumber({
+                      rawLabel: 'rw',
+                      $event
+                    })
+                  "
+                  @keyup="
+                    setValue({
                       rawLabel: 'rw',
                       $event
                     })
@@ -500,22 +534,46 @@
             </b-col>
           </b-row>
         </b-col>
-        <b-col cols="6"></b-col>
+        <b-col cols="6" class="pl-1">
+          <b-form-group
+            :label="renderLabel({ label: 'no. hp penanggung jawab' })"
+            class="text-capitalize"
+            style="position: relative"
+            :state="getDataError({ rawLabel: 'no. hp penanggung jawab' })"
+            :invalid-feedback="
+              renderInvalidFeedback({
+                validationDesc: blindlyGetData({
+                  rawLabel: 'no. hp penanggung jawab'
+                })
+              })
+            "
+          >
+            <b-form-input
+              @keypress="
+                onKeyInputNumber({
+                  rawLabel: 'no. hp penanggung jawab',
+                  $event
+                })
+              "
+              @keyup="
+                setValue({
+                  rawLabel: 'no. hp penanggung jawab',
+                  $event
+                })
+              "
+              :disabled="disabledForm()"
+              :value="getValue('no. hp penanggung jawab')"
+              :maxlength="15"
+            />
+          </b-form-group>
+        </b-col>
       </b-row>
       <b-row class="mb-3">
         <b-col cols="6">
           <b-form-group
-            label="Status Perkawinan"
+            :label="renderLabel({ label: 'status perkawinan' })"
             class="text-capitalize"
             style="position: relative"
-            :state="getDataError({ rawLabel: 'status perkawinan' })"
-            :invalid-feedback="
-              renderInvalidFeedback({
-                validationDesc: blindlyGetData({
-                  rawLabel: 'status perkawinan'
-                })
-              })
-            "
           >
             <b-form-select
               :options="
@@ -532,7 +590,6 @@
                   $event
                 })
               "
-              :state="getDataError({ rawLabel: 'status perkawinan' })"
               :disabled="disabledForm()"
               :value="getValue('status perkawinan')"
             />
@@ -583,8 +640,8 @@
               variant="primary"
               style="font-size:17.5px;"
               type="submit"
-              >simpan</b-button
-            >
+              >simpan
+            </b-button>
           </template>
           <template v-else>
             <b-button
@@ -611,6 +668,8 @@ import Vue from "vue";
 import { Datetime } from "vue-datetime";
 import axios from "axios";
 import startCase from "lodash/startCase";
+import ImageUploader from "vue-image-upload-resize";
+Vue.use(ImageUploader);
 import {
   required,
   minLength,
@@ -650,16 +709,12 @@ const tmp = [
   {
     label: "email",
     alias: "email",
-    validations: {
-      email
-    }
+    validations: {}
   },
   {
     label: "tempat lahir",
     alias: "tempat_lahir",
-    validations: {
-      required
-    }
+    validations: {}
   },
   {
     label: "tanggal lahir",
@@ -685,8 +740,18 @@ const tmp = [
     alias: "golongan_darah",
     validations: {}
   },
+  // {
+  //   label: "no. member/polis asuransi",
+  //   alias: "nomor_polis",
+  //   validations: {}
+  // },
   {
-    label: "no. member/polis asuransi",
+    label: "no. member asuransi",
+    alias: "nomor_member",
+    validations: {}
+  },
+  {
+    label: "no. polis asuransi",
     alias: "nomor_polis",
     validations: {}
   },
@@ -699,8 +764,8 @@ const tmp = [
     label: "no. hp penanggung jawab",
     alias: "nomor_hp_penanggung_jawab",
     validations: {
-      numeric,
-      minLength: minLength(10)
+      // numeric,
+      // minLength: minLength(10)
     }
   },
   {
@@ -731,7 +796,7 @@ const tmp = [
   {
     label: "status perkawinan",
     alias: "status_perkawinan",
-    validations: { required }
+    validations: {}
   },
   {
     label: "pekerjaan",
@@ -840,7 +905,7 @@ const jobs = [
 export default {
   components: {
     Datetime,
-    vueDropzone: () => import("vue2-dropzone"),
+
     "vue-select": () => import("@/components/VueSelect.vue")
   },
   props: {
@@ -858,7 +923,10 @@ export default {
     formData: null,
     options: ["foo", "bar", "baz"],
     selected: null,
-    jobs: jobs
+    jobs: jobs,
+    hasImage: false,
+    heightFoto: "",
+    image: null
   }),
   validations() {
     return {
@@ -883,29 +951,78 @@ export default {
       const { assignValuePasien } = this;
       assignValuePasien(res);
     },
-    dropzoneOptions() {
-      const { klinik: { nama_klinik = null } = {} } = this.$store.state.user;
+    setImage: function(output) {
+      const tmp = (dataURI, mimetype) => {
+        var byteString = atob(dataURI.split(",")[1]);
+        var ab = new ArrayBuffer(byteString.length);
+        var ia = new Uint8Array(ab);
 
-      return {
-        url: `${this.url_api}/pasien/ocr`,
-        maxFilesize: 5000,
-        headers: this.rawAuthHeader(),
-        maxFiles: 1,
-        params: {
-          nama_klinik
-        },
-        acceptedFiles: "image/*",
-        capture: "image/*",
-        thumbnailMethod: "contain",
-        uploadMultiple: false
+        for (var i = 0; i < byteString.length; i++) {
+          ia[i] = byteString.charCodeAt(i);
+        }
+        return new Blob([ab], { type: mimetype });
       };
+      const { dataUrl } = output;
+      const [mimeRaw] = output && dataUrl.split(";");
+      const [mime] = mimeRaw.split(":");
+      const blob = tmp(dataUrl, mime);
+      const formData = new FormData();
+      this.hasImage = true;
+      this.image = output;
+      // var heightFoto;
+      // this.output.info.newHeight = heightFoto;
+      // console.log(heightFoto);
+      this.heightFoto = output.info.newHeight;
+
+      formData.append("file", blob);
+
+      axios
+        .post(`${this.url_api}/pasien/ocr`, formData)
+        .then(response => {
+          const {
+            data: {
+              data: { result: res }
+            }
+          } = response;
+          this.ocrCompleted(res);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    stupidOcrHelper({ alias, val }) {
+      const mapGender = val => {
+        const x = 1;
+        return /empu|wan/gi.test(val) ? x * 0 : x;
+      };
+
+      switch (alias.toLowerCase()) {
+        case "gender":
+          return mapGender(val);
+
+        default:
+          return val;
+      }
     },
     assignValuePasien(data) {
       if (data) {
         Object.keys(data).map(item => {
           const y = this.formBasicData.find(x => x.alias === item);
           if (y) {
-            Vue.set(this.formData, y.label, data[item]);
+            const { stupidOcrHelper } = this;
+            Vue.set(
+              this.formData,
+              y.label,
+              stupidOcrHelper({
+                alias: y.alias,
+                val: (() => {
+                  return (
+                    (typeof data[item] === "string" && data[item].trim()) ||
+                    data[item]
+                  );
+                })()
+              })
+            );
           }
         });
       }
@@ -960,7 +1077,9 @@ export default {
       }
     },
     whitelistValidation() {
-      return this.setFormBasicData().map(item => item.rawLabel);
+      return this.setFormBasicData()
+        .filter(item => item.validations && !item.validations.required)
+        .map(item => item.rawLabel);
     },
     setFormData() {
       return this.setFormBasicData().reduce((arr, val) => {
@@ -988,17 +1107,27 @@ export default {
       ) {
         evt.preventDefault();
       } else {
-        void this.setValue({ rawLabel, $event });
+        void this.setValue({
+          rawLabel,
+          $event
+        });
       }
     },
     setValue({ rawLabel, $event = null } = {}) {
       let value = $event;
       const label = rawLabel.split(" ").join("_");
       if (typeof $event === "object") {
-        const { target } = $event;
-        value = target.value;
+        if ($event) {
+          const {
+            target: { value }
+          } = $event;
+          this.formData[label] = value;
+        } else {
+          this.formData[label] = null;
+        }
+      } else {
+        this.formData[label] = value;
       }
-      this.formData[label] = value;
       this.triggerValidation({
         label,
         $v: this.$v,
@@ -1025,14 +1154,50 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-#dropzone {
-  // &:hover {
-  //   background-color: transparent !important;
-  // }
+<style>
+#fileInput {
+  display: none;
+  position: absolute;
+}
 
-  & {
-    // cursor: default !important;
+.text-foto {
+  width: 100%;
+  background-color: #f2f3f4;
+  padding: 15px;
+  border-radius: 15px;
+  margin-top: 30px;
+  z-index: 999;
+  /* height: auto; */
+}
+
+.text-foto:hover {
+  background-color: #d5d8dc;
+}
+
+/* .img-preview {
+    opacity: 0.7;
+    margin-right: 40px;
+  } */
+
+.overlay-upload {
+  top: 0px;
+  left: 0px;
+  background-image: linear-gradient(
+    rgba(255, 255, 255, 0),
+    rgba(0, 0, 0, 0.5) 83%,
+    rgba(0, 0, 0, 0.8)
+  );
+  width: 100%;
+  height: auto;
+  /* z-index: 998 */
+  position: absolute;
+}
+</style>
+
+<style lang="scss">
+.foto-upload {
+  & .text-foto {
+    cursor: pointer;
   }
 }
 </style>
