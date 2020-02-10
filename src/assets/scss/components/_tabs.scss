@@ -1,0 +1,144 @@
+// Tabs
+
+.card-header-tab {
+
+  .card-header--title > a {
+    display: block;
+    padding: ($spacer / 2) $spacer;
+    @include border-top-radius($border-radius-sm);
+    position: relative;
+    font-weight: bold;
+    font-size: $font-size-sm;
+
+    &:after {
+      position: absolute;
+      width: 100%;
+      bottom: -12px;
+      left: 0;
+      content: '';
+      background: $primary;
+      display: none;
+      height: 3px;
+      @include border-radius($border-radius);
+    }
+
+    &.active {
+      color: $black;
+
+      &:after {
+        display: block;
+      }
+    }
+  }
+}
+
+// Basic
+
+.nav-tabs {
+  padding: 0 ($spacer / 1.5);
+
+  .nav-item {
+    padding: 0 ($spacer / 6);
+
+    .nav-link {
+      font-size: $font-size-sm;
+      text-transform: uppercase;
+      margin-top: 2px;
+      color: $gray-700;
+      transition: $transition-base;
+
+      &:hover {
+        color: $black;
+      }
+
+      &.active {
+        margin-top: 0;
+        color: $primary;
+        border-top: $primary solid 3px;
+
+        &:hover {
+          color: $primary;
+        }
+      }
+    }
+
+  }
+}
+
+// Line tabs
+
+.nav-line {
+  .nav-link {
+    color: $gray-700;
+    position: relative;
+    transition: $transition-base;
+    padding: 0 $spacer $spacer;
+
+    .divider {
+      width: 34px;
+      @include border-radius($border-radius-lg);
+      height: 3px;
+      background: $primary;
+      visibility: hidden;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: $transition-base;
+      position: absolute;
+      left: $spacer;
+      bottom: 0;
+    }
+
+    &:hover {
+      color: $black;
+    }
+
+    &.active {
+      color: $primary;
+      background: transparent !important;
+
+      &:hover {
+        color: $primary;
+      }
+
+      .divider {
+        visibility: visible;
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  }
+}
+
+// Line tabs alternate
+
+.nav-line-alt {
+  position: relative;
+
+  &:after {
+    background: $gray-200;
+    height: 3px;
+    @include border-radius($border-radius-lg);
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    content: "";
+    z-index: 4;
+  }
+
+  .nav-item + .nav-item {
+    margin-left: ($spacer * 2);
+  }
+
+  .nav-link {
+    padding: 0 0 $spacer;
+    margin: 0;
+
+    .divider {
+      z-index: 8;
+      left: 0;
+      width: 100%;
+    }
+  }
+}

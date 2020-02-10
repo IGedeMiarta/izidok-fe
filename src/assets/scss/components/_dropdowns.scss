@@ -1,0 +1,89 @@
+// Dropdowns
+
+.btn-group {
+  transition: $transition-base;
+
+  & > .btn {
+    transform: translateY(0px);
+  }
+
+  &:hover {
+    & > .btn {
+      transform: translateY(-2px);
+    }
+  }
+}
+
+.dropdown-item {
+  transition: $transition-base;
+}
+
+// Dropdown menu
+
+.dropdown-menu {
+  box-shadow: $dropdown-box-shadow;
+  display: block;
+  transition: visibility .25s,opacity .25s;
+  opacity: 0;
+  visibility: hidden;
+
+  &.show {
+    display: block;
+    visibility: visible;
+    opacity: 1;
+  }
+
+  & > .bg-composed-wrapper {
+    margin: (-($dropdown-padding-y)) -1px -2px;
+    z-index: 5;
+    top: -1px;
+  }
+
+  & > .list-group-flush:last-of-type {
+    .list-group-item:last-child {
+      @include border-bottom-radius(inherit !important);
+    }
+  }
+
+  & > .list-group-flush,
+  & > .card-body {
+    &:last-of-type {
+      @include border-bottom-radius(inherit !important);
+    }
+  }
+
+  .scrollbar-container {
+    height: 9rem;
+  }
+}
+
+.dropdown-menu-lg {
+  & > .dropdown-menu {
+  min-width: 15rem;
+  }
+}
+
+.dropdown-menu-xl {
+  & > .dropdown-menu {
+  min-width: 18rem;
+  }
+}
+
+.dropdown-menu-xxl {
+  & > .dropdown-menu {
+  min-width: 21rem;
+  }
+}
+
+.dropdown-toggle::after {
+  position: relative;
+  top: 2px;
+}
+
+// Remove caret
+
+.dropdown-toggle-no-caret {
+  &:after {
+    display: none !important;
+  }
+}

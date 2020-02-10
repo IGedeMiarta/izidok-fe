@@ -1,0 +1,232 @@
+// Variables
+
+$header-height-sm: 64px;
+$header-height: 74px;
+$header-height-lg: 84px;
+$header-height-xl: 94px;
+
+$header-link-color-light: rgba($white, .8);
+$header-link-hover-color-light: $white;
+$header-link-hover-bg-light: rgba($white, .15);
+
+
+$header-link-color-dark: rgba($black, .8);
+$header-link-hover-color-dark: $black;
+$header-link-hover-bg-dark: rgba($black, .07);
+
+// Headers
+
+.header-nav-wrapper {
+  min-height: $header-height;
+  align-items: center;
+  display: flex;
+  position: relative;
+
+  & > .container {
+    align-items: center;
+    display: flex;
+  }
+
+  // Logo
+
+  .header-nav-logo {
+    flex: 1;
+    display: flex;
+
+    a {
+      transition: $transition-base;
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  // Navigation menu
+
+  .header-nav-menu {
+    flex: 2;
+    display: flex;
+
+    & > .nav > .nav-item > .nav-link {
+      @include border-radius($border-radius-lg * 2);
+      transition: $transition-base;
+      margin: 0 ($spacer / 4);
+    }
+  }
+
+  // Actions
+
+  .header-nav-actions {
+    flex: 1;
+    display: flex;
+  }
+
+  // Sizing
+
+  &.header-nav-wrapper-sm {
+    min-height: $header-height-sm;
+  }
+
+  &.header-nav-wrapper-lg {
+    min-height: $header-height-lg;
+  }
+
+  &.header-nav-wrapper-xl {
+    min-height: $header-height-xl;
+  }
+
+  // Responsive navigation
+
+  .nav-collapsed-wrapper {
+    position: absolute;
+    left: 5%;
+    top: $spacer;
+    width: 90%;
+    background: $white;
+    z-index: 5;
+    @include border-radius($border-radius);
+    box-shadow: $box-shadow;
+  }
+
+  // Theming dark
+
+  &.navbar-dark {
+    .header-nav-logo {
+      a {
+        color: $header-link-color-light;
+
+        &:hover {
+          color: $header-link-hover-color-light;
+        }
+      }
+    }
+
+    .header-nav-menu {
+      & > .nav > .nav-item > .nav-link {
+        color: $header-link-color-light;
+
+        &.active,
+        &:hover {
+          color: $header-link-hover-color-light;
+          background: $header-link-hover-bg-light;
+        }
+      }
+
+      & > .nav > .nav-item.dropdown.show {
+        & > .nav-link {
+          color: $header-link-hover-color-light;
+          background: $header-link-hover-bg-light;
+        }
+      }
+    }
+  }
+
+  // Theming light
+
+  &.navbar-light {
+    .header-nav-logo {
+      a {
+        color: $header-link-color-dark;
+
+        &:hover {
+          color: $header-link-hover-color-dark;
+        }
+      }
+    }
+
+    .header-nav-menu {
+      & > .nav > .nav-item > .nav-link {
+        color: $header-link-color-dark;
+
+        &.active,
+        &:hover {
+          color: $header-link-hover-color-dark;
+          background: $header-link-hover-bg-dark;
+        }
+      }
+
+      & > .nav > .nav-item.dropdown.show {
+        & > .nav-link {
+          color: $header-link-hover-color-dark;
+          background: $header-link-hover-bg-dark;
+        }
+      }
+    }
+  }
+
+  // Translucent header
+
+  &.navbar-white-50 {
+    background: rgba($white, .15);
+  }
+}
+
+.headroom--not-top {
+  .header-nav-wrapper {
+    .header-nav-logo {
+      a {
+        color: $header-link-color-dark;
+
+        &:hover {
+          color: $header-link-hover-color-dark;
+        }
+      }
+    }
+
+    .header-nav-menu {
+      & > .nav > .nav-item > .nav-link {
+        color: $header-link-color-dark;
+
+        &.active,
+        &:hover {
+          color: $header-link-hover-color-dark;
+          background: $header-link-hover-bg-dark;
+        }
+      }
+
+      & > .nav > .nav-item.dropdown.show {
+        & > .nav-link {
+          color: $header-link-hover-color-dark;
+          background: $header-link-hover-bg-dark;
+        }
+      }
+    }
+  }
+}
+
+
+// Nav page menu collapsed
+
+.nav-menu-collapse {
+  position: fixed;
+  right: 0;
+  top: 0;
+  height: 100vh;
+  width: 260px;
+  box-shadow: $box-shadow-lg;
+
+  .nav-inner-wrapper {
+    position: relative;
+    z-index: 6;
+  }
+
+  &:after {
+    content: '';
+    position: fixed;
+    background: rgba($black, .1);
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: $transition-base;
+  }
+
+  &.show {
+    &:after {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}

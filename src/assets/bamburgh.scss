@@ -1,0 +1,48 @@
+// Core
+
+@import "vendor/bootstrap/scss/functions";
+@import "scss/variables/functions";
+
+@import "vendor/bootstrap/scss/variables";
+@import "scss/variables/variables";
+
+@import "vendor/bootstrap/scss/mixins";
+@import "scss/variables/mixins";
+
+// Bootstrap base
+
+@import "vendor/bootstrap/bootstrap-base";
+
+// Components
+
+@import "scss/components";
+
+// Presentation blocks
+
+@import "scss/presentation-blocks";
+
+// Bamburgh V Admin Dashboard PRO
+
+// Variables
+
+@import 'scss/bamburgh-v/variables/variables';
+
+// Layout
+
+@import 'scss/bamburgh-v/layout/header';
+@import 'scss/bamburgh-v/layout/sidebar';
+@import 'scss/bamburgh-v/layout/wrapper';
+@import 'scss/bamburgh-v/layout/footer';
+
+// Elements
+
+@import 'scss/bamburgh-v/elements/page-title';
+@import 'scss/bamburgh-v/elements/dashboard-elements';
+
+// Vendors
+
+@import "vendor/animate-scss/animate";
+@import "vendor/slick/scss/slick";
+@import "vendor/perfect-scrollbar/scss/perfect-scrollbar";
+@import "vendor/sweet-alerts/sweet-alerts";
+@import "vendor/vue-select/scss/vue-select";

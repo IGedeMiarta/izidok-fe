@@ -1,0 +1,161 @@
+// Wrapper
+
+html,
+body {
+  -ms-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-wrapper {
+  display: flex;
+  flex: 1;
+  background: $page-bg;
+}
+
+.app-main {
+  display: flex;
+  flex: 1 auto;
+  min-width: 0;
+  flex-direction: column;
+  position: relative;
+  //z-index: 8;
+}
+
+.fixed-inner-layout {
+  bottom: 0;
+  top: 0;
+  width: 100%;
+  position: absolute;
+}
+
+.app-content {
+  flex: 1;
+  display: flex;
+  padding: $header-height 0 0 $sidebar-width;
+  flex-direction: column;
+  transition: all 0.5s cubic-bezier(0.685, 0.0473, 0.346, 1);
+
+  &.app-content-aside {
+    flex-direction: row;
+    z-index: 5;
+
+    @include media-breakpoint-down(md) {
+      flex-direction: column;
+    }
+  }
+
+  &--inner {
+    padding: $layout-spacer;
+    width: 100%;
+    flex: 1;
+  }
+
+  &--sidebar {
+    z-index: 5;
+    background: $app-content-aside-bg;
+    box-shadow: $sidebar-shadow-light;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.5s cubic-bezier(0.685, 0.0473, 0.346, 1);
+
+    &.sidebar-inner-open {
+      display: flex;
+      height: 100%;
+      top: 0;
+      padding-top: calc(#{$header-height});
+      z-index: 15;
+    }
+
+    @include media-breakpoint-down(md) {
+      display: none;
+      position: fixed;
+      width: 100%;
+    }
+
+    &__sm {
+      width: $app-content-aside-sm-width;
+    }
+
+    &__lg {
+      width: $app-content-aside-lg-width;
+
+      @include media-breakpoint-down(lg) {
+        width: $app-content-aside-lg-width - 100;
+      }
+    }
+
+    &__header,
+    &__footer {
+      padding: ($layout-spacer / 2) $layout-spacer;
+    }
+
+    &__header {
+      border-bottom: $gray-300 solid 1px;
+    }
+
+    &__footer {
+      border-top: $gray-300 solid 1px;
+    }
+
+    &__content {
+      padding: $layout-spacer;
+    }
+  }
+}
+
+// Responsive
+
+.sidebar-inner-mobile-overlay,
+.sidebar-mobile-overlay {
+  width: 0;
+  height: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .2s;
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba($black, .4);
+  z-index: 11;
+}
+
+@include media-breakpoint-down(md) {
+  .app-content {
+    padding-left: 0;
+  }
+
+  .sidebar-open-mobile {
+    overflow: hidden;
+
+    .sidebar-mobile-overlay {
+      opacity: 1;
+      visibility: visible;
+      width: 100%;
+      height: 100%;
+    }
+
+    .app-content {
+      transform: translate3d($sidebar-width, 0, 0);
+    }
+  }
+
+  .sidebar-inner-mobile-overlay {
+    z-index: 4;
+
+    &.active {
+      opacity: 1;
+      visibility: visible;
+      width: 100%;
+      height: 100%;
+    }
+  }
+}

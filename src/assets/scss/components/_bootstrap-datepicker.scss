@@ -1,0 +1,126 @@
+.datepicker {
+  @include border-radius($datepicker-border-radius);
+
+  &-wrapper-flush {
+    border: 0;
+    @include border-radius(inherit);
+  }
+
+  &-inline {
+    width: 220px;
+  }
+
+  &-dropdown {
+    top: 0;
+    left: 0;
+    padding: $datepicker-dropdown-padding;
+    @include box-shadow($dropdown-box-shadow);
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .day-header {
+    border: 0 !important;
+  }
+
+  .cell:not(.day-header) {
+    border-radius: $datepicker-cell-border-radius;
+    transition: $datepicker-cell-transition;
+    text-align: center;
+    font-size: $font-size-sm;
+    border: 0 !important;
+
+    &.weekend {
+      opacity: .6;
+    }
+
+    &:hover,
+    &.selected {
+      background: $datepicker-active-background !important;
+      color: $datepicker-active-color;
+      cursor: pointer;
+    }
+
+    &.disabled,
+    &.disabled:hover {
+      background: none;
+      color: $datepicker-disabled-cell-color;
+      cursor: default;
+    }
+
+    &.today {
+      background: lighten($datepicker-active-background, 45%);
+      &.focused {
+        background: lighten($gray-400, 58%);
+      }
+
+      &.disabled,
+      &.disabled:active {
+        background: lighten($gray-400, 58%);
+        color: $btn-link-disabled-color;
+      }
+    }
+  }
+
+  header {
+    margin: 0 0 ($spacer / 2);
+
+    span:hover {
+      background: $datepicker-active-background !important;
+      color: $datepicker-active-color;
+      @include border-radius($dropdown-border-radius);
+    }
+
+    .prev,
+    .next {
+      position: relative;
+      font-weight: 900;
+      font-family: "Font Awesome 5 Free";
+      text-indent: -999rem;
+      display: block;
+      @include border-radius($dropdown-border-radius);
+
+      &:after {
+        border: 0 !important;
+        text-indent: initial;
+        position: absolute;
+        width: $datepicker-cell-width;
+        height: $datepicker-cell-height;
+        line-height: $datepicker-cell-height;
+        left: 50%;
+        margin: 0 !important;
+        top: 0;
+        font-size: $font-size-lg;
+      }
+
+      &.disabled {
+        visibility: hidden;
+      }
+    }
+
+    .prev {
+      &:after {
+        content: $datepicker-prev-character !important;
+      }
+    }
+    .next {
+      &:after {
+        content: $datepicker-next-character !important;
+      }
+    }
+  }
+}
+
+
+// Inline calendar in card box
+
+.card-body {
+  .datepicker-inline {
+    width: 100%;
+    border: 0;
+
+    table {
+      width: 100%;
+    }
+  }
+}
