@@ -269,6 +269,7 @@
           tarif: data.tarif
         }
         this.kodeLayananBeforeEdit = data.kode_layanan;
+        this.checkDataKode = 1;
       },
       async updateTarif(dataEdit) {
         var checkError = this.$v.nama_layanan.$error;
@@ -287,7 +288,7 @@
             updateProsesTarif,
           } = this;
           let listKode = axios.get(`${this.url_api}/layanan/${dataEdit.kode_layanan}/kode`)
-            .then(function (response) {
+            .then((response) => {
               checkDataKode = 2;
             })
             .catch((error) => {

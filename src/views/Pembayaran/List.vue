@@ -23,11 +23,11 @@
             <div class="col-md-9 no-padding">
               <div class="form-group col-md-5" style="float:left;">
                 <label for="inputEmail4">Nama Pasien</label>
-                <input type="email" class="form-control" id="inputEmail4" />
+                <input type="text" class="form-control" />
               </div>
               <div class="form-group col-md-4" style="float:left;">
                 <label for="inputPassword46">No. Rekam Medis</label>
-                <input type="password" class="form-control" id="inputPassword46" />
+                <input type="text" class="form-control"  />
               </div>
               <div class="form-group col-md-3" style="float:left;padding-top:30px;padding-left:0;">
                 <b-button variant="primary">CARI</b-button>

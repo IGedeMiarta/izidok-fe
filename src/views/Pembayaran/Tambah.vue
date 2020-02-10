@@ -47,14 +47,14 @@
           v-if="this.pembayaranList.status == 'BELUM LUNAS' || this.pembayaranList.status == 'Belum Lunas' || this.pembayaranList.status == 'belum lunas'">
           <h3>Belum Lunas</h3>
           <div class="card-body">
-            <TablePembayaran @valueChanged="calc" />
+            <TablePembayaran @valueChanged="calc" :datanya="this.pembayaranVal" />
           </div>
         </template>
         <template
           v-if="this.pembayaranList.status == 'DRAFT' || this.pembayaranList.status == 'Draft' || this.pembayaranList.status == 'draft'">
           <h3>Draft</h3>
           <div class="card-body">
-            <TablePembayaran @valueChanged="calc" />
+            <TablePembayaran @valueChanged="calc" :datanya="this.pembayaranVal" />
           </div>
         </template>
         <template
@@ -91,7 +91,7 @@
                 <b-button variant="danger" class="text-uppercase mr-3" @click="previewStruk">preview struk</b-button>
                 <b-button variant="success" class="text-uppercase mr-3" @click="simpanProsesPembayaran">simpan
                 </b-button>
-                <b-button variant="primary" class="text-uppercase">bayar</b-button>
+                <b-button variant="primary" class="text-uppercase" @click="bayarModal">bayar</b-button>
               </div>
             </div>
           </div>
@@ -110,6 +110,7 @@
   import axios from "axios";
   import moment from "moment";
   moment.locale('id');
+
   export default {
     components: {
       TablePembayaran: () => import("./TablePembayaran.vue")
@@ -118,7 +119,9 @@
       pembayaranList: [],
       isWaktuMasuk: null,
       simpanPembayaran: [],
+      setPembayaran: [],
       total: null,
+      isidata: [],
       potongan: null,
       pembayaranVal: null,
     }),
@@ -139,13 +142,50 @@
         setStrukVal: "struk/SET_STRUK_VAL"
       }),
       calc(val) {
-        const tmp = val;
+        // const tmp = val;
+        // let total_tmp = 0;
+        // tmp.map(item => {
+        //   total_tmp += item.qty * item.nilai;
+        // });
+        let tmp;
         let total_tmp = 0;
-        tmp.map(item => {
-          total_tmp += item.qty * item.nilai;
-        });
-        this.pembayaranVal = val;
+        if (this.pembayaranList) {
+          var dataLayanan = this.pembayaranList.detail;
+          tmp = val;
+          // const arr = dataLayanan[dataLayanan.length - 1];
+          // tmp.push(arr);
+          tmp.map((item, x) => {
+            val[x].nama_layanan = dataLayanan[x].nama_layanan;
+            val[x].quantity = dataLayanan[x].quantity;
+            val[x].tarif = dataLayanan[x].tarif;
+            total_tmp += item.tarif * item.quantity;
+            this.pembayaranVal = val;
+          });
+        } else {
+          tmp = val;
+          tmp.map(item => {
+            total_tmp += item.quantity * item.tarif;
+            this.pembayaranVal = val;
+          });
+        }
+        // this.pembayaranVal = val;
         this.total = total_tmp;
+      },
+      bayarModal() {
+        this.$swal({
+          title: startCase("Bayar"),
+          text: `Apakah anda yakin untuk melakukan pembayaran?`,
+          type: "warning",
+          showCancelButton: true,
+          cancelButtonText: startCase("tidak"),
+          confirmButtonText: startCase("ya")
+        }).then(res => {
+          if (res.value) {
+            next();
+          } else {
+            next(false);
+          }
+        });
       },
       previewStruk() {
         this.setStrukVal(this.pembayaranVal);
@@ -164,7 +204,6 @@
             data
           } = res.data;
           this.pembayaranList = data;
-
           this.isWaktuMasuk = moment(this.pembayaranList['created_at']).format("DD-MMMM-YYYY,  h:mm:ss a");
         } catch (err) {
           // console.log(err);
@@ -172,10 +211,9 @@
       },
       async simpanProsesPembayaran() {
         try {
-          console.log('isi pembayaran',this.pembayaranVal);
           const res = await axios.post(
-            `${this.url_api}/pembayaran/detail`, {
-              arr: this.this.pembayaranVal
+            `${this.url_api}/pembayaran/`, {
+              detail_pembayaran: this.pembayaranVal
             }
           );
           const {
@@ -201,9 +239,6 @@
 </script>
 
 <style lang="scss" scoped>
-  // .card {
-  //   border-width: 0;
-  // }
   .card {
     .card-header {
       background-color: #eaf9e6;

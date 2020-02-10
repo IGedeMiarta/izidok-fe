@@ -324,8 +324,13 @@
           this.$router.push({
             path: "/tarif"
           });
-        } catch (err) {
-          // console.log(err);
+        } catch (errror) {
+          console.log(errror.response.data);
+          var d = errror.response.data.length;
+          console.log(d);
+          // this.tmpInputTarifData[i].error['nama_layanan'].error = false;
+          // this.tmpInputTarifData[i].error['nama_layanan'].desc = 'Kode Layanan Sudah Ada';
+       
         }
       },
       constructPostData() {
@@ -441,7 +446,6 @@
               this.tmpInputTarifData[index].error['kode_layanan'].error = false
               this.tmpInputTarifData[index].error['kode_layanan'].desc =
                 'Kode layanan Sudah Ada';
-            
             }
           })
           .catch((error) => {
@@ -470,6 +474,7 @@
                   this.tmpInputTarifData[index].error['kode_layanan'].error = false
                   this.tmpInputTarifData[index].error['kode_layanan'].desc =
                     'Kode Layanan Tidak Boleh Sama'
+                    //disini
                 }
               })
           } else {
@@ -484,6 +489,7 @@
               .catch((error) => {
                 //kasus inputan setelahnya
                 // console.log(error.response.data.success);
+                
                 if (error.response.data.success == false) {
                   this.tmpInputTarifData[index].error['kode_layanan'].error = true
                   this.tmpInputTarifData[index].error['kode_layanan'].desc =

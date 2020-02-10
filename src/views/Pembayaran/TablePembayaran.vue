@@ -1,24 +1,24 @@
 <template>
-  <b-table :fields="fields()" :items="items" borderless class="table-pembayaran">
+  <b-table :fields="fields()" :items="datanya" borderless class="table-pembayaran">
     <template v-slot:cell(no)="data">
-      {{ data.index + 1 }}
+      {{data.index + 1}}
     </template>
 
     <template v-slot:cell(layanan)="data">
-      <vue-select :options="listLayanan" v-model="data.item.layanan"></vue-select>
+      <vue-select :options="listLayanan" v-model="data.item.nama_layanan" value="nama_layanan"></vue-select>
     </template>
 
     <template v-slot:cell(qty)="data">
-      <b-form-input type="number" v-model="data.item.qty" />
+      <b-form-input type="number" v-model="data.item.quantity" />
     </template>
 
     <template v-slot:cell(nilai)="data">
-      <b-form-input v-model="data.item.nilai" disabled  /> 
+      <b-form-input v-model="data.item.tarif" disabled />
     </template>
 
     <template v-slot:cell(subtotal)="data">
       <div class="d-flex align-items-center">
-        <b-form-input class="flex-grow-1" :value="data.item.subtotal" disabled />
+        <b-form-input class="flex-grow-1" :value="data.item.quantity * data.item.tarif" disabled />
         <div class="d-flex flex-shrink-1 justify-content-around ml-3">
           <font-awesome-layers class="fa-lg mr-1 btn-actions" @click="kurang(data.index)"
             :class="{ invisible: items.length < 1 }" v-if="items.length > 1">
@@ -33,6 +33,7 @@
         </div>
       </div>
     </template>
+
   </b-table>
 </template>
 
@@ -57,13 +58,14 @@
       FontAwesomeLayers,
       "vue-select": () => import("@/components/VueSelect.vue")
     },
+    props: ['datanya'],
     data: () => ({
-      listLayanan: {},
+      listLayanan: [],
       items: [{
         no: 1,
-        layanan: null,
-        qty: 1,
-        nilai: null,
+        nama_layanan: null,
+        quantity: null,
+        tarif: null,
         subtotal: null
       }, ],
     }),
@@ -76,10 +78,10 @@
         deep: true,
         handler: function (newVal) {
           const tmp = newVal.map(item => {
-            item.subtotal = item.qty * item.nilai;
-            item.nilai = item.layanan.tarif
+            item.subtotal = item.quantity * item.tarif;
             return item;
           });
+          console.log('dari tmp = ',tmp);
           this.calcValue(tmp);
           return tmp;
         }
@@ -115,7 +117,7 @@
       fields() {
         const tmp = [{
             key: "no",
-            label: "no."
+            label: "no.",
           },
           {
             label: "layanan",
@@ -129,18 +131,19 @@
           "nilai",
           "subtotal"
         ];
-     
         return tmp.map(item => ({
           key: item.label ? item.label : item,
           label: item.label ? item.label : item,
           thStyle: item.thStyle && item.thStyle
         }));
       },
+      
       async fetchLayanan() {
         try {
           const res = await axios.get(
             `${this.url_api}/layanan`
           );
+
           const {
             items
           } = this;
@@ -155,15 +158,14 @@
               layanan: tarifData,
               total
             } = data;
-            
+
             const {
               data: listTarif
             } = tarifData;
 
-            this.listLayanan = listTarif.map( val => ({
+             this.listLayanan = listTarif.map(val => ({
               ...val,
               label: `${val.nama_layanan} - ${val.kode_layanan}`,
-              code: val.kode_layanan,
             }));
             this.rows = tarifData.total;
           }
