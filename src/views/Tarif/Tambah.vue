@@ -325,7 +325,14 @@
             path: "/tarif"
           });
         } catch (errror) {
+          const x = errror.response.data
+          const y = Object.keys(x)
+          console.log(y.length - 1)
           console.log(errror.response.data);
+          y.map(item => {
+            const z = item.split('.')
+            this.tmpInputTarifData[z[1]].error.nama_layanan.desc = x[item][x[item].length - x[item].length]
+          })
           var d = errror.response.data.length;
           console.log(d);
           // this.tmpInputTarifData[i].error['nama_layanan'].error = false;

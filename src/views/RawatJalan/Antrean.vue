@@ -375,6 +375,9 @@ export default {
         if (status) {
           const { total, data: antreanData } = data;
           this.items = antreanData.map((item, index) => {
+            const {
+              examination_by: { nama: dokter_tujuan }
+            } = item;
             return {
               no: (page - 1) * this.perPage + index + 1,
               waktu_konsultasi:
@@ -384,7 +387,7 @@ export default {
               "nama pasien": item.pasien.nama,
               "jenis kelamin": this.jenisKelamin(item.pasien.jenis_kelamin),
               "nomor hp": item.pasien.nomor_hp,
-              "dokter tujuan": "dr. Aviandra",
+              "dokter tujuan": dokter_tujuan,
               pasien_id: item.pasien_id,
               transaksi_id: item.id,
               status: item.status
