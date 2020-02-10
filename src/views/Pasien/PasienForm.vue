@@ -2,7 +2,7 @@
   <div>
     <div
       class="text-center col-md-12 foto-upload mb-4"
-      v-if="formType !== 'detail'"
+      v-if="formType !== 'detail' && formType !== 'edit'"
     >
       <!-- <template v-if="this.hasImage == true">
         <div class="overlay-upload" :style="{ height: 250 +'px', position : 'absolute' }" >
@@ -687,7 +687,7 @@ library.add(faCamera);
 const tmp = [
   {
     label: "nama lengkap",
-    alias: "name",
+    alias: "nama",
     validations: {
       required
     }
@@ -713,7 +713,7 @@ const tmp = [
   },
   {
     label: "tempat lahir",
-    alias: "birthdate",
+    alias: "tempat_lahir",
     validations: {}
   },
   {
@@ -730,7 +730,7 @@ const tmp = [
   },
   {
     label: "jenis kelamin",
-    alias: "gender",
+    alias: "jenis_kelamin",
     validations: {
       required
     }
