@@ -202,6 +202,7 @@
                       ? null
                       : 'border-color: red'
                   "
+                  :max-datetime="maximumDatetime"
                 />
               </b-form-group>
             </b-col>
@@ -928,6 +929,11 @@ export default {
     heightFoto: "",
     image: null
   }),
+  computed: {
+    maximumDatetime() {
+      return moment().format("YYYY-MM-DD");
+    }
+  },
   validations() {
     return {
       formData: {
