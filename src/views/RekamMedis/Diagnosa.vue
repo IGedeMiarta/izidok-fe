@@ -166,7 +166,9 @@ export default {
   },
   watch: {
     selectedKodePenyakit: function() {
-      document.getElementById("box_diagnosa").style.setProperty('border-color', '');
+      document
+        .getElementById("box_diagnosa")
+        .style.setProperty("border-color", "");
       this.updatePostData({
         key: "kode_penyakit",
         value: this.selectedKodePenyakit
@@ -183,7 +185,7 @@ export default {
     updateContent(content) {
       this.updatePostData({ key: "diagnosa_text", value: content });
     },
-     handleMousedown(e) {
+    handleMousedown(e) {
       this.lastPos = this.getMousePos(e);
       this.ctx.lineWidth = this.penWidth;
       this.drawing = true;
@@ -268,7 +270,7 @@ export default {
             return;
           }
 
-          let kode_penyakit = res.data.kode_penyakit;
+          let kode_penyakit = res.data.kode_penyakit.data;
 
           if (kode_penyakit) {
             self.kodePenyakit = kode_penyakit;
@@ -279,7 +281,7 @@ export default {
         .catch(err => {
           self.isLoading = false;
           console.log(err);
-          });
+        });
     },
     // clearAll() {
     //   this.selectedKodePenyakit = [];
