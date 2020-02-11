@@ -2,8 +2,11 @@
   <div>
     <div class="app-content--inner p-0 d-flex flex-column">
       <page-title
-        heading="Input Data Operator"
-        subheading="Masukkan data operator untuk dapat melakukan penggunaan iziDok."
+        heading="Input Data Operator*"
+        :subheading="subheading"
+        :customStyleSubheadingProp="{
+          'font-italic': true
+        }"
       />
       <div class="container">
         <div class="card card-box mb-5">
@@ -66,7 +69,7 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { maxLength, email, required } from "vuelidate/lib/validators";
-import axios from 'axios';
+import axios from "axios";
 library.add(faPlus, faMinus);
 
 export default {
@@ -89,6 +92,13 @@ export default {
       }
     }
   },
+  computed: {
+    subheading() {
+      return {
+        text: `*Operator adalah staff yang dapat membantu Anda untuk melakukan aktivitas registrasi, administrasi, maupun pembayaran. <br/> Silahkan masukkan email dan nama untuk mendaftarkan Operator Anda (jika ada) atau lewati langkah ini.`
+      };
+    }
+  },
   mounted() {
     this.formBasicData = this.setFormBasicData();
     this.formData = this.setFormData();
@@ -102,8 +112,8 @@ export default {
           constructPostData()
         );
         const { status, data } = res.data;
-        if(status) {
-          this.$router.push('/')
+        if (status) {
+          this.$router.push("/");
         }
       } catch (err) {
         // console.log(err);
