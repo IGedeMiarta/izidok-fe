@@ -6,13 +6,29 @@
           <div class="flex-grow-1 w-100 d-flex align-items-center">
             <div class="bg-composed-wrapper--content py-5">
               <div class="container">
-                <b-modal centered v-model="modalShow" no-close-on-backdrop hide-header-close>
+                <b-modal
+                  centered
+                  v-model="modalShow"
+                  no-close-on-backdrop
+                  hide-header-close
+                  header-class="d-none"
+                  footer-class="border-0 pt-0"
+                  body-class="pb-2 pt-4"
+                  content-class="shadow-none border-0 p-3"
+                  dialog-class="modal-verification"
+                >
+                  <template v-slot:modal-backdrop>
+                    <div
+                      style="width: 100%; height: 100%; background-color: #fff; position: absolute;"
+                      class="fck-this-backdrop"
+                    ></div>
+                  </template>
                   <p>
                     {{ text[state] }}
                   </p>
                   <div slot="modal-footer">
                     <b-button @click="redirectToLogin" variant="primary">
-                      {{ state == 'success' ? 'Login' : 'Kembali ke Login' }}
+                      {{ state == "success" ? "Login" : "Kembali ke Login" }}
                     </b-button>
                   </div>
                 </b-modal>
@@ -27,26 +43,24 @@
 
 <script>
 export default {
-  props: ['state'], // success | already-activated | expired
+  props: ["state"], // success | already-activated | expired
   data() {
     return {
       modalShow: false,
       text: {
-        'success'           : 'Akun Anda berhasil diaktivasi. Silakan login untuk mengakses iziDok.',
-        'already-activated' : 'Akun Anda gagal diaktivasi. Email anda telah teraktivasi sebelumnya.',
-        'failed'            : 'Akun Anda gagal diaktivasi. Lakukan aktivasi ulang.',
+        success:
+          "Akun Anda berhasil diaktivasi. Silakan login untuk mengakses izidok.",
+        "already-activated":
+          "Akun Anda gagal diaktivasi. Email anda telah teraktivasi sebelumnya.",
+        failed: "Akun Anda gagal diaktivasi. Lakukan aktivasi ulang."
       }
     };
   },
   beforeRouteEnter: (to, from, next) => {
-    if([
-      'success', 
-      'already-activated', 
-      'failed'].includes(to.params.state)) {
-      next()
-    }
-    else {
-      next('/')
+    if (["success", "already-activated", "failed"].includes(to.params.state)) {
+      next();
+    } else {
+      next("/");
     }
 
     // if (!to.params.summary) {
@@ -67,9 +81,23 @@ export default {
   },
   mounted() {
     this.toggleModal();
+    console.log(this.$refs.modalVerification);
   },
   destroyed() {
     this.toggleModal();
   }
 };
 </script>
+
+<style lang="scss">
+.fck-this-backdrop {
+  background-image: url("~@/assets/img/confirm-signup.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.modal-verification {
+  max-width: 580px;
+}
+</style>
