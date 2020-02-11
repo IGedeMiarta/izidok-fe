@@ -37,14 +37,14 @@ const getters = {
 };
 
 const actions = {
-    resetCartState({ commit }) {
+    resetState({ commit }) {
         console.log('reset state called...');
         commit('resetState')
     },
     async fetchData({ commit, dispatch }) {
         console.log('fetch data called...');
 
-        dispatch('resetCartState');
+        dispatch('resetState');
 
         const pasien_id = router.currentRoute.params.pasien_id;
         const transklinik_id = router.currentRoute.params.transklinik_id;
