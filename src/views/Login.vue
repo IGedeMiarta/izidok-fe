@@ -31,12 +31,12 @@
                                     })
                                   " style="position: relative" :state="renderError({ error: form.error })">
                                 <template v-if="form.type === 'password'">
-                                  <b-input-group-text slot="append">
-                                      <font-awesome-icon class="mx-auto" icon="eye" type="password"
-                                        @click="switchVisibility" />
-                                    </b-input-group-text>
-                                </template>
-                                <b-form-input :type="form.type || 'text'" @keyup="
+                                  <b-input-group>
+                                    <b-input-group-text slot="append">
+                                        <font-awesome-icon class="mx-auto" icon="eye" type="password"
+                                          @click="switchVisibility" />
+                                      </b-input-group-text>
+                                      <b-form-input :type="form.type || 'text'" @keyup="
                                       setValue({
                                         rawLabel: form.rawLabel,
                                         label: form.label,
@@ -44,7 +44,18 @@
                                         tmpId: form.tmpId
                                       })
                                     " :state="renderError({ error: form.error })" :placeholder="form.placeholder" />
-
+                                    </b-input-group>
+                                </template>
+                                <template v-else>
+                                  <b-form-input :type="form.type || 'text'" @keyup="
+                                        setValue({
+                                          rawLabel: form.rawLabel,
+                                          label: form.label,
+                                          $event,
+                                          tmpId: form.tmpId
+                                        })
+                                      " :state="renderError({ error: form.error })" :placeholder="form.placeholder" />
+                                </template>
                                 </b-form-group>
                                 <!-- <b-form-group>
                                   <b-input-group class="input-group-seamless">
