@@ -125,6 +125,8 @@ import { mapGetters, mapActions } from "vuex";
 import Editor from "./Editor";
 import Multiselect from "vue-multiselect";
 
+// comment regarding canvas functionality can be find on Anamnesa.vue
+
 export default {
   name: "Pemeriksaan",
   components: {
@@ -154,9 +156,12 @@ export default {
     }
   },
   watch: {
+    // on organ selected, do something
     selectedOrgan: function() {
       document.getElementById("box_pemeriksaan_fisik").style.setProperty('border-color', '');
+      // update the payload
       this.updatePostData({ key: "organ_id", value: this.selectedOrgan.id });
+      // to render the image
       this.organChanged();
     }
   },
@@ -166,11 +171,13 @@ export default {
       this.updatePostData({ key: "pemeriksaan_text", value: content });
     },
     organChanged() {
+      // get the image URL
       let self = this;
       self.image_url = self.selectedOrgan.gambar;
       self.clear();
       self.drawBackground(self.image_url);
     },
+    // draw the image
     drawBackground(image_url) {
       let self = this;
       var canvas = document.getElementById("pemeriksaan-canvas"),
@@ -195,14 +202,12 @@ export default {
         }
 
         if (self.isHidden) {
-
           let img = document.createElement("img");
           img.src = backgroundURL;
           img.style.height = newSize.height + 'px';
           img.style.width = newSize.width + 'px';
           img_organ.appendChild(img);
 
-          // img_organ.appendChild(background);
         } else {
           console.log('draw on canvas pemeriksaan');
           ctx.drawImage(background, 0, 0, newSize.width, newSize.height);
@@ -291,6 +296,7 @@ export default {
       this.ispen = true;
       this.ctx.strokeStyle = color;
     },
+    // to get organ datas from backend
     asyncFind(query) {
       let self = this;
       this.isLoading = true;

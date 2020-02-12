@@ -256,6 +256,7 @@ export default {
     limitText(count) {
       return `and ${count} other kode penyakit`;
     },
+    // to get kode_penyakit datas from backend
     asyncFind(query) {
       let self = this;
       this.isLoading = true;

@@ -170,6 +170,7 @@ export default {
     Footer
   },
   methods: {
+    // import the action from VUEX
     ...mapActions(["fetchData", "saveRekamMedis"]),
     async saveButton() {
       
@@ -189,6 +190,8 @@ export default {
         reverseButtons: true
       }).then(async result => {
         if (result.value) {
+
+          // call vuex action (saveRekamMedis())
           const saving = await this.saveRekamMedis();
 
           if (!this.saving_params.is_next_konsul) {
