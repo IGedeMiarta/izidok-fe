@@ -9,39 +9,22 @@
                 <img src="@/assets/img/forgot.jpg" class="img-fluid mb-5" alt="lupa password izidok" />
               </div>
               <div class="col-md-6">
-                <div class="pl-5 mb-5 w-100">
+                <div class="pl-5 mb-5  w-100" style="margin-top:85px;">
                   <img src="/img/izidok.baaa69b4.png" alt="izidok" class="img-fluid w-100 d-block float-left"
-                    style="width: 49% !important;">
+                    style="width: 49% !important; ;">
                   <div class="mt-3">
-                    <label class="mb-3 mt-4" style="color:gray">
-                      Masukan password baru Anda untuk dapat melanjutkan akses ke izidok
+                    <template v-if="this.currentStep == 1">
+                    <label class="mb-3 mt-4" style="margin-top:35px; margin-left:20px ;color:gray">
+                      Masukan Email / Username yang terintegrasi dengan akun
                     </label>
-                    <div>
-                      <b-form v-on:submit.prevent="submitForm">
-                        
-                          <b-form-group>
-                            <b-input-group class="input-group-seamless">
-                               <b-input-group-text slot="append">
-                                <font-awesome-icon class="mx-auto" icon="eye" type="password"
-                                  @click="switchVisibility" />
-                              </b-input-group-text>
-                              <b-form-input placeholder="Password baru" :type="passwordFieldType"></b-form-input>
-                            </b-input-group>
-                            <b-input-group class="input-group-seamless mt-4">
-                              <b-input-group-text slot="append">
-                                <font-awesome-icon class="mx-auto" icon="eye" type="password"
-                                  @click="switchVisibility" />
-                              </b-input-group-text>
-                              <b-form-input placeholder="Konfirmasi Ulang Password" :type="passwordFieldType">
-                              </b-form-input>
-                            </b-input-group>
-                          </b-form-group>
-                        
-                        <button class="btn btn-lg btn-block mt-2 " 
-                          style="background-color :#3F7EA7; color:white; border-radius : 10px;">
-                         Kirim Permintaan Ubah Password
-                        </button>
-                      </b-form>
+                    </template>
+                    <template v-if="this.currentStep == 2">
+                    <label class="mb-3 mt-4" style="margin-top:35px; margin-left:20px ;color:gray">
+                      Masukan Password Baru Anda Untuk Dapat Melanjutkan Akses Ke izidok
+                    </label>
+                    </template>
+                    <div >
+                      <component :is="currentStepComponent" :token="token"></component>
                     </div>
                   </div>
                 </div>
@@ -53,64 +36,47 @@
     </div>
   </div>
 </template>
-
+ 
 <script>
-  import {
-    required,
-    minLength,
-    maxLength,
-    sameAs,
-    email,
-    numeric
-  } from "vuelidate/lib/validators";
 
-  import {
-    FontAwesomeIcon
-  } from "@fortawesome/vue-fontawesome";
-  import {
-    library
-  } from "@fortawesome/fontawesome-svg-core";
-  import {
-    faSearch,
-    faEye,
-    faInfo
-  } from "@fortawesome/free-solid-svg-icons";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  required,
+  minLength,
+  maxLength,
+  sameAs,
+  email,
+  numeric
+} from "vuelidate/lib/validators";
 
-  library.add(
-    faEye,
-    faInfo
-  );
+library.add(faArrowLeft);
 
-  export default {
-    props: ["token"],
-    data() {
-      return {
-        currentStep: 1,
-        password: '',
-        passwordFieldType: 'password'
-      };
-    },
-    // components: {
-    //   Step1: () => import("./ForgotPassword/Step1.vue"),
-    //   Step2: () => import("./ForgotPassword/Step2.vue")
-    // },
-    computed: {
-      currentStepComponent() {
-        return `Step${this.currentStep}`;
-      }
-    },
-    mounted() {
-      this.redirectResetPassword();
-    },
-    methods: {
-      switchVisibility() {
-        this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password'
-      },
-      redirectResetPassword() {
-        if (this.token) {
-          this.currentStep++;
-        }
+export default {
+  props: ["token"],
+  data() {
+    return {
+      currentStep: 1
+    };
+  },
+  components: {
+    Step1: () => import("./ForgotPassword/Step1.vue"),
+    Step2: () => import("./ForgotPassword/Step2.vue")
+  },
+  computed: {
+    currentStepComponent() {
+      return `Step${this.currentStep}`;
+    }
+  },
+  mounted() {
+    this.redirectResetPassword();
+  },
+  methods: {
+    redirectResetPassword() {
+      if (this.token) {
+        this.currentStep++;
       }
     }
-  };
+  }
+};
 </script>

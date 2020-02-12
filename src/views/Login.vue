@@ -12,11 +12,11 @@
                     <div class="col-lg-6 pl-0 d-none d-lg-flex align-items-center">
                       <img src="@/assets/login.jpg" class="img-fluid mb-5" alt="login izidok" />
                     </div>
-                    <div class="col-lg-6 pr-0 d-flex align-items-center">
+                    <div class="col-lg-6 pr-0 d-flex align-items-center" >
                       <div class="pl-5 mb-5 w-100">
                         <img src="/img/izidok.baaa69b4.png" alt="izidok" class="img-fluid w-100 d-block float-left"
                           style="width: 49% !important;">
-                        <div class="mt-3">
+                        <div class="mt-3" style="    margin-left: 15px;">
                           <label class="mb-3 mt-4" style="color:gray">
                             Masukan Username Beserta Password Anda
                           </label>
@@ -30,13 +30,13 @@
                                       validationDesc: form['validation-desc']
                                     })
                                   " style="position: relative" :state="renderError({ error: form.error })">
-                                <template v-if="form.type === 'password'">
-                                  <b-input-group>
-                                    <b-input-group-text slot="append">
-                                        <font-awesome-icon class="mx-auto" icon="eye" type="password"
-                                          @click="switchVisibility" />
+                                  <template v-if="form.type === 'password' || form.isType == 'password' ">
+                                    <b-input-group>
+                                      <b-input-group-text slot="append" class="border-left-0" @click="switchVisibility">
+                                        <font-awesome-icon class="mx-auto" icon="eye" 
+                                           />
                                       </b-input-group-text>
-                                      <b-form-input :type="form.type || 'text'" @keyup="
+                                      <b-form-input :type="form.type || 'text'" class="border-right-0" @keyup="
                                       setValue({
                                         rawLabel: form.rawLabel,
                                         label: form.label,
@@ -45,9 +45,9 @@
                                       })
                                     " :state="renderError({ error: form.error })" :placeholder="form.placeholder" />
                                     </b-input-group>
-                                </template>
-                                <template v-else>
-                                  <b-form-input :type="form.type || 'text'" @keyup="
+                                  </template>
+                                  <template v-else>
+                                    <b-form-input :type="form.type || 'text'" @keyup="
                                         setValue({
                                           rawLabel: form.rawLabel,
                                           label: form.label,
@@ -55,7 +55,7 @@
                                           tmpId: form.tmpId
                                         })
                                       " :state="renderError({ error: form.error })" :placeholder="form.placeholder" />
-                                </template>
+                                  </template>
                                 </b-form-group>
                                 <!-- <b-form-group>
                                   <b-input-group class="input-group-seamless">
@@ -140,8 +140,6 @@
       firstJoin: false,
       failedCounter: 0,
       klinik_id: null,
-      password: '',
-      passwordFieldType: 'password'
     }),
     components: {
       "first-join-component": () => import("@/components/FirstJoin")
@@ -164,8 +162,9 @@
     },
     methods: {
       switchVisibility() {
-        this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password'
+        this.formBasicData[1].type == 'password' ? this.formBasicData[1].type = 'text' : this.formBasicData[1].type = 'password';
       },
+
       async login() {
         this.loggedIn = false;
         try {
@@ -176,7 +175,6 @@
             switch (true) {
               case /(email|username)/gi.test(label):
                 return "username";
-
               default:
                 return label;
             }
@@ -270,6 +268,7 @@
             label: "password",
             placeholder: "Masukkan password Anda",
             type: "password",
+            isType: "password",
             ignoreTransform: true,
           }
         ].map((item, index) => ({

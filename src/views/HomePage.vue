@@ -15,16 +15,15 @@
                       <img src="/img/izidok.baaa69b4.png" alt="izidok" class="img-fluid w-100 d-block float-left"
                         style="width: 49% !important;">
                     </div>
-
                   </div>
-                  <div class="col">
+                  <div class="col-md-12" style="    margin-left: 15px;">
                     <br>
                     <p style="color:gray">
                       Selamat bergabung dengan izidok
                     </p>
                     <div>
-                      <small>izidok siap membantu untuk memudahkan Anda dalam menangani pasien dan tempat praktik
-                        anda</small>
+                      <p style="color:gray">izidok siap membantu untuk memudahkan Anda dalam menangani pasien dan tempat praktik
+                        anda</p>
                            <button class="btn btn-lg btn-block mt-5 "
                                 style="background-color :#3F7EA7; color:white; border-radius : 10px;">
                                 Masuk

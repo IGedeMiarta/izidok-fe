@@ -36,6 +36,12 @@ const routes = [
     meta: { layout: "examples" }
   },
   {
+    path: "/sukses",
+    name: "sukses-page",
+    component: () => import("../views/HomePage.vue"),
+    meta: { layout: "examples" }
+  },
+  {
     path: "/register",
     name: "register-page",
     component: () => import("../views/Register.vue"),
@@ -215,7 +221,8 @@ router.beforeEach((to, from, next) => {
     "forgot-password",
     "verification-process",
     "verification-operator",
-    "verification-result"
+    "verification-result",
+    'sukses-page'
   ].includes(name);
 
   if (!isAuthenticated && !isRouteAuth) next("/login");
