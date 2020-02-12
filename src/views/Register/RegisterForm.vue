@@ -79,7 +79,7 @@
                     :stacked="true"
                   />
                 </b-form-group> -->
-                <b-form-group>
+                <!-- <b-form-group>
                   <label for="">Pilih Spesialisasi *</label>
                   <b-form-select v-model="selected" :options="options" class="mt-3"></b-form-select>
                   <template v-if="selected == 'e'" >
@@ -88,7 +88,7 @@
                       <b-form-input placeholder="Tulis Spesialis Anda"></b-form-input>
                     </b-input-group>
                   </template>
-                </b-form-group>
+                </b-form-group> -->
                 <template v-if="formBasicData && formBasicData.length">
                   <b-form-group :label="renderLabel({ label: form.rawLabel })" v-for="form in formBasicData"
                     :key="form.tmpId" :class="form.rawLabel == 'No. SIP' ? '' : 'text-capitalize'" :invalid-feedback="
@@ -104,7 +104,8 @@
                       v-bind:maxlength="form.maxlength"
                       v-if="form.rawLabel === 'email'"
                     /> -->
-                    <b-form-input :type="form.type || 'text'" :value="form.value" @input="
+                    <b-form-select v-if="form.type === 'select'" v-model="selected" :options="options" class="mt-3" @change="spesialisLainnya"></b-form-select>
+                    <b-form-input :type="form.type || 'text'" v-else :value="form.value" @input="
                         setValue({
                           rawLabel: form.rawLabel,
                           label: form.label,
@@ -398,6 +399,12 @@
       }
     },
     methods: {
+      spesialisLainnya() {
+        console.log('asd')
+        if (this.selected === 'e') {
+          this.formBasicData = this.setFormBasicData({showHidden: true})
+        }
+      },
       whitelistValidation({
         opts = "normalized"
       } = {}) {
@@ -505,7 +512,8 @@
         );
       },
       setFormBasicData({
-        noFilter = true
+        noFilter = true,
+        showHidden = false
       } = {}) {
         const tmp = [{
             label: "nama dokter",
@@ -515,12 +523,20 @@
             maxlength: 50
           },
           {
-            label: "nama dokter",
+            type: 'select',
+            label: "pilih spesialisasi",
             placeholder: "Masukkan nama dokter",
             parent: "tempat praktik",
-            name: "nama_klinik",
-
+            name: "pilih_spesialisasi",
             maxlength: 50
+          },
+          {
+            label: "Lainnya",
+            placeholder: "lainnya",
+            parent: "tempat praktik",
+            name: "lainnya",
+            maxlength: 30,
+            hide: true
           },
           {
             label: "No. SIP",
@@ -589,11 +605,13 @@
           rawLabel: item.label
         }));
 
-        return noFilter ?
-          tmp.filter(
-            item => !item.parent || item.parent === this.selectedTipeFaskes
-          ) :
-          tmp;
+        // return noFilter ?
+        //   tmp.filter(
+        //     item => !item.parent || item.parent === this.selectedTipeFaskes
+        //   ) : !showHidden ? tmp.filter(item => !item.hide) :
+        //   tmp;
+
+        return showHidden ? tmp : tmp.filter(item => !item.hide)
       },
       async getDataSpesialisasi() {
         try {
