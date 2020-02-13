@@ -25,7 +25,7 @@
         </div>
         <div class="card-body">
           <div class="row no-padding mb-3">
-            <div class="col-md-9">
+            <div class="col-md-9 ">
               <b-row>
                 <div class="form-group col-md-4">
                   <label for="inputEmail4">Nama Pasien</label>
@@ -57,14 +57,15 @@
               </b-row>
             </div>
             <div
-              class="col-md-3 no-padding d-flex align-items-end justify-content-center"
+              class="col-md-3 d-flex align-items-end justify-content-center"
             >
-              <b-row>
+              <b-row >
                 <b-col>
                   <div class="form-group">
-                    <b-button variant="primary" @click="fetchListPasien"
+                    <b-button variant="primary"  @click="fetchListPasien"
                       >CARI</b-button
                     >
+                    
                   </div>
                 </b-col>
                 <b-col>
@@ -298,4 +299,11 @@ export default {
 .ninja-shadow {
   box-shadow: 0px 8px 15px 0px lightgrey;
 }
+
+/* @media screen and (max-width: 1275px; min-width: 1116px;) {
+    #btn-tambah {
+      margin-left :         
+    }
+} */
+        
 </style>

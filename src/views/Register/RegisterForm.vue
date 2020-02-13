@@ -2,80 +2,29 @@
   <div class="flex-grow-1 w-100 d-flex align-items-center">
     <div class="bg-composed-wrapper--content">
       <div class="row no-gutters">
-        <div class="col-lg-6">
-          <div class="hero-wrapper bg-composed-wrapper bg-plum-plate min-vh-100" style="height: 100%">
-            <div class="flex-grow-1 w-100 d-flex align-items-center">
-              <div class="bg-composed-wrapper--image" :style="{
+        <div class="col-lg-6 mb-2 img-banner-left" >
+          <!-- <div class="hero-wrapper bg-composed-wrapper bg-plum-plate min-vh-100" style="height: 100%"> -->
+            <div class="flex-grow-1 w-100  align-items-center">
+              <!-- <div class="bg-composed-wrapper--image" :style="{
                   backgroundImage:
                     'url(' + require('@/assets/img/register.jpg') + ')'
-                }"></div>
-              <div class="bg-composed-wrapper--content p-2" style="position: -webkit-sticky;
-  position: sticky;">
-                <div class="text-white mt-3">
-                  <h1 class="display-4 my-3 font-weight-bold">
-                    Mengapa harus izidok?
-                  </h1>
-                  <b-form class="col-sm-12" inline>
-                    <div class="dot-icon" style="float:left">
-                      <font-awesome-icon class="mx-auto" icon="file-signature" style="color: green;
-     position: relative;
-    left: 10px;
-    top: 3;
-    " />
-                    </div>
-                    <label class="col-md-9" style="margin-left:20px;"> Pantau Laporan Pendapatan, jumlah kunjungan
-                      pasien harian & bulan,
-                      serta antrean pasien secara lengkap dengan fitur Dashboard Monitoring</label>
-                  </b-form>
-                  <b-form class="col-sm-12 mt-3" inline>
-                    <div class="dot-icon" style="float:left">
-                      <font-awesome-icon class="mx-auto" icon="image" style="color: green;
-     position: relative;
-    left: 9px;
-    top: 3;
-    " />
-                    </div>
-                    <label class="col-md-9" style="margin-left:20px;">Input berbagai hasil rekam medis terlengkap dengan
-                      gambar</label>
-                  </b-form>
-                  <b-form class="col-sm-12 mt-3" inline>
-                    <div class="dot-icon" style="float:left">
-                      <font-awesome-icon class="mx-auto" icon="edit" style="color: green;
-     position: relative;
-    left: 9px;
-    top: 3;
-    " />
-                    </div>
-                    <label class="col-md-9" style="margin-left:20px;"> Fitur "Write & Type Ready" mendukung untuk
-                      melakukan input data
-                      dengan keyboard & stylus pen</label>
-                  </b-form>
-                  <b-form class="col-sm-12 mt-3" inline>
-                    <div class="dot-icon" style="float:left">
-                      <font-awesome-icon class="mx-auto" icon="comments" style="color: green;
-     position: relative;
-    left: 9px;
-    top: 3;
-    " />
-                    </div>
-                    <label class="col-md-9" style="margin-left:20px;"> Memudahkan dokter untuk selalu terhubung dan
-                      follow up pasien
-                      melalui WhatsApp, SMS, e-mail dan apps</label>
-                  </b-form>
-                  <div class="divider border-2 my-4 border-light opacity-2 rounded w-25"></div>
-                </div>
-              </div>
+                }"></div> -->
+              <VueSlickCarousel :dots="true" :arrows='false' :autoplay="true">
+                  <img src="@/assets/img/image_Register1.jpg" alt="Banner izidok">
+                  <img src="@/assets/img/image_Register2.jpg" alt="Banner izidok">
+                  <img src="@/assets/img/image_Register3.jpg" alt="Banner izidok">
+              </VueSlickCarousel>
             </div>
-          </div>
+          <!-- </div> -->
         </div>
-        <div class="col-lg-6 mt-5 d-flex align-items-center p-2">
-          <div class="col-lg-6 mx-auto px-0">
-            <div class="py-2">
-              <h4 class="mb-2 font-weight-bold text-capitalize">
-                daftarkan {{ selectedTipeFaskes }} anda
-              </h4>
-              <b-form @submit.prevent="submitForm">
-                <!-- <b-form-group label="Tipe Faskes">
+        <div class="col-lg-6 mt-1 d-flex align-items-center p-5 content-register-right" >
+
+          <div class="py-1 col-sm-8" style="margin-left:auto;margin-right:auto">
+            <h4 class="mb-2 font-weight-bold text-capitalize">
+              daftarkan {{ selectedTipeFaskes }} anda
+            </h4>
+            <b-form @submit.prevent="submitForm">
+              <!-- <b-form-group label="Tipe Faskes">
                   <b-form-radio-group
                     class="text-capitalize"
                     v-model="selectedTipeFaskes"
@@ -84,7 +33,7 @@
                     :stacked="true"
                   />
                 </b-form-group> -->
-                <!-- <b-form-group>
+              <!-- <b-form-group>
                   <label for="">Pilih Spesialisasi *</label>
                   <b-form-select v-model="selected" :options="options" class="mt-3"></b-form-select>
                   <template v-if="selected == 'e'" >
@@ -94,14 +43,14 @@
                     </b-input-group>
                   </template>
                 </b-form-group> -->
-                <template v-if="formBasicData && formBasicData.length">
-                  <b-form-group :label="renderLabel({ label: form.rawLabel })" v-for="form in formBasicData"
-                    :key="form.tmpId" :class="form.rawLabel == 'No. SIP' ? '' : 'text-capitalize'" :invalid-feedback="
+              <template v-if="formBasicData && formBasicData.length">
+                <b-form-group :label="renderLabel({ label: form.rawLabel })" v-for="form in formBasicData"
+                  :key="form.tmpId" :class="form.rawLabel == 'No. SIP' ? '' : 'text-capitalize'" :invalid-feedback="
                       renderInvalidFeedback({
                         validationDesc: form['validation-desc']
                       })
-                    " style="margin-top:20px;" :state="renderError({ error: form.error })">
-                    <!-- <b-form-input
+                    " :state="renderError({ error: form.error })">
+                  <!-- <b-form-input
                       :type="form.type || 'text'"
                       :value="form.value"
                       :state="renderError({ error: form.error })"
@@ -109,9 +58,9 @@
                       v-bind:maxlength="form.maxlength"
                       v-if="form.rawLabel === 'email'"
                     /> -->
-                    <b-form-select v-if="form.type === 'select'" v-model="formData.pilih_spesialisasi" :options="options" class="mt-3"
-                      @change="spesialisLainnya"></b-form-select>
-                    <b-form-input :type="form.type || 'text'" v-else @input="
+                  <!-- <b-form-select v-if="form.type === 'select'" v-model="formData.pilih_spesialisasi" :options="options" class="mt-3"
+                      @change="spesialisLainnya"></b-form-select> -->
+                  <b-form-input :type="form.type || 'text'" @input="
                         setValue({
                           rawLabel: form.rawLabel,
                           label: form.label,
@@ -119,31 +68,31 @@
                           tmpId: form.tmpId
                         })
                       " :state="renderError({ error: form.error })" :placeholder="form.placeholder"
-                      v-bind:maxlength="form.maxlength" />
-                  </b-form-group>
-                </template>
-                <div class="form-group mb-5">
-                  Dengan menekan tombol <strong>Daftar</strong>,
-                  <span class="text-capitalize">Anda</span> setuju dengan semua
-                  <span class="text-capitalize">syarat {{ "&" }} ketentuan</span>
-                  serta
-                  <span class="text-capitalize">kebijakan privasi</span> yang
-                  berlaku
-                </div>
-                <button type="submit" class="btn btn-lg btn-block text-capitalize"
-                  style="background-color :#3F7EA7; color:white; border-radius : 10px;">
-                  daftar
-                </button>
-                <div style="margin-top:15px;margin-bottom:25px;">
-                  Anda Sudah Memiliki Akun ?
-                  <router-link to="/login">
-                    <span class="btn-wrapper--label">Masuk</span>
-                  </router-link>
-                  disini
-                </div>
-              </b-form>
-            </div>
+                    v-bind:maxlength="form.maxlength" />
+                </b-form-group>
+              </template>
+              <div class="form-group mb-4">
+                Dengan menekan tombol <strong>Daftar</strong>,
+                <span class="text-capitalize">Anda</span> setuju dengan semua
+                <span class="text-capitalize">syarat {{ "&" }} ketentuan</span>
+                serta
+                <span class="text-capitalize">kebijakan privasi</span> yang
+                berlaku
+              </div>
+              <button type="submit" class="btn btn-lg btn-block text-capitalize"
+                style="background-color :#3F7EA7; color:white; border-radius : 10px;">
+                daftar
+              </button>
+              <div class="text-center" style="margin-top:15px;">
+                Anda Sudah Memiliki Akun ?
+                <router-link to="/login">
+                  <span class="btn-wrapper--label">Masuk</span>
+                </router-link>
+                disini
+              </div>
+            </b-form>
           </div>
+
         </div>
       </div>
     </div>
@@ -175,7 +124,9 @@
 
   library.add(faArrowLeft, faFileSignature, faImage, faComments, faEdit);
 
-
+  import VueSlickCarousel from 'vue-slick-carousel'
+  // optional style for arrows & dots
+  import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
 
   // const verifyEmail = async function(val) {
   //   if (val === "") return true;
@@ -211,27 +162,27 @@
           text: 'Pilih Spesialisasi'
         },
         {
-          id : 1,
+          id: 1,
           value: 'Umum',
           text: 'Umum'
         },
         {
-          id : 2,
+          id: 2,
           value: 'Gigi',
           text: 'Gigi'
         },
         {
-          id : 3,
+          id: 3,
           value: 'Spesialis Penyakit Dalam',
           text: 'Spesialis Penyakit Dalam'
         },
         {
-          id : 4,
+          id: 4,
           value: 'Spesialis Anak',
           text: 'Spesialis Anak'
         },
         {
-          id : 5,
+          id: 5,
           value: 'Spesialis Obstetri & Ginekologi',
           text: 'Spesialis Obstetri & Ginekologi'
         },
@@ -241,22 +192,22 @@
           text: 'Spesialis Jantung & Pembuluh Darah'
         },
         {
-          id : 7,
+          id: 7,
           value: 'Spesialis Kulit & Kelamin',
           text: 'Spesialis Kulit & Kelamin'
         },
         {
-          id :8,
+          id: 8,
           value: 'Spesialis Mata',
           text: 'Spesialis Mata'
         },
         {
-          id : 9,
+          id: 9,
           value: 'Spesialis Anak',
           text: 'Spesialis Anak'
         },
         {
-          id : 10,
+          id: 10,
           value: 'Spesialis Saraf',
           text: 'Spesialis Saraf'
         },
@@ -266,42 +217,42 @@
           text: 'Spesialis THT'
         },
         {
-          id : 12,
+          id: 12,
           value: 'Spesialis Paru',
           text: 'Spesialis Paru'
         },
         {
-          id : 13,
+          id: 13,
           value: 'Spesialis Urologi',
           text: 'Spesialis Urologi'
         },
         {
-          id :14,
+          id: 14,
           value: 'Spesialis Geriatri',
           text: 'Spesialis Geriatri'
         },
         {
-          id : 15,
+          id: 15,
           value: 'Spesialis Gigi Anak',
           text: 'Spesialis Gigi Anak'
         },
         {
-          id : 16,
+          id: 16,
           value: 'Spesialis Konservatori Gigi',
           text: 'Spesialis Konservatori Gigi'
         },
         {
-          id : 17,
+          id: 17,
           value: 'Spesialis Ortodonsia Gigi',
           text: 'Spesialis Ortodonsia Gigi'
         },
         {
-          id : 18,
+          id: 18,
           value: 'Spesialis Ortodonsia Gigi',
           text: 'Spesialis Periodonsia (Gigi)'
         },
         {
-          id : 19,
+          id: 19,
           value: 'Spesialis Bedah Mulut & Maksilofasial',
           text: 'Spesialis Bedah Mulut & Maksilofasial'
         },
@@ -312,6 +263,9 @@
         },
       ]
     }),
+    components: {
+      VueSlickCarousel
+    },
     watch: {
       selectedTipeFaskes(newVal, oldVal) {
         if (newVal !== oldVal) {
@@ -405,51 +359,51 @@
             sameAsPassword: sameAs("password"),
             minLength: minLength(6)
           },
-          username: {
-            required,
-            maxLength: maxLength(20),
-            minLength: minLength(3),
-            verifyUsername(val) {
-              const {
-                required: re
-              } = this.$v.formData.username;
-              if (val === "" || !re) return true;
+          // username: {
+          //   required,
+          //   maxLength: maxLength(20),
+          //   minLength: minLength(3),
+          //   verifyUsername(val) {
+          //     const {
+          //       required: re
+          //     } = this.$v.formData.username;
+          //     if (val === "" || !re) return true;
 
-              return new Promise((resolve, reject) => {
-                axios
-                  .get(`${this.url_api}/username/verify?username=${val}`)
-                  .then(res => {
-                    const {
-                      data: {
-                        status,
-                        message
-                      }
-                    } = res;
+          //     return new Promise((resolve, reject) => {
+          //       axios
+          //         .get(`${this.url_api}/username/verify?username=${val}`)
+          //         .then(res => {
+          //           const {
+          //             data: {
+          //               status,
+          //               message
+          //             }
+          //           } = res;
 
-                    resolve(status);
-                  })
-                  .catch(err => {
-                    if (err.response) {
-                      const x = err.response.data;
-                      if (x && x.username) {
-                        resolve(false);
-                      }
-                    } else {
-                      resolve(true);
-                    }
-                  })
-                  .finally(() => {
-                    const x = "username";
-                    this.triggerValidation({
-                      label: x,
-                      $v: this.$v,
-                      $vm: this,
-                      rawLabel: x
-                    });
-                  });
-              });
-            }
-          }
+          //           resolve(status);
+          //         })
+          //         .catch(err => {
+          //           if (err.response) {
+          //             const x = err.response.data;
+          //             if (x && x.username) {
+          //               resolve(false);
+          //             }
+          //           } else {
+          //             resolve(true);
+          //           }
+          //         })
+          //         .finally(() => {
+          //           const x = "username";
+          //           this.triggerValidation({
+          //             label: x,
+          //             $v: this.$v,
+          //             $vm: this,
+          //             rawLabel: x
+          //           });
+          //         });
+          //     });
+          //   }
+          // }
         }
       };
     },
@@ -499,7 +453,7 @@
           this.formBasicData = this.setFormBasicData({
             showHidden: false,
           })
-          
+
         }
       },
       whitelistValidation({
@@ -565,18 +519,19 @@
                 user_id: data.user_id
               }
             });
-          } else {
-            let match = message.match(/(email|username) is already in used/);
-            if (match) {
-              this.$swal({
-                title: `${startCase(match[1])} Tidak Dapat Digunakan`,
-                text: `${startCase(match[1])} telah terdaftar. Silakan gunakan ${
-                match[1]
-              } lain untuk melakukan registrasi!`,
-                type: "error"
-              });
-            }
           }
+          // else {
+          //   let match = message.match(/(email|username) is already in used/);
+          //   if (match) {
+          //     this.$swal({
+          //       title: `${startCase(match[1])} Tidak Dapat Digunakan`,
+          //       text: `${startCase(match[1])} telah terdaftar. Silakan gunakan ${
+          //       match[1]
+          //     } lain untuk melakukan registrasi!`,
+          //       type: "error"
+          //     });
+          //   }
+          // }
         } catch (err) {
           // console.log(err);
         }
@@ -618,26 +573,26 @@
             name: "nama_klinik",
             maxlength: 50
           },
-          {
-            type: 'select',
-            label: "pilih spesialisasi",
-            name: "pilih_spesialisasi",
-            maxlength: 50
-          },
-          {
-            label: "lainnya",
-            placeholder: "lainnya",
-            parent: "pilih spesialisasi",
-            name: "pilih_spesialisasi",
-            maxlength: 30,
-            hide: true
-          },
-          {
-            label: "No. SIP",
-            placeholder: "Masukkan nomor SIP",
-            name: "nomor_ijin",
-            maxlength: 30
-          },
+          // {
+          //   type: 'select',
+          //   label: "pilih spesialisasi",
+          //   name: "pilih_spesialisasi",
+          //   maxlength: 50
+          // },
+          // {
+          //   label: "lainnya",
+          //   placeholder: "lainnya",
+          //   parent: "pilih spesialisasi",
+          //   name: "pilih_spesialisasi",
+          //   maxlength: 30,
+          //   hide: true
+          // },
+          // {
+          //   label: "No. SIP",
+          //   placeholder: "Masukkan nomor SIP",
+          //   name: "nomor_ijin",
+          //   maxlength: 30
+          // },
           // {
           //   label: "nama klinik",
           //   placeholder: "Masukkan nama klinik Anda",
@@ -677,18 +632,18 @@
           //   name: "username",
           //   maxlength: 20
           // },
-          // {
-          //   label: "password",
-          //   placeholder: "Masukkan password Anda",
-          //   type: "password",
-          //   name: "password"
-          // },
-          // {
-          //   label: "konfirmasi password",
-          //   placeholder: "Masukkan password Anda sekali lagi",
-          //   type: "password",
-          //   name: "password_confirmation"
-          // }
+          {
+            label: "password",
+            placeholder: "Masukkan password Anda",
+            type: "password",
+            name: "password"
+          },
+          {
+            label: "konfirmasi password",
+            placeholder: "Masukkan password Anda sekali lagi",
+            type: "password",
+            name: "password_confirmation"
+          }
         ].map((item, index) => ({
           ...item,
           label: item.label.split(" ").join("_"),
@@ -762,7 +717,7 @@
   };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .dot-icon {
     width: 30px;
     height: 28px;
@@ -775,11 +730,27 @@
     opacity: 0.35;
   }
 
+  .slick-dots li.slick-active button {
+      width: 20px;
+      background: #cac0c0;
+      // margin-top : -50px;
+  }
+  .slick-dots { 
+    margin-bottom: 150px;
+  }
+  .img-banner-left { 
+    position : fixed
+  }
+  .content-register-right {
+    position : absolute; right: 0px;
+  }
   @media only screen and (max-width: 600px) {
-    .dot-icon {
-      margin-left: auto;
-      margin-right: auto;
-      margin-bottom: 20px;
+    .img-banner-left {
+      position : relative;
+      display: none;
+    }
+    .content-register-right {
+      position: relative;
     }
   }
 </style>

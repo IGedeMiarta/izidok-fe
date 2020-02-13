@@ -382,7 +382,7 @@ export default {
               no: (page - 1) * this.perPage + index + 1,
               waktu_konsultasi:
                 item.waktu_konsultasi &&
-                moment(item.waktu_konsultasi).format("DD-MM-YYYY HH:mm:ss"),
+                moment(item.waktu_konsultasi).format("DD-MM-YYYY"),
               "nomor rekam medis": item.pasien.nomor_rekam_medis,
               "nama pasien": item.pasien.nama,
               "jenis kelamin": this.jenisKelamin(item.pasien.jenis_kelamin),
