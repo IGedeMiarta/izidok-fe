@@ -4,26 +4,26 @@
       <template v-if="!loggedIn">
         <div class="divider border-2 border-primary bg-primary"></div>
         <div class="app-content p-0">
-          <div class="app-content--inner d-flex align-items-center">
+          <div class="d-flex align-items-center">
             <div class="flex-grow-1 w-100 d-flex align-items-center">
               <div class="bg-composed-wrapper--content -5py">
                 <div class="container-fluid">
                   <div class="row">
-                    <div class="col-lg-6 pl-0 d-none d-lg-flex align-items-center">
-                      <img src="@/assets/login.jpg" class="img-fluid mb-5" alt="login izidok" />
+                    <div class="col-md-6 pl-0 d-none d-lg-flex align-items-center">
+                      <img src="@/assets/login.jpg" class="img-fluid" alt="login izidok" />
                     </div>
-                    <div class="col-lg-6 pr-0 d-flex align-items-center" >
-                      <div class="pl-5 mb-5 w-100">
+                    <div class="col-md-6 pr-0 d-flex align-items-center" >
+                      <div class="pl-5">
                         <img src="/img/izidok.baaa69b4.png" alt="izidok" class="img-fluid w-100 d-block float-left"
                           style="width: 49% !important;">
                         <div class="mt-3" style="    margin-left: 15px;">
                           <label class="mb-3 mt-4" style="color:gray">
-                            Masukan Username Beserta Password Anda
+                            Masukan Email / No. Handphone Beserta password Anda
                           </label>
                           <div>
                             <b-form v-on:submit.prevent="submitForm">
                               <template v-if="formBasicData && formBasicData.length">
-                                <b-form-group :label="renderLabel({ label: form.rawLabel })"
+                                <b-form-group
                                   v-for="form in formBasicData" :key="form.tmpId" class="text-capitalize"
                                   :invalid-feedback="
                                     renderInvalidFeedback({
@@ -260,13 +260,13 @@
       } = {}) {
         const tmp = [{
             label: "email / username",
-            placeholder: "name@mail.com",
+            placeholder: "Email / No.Handphone",
             type: "text",
             ignoreTransform: true
           },
           {
             label: "password",
-            placeholder: "Masukkan password Anda",
+            placeholder: "Password",
             type: "password",
             isType: "password",
             ignoreTransform: true,

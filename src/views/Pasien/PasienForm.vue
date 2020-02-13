@@ -192,7 +192,7 @@
                   input-class="form-control"
                   zone="Asia/Jakarta"
                   format="d LLL yyyy"
-                  @input="tanggalLahirSelected"
+                  @keyup="tanggalLahirSelected"
                   :value="getValue('tanggal lahir')"
                   :disabled="disabledForm()"
                   :input-style="
@@ -666,7 +666,7 @@
 
 <script>
 import Vue from "vue";
-import { Datetime } from "vue-datetime";
+
 import axios from "axios";
 import startCase from "lodash/startCase";
 import ImageUploader from "vue-image-upload-resize";
@@ -679,6 +679,7 @@ import {
   email
 } from "vuelidate/lib/validators";
 import "vue-datetime/dist/vue-datetime.css";
+import { Datetime } from "vue-datetime";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
 import moment from "moment";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -1058,11 +1059,13 @@ export default {
       return this.formType === "detail";
     },
     tanggalLahirSelected($event) {
+      console.log('awal',$event)
       if (!$event) return;
       this.setValue({
         rawLabel: "tanggal lahir",
         $event: moment($event).format("YYYY-MM-DD")
       });
+      console.log('hasil',$event)
     },
     async getPasienData() {
       if (this.idPasien) {

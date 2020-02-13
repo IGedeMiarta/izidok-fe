@@ -23,11 +23,11 @@
                       class="fck-this-backdrop"
                     ></div>
                   </template>
-                  <p>
+                  <strong style="color : #3F7EA7;font-size:16px;"> 
                     {{ text[state] }}
-                  </p>
+                  </strong>
                   <div slot="modal-footer">
-                    <b-button @click="redirectToLogin" variant="primary">
+                    <b-button @click="redirectToLogin" style="background-color :#3F7EA7;margin-right:19px;margin-top : 15px;color:white" >
                       {{ state == "success" ? "Login" : "Kembali ke Login" }}
                     </b-button>
                   </div>

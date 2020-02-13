@@ -15,7 +15,7 @@
                   $event,
                   tmpId: form.tmpId
                 })
-              " size="lg" :state="renderError({ error: form.error })" :placeholder="form.placeholder" />
+              " size="lg" class="border-right-0" :state="renderError({ error: form.error })" :placeholder="form.placeholder" />
     </b-input-group>
     <button class="btn d-block shadow-none w-100 btn-lg "
       style="background-color :#3F7EA7; color:white; border-radius : 10px;margin-top:20px" type="submit">
@@ -171,7 +171,7 @@
               text: "Silakan kembali ke halaman Login untuk masuk!"
             }).then((e) => {
               if (e.value) {
-                this.$router.push('login')
+                this.$router.go('login')
               }
             });
           } else {
