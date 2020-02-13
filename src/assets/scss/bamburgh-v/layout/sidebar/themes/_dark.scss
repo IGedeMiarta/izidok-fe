@@ -27,15 +27,19 @@
       .vsm-list {
         .vsm-item {
           .vsm-link {
-            color: rgba($white, .5);
+            // color: rgba($white, .5);
+            color: #000;
 
             svg {
-              color: $white;
-              fill: rgba($white, .25);
+              // color: $white;
+              color: #ddd;
+              // fill: rgba($white, .25);
+              fill: #ddd;
             }
 
             &:hover {
-              background: rgba($black, .1);
+              // background: rgba($black, .1);
+              background-image: linear-gradient(45deg, #73B6FB, #5E8CBC);
               color: rgba($white, .9);
             }
           }
@@ -58,7 +62,8 @@
             .vsm-item.active-item {
               .vsm-link {
                 background: rgba($black, .1);
-                color: rgba($white, .9);
+                color: rgba($white, 1);
+                // background-image: linear-gradient(45deg, #73B6FB, #5E8CBC);
               }
             }
           }
@@ -66,8 +71,8 @@
           &.active-item,
           &.open-item {
             & > .vsm-link {
-              background: rgba($black, .1);
-              color: rgba($white, .9);
+              background: rgba($black, 1);
+              color: rgba($white, 1);
             }
           }
         }
