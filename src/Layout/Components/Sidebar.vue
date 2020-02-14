@@ -1,6 +1,6 @@
 <template>
-  <div class="app-sidebar app-sidebar--dark" :class="sidebarbg">
-    <div class="app-sidebar--header bg-white">
+  <div class="app-sidebar app-sidebar--dark">
+    <!-- <div class="app-sidebar--header bg-white">
       <div class="nav-logo w-100 text-center">
         <router-link tag="a" class="d-block" active-class="active" to="/" exact>
           <b-img
@@ -26,12 +26,23 @@
       >
         <font-awesome-icon icon="arrows-alt-h" />
       </button>
-    </div>
-    <VuePerfectScrollbar class="app-sidebar--content">
-      <div class="sidebar-navigation py-4">
-        <sidebar-menu showOneChild :menu="dataMenu()" />
+    </div> -->
+    <div class="sidebar-navigation">
+      <div class="nav-logo w-100 text-center my-4">
+        <router-link tag="a" class="d-block w-auto" active-class="active" to="/" exact>
+          <b-img
+            center
+            fluid-grow
+            :src="require('@/assets/izidok.png')"
+            alt="izidok"
+            class="py-0 px-4"
+          />
+        </router-link>
       </div>
-    </VuePerfectScrollbar>
+      <VuePerfectScrollbar class="app-sidebar--content">
+        <sidebar-menu showOneChild :menu="dataMenu()" />
+      </VuePerfectScrollbar>
+    </div>
   </div>
 </template>
 
@@ -145,7 +156,7 @@ export default {
             {
               href: "/rekam-medis",
               title: "Rekam Medis"
-            },
+            }
             // {
             //   // href: "/layouts/gradient-sidebar-1",
             //   title: "Resep"
@@ -194,7 +205,7 @@ export default {
               icon: "calculator"
             }
           }
-        },
+        }
         // {
         //   title: "Laporan",
         //   icon: {

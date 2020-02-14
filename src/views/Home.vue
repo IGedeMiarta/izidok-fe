@@ -16,9 +16,14 @@
               dashboard
             </li>
           </ol>
-          <h5 class="display-4 mt-1 mb-1 font-weight-bold text-capitalize">
-            dashboard monitoring hari ini
-          </h5>
+          <div class="d-flex flex-row align-items-center">
+            <h5 class="display-4 mt-1 mb-1 font-weight-bold text-capitalize flex-grow-1">
+              dashboard
+            </h5>
+            <h5 class="display-4 mt-1 mb-1 font-weight-bold text-capitalize">
+              Hari ini, {{ nowIndonesia }}
+            </h5>
+          </div>
         </div>
       </b-col>
     </b-row>
@@ -88,6 +93,10 @@ export default {
   computed: {
     now() {
       return moment().format("YYYY-MM-DD");
+    },
+    nowIndonesia() {
+      moment.locale('ID')
+      return moment().format('D MMMM YYYY')
     }
   },
   methods: {

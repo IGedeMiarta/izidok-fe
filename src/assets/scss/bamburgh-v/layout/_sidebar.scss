@@ -2,13 +2,15 @@
 
 .app-sidebar {
   width: $sidebar-width;
-  background: $sidebar-bg;
+  // background: $sidebar-bg;
+  background-color: #fff;
   flex-direction: column;
   display: flex;
   position: fixed;
   height: 100%;
   transition: width 0.5s cubic-bezier(0.685, 0.0473, 0.346, 1);
   z-index: 11;
+  box-shadow: $header-shadow-new;
 
   &--header {
     background: $sidebar-header-bg;
@@ -115,12 +117,15 @@
       padding: 2px 0;
 
       .vsm-link {
+        border-radius: 5px;
         position: relative;
         display: flex;
         align-items: center;
         align-content: center;
         height: $navlink-height;
-        padding: 0 $layout-spacer;
+        // padding: 0 $layout-spacer;
+        padding: 0 1.2rem;
+        margin: 0 .95rem;
         transition: background .3s ease-out;
         font-size: $font-size-xs / 1.1;
         white-space: nowrap;
@@ -130,7 +135,7 @@
           min-width: 24px;
           min-height: 24px;
           transition: $transition-base;
-          opacity: .2;
+          // opacity: .2;
         }
 
         .vsm-title {
@@ -158,7 +163,9 @@
 
         &:hover {
           svg {
-            opacity: .6;
+            color: #fff;
+            fill: #fff;
+            opacity: 1;
           }
         }
       }

@@ -3,8 +3,10 @@
 .app-header {
   height: $header-height;
   padding: 0 $layout-spacer;
-  background: $header-bg;
-  box-shadow: $header-shadow;
+  // background: $header-bg;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: $header-shadow-new;
   align-items: center;
   display: flex;
   justify-content: space-between;
@@ -13,6 +15,7 @@
   right: 0;
   z-index: 10;
   transition: all 0.5s cubic-bezier(0.685, 0.0473, 0.346, 1);
+  margin: 1.5rem 1.8rem;
 ;
 
   .hamburger-inner,
