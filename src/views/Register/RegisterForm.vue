@@ -338,7 +338,46 @@
             numeric,
             required,
             maxLength: maxLength(15),
-            minLength: minLength(10)
+            minLength: minLength(10),
+              verifyPhone(val) {
+              const {
+                required: re,
+              } = this.$v.formData['no._handphone'];
+              if (val === "" || !re) return true;
+              return new Promise((resolve, reject) => {
+                axios
+                  .get(`${this.url_api}/phone/verify?nomor_telp=${val}`)
+                  .then(res => {
+                    const {
+                      data: {
+                        status,
+                        message
+                      }
+                    } = res;
+                    resolve(status);
+                  })
+                  .catch(err => {
+                    if (err.response) {
+                      const x = err.response.data;
+
+                      if (x && x.nomor_telp) {
+                        resolve(false);
+                      }
+                    } else {
+                      resolve(true);
+                    }
+                  })
+                  .finally(() => {
+                    const x = "no._handphone";
+                    this.triggerValidation({
+                      label: x,
+                      $v: this.$v,
+                      $vm: this,
+                      rawLabel: x
+                    });
+                  });
+              });
+            }
           },
           // "no._izin_klinik": {
           //   maxLength: maxLength(50)
@@ -443,6 +482,24 @@
           x;
       }
     },
+     noTelpValidation() {
+        const x = {
+          email,
+          required,
+          maxLength: maxLength(50)
+        };
+
+        const {
+          required: re,
+          maxLength: ml
+        } = this.$v.formData['no._handphone'];
+
+        return re && ml ? {
+            ...x,
+            verifyPhone
+          } :
+          x;
+      },
     methods: {
       spesialisLainnya() {
         if (this.formData.pilih_spesialisasi === 'e') {
@@ -498,19 +555,20 @@
             obj[name] = formData[label];
             return obj;
           }, {});
+          
           const postData = {
             tipe_faskes: this.tipeFaskesData.findIndex(
               item => item === this.selectedTipeFaskes
             ) + 1,
             ...tmpPostData
           };
-          // console.log(postData);
           const res = await axios.post(`${this.url_api}/klinik`, postData);
           const {
             status,
             data,
             message
           } = res.data;
+          // console.log();
           if (status) {
             this.$router.push({
               name: "verification-process",
@@ -520,19 +578,21 @@
               }
             });
           }
-          // else {
-          //   let match = message.match(/(email|username) is already in used/);
-          //   if (match) {
-          //     this.$swal({
-          //       title: `${startCase(match[1])} Tidak Dapat Digunakan`,
-          //       text: `${startCase(match[1])} telah terdaftar. Silakan gunakan ${
-          //       match[1]
-          //     } lain untuk melakukan registrasi!`,
-          //       type: "error"
-          //     });
-          //   }
-          // }
-        } catch (err) {
+          else {
+            console.log(match);
+            let match = message.match(/(email||nomor_telp) is already in used/);
+            if (match) {
+              this.$swal({
+                title: `${startCase(match[1])} Tidak Dapat Digunakan`,
+                text: `${startCase(match[1])} telah terdaftar. Silakan gunakan ${
+                match[1]
+              } lain untuk melakukan registrasi!`,
+                type: "error"
+              });
+            }
+          }
+        } 
+        catch (err) {
           // console.log(err);
         }
       },

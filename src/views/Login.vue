@@ -2,7 +2,7 @@
   <div class="app-wrapper bg-white h-100">
     <div class="app-main">
       <template v-if="!loggedIn">
-        <div class="divider border-2 border-primary bg-primary"></div>
+     
         <div class="app-content p-0">
           <div class="d-flex align-items-center">
             <div class="flex-grow-1 w-100 d-flex align-items-center">
@@ -215,7 +215,7 @@
           } else {
             this.$swal({
               title: 'Login gagal',
-              text: `Email/username dengan Password yang anda masukkan tidak cocok!`,
+              text: `Email/No Telp dengan Password yang anda masukkan tidak cocok!`,
               type: "error"
             });
 

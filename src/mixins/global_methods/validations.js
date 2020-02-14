@@ -40,6 +40,9 @@ const validations = {
 
       case "verifyEmail":
         return "Email tidak dapat digunakan";
+      
+      case "verifyPhone":
+        return "Nomor Telepon sudah digunakan";
 
       case "verifyUsername":
         return "Username tidak dapat digunakan";

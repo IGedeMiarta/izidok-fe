@@ -133,7 +133,7 @@
       money: {
         decimal: "",
         thousands: ",",
-        prefix: "",
+        prefix: "Rp. ",
         suffix: "",
         precision: 0
       },
@@ -347,11 +347,11 @@
         const tmp = tmpInputTarifData.map(item => {
           const x = Object.keys(item).filter(y => !["error"].includes(y));
           const z = x.reduce((obj, key) => {
-            let q = key
+            let q = key;
             if (key == 'tarif_layanan') {
               q = 'tarif';
               // hapus separator ribuan dan jadikan int
-              item[key] = parseInt(item[key].replace(/\D/g, ""))
+              item[key] = parseInt(item[key].replace(/\D/g, "",'Rp. ', ''))
             }
             obj[q] = item[key];
             return obj;

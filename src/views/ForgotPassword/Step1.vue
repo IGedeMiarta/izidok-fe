@@ -22,9 +22,10 @@
         <button class="btn d-block w-100 btn-lg" style="background-color :#3F7EA7; color:white; border-radius : 10px;"
           type="submit">
           <span class="btn-wrapper--label text-capitalize">
-            Kirim Link Reset
+            Kirim Permintaan Ubah Password
           </span>
         </button>
+        <b-button class="btn d-block w-100 btn-lg mt-3" to="/login" style="border-color: #6c757d;background-color :#fff; color:#000; border-radius : 10px;" >Kembali ke Halaman Login</b-button>
       </div>
     </b-row>
   </b-form>
@@ -67,7 +68,7 @@
       setFormBasicData() {
         const tmp = [{
           label: "email",
-          placeholder: "email"
+          placeholder: "Email"
         }];
 
         return tmp.map((item, index) => ({

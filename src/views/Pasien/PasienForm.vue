@@ -192,7 +192,7 @@
                   input-class="form-control"
                   zone="Asia/Jakarta"
                   format="d LLL yyyy"
-                  @keyup="tanggalLahirSelected"
+                  @input="tanggalLahirSelected"
                   :value="getValue('tanggal lahir')"
                   :disabled="disabledForm()"
                   :input-style="
@@ -275,6 +275,7 @@
                 :label="renderLabel({ label: 'gol. darah' })"
                 class="text-capitalize col-md-6 p-0 float-left"
                 style="position: relative"
+                
                 :state="getDataError({ rawLabel: 'gol. darah' })"
                 :invalid-feedback="
                   renderInvalidFeedback({
@@ -682,6 +683,7 @@ import "vue-datetime/dist/vue-datetime.css";
 import { Datetime } from "vue-datetime";
 import "vue2-dropzone/dist/vue2Dropzone.min.css";
 import moment from "moment";
+moment.locale('id');  
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
 library.add(faCamera);

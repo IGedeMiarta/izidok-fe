@@ -1,14 +1,14 @@
 <template>
   <div class="app-wrapper bg-white">
     <div class="app-content p-0">
-      <div class="app-content--inner d-flex align-items-center">
-        <div class="flex-grow-1 w-100 d-flex align-items-center">
-          <div class="container">
-            <div class="row">
-              <div class="col-lg-6 pl-0 d-none d-lg-flex align-items-center">
-                <img src="@/assets/img/forgot.jpg" class="img-fluid mb-5" alt="lupa password izidok" />
-              </div>
-              <div class="col-md-6 mt-5">
+      <div class="flex-grow-1 w-100 d-flex align-items-center">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-6 pl-0 d-none d-lg-flex align-items-center">
+              <img src="@/assets/img/forgot.jpg" class="img-fluid" alt="lupa password izidok" />
+            </div>
+            <div class="col-md-6 mt-5">
+              <div class="pl-5">
                 <div class="row">
                   <div class="col-md-12">
                     <div class="mb-5 w-100">
@@ -16,21 +16,19 @@
                         style="width: 49% !important;">
                     </div>
                   </div>
-                  <div class="col-md-12" style="    margin-left: 15px;">
+                  <div class="col-md-10" style="    margin-left: 15px;">
                     <br>
                     <p style="color:gray">
                       Selamat bergabung dengan izidok
                     </p>
-                    <div>
                       <p style="color:gray">izidok siap membantu untuk memudahkan Anda dalam menangani pasien dan tempat
                         praktik
                         anda</p>
                       <router-link :to="{name:'input-tarif',params:{klinik_id:klinik_id}}"
-                        class="btn btn-lg btn-block mt-5 "
+                        class="btn btn-lg btn-block mt-4 "
                         style="background-color :#3F7EA7; color:white; border-radius : 10px;">
                         Masuk
                       </router-link>
-                    </div>
                   </div>
                 </div>
               </div>

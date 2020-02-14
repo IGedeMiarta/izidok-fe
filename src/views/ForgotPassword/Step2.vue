@@ -20,7 +20,7 @@
     <button class="btn d-block shadow-none w-100 btn-lg "
       style="background-color :#3F7EA7; color:white; border-radius : 10px;margin-top:20px" type="submit">
       <span class="btn-wrapper--label text-capitalize">
-        Kirim permintaan ubah password
+        Atur Ulang Password
       </span>
     </button>
   </b-form>
@@ -93,7 +93,7 @@
       setFormBasicData() {
         const tmp = [{
             label: "password",
-            placeholder: "Password Baru",
+            placeholder: "Password baru",
             type: "password"
           },
           {
