@@ -132,6 +132,7 @@ export default {
   },
   methods: {
     ...mapActions(["updatePostData", "updateCanvas"]),
+    // called if user using wysiwyg instead of drawing canvas
     updateContent(content) {
       this.updatePostData({ key: "anamnesa_text", value: content });
     },
@@ -147,12 +148,14 @@ export default {
       this.mousePos = this.getMousePos(e);
       if (this.drawing) {
         this.ctx.beginPath();
+        // pen drawing
         if (this.isPen) {
           this.ctx.globalCompositeOperation = "source-over";
           this.ctx.moveTo(this.lastPos.x, this.lastPos.y);
           this.ctx.lineTo(this.mousePos.x, this.mousePos.y);
           this.ctx.stroke();
         } else {
+          // eraser
           this.ctx.globalCompositeOperation = "destination-out";
           this.ctx.arc(
             this.mousePos.x,
@@ -203,10 +206,12 @@ export default {
         y: touchEvent.touches[0].clientY - rect.top
       };
     },
+    // to change pen color
     penColor(color) {
       this.ispen = true;
       this.ctx.strokeStyle = color;
     },
+    // to clear the canvas
     clear() {
       this.canvas.width = this.canvas.width;
     }
