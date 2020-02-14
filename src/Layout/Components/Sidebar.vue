@@ -29,17 +29,13 @@
     </div> -->
     <div class="sidebar-navigation">
       <div class="nav-logo w-100 text-center my-4">
-        <router-link tag="a" class="d-block" active-class="active" to="/" exact>
+        <router-link tag="a" class="d-block w-auto" active-class="active" to="/" exact>
           <b-img
             center
             fluid-grow
             :src="require('@/assets/izidok.png')"
             alt="izidok"
-            :style="[
-              !sidebarCollapsed
-                ? { width: '70% !important' }
-                : { width: '69% !important' }
-            ]"
+            class="py-0 px-4"
           />
         </router-link>
       </div>
