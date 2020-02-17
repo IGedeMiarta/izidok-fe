@@ -13,10 +13,10 @@
                       <img src="@/assets/login.jpg" class="img-fluid" alt="login izidok" />
                     </div>
                     <div class="col-md-6 pr-0 d-flex align-items-center" >
-                      <div class="pl-5">
+                      <div>
                         <img src="/img/izidok.baaa69b4.png" alt="izidok" class="img-fluid w-100 d-block float-left"
                           style="width: 49% !important;">
-                        <div class="mt-3" style="    margin-left: 15px;">
+                        <div class="mt-3 form-login">
                           <label class="mb-3 mt-4" style="color:gray">
                             Masukan Email / No. Handphone Beserta password Anda
                           </label>
@@ -319,6 +319,15 @@
 </script>
 
 
-<style lang="stylus" scoped>
+<style scoped>
 
+  .form-login {
+    margin-left : 15px;
+  }
+  @media only screen and (max-width: 600px) { 
+     .form-login {
+      margin-left : auto;
+      margin-right: 20px ;
+     } 
+  }
 </style>

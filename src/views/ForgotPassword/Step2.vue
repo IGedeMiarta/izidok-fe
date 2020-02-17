@@ -171,11 +171,17 @@
               text: "Silakan kembali ke halaman Login untuk masuk!"
             }).then((e) => {
               if (e.value) {
-                this.$router.go('login')
+                this.$router.push('/login')
               }
             });
           } else {
-            alert(message);
+             this.$swal({
+              type: "failed",
+              title: "Token sudah kadaluarsa",
+              text: "Silakan kembali ke halaman lupa password"
+            }).then((e) => {
+                this.$router.push('/login');
+            });
           }
         } catch (err) {
           // console.log(err);

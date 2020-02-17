@@ -9,10 +9,10 @@
                 <img src="@/assets/img/forgot.jpg" class="img-fluid" alt="lupa password izidok" />
               </div>
               <div class="col-md-6 pr-0 d-flex align-items-center">
-                <div class="pl-5">
+                <div class="form-login">
                   <img src="/img/izidok.baaa69b4.png" alt="izidok" class="img-fluid w-100 d-block float-left"
-                    style="width: 39% !important;">
-                  <div class="mt-3 col-md-10" style="margin-left:-25px;">
+                    style="width: 39% !important;margin-left:20px;">
+                  <div class="mt-3 col-md-10">
                     <template v-if="this.currentStep == 1">
                       <label class="mb-3 mt-4" style="margin-top:35px; margin-left:20px ;color:gray">
                         Masukan email yang terintegrasi dengan akun
@@ -83,3 +83,15 @@
     }
   };
 </script>
+
+<style scoped>
+  .form-login {
+       margin-left : 15px;
+  }
+   @media only screen and (max-width: 600px) { 
+     .form-login {
+      margin-left : auto;
+      margin-right: 20px ;
+     } 
+  }
+</style>
