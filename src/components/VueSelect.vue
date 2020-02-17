@@ -7,6 +7,7 @@
     :value="value"
     :disabled="disabled"
     @input="$emit('input', $event)"
+    :placeholder="placeholder"
   ></v-select>
 </template>
 
@@ -33,6 +34,10 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    placeholder: {
+      type: String,
+      default: ''
     }
   },
   methods: {

@@ -7,7 +7,7 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/rekam-medis",
-    component: () => import("../views/RekamMedis/List.vue"),
+    component: () => import("../views/RekamMedis/List.vue")
   },
   {
     path: "/rekam-medis/:transklinik_id/:pasien_id",
@@ -64,6 +64,17 @@ const routes = [
     path: "/input-data-operator",
     name: "input-data-operator",
     component: () => import("../views/InputDataOperator.vue")
+  },
+  {
+    path: "/initialization",
+    component: () => import("../views/Initialization/InputSpesialisasi.vue"),
+    children: [
+      {
+        path: "input-spesialisasi",
+        name: "input-spesialisasi",
+        component: () => import("../views/Initialization/InputSpesialisasi.vue")
+      }
+    ]
   },
   {
     path: "/verification",
@@ -222,7 +233,7 @@ router.beforeEach((to, from, next) => {
     "verification-process",
     "verification-operator",
     "verification-result",
-    'sukses-page'
+    "sukses-page"
   ].includes(name);
 
   if (!isAuthenticated && !isRouteAuth) next("/login");
