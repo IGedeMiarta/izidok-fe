@@ -2,22 +2,22 @@
   <div class="flex-grow-1 w-100 d-flex align-items-center">
     <div class="bg-composed-wrapper--content">
       <div class="row no-gutters">
-        <div class="col-lg-6 mb-2 img-banner-left" >
+        <div class="col-lg-6 mb-2 img-banner-left">
           <!-- <div class="hero-wrapper bg-composed-wrapper bg-plum-plate min-vh-100" style="height: 100%"> -->
-            <div class="flex-grow-1 w-100  align-items-center">
-              <!-- <div class="bg-composed-wrapper--image" :style="{
+          <div class="flex-grow-1 w-100  align-items-center">
+            <!-- <div class="bg-composed-wrapper--image" :style="{
                   backgroundImage:
                     'url(' + require('@/assets/img/register.jpg') + ')'
                 }"></div> -->
-              <VueSlickCarousel :dots="true" :arrows='false' :autoplay="true">
-                  <img src="@/assets/img/image_Register1.jpg" alt="Banner izidok">
-                  <img src="@/assets/img/image_Register2.jpg" alt="Banner izidok">
-                  <img src="@/assets/img/image_Register3.jpg" alt="Banner izidok">
-              </VueSlickCarousel>
-            </div>
+            <VueSlickCarousel :dots="true" :arrows='false' :autoplay="false">
+              <img src="@/assets/img/image_Register1.jpg" alt="Banner izidok">
+              <img src="@/assets/img/image_Register2.jpg" alt="Banner izidok">
+              <img src="@/assets/img/image_Register3.jpg" alt="Banner izidok">
+            </VueSlickCarousel>
+          </div>
           <!-- </div> -->
         </div>
-        <div class="col-lg-6 mt-1 d-flex align-items-center p-5 content-register-right" >
+        <div class="col-lg-6 mt-1 d-flex align-items-center p-5 content-register-right">
 
           <div class="py-1 col-sm-8" style="margin-left:auto;margin-right:auto">
             <h4 class="mb-2 font-weight-bold text-capitalize">
@@ -60,21 +60,41 @@
                     /> -->
                   <!-- <b-form-select v-if="form.type === 'select'" v-model="formData.pilih_spesialisasi" :options="options" class="mt-3"
                       @change="spesialisLainnya"></b-form-select> -->
-                  <b-form-input :type="form.type || 'text'" @input="
+                  <template v-if="form.isType === 'password' || form.isType == 'password' ">
+                    <b-input-group>
+                      <b-input-group-text slot="append" class="border-left-0" v-if="form.name == 'password' "
+                        @click="switchVisibilityPassword">
+                        <font-awesome-icon class="mx-auto" icon="eye" />
+                      </b-input-group-text>
+                      <b-input-group-text slot="append" class="border-left-0"
+                        v-if="form.name == 'password_confirmation' " @click="switchVisibilityPasswordConfirmation">
+                        <font-awesome-icon class="mx-auto" icon="eye" />
+                      </b-input-group-text>
+                      <b-form-input :type="form.type || 'text'" class="border-right-0" @input="
+                                      setValue({
+                                        rawLabel: form.rawLabel,
+                                        label: form.label,
+                                        $event,
+                                        tmpId: form.tmpId
+                                      })
+                                    "  :state="renderError({ error: form.error })" :placeholder="form.placeholder" />
+                    </b-input-group>
+                  </template>
+                  <b-form-input v-else :type="form.type || 'text'" @input="
                         setValue({
                           rawLabel: form.rawLabel,
                           label: form.label,
                           $event,
                           tmpId: form.tmpId
                         })
-                      " :state="renderError({ error: form.error })" :placeholder="form.placeholder"
+                      "  :state="renderError({ error: form.error })" :placeholder="form.placeholder"
                     v-bind:maxlength="form.maxlength" />
                 </b-form-group>
               </template>
               <div class="form-group mb-4">
                 Dengan menekan tombol <strong>Daftar</strong>,
                 <span class="text-capitalize">Anda</span> setuju dengan semua
-                <span class="text-capitalize">syarat {{ "&" }} ketentuan</span>
+                <span class="text-capitalize"><strong>syarat {{ "&" }} ketentuan </strong></span>
                 serta
                 <span class="text-capitalize">kebijakan privasi</span> yang
                 berlaku
@@ -109,6 +129,7 @@
     faArrowLeft,
     faFileSignature,
     faComments,
+    faEye,
     faEdit,
     faImage
   } from "@fortawesome/free-solid-svg-icons";
@@ -122,7 +143,7 @@
     helpers
   } from "vuelidate/lib/validators";
 
-  library.add(faArrowLeft, faFileSignature, faImage, faComments, faEdit);
+  library.add(faArrowLeft, faEye, faFileSignature, faImage, faComments, faEdit);
 
   import VueSlickCarousel from 'vue-slick-carousel'
   // optional style for arrows & dots
@@ -339,7 +360,7 @@
             required,
             maxLength: maxLength(15),
             minLength: minLength(10),
-              verifyPhone(val) {
+            verifyPhone(val) {
               const {
                 required: re,
               } = this.$v.formData['no._handphone'];
@@ -359,7 +380,6 @@
                   .catch(err => {
                     if (err.response) {
                       const x = err.response.data;
-
                       if (x && x.nomor_telp) {
                         resolve(false);
                       }
@@ -385,18 +405,21 @@
           // "no._sip": {
           //   maxLength: maxLength(30)
           // },
+          // pilih_spesialisasi: {
+          //   required,
+          //   minLength: minLength(2)
+          // },
           password: {
             required,
-            minLength: minLength(6)
-          },
-          pilih_spesialisasi: {
-            required,
-            minLength: minLength(2)
+            minLength: minLength(6),
+            // maxLength: maxLength(15),
+            // verifyPassword
           },
           konfirmasi_password: {
             required,
             sameAsPassword: sameAs("password"),
-            minLength: minLength(6)
+            minLength: minLength(6),
+            maxLength: maxLength(15),
           },
           // username: {
           //   required,
@@ -482,25 +505,33 @@
           x;
       }
     },
-     noTelpValidation() {
-        const x = {
-          email,
-          required,
-          maxLength: maxLength(50)
-        };
+    noTelpValidation() {
+      const x = {
+        email,
+        required,
+        maxLength: maxLength(15)
+      };
 
-        const {
-          required: re,
-          maxLength: ml
-        } = this.$v.formData['no._handphone'];
+      const {
+        required: re,
+        maxLength: ml
+      } = this.$v.formData['no._handphone'];
 
-        return re && ml ? {
-            ...x,
-            verifyPhone
-          } :
-          x;
-      },
+      return re && ml ? {
+          ...x,
+          verifyPhone
+        } :
+        x;
+    },
     methods: {
+      switchVisibilityPassword() {
+        this.formBasicData[3].type == 'password' ? this.formBasicData[3].type = 'text' : this.formBasicData[3].type =
+          'password';
+      },
+      switchVisibilityPasswordConfirmation() {
+        this.formBasicData[4].type == 'password' ? this.formBasicData[4].type = 'text' : this.formBasicData[4].type =
+          'password';
+      },
       spesialisLainnya() {
         if (this.formData.pilih_spesialisasi === 'e') {
           this.formBasicData = this.setFormBasicData({
@@ -555,7 +586,7 @@
             obj[name] = formData[label];
             return obj;
           }, {});
-          
+
           const postData = {
             tipe_faskes: this.tipeFaskesData.findIndex(
               item => item === this.selectedTipeFaskes
@@ -577,10 +608,9 @@
                 user_id: data.user_id
               }
             });
-          }
-          else {
+          } else {
             console.log(match);
-            let match = message.match(/(email||nomor_telp) is already in used/);
+            let match = message.match(/(email|nomor_telp) is already in used/);
             if (match) {
               this.$swal({
                 title: `${startCase(match[1])} Tidak Dapat Digunakan`,
@@ -591,8 +621,7 @@
               });
             }
           }
-        } 
-        catch (err) {
+        } catch (err) {
           // console.log(err);
         }
       },
@@ -696,13 +725,17 @@
             label: "password",
             placeholder: "Masukkan password Anda",
             type: "password",
-            name: "password"
+            isType: "password",
+            name: "password",
+            maxlength: 15
           },
           {
             label: "konfirmasi password",
             placeholder: "Masukkan password Anda sekali lagi",
             type: "password",
-            name: "password_confirmation"
+            isType: "password",
+            name: "password_confirmation",
+            maxlength: 15
           }
         ].map((item, index) => ({
           ...item,
@@ -739,6 +772,7 @@
         const value = $event;
         this.formData[label] = value && value.trim();
         if (!this.whitelistValidation().includes(label)) {
+          // this.formData['password'].match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/);
           const confirms = ["password", "konfirmasi_password"];
           if (confirms.includes(label)) {
             confirms.forEach(item => {
@@ -791,24 +825,30 @@
   }
 
   .slick-dots li.slick-active button {
-      width: 20px;
-      background: #cac0c0;
-      // margin-top : -50px;
+    width: 20px;
+    background: #cac0c0;
+    // margin-top : -50px;
   }
-  .slick-dots { 
+
+  .slick-dots {
     margin-bottom: 150px;
   }
-  .img-banner-left { 
-    position : fixed
+
+  .img-banner-left {
+    position: fixed
   }
+
   .content-register-right {
-    position : absolute; right: 0px;
+    position: absolute;
+    right: 0px;
   }
+
   @media only screen and (max-width: 600px) {
     .img-banner-left {
-      position : relative;
+      position: relative;
       display: none;
     }
+
     .content-register-right {
       position: relative;
     }

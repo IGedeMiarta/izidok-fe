@@ -23,7 +23,7 @@
                     </p>
                     <p style="color:gray">izidok siap membantu untuk memudahkan Anda dalam menangani pasien dan tempat
                       praktik
-                      anda</p>
+                      Anda</p>
                     <router-link :to="{name:'input-tarif',params:{klinik_id:klinik_id}}"
                       class="btn btn-lg btn-block mt-4 "
                       style="background-color :#3F7EA7; color:white; border-radius : 10px;">

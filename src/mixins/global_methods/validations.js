@@ -38,8 +38,11 @@ const validations = {
       case "email":
         return `format ${label} tidak sesuai`;
 
+      case "verifyPassword" :
+        return `Gunakan min 6 karakter dengan campuran huruf besar, huruf kecil dan angka`;
+
       case "verifyEmail":
-        return "Email tidak dapat digunakan";
+        return "Alamat email telah terdaftar";
       
       case "verifyPhone":
         return "Nomor Telepon sudah digunakan";

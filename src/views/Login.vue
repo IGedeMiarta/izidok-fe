@@ -6,7 +6,6 @@
         <div class="app-content p-0">
           <div class="d-flex align-items-center">
             <div class="flex-grow-1 w-100 d-flex align-items-center">
-              <div class="bg-composed-wrapper--content -5py">
                 <div class="container-fluid">
                   <div class="row">
                     <div class="col-md-6 pl-0 d-none d-lg-flex align-items-center">
@@ -18,7 +17,7 @@
                           style="width: 49% !important;">
                         <div class="mt-3 form-login">
                           <label class="mb-3 mt-4" style="color:gray">
-                            Masukan Email / No. Handphone Beserta password Anda
+                            Masukan Email/No.Handphone beserta password Anda
                           </label>
                           <div>
                             <b-form v-on:submit.prevent="submitForm">
@@ -43,7 +42,7 @@
                                         $event,
                                         tmpId: form.tmpId
                                       })
-                                    " :state="renderError({ error: form.error })" :placeholder="form.placeholder" />
+                                    " :state="renderError({ error: form.error })"  :maxlength="form.maxLength" :placeholder="form.placeholder" />
                                     </b-input-group>
                                   </template>
                                   <template v-else>
@@ -54,7 +53,7 @@
                                           $event,
                                           tmpId: form.tmpId
                                         })
-                                      " :state="renderError({ error: form.error })" :placeholder="form.placeholder" />
+                                      " :state="renderError({ error: form.error })"  :maxlength="form.maxLength" :placeholder="form.placeholder" />
                                   </template>
                                 </b-form-group>
                                 <!-- <b-form-group>
@@ -84,7 +83,7 @@
                             </b-form>
                           </div>
                           <div class="text-left pt-4 text-black">
-                            Tempat praktik anda belum terdaftar?
+                            Tempat praktik Anda belum terdaftar?
                             <router-link tag="a" to="/register" exact title="Daftar disini">Daftar disini</router-link>
                           </div>
                         </div>
@@ -92,7 +91,6 @@
                     </div>
                   </div>
                 </div>
-              </div>
             </div>
           </div>
         </div>
@@ -146,7 +144,7 @@
     },
     validations: {
       formData: {
-        ["email_/_username"]: {
+        ["email_/_No.Handphone"]: {
           required,
           maxLength: maxLength(50)
         },
@@ -215,7 +213,7 @@
           } else {
             this.$swal({
               title: 'Login gagal',
-              text: `Email/No Telp dengan Password yang anda masukkan tidak cocok!`,
+              text: `Email/No.Handphone dengan Password yang anda masukkan tidak cocok!`,
               type: "error"
             });
 
@@ -259,10 +257,11 @@
         noFilter = true
       } = {}) {
         const tmp = [{
-            label: "email / username",
-            placeholder: "Email / No.Handphone",
+            label: "email / No.Handphone",
+            placeholder: "Email/No.Handphone",
             type: "text",
-            ignoreTransform: true
+            ignoreTransform: true,
+            maxLength :50
           },
           {
             label: "password",
@@ -270,6 +269,7 @@
             type: "password",
             isType: "password",
             ignoreTransform: true,
+            maxLength : 15
           }
         ].map((item, index) => ({
           ...item,
@@ -324,6 +324,7 @@
   .form-login {
     margin-left : 15px;
   }
+
   @media only screen and (max-width: 600px) { 
      .form-login {
       margin-left : auto;

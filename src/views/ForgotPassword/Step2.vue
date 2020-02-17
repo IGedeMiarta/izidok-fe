@@ -1,11 +1,15 @@
 <template>
   <b-form @submit.prevent="submitForm" class="col-sm-12 forgot-form">
-    <b-input-group v-for="form in formBasicData" :key="form.tmpId" class="text-capitalize mt-3" :invalid-feedback="
-              renderInvalidFeedback({
-                validationDesc: form['validation-desc']
-              })
-            " :state="renderError({ error: form.error })">
-      <b-input-group-text slot="append" @click="switchVisibility">
+    <b-form-group v-for="form in formBasicData" :key="form.tmpId" class="text-capitalize mt-3" :invalid-feedback="
+                      renderInvalidFeedback({
+                        validationDesc: form['validation-desc']
+                      })
+                    " :state="renderError({ error: form.error })" >
+      <b-input-group>               
+      <b-input-group-text slot="append" v-if="form.label == 'password' " @click="switchVisibility">
+        <font-awesome-icon icon="eye" />
+      </b-input-group-text>
+      <b-input-group-text slot="append" v-else @click="switchVisibilityPassword">
         <font-awesome-icon icon="eye" />
       </b-input-group-text>
       <b-form-input :type="form.type || 'text'" :value="form.value" @keyup="
@@ -15,8 +19,10 @@
                   $event,
                   tmpId: form.tmpId
                 })
-              " size="lg" class="border-right-0" :state="renderError({ error: form.error })" :placeholder="form.placeholder" />
-    </b-input-group>
+              " size="lg"  v-bind:maxlength="form.maxlength" class="border-right-0" :state="renderError({ error: form.error })"
+        :placeholder="form.placeholder" />
+          </b-input-group>
+    </b-form-group>
     <button class="btn d-block shadow-none w-100 btn-lg "
       style="background-color :#3F7EA7; color:white; border-radius : 10px;margin-top:20px" type="submit">
       <span class="btn-wrapper--label text-capitalize">
@@ -32,7 +38,7 @@
   import {
     required,
     minLength,
-    // maxLength,
+    maxLength,
     sameAs
   } from "vuelidate/lib/validators";
   import axios from 'axios';
@@ -65,11 +71,13 @@
         password: {
           required,
           minLength: minLength(6),
+          maxLength : maxLength(15)
         },
         konfirmasi_password: {
           required,
           sameAsPassword: sameAs("password"),
           minLength: minLength(6),
+          maxLength : maxLength(15)
         }
       }
     },
@@ -79,10 +87,12 @@
     },
     methods: {
       switchVisibility() {
-        this.formBasicData.map((item, i) => {
-          this.formBasicData[i].type == 'password' ? this.formBasicData[i].type = 'text' : this.formBasicData[i]
-            .type = 'password'
-        })
+        this.formBasicData[0].type == 'password' ? this.formBasicData[0].type = 'text' : this.formBasicData[0]
+          .type = 'password'
+      },
+      switchVisibilityPassword() {
+        this.formBasicData[1].type == 'password' ? this.formBasicData[1].type = 'text' : this.formBasicData[1]
+          .type = 'password'
       },
       setFormData() {
         return this.setFormBasicData().reduce((arr, val) => {
@@ -94,12 +104,14 @@
         const tmp = [{
             label: "password",
             placeholder: "Password baru",
-            type: "password"
+            type: "password",
+            maxlength: 15
           },
           {
             label: "konfirmasi password",
             placeholder: "Konfirmasi ulang password",
-            type: "password"
+            type: "password",
+            maxlength: 15
           }
         ];
 
@@ -175,12 +187,12 @@
               }
             });
           } else {
-             this.$swal({
+            this.$swal({
               type: "failed",
               title: "Token sudah kadaluarsa",
               text: "Silakan kembali ke halaman lupa password"
             }).then((e) => {
-                this.$router.push('/login');
+              this.$router.push('/login');
             });
           }
         } catch (err) {
@@ -208,8 +220,8 @@
   };
 </script>
 
-<style>
-  .forgot-form .invalid-feedback {
-    color: #fff !important;
-  }
+<style scoped>
+.forgot-form .invalid-feedback {
+    color: red !important;
+}
 </style>

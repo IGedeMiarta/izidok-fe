@@ -3,7 +3,7 @@
     <div class="app-content--inner p-0 d-flex flex-column">
       <page-title
         heading="Input Tarif"
-        subheading="Masukkan tarif berikut untuk dapat melakukan penggunaan iziDok."
+        subheading="Masukkan tarif berikut untuk dapat melakukan penggunaan izidok."
       />
       <div class="container">
         <div class="card card-box mb-5">

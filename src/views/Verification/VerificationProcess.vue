@@ -31,9 +31,7 @@
                       pendaftaran anda berhasil
                     </h1> -->
                     <p class="mb-5">
-                      Silakan cek email Anda untuk melakukan verifikasi dan
-                      mendapatkan informasi password untuk login Akun izidok
-                      Anda!
+                      Silahkan cek email Anda untuk melakukan verifikasi akun izidok!
                     </p>
                     <!-- <h4
                       class="line-height-sm font-weight-light d-block px-1 mb-3 text-white"
@@ -47,7 +45,7 @@
                       </template>
                       <template v-else>
                         Anda telah mencapai batas limit aktivasi. Silahkan
-                        hubungi Customer Care iziDok.
+                        hubungi Customer Care izidok.
                       </template>
                     </p>
                     <div
@@ -81,7 +79,7 @@
                         <p class="my-2">
                           Tunggu
                           <span style="color: #3c44b1"
-                            >0:{{ this.counterValue }}</span
+                            >{{ this.counterValue }}</span
                           >
                           detik lagi...
                         </p>
@@ -136,7 +134,7 @@ export default {
     async triggerResend() {
       try {
         const { resendLinkActivation } = this;
-        if (resendLinkActivation < 3) {
+        if (resendLinkActivation <= 3) {
           this.resendLinkActivation++;
           this.counterFunc();
 
