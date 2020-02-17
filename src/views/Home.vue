@@ -17,7 +17,9 @@
             </li>
           </ol>
           <div class="d-flex flex-row align-items-center">
-            <h5 class="display-4 mt-1 mb-1 font-weight-bold text-capitalize flex-grow-1">
+            <h5
+              class="display-4 mt-1 mb-1 font-weight-bold text-capitalize flex-grow-1"
+            >
               dashboard
             </h5>
             <h5 class="display-4 mt-1 mb-1 font-weight-bold text-capitalize">
@@ -28,47 +30,73 @@
       </b-col>
     </b-row>
     <b-row class="align-items-center">
-      <b-col cols="6">
-        <b-row>
-          <b-col cols="6">
+      <b-col cols="12">
+        <div class="d-flex justify-content-between">
+          <div class="d-flex align-items-center mr-2">
             <CardDashboard
-              title="pasien baru"
+              title="total pasien hari ini"
               :highlight="5"
               bg-color="bg-first"
             />
-          </b-col>
-          <b-col cols="6">
+          </div>
+          <div class="d-flex align-items-center mr-2">
             <CardDashboard
-              title="pasien rawat jalan"
+              title="pasien baru hari ini"
               :highlight="dataRawatJalan"
               bg-color="bg-success"
             />
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col cols="6">
-            <CardDashboard title="antrean" :highlight="nomor_antrean" />
-          </b-col>
-          <b-col cols="6">
+          </div>
+          <div class="d-flex align-items-center mr-2">
             <CardDashboard
-              title="pendapatan"
+              title="no. antrean saat ini"
+              :highlight="nomor_antrean"
+            />
+          </div>
+          <div class="d-flex align-items-center mr-2">
+            <CardDashboard
+              title="total pendapatan hari ini"
               highlight="1.500.000"
               bg-color="bg-warning"
             />
-          </b-col>
-        </b-row>
+          </div>
+          <div class="d-flex align-items-center">
+            <CardDashboard
+              title="jumlah pasien batal hari ini"
+              highlight="1.500.000"
+              bg-color="bg-warning"
+            />
+          </div>
+        </div>
       </b-col>
-      <b-col cols="6">
-        <b-row>
+      <b-col cols="9">
+        <b-tabs content-class="pt-4">
+          <b-tab title="List Antrean" active>
+            <div slot="title">
+              list antrean
+            </div>
+            <list-antrean/>
+          </b-tab>
+          <b-tab title="List Pembayaran">
+            <div slot="title">
+              list pembayaran
+            </div>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              Vestibulum sodales ullamcorper vehicula. Duis placerat quam porta
+              lorem lobortis, sit amet sodales mauris finibus.
+            </p>
+          </b-tab>
+        </b-tabs>
+        <!-- <b-row>
           <b-col>
             <TableDashboard />
           </b-col>
-        </b-row>
+        </b-row> -->
       </b-col>
     </b-row>
-    <div class="d-flex">
-      <!-- <TrendPasien class="flex-grow-1 my-2" :seriesData="dataSeries" /> -->
-    </div>
+    <!-- <div class="d-flex">
+      <TrendPasien class="flex-grow-1 my-2" :seriesData="dataSeries" />
+    </div> -->
   </div>
 </template>
 
@@ -79,8 +107,9 @@ import moment from "moment";
 export default {
   name: "home",
   components: {
-    CardDashboard: () => import("@/components/CardDashboard"),
-    TableDashboard: () => import("@/components/TableDashboard")
+    ListAntrean: () => import('@/views/Home/ListAntrean'),
+    CardDashboard: () => import("@/components/CardDashboard")
+    // TableDashboard: () => import("@/components/TableDashboard")
     // TrendPasien: () => import("@/components/TrendPasien")
   },
   mounted() {
@@ -95,8 +124,8 @@ export default {
       return moment().format("YYYY-MM-DD");
     },
     nowIndonesia() {
-      moment.locale('ID')
-      return moment().format('D MMMM YYYY')
+      moment.locale("ID");
+      return moment().format("D MMMM YYYY");
     }
   },
   methods: {

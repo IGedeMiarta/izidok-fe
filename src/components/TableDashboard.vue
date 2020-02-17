@@ -1,8 +1,8 @@
 <template>
-  <div class="card card-box mb-5">
+  <div class="mb-5">
     <div class="card-header pr-2">
       <div class="card-header--title">
-        <h4 style="display:inline-block">Antrean Hari Ini</h4>
+        <h5 style="display:inline-block">Antrean Hari Ini</h5>
         <b-button :to="{ name: 'registrasi-rawat-jalan' }" class="float-right text-capitalize" pill variant="success">
           registrasi baru</b-button>
       </div>
