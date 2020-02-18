@@ -6,17 +6,13 @@
         <div class="card card-box mb-5">
           <div class="card-body">
             <template v-if="formBasicData && formBasicData.length">
-              <b-form @submit.prevent="submitInputDataOperator">
+              <b-form @submit.prevent="submitForm">
                 <div v-for="form in formBasicData" :key="form.tmpId">
                   <template v-if="form.type !== 'toggle'">
                     <b-form-group
                       :label="renderLabel(form)"
-                      class="text-capitalize w-50"
-                      :invalid-feedback="
-                        renderInvalidFeedback({
-                          validationDesc: form['validation-desc']
-                        })
-                      "
+                      class="text-capitalize"
+                      :invalid-feedback="customRenderInvalidFeedback(form)"
                       style="position: relative"
                       :state="renderError({ error: form.error })"
                     >
@@ -25,14 +21,15 @@
                           pilih spesialisasi <span style="color: red">*</span>
                         </p>
                         <vue-select
+                          :class="{ error: form.error }"
                           :options="spesialisasi"
                           @input="
                             setValue({
-                              rawLabel: 'pekerjaan',
+                              rawLabel: 'pilih spesialisasi',
                               $event
                             })
                           "
-                          :value="getValue('pekerjaan')"
+                          :value="getValue('pilih_spesialisasi')"
                           :placeholder="form.placeholder"
                           label="title"
                           class="custom-v-select"
@@ -47,6 +44,12 @@
                               label: form.label,
                               $event,
                               tmpId: form.tmpId
+                            })
+                          "
+                          @keypress="
+                            customInputEvent({
+                              rawLabel: form.rawLabel,
+                              $event
                             })
                           "
                           :state="renderError({ error: form.error })"
@@ -71,7 +74,12 @@
                           Apakah Anda Memiliki Asisten?
                           <span style="color: red">*</span>
                         </p>
-                        <b-form-checkbox class="m-0" name="check-button" switch>
+                        <b-form-checkbox
+                          class="m-0"
+                          name="check-button"
+                          switch
+                          v-model="formData[form.label]"
+                        >
                         </b-form-checkbox>
                       </div>
                     </b-form-group>
@@ -146,14 +154,18 @@ export default {
   }),
   validations: {
     formData: {
-      nama_operator: {
+      pilih_spesialisasi: {
         required,
         maxLength: maxLength(50)
       },
-      email: {
+      "no._SIP": {
+        maxLength: maxLength(50)
+        // verifyValue(val) {
+        // }
+      },
+      "Apakah_Anda_memiliki_Asisten?": {
         required,
-        maxLength: maxLength(50),
-        email
+        maxLength: maxLength(50)
       }
     }
   },
@@ -169,7 +181,23 @@ export default {
     this.formData = this.setFormData();
   },
   methods: {
-    async addOperator() {
+    customRenderInvalidFeedback(form) {
+      const { rawLabel, "validation-desc": valDesc } = form;
+
+      if (rawLabel === "pilih spesialisasi" && valDesc) {
+        const regex = new RegExp(/pilih/gi);
+        const x = valDesc.findIndex(item => regex.test(item));
+        return valDesc && valDesc[x] && valDesc[x].replace(regex, "");
+      } else {
+        this.renderInvalidFeedback({
+          validationDesc: form["validation-desc"]
+        });
+      }
+    },
+    addSpesialisasi() {
+      this.$router.push({
+        name: "input-asisten-dokter"
+      });
       // const { constructPostData } = this;
       // try {
       //   const res = await axios.post(
@@ -178,11 +206,26 @@ export default {
       //   );
       //   const { status, data } = res.data;
       //   if (status) {
-      //     this.$router.push("/");
+      //     this.$router.push({
+      //       name: "input-asisten-dokter"
+      //     });
       //   }
       // } catch (err) {
       //   // console.log(err);
       // }
+    },
+    customInputEvent({ label, rawLabel, $event }) {
+      const { key } = $event;
+      var evt = $event;
+      evt = evt ? evt : window.event;
+      if (/[^a-zA-Z0-9\/\-\.]/.test(key)) {
+        evt.preventDefault();
+      } else {
+        void this.setValue({
+          rawLabel,
+          $event
+        });
+      }
     },
     renderLabel(form) {
       return form.customLabel ? null : (form.rawLabel && form.rawLabel) || null;
@@ -199,19 +242,26 @@ export default {
       }, {});
       return tmp;
     },
-    submitInputDataOperator() {
+    submitForm() {
       const { formBasicData } = this;
-      if (formBasicData.every(item => item.error !== null && !item.error)) {
-        this.addOperator();
-      } else {
-        formBasicData.map(item => {
-          this.triggerValidation({ label: item.label, $v: this.$v, $vm: this });
+      formBasicData.map(item => {
+        this.triggerValidation({
+          label: item.label,
+          $v: this.$v,
+          $vm: this,
+          rawLabel: item.rawLabel
         });
+      });
+
+      if (formBasicData.every(item => item.error !== null && !item.error)) {
+        this.addSpesialisasi();
       }
     },
     setFormData() {
       return this.setFormBasicData().reduce((arr, val) => {
-        arr[val.label.split(" ").join("_")] = null;
+        arr[val.label.split(" ").join("_")] = /asisten/gi.test(val.label)
+          ? false
+          : null;
         return arr;
       }, {});
     },
@@ -226,7 +276,7 @@ export default {
         {
           label: "no. SIP",
           placeholder: "Masukkan No. SIP",
-          type: "email"
+          type: "text"
         },
         {
           label: "Apakah Anda memiliki Asisten?",
@@ -245,10 +295,21 @@ export default {
 
       return tmp;
     },
-    setValue({ label, rawLabel, $event = null } = {}) {
-      const { target } = $event;
-      const { value } = target;
-      this.formData[label] = value && value.trim();
+    setValue({ rawLabel, $event = null } = {}) {
+      let value = $event;
+      const label = rawLabel.split(" ").join("_");
+      if (typeof $event === "object") {
+        if ($event) {
+          const {
+            target: { value }
+          } = $event;
+          this.formData[label] = value;
+        } else {
+          this.formData[label] = null;
+        }
+      } else {
+        this.formData[label] = value;
+      }
       this.triggerValidation({
         label,
         $v: this.$v,

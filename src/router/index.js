@@ -66,13 +66,19 @@ const routes = [
     component: () => import("../views/InputDataOperator.vue")
   },
   {
-    path: "/initialization",
-    component: () => import("../views/Initialization/InputSpesialisasi.vue"),
+    path: "/init",
+    component: () => import("../views/Initialization.vue"),
     children: [
       {
-        path: "input-spesialisasi",
+        path: "",
         name: "input-spesialisasi",
         component: () => import("../views/Initialization/InputSpesialisasi.vue")
+      },
+      {
+        path: "input-asisten-dokter",
+        name: "input-asisten-dokter",
+        component: () =>
+          import("../views/Initialization/InputDataAsistenDokter.vue")
       }
     ]
   },
