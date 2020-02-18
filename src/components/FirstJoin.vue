@@ -1,34 +1,41 @@
 <template>
-  <div class="app-wrapper bg-white">
-    <div class="app-content p-0">
-      <div class="flex-grow-1 w-100 d-flex align-items-center">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-md-6 pl-0 d-none d-lg-flex align-items-center">
-              <img src="@/assets/img/forgot.jpg" class="img-fluid" alt="lupa password izidok" />
-            </div>
-            <div class="col-md-6 first-join">
-              <div>
-                <div class="row">
-                  <div class="col-md-12">
-                    <div class="mb-5 w-100">
-                      <img src="/img/izidok.baaa69b4.png" alt="izidok" class="img-fluid w-100 d-block float-left"
-                        style="width: 49% !important;">
-                    </div>
+  <div class="app-wrapper bg-white h-100">
+    <div class="app-main">
+      <div class="app-content p-0">
+        <div class="d-flex align-items-center">
+          <div class="flex-grow-1 w-100 d-flex align-items-center">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-md-6 pl-0 d-none d-lg-flex align-items-center">
+                  <div class="wrap" :style="wrapStyle">
+                    <img src="@/assets/img/forgot.jpg" :style="wrapImgStyle" alt="initial page izidok" />
                   </div>
-                  <div class="col-md-10">
-                    <br>
-                    <p style="color:gray">
-                      Selamat bergabung dengan izidok
-                    </p>
-                    <p style="color:gray">izidok siap membantu untuk memudahkan Anda dalam menangani pasien dan tempat
-                      praktik
-                      Anda</p>
-                    <router-link :to="{name:'input-tarif',params:{klinik_id:klinik_id}}"
-                      class="btn btn-lg btn-block mt-4 "
-                      style="background-color :#3F7EA7; color:white; border-radius : 10px;">
-                      Masuk
-                    </router-link>
+                </div>
+                <div class="col-md-6 pr-0 d-flex align-items-center first-join">
+                  <div>
+                    <div class="mb-5 w-100">
+                      <img src="/img/izidok.baaa69b4.png" alt="izidok"
+                        class="img-fluid w-100 d-block float-left logo-forgot"
+                        style="width: 39% !important;height:100%;">
+                    </div>
+
+                    <div class="col-md-10">
+                      <br>
+                      <p style="color:gray">
+                        <br>
+                        Selamat bergabung dengan izidok
+                      </p>
+                      <p style="color:gray">izidok siap membantu untuk memudahkan Anda dalam menangani pasien dan
+                        tempat
+                        praktik
+                        Anda</p>
+                      <router-link :to="{name:'input-tarif',params:{klinik_id:klinik_id}}"
+                        class="btn btn-lg btn-block mt-4 "
+                        style="background-color :#3F7EA7; color:white; border-radius : 10px;">
+                        Masuk
+                      </router-link>
+                    </div>
+
                   </div>
                 </div>
               </div>
@@ -47,28 +54,56 @@
       if (this.modalShow) {
         this.$refs["first-join-modal"].show();
       }
-    }
-    // computed: {
-    //   modalProp: {
-    //     set() {
-    //       this.$emit("toggleModal");
-    //     },
-    //     get() {
-    //       return this.modalShow;
-    //     }
-    //   }
-    // }
+    },
+    data() {
+      return {
+        windowHeight: 0
+      };
+    },
+    computed: {
+      wrapStyle() {
+        return {
+          height: this.windowHeight + 'px'
+        }
+      },
+      wrapImgStyle() {
+        return {
+          "max-height": this.windowHeight + 'px'
+        }
+      },
+    },
+    mounted() {
+      this.windowHeight = window.innerHeight;
+      this.$nextTick(() => {
+        window.addEventListener('resize', (e) => {
+          this.windowHeight = window.innerHeight;
+        })
+      })
+    },
   };
 </script>
 
 <style scoped>
-  .first-join {
-    margin-top: 150px;
+  .wrap {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    margin: 0;
   }
 
-  @media only screen and (max-width: 600px) {
-    .first-join {
-      margin-top: 35px;
-    }
+  .logo-forgot {
+    margin-left: 5px;
+  }
+
+  .wrap img {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-height: 100%;
+    min-width: 100%;
+    transform: translate(-50%, -50%);
   }
 </style>
