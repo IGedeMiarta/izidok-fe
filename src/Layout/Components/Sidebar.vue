@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 import { SidebarMenu } from "vue-sidebar-menu";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
