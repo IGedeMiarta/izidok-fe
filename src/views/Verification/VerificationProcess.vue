@@ -31,7 +31,7 @@
                       pendaftaran anda berhasil
                     </h1> -->
                     <p class="mb-5">
-                      Silahkan cek email Anda untuk melakukan verifikasi akun izidok!
+                      Silahkan cek email Anda untuk melakukan verifikasi akun izidok
                     </p>
                     <!-- <h4
                       class="line-height-sm font-weight-light d-block px-1 mb-3 text-white"

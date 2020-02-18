@@ -17,7 +17,7 @@
                         style="width: 49% !important;height:100%;">
                       <div class="mt-3 form-login">
                         <label class="mb-3 mt-4" style="color:gray">
-                          Masukan Email/No.Handphone beserta password Anda
+                          Masukan Email/No. Handphone beserta password Anda
                         </label>
                         <div>
                           <b-form v-on:submit.prevent="submitForm">
@@ -31,7 +31,8 @@
                                 <template v-if="form.type === 'password' || form.isType == 'password' ">
                                   <b-input-group>
                                     <b-input-group-text slot="append" class="border-left-0" @click="switchVisibility">
-                                      <font-awesome-icon class="mx-auto" icon="eye" />
+                                      <font-awesome-icon v-if="passwordVisible == false" icon="eye" />
+                                      <font-awesome-icon v-else icon="eye-slash" />
                                     </b-input-group-text>
                                     <b-form-input :type="form.type || 'text'" class="border-right-0" @keyup="
                                       setValue({
@@ -119,12 +120,14 @@
   import {
     faSearch,
     faEye,
+    faEyeSlash,
     faInfo
   } from "@fortawesome/free-solid-svg-icons";
 
   library.add(
     faEye,
-    faInfo
+    faInfo,
+    faEyeSlash
   );
 
   const maxFailed = 3;
@@ -136,6 +139,7 @@
       formData: null,
       loggedIn: false,
       firstJoin: false,
+      passwordVisible: false,
       failedCounter: 0,
       klinik_id: null,
     }),
@@ -144,7 +148,7 @@
     },
     validations: {
       formData: {
-        ["email_/_No.Handphone"]: {
+        ["email/No.Handphone"]: {
           required,
           maxLength: maxLength(50)
         },
@@ -162,6 +166,11 @@
       switchVisibility() {
         this.formBasicData[1].type == 'password' ? this.formBasicData[1].type = 'text' : this.formBasicData[1].type =
           'password';
+        if (this.formBasicData[1].type == 'text') {
+          this.passwordVisible = true;
+        } else if (this.formBasicData[1].type == 'password') {
+          this.passwordVisible = false;
+        }
       },
 
       async login() {
@@ -214,7 +223,7 @@
           } else {
             this.$swal({
               title: 'Login gagal',
-              text: `Email/No.Handphone dengan Password yang anda masukkan tidak cocok!`,
+              text: `Email/No. Handphone dengan Password yang anda masukkan tidak cocok!`,
               type: "error"
             });
 
@@ -258,8 +267,8 @@
         noFilter = true
       } = {}) {
         const tmp = [{
-            label: "email / No.Handphone",
-            placeholder: "Email/No.Handphone",
+            label: "email/No.Handphone",
+            placeholder: "Email/No. Handphone",
             type: "text",
             ignoreTransform: true,
             maxLength: 50
@@ -279,7 +288,7 @@
           error: null,
           placeholder: !item.ignoreTransform ?
             startCase(item.placeholder) : item.placeholder,
-          rawLabel: item.label
+          rawLabel:item.label.split(".").join(". "),
         }));
 
         return noFilter ?

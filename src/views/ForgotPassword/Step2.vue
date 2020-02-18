@@ -7,10 +7,12 @@
                     " :state="renderError({ error: form.error })">
       <b-input-group>
         <b-input-group-text slot="append" v-if="form.label == 'password' " @click="switchVisibility">
-          <font-awesome-icon icon="eye" />
+          <font-awesome-icon v-if="passwordVisible == false" icon="eye"  />
+          <font-awesome-icon v-else icon="eye-slash"  />
         </b-input-group-text>
         <b-input-group-text slot="append" v-else @click="switchVisibilityPassword">
-          <font-awesome-icon icon="eye" />
+           <font-awesome-icon v-if="passwordVisible1 == false" icon="eye"  />
+          <font-awesome-icon v-else icon="eye-slash"  />
         </b-input-group-text>
         <b-form-input :type="form.type || 'text'" :value="form.value" @keyup="
                 setValue({
@@ -52,25 +54,28 @@
   import {
     faSearch,
     faEye,
+    faEyeSlash,
     faInfo
   } from "@fortawesome/free-solid-svg-icons";
 
   library.add(
     faEye,
-    faInfo
+    faInfo,
+    faEyeSlash
   );
 
   export default {
     props: ['token'],
     data: () => ({
       formBasicData: null,
-      formData: null
+      formData: null,
+      passwordVisible: false,
+      passwordVisible1: false,
     }),
     validations: {
       formData: {
         password: {
           required,
-          minLength: minLength(6),
           maxLength: maxLength(15),
           verifyPassword(val) {
             if (val.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/)) {
@@ -95,11 +100,21 @@
     methods: {
       switchVisibility() {
         this.formBasicData[0].type == 'password' ? this.formBasicData[0].type = 'text' : this.formBasicData[0]
-          .type = 'password'
+          .type = 'password';
+        if (this.formBasicData[0].type == 'text') {
+          this.passwordVisible = true;
+        } else if(this.formBasicData[0].type == 'password') {
+          this.passwordVisible = false;
+        }
       },
       switchVisibilityPassword() {
         this.formBasicData[1].type == 'password' ? this.formBasicData[1].type = 'text' : this.formBasicData[1]
-          .type = 'password'
+          .type = 'password';
+        if(this.formBasicData[1].type == 'text') {
+          this.passwordVisible1 = true;
+        } else if(this.formBasicData[1].type == 'password') {
+          this.passwordVisible1 = false;
+        }
       },
       setFormData() {
         return this.setFormBasicData().reduce((arr, val) => {
