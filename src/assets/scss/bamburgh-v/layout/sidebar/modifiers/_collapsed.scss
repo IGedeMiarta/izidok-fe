@@ -21,6 +21,17 @@
         .vsm-list {
           .vsm-item {
             .vsm-link {
+              &[disabled]:hover {
+                background-image: none;
+                background-color: transparent;
+                color: #333;
+
+                svg {
+                  color: #ddd;
+                  fill: #ddd;
+                }
+              }
+
               .vsm-title {
                 transform: translate3d(-25px, 0, 0);
                 opacity: 0;
@@ -36,7 +47,17 @@
         visibility: hidden;
       }
 
-      &:hover {
+      &.sidebar-disable:hover {
+        a {
+          cursor: default;
+        }
+
+        .ps__scrollbar-x-rail {
+          display: none;
+        }
+      }
+
+      &:not(.sidebar-disable):hover {
         width: $sidebar-width;
 
         .vsm-dropdown {
@@ -57,7 +78,6 @@
               }
             }
           }
-
         }
 
         .vsm-header {

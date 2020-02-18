@@ -12,6 +12,12 @@
   z-index: 11;
   box-shadow: $header-shadow-new;
 
+  &.sidebar-disable {
+    .sidebar-navigation {
+      display: none;
+    }
+  }
+
   &--header {
     background: $sidebar-header-bg;
     padding: 0;
@@ -112,7 +118,6 @@
   }
 
   .vsm-list {
-
     .vsm-item {
       padding: 2px 0;
 
@@ -125,8 +130,8 @@
         height: $navlink-height;
         // padding: 0 $layout-spacer;
         padding: 0 1.2rem;
-        margin: 0 .95rem;
-        transition: background .3s ease-out;
+        margin: 0 0.95rem;
+        transition: background 0.3s ease-out;
         font-size: $font-size-xs / 1.1;
         white-space: nowrap;
 
@@ -149,11 +154,11 @@
           transition: $transition-base;
           transform: rotate(0deg);
           margin-left: auto;
-          opacity: .4;
+          opacity: 0.4;
 
           &:after {
-            content: '\f105';
-            font-family: 'Font Awesome 5 Free';
+            content: "\f105";
+            font-family: "Font Awesome 5 Free";
           }
 
           &.open-arrow {
@@ -171,7 +176,6 @@
       }
 
       .vsm-dropdown {
-
         .vsm-list {
           padding: ($layout-spacer / 2) ($layout-spacer);
         }
@@ -215,14 +219,13 @@
       &.open-item {
         & > .vsm-link {
           svg {
-            opacity: .6;
+            opacity: 0.6;
           }
         }
       }
     }
   }
 }
-
 
 // Responsive
 

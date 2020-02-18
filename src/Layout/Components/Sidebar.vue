@@ -1,5 +1,8 @@
 <template>
-  <div class="app-sidebar app-sidebar--dark">
+  <div
+    class="app-sidebar app-sidebar--dark"
+    :class="{ 'sidebar-disable': initPage }"
+  >
     <!-- <div class="app-sidebar--header bg-white">
       <div class="nav-logo w-100 text-center">
         <router-link tag="a" class="d-block" active-class="active" to="/" exact>
@@ -29,7 +32,13 @@
     </div> -->
     <div class="sidebar-navigation">
       <div class="nav-logo w-100 text-center my-4">
-        <router-link tag="a" class="d-block w-auto" active-class="active" to="/" exact>
+        <router-link
+          tag="a"
+          class="d-block w-auto"
+          active-class="active"
+          to="/"
+          exact
+        >
           <b-img
             center
             fluid-grow
@@ -40,13 +49,18 @@
         </router-link>
       </div>
       <VuePerfectScrollbar class="app-sidebar--content">
-        <sidebar-menu showOneChild :menu="dataMenu()" />
+        <sidebar-menu
+          :disableHover="initPage"
+          showOneChild
+          :menu="dataMenu()"
+        />
       </VuePerfectScrollbar>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState, mapGetters } from "vuex";
 import { SidebarMenu } from "vue-sidebar-menu";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -88,6 +102,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters({
+      initPage: "sidebar/initPage"
+    }),
     sidebarCollapsed: {
       get() {
         return this.$store.state.sidebar.sidebarCollapsed;
@@ -217,7 +234,10 @@ export default {
         // }
       ];
 
-      return tmp;
+      return tmp.map(item => ({
+        ...item,
+        disabled: this.initPage
+      }));
     }
   }
 };
