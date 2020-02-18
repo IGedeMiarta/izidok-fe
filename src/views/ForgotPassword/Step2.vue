@@ -4,24 +4,24 @@
                       renderInvalidFeedback({
                         validationDesc: form['validation-desc']
                       })
-                    " :state="renderError({ error: form.error })" >
-      <b-input-group>               
-      <b-input-group-text slot="append" v-if="form.label == 'password' " @click="switchVisibility">
-        <font-awesome-icon icon="eye" />
-      </b-input-group-text>
-      <b-input-group-text slot="append" v-else @click="switchVisibilityPassword">
-        <font-awesome-icon icon="eye" />
-      </b-input-group-text>
-      <b-form-input :type="form.type || 'text'" :value="form.value" @keyup="
+                    " :state="renderError({ error: form.error })">
+      <b-input-group>
+        <b-input-group-text slot="append" v-if="form.label == 'password' " @click="switchVisibility">
+          <font-awesome-icon icon="eye" />
+        </b-input-group-text>
+        <b-input-group-text slot="append" v-else @click="switchVisibilityPassword">
+          <font-awesome-icon icon="eye" />
+        </b-input-group-text>
+        <b-form-input :type="form.type || 'text'" :value="form.value" @keyup="
                 setValue({
                   rawLabel: form.rawLabel,
                   label: form.label,
                   $event,
                   tmpId: form.tmpId
                 })
-              " size="lg"  v-bind:maxlength="form.maxlength" class="border-right-0" :state="renderError({ error: form.error })"
-        :placeholder="form.placeholder" />
-          </b-input-group>
+              " size="lg" v-bind:maxlength="form.maxlength" class="border-right-0"
+          :state="renderError({ error: form.error })" :placeholder="form.placeholder" />
+      </b-input-group>
     </b-form-group>
     <button class="btn d-block shadow-none w-100 btn-lg "
       style="background-color :#3F7EA7; color:white; border-radius : 10px;margin-top:20px" type="submit">
@@ -71,13 +71,20 @@
         password: {
           required,
           minLength: minLength(6),
-          maxLength : maxLength(15)
+          maxLength: maxLength(15),
+          verifyPassword(val) {
+            if (val.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/)) {
+              return true
+            } else {
+              return false;
+            }
+          }
         },
         konfirmasi_password: {
           required,
           sameAsPassword: sameAs("password"),
           minLength: minLength(6),
-          maxLength : maxLength(15)
+          maxLength: maxLength(15)
         }
       }
     },
@@ -220,8 +227,8 @@
   };
 </script>
 
-<style scoped>
-.forgot-form .invalid-feedback {
+<style>
+  .forgot-form .invalid-feedback {
     color: red !important;
-}
+  }
 </style>

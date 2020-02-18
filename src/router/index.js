@@ -55,6 +55,12 @@ const routes = [
     props: true
   },
   {
+    path: "/forgot_password/invalid",
+    name: "forgot-password-failed",
+    component: () => import("../views/ForgotPassword/ForgotExpired.vue"),
+    meta: { layout: "examples" },
+  },
+  {
     path: "/input-tarif",
     name: "input-tarif",
     component: () => import("../views/InputTarif.vue"),
@@ -239,6 +245,7 @@ router.beforeEach((to, from, next) => {
     "verification-process",
     "verification-operator",
     "verification-result",
+    "forgot-password-failed",
     "sukses-page"
   ].includes(name);
 

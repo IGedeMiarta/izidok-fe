@@ -2,61 +2,61 @@
   <div class="app-wrapper bg-white h-100">
     <div class="app-main">
       <template v-if="!loggedIn">
-     
+
         <div class="app-content p-0">
-          <div class="d-flex align-items-center">
+          <div class="d-flex align-items-center h-100">
             <div class="flex-grow-1 w-100 d-flex align-items-center">
-                <div class="container-fluid">
-                  <div class="row">
-                    <div class="col-md-6 pl-0 d-none d-lg-flex align-items-center">
-                      <img src="@/assets/login.jpg" class="img-fluid" alt="login izidok" />
-                    </div>
-                    <div class="col-md-6 pr-0 d-flex align-items-center" >
-                      <div>
-                        <img src="/img/izidok.baaa69b4.png" alt="izidok" class="img-fluid w-100 d-block float-left"
-                          style="width: 49% !important;">
-                        <div class="mt-3 form-login">
-                          <label class="mb-3 mt-4" style="color:gray">
-                            Masukan Email/No.Handphone beserta password Anda
-                          </label>
-                          <div>
-                            <b-form v-on:submit.prevent="submitForm">
-                              <template v-if="formBasicData && formBasicData.length">
-                                <b-form-group
-                                  v-for="form in formBasicData" :key="form.tmpId" class="text-capitalize"
-                                  :invalid-feedback="
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-md-6 pl-0 d-none d-lg-flex align-items-center">
+                    <img src="@/assets/login.jpg" class="img-fluid" alt="login izidok" />
+                  </div>
+                  <div class="col-md-6 pr-0 d-flex align-items-center">
+                    <div>
+                      <img src="/img/izidok.baaa69b4.png" alt="izidok" class="img-fluid w-100 d-block float-left"
+                        style="width: 49% !important;height:100%;">
+                      <div class="mt-3 form-login">
+                        <label class="mb-3 mt-4" style="color:gray">
+                          Masukan Email/No.Handphone beserta password Anda
+                        </label>
+                        <div>
+                          <b-form v-on:submit.prevent="submitForm">
+                            <template v-if="formBasicData && formBasicData.length">
+                              <b-form-group v-for="form in formBasicData" :key="form.tmpId" class="text-capitalize"
+                                :invalid-feedback="
                                     renderInvalidFeedback({
                                       validationDesc: form['validation-desc']
                                     })
                                   " style="position: relative" :state="renderError({ error: form.error })">
-                                  <template v-if="form.type === 'password' || form.isType == 'password' ">
-                                    <b-input-group>
-                                      <b-input-group-text slot="append" class="border-left-0" @click="switchVisibility">
-                                        <font-awesome-icon class="mx-auto" icon="eye" 
-                                           />
-                                      </b-input-group-text>
-                                      <b-form-input :type="form.type || 'text'" class="border-right-0" @keyup="
+                                <template v-if="form.type === 'password' || form.isType == 'password' ">
+                                  <b-input-group>
+                                    <b-input-group-text slot="append" class="border-left-0" @click="switchVisibility">
+                                      <font-awesome-icon class="mx-auto" icon="eye" />
+                                    </b-input-group-text>
+                                    <b-form-input :type="form.type || 'text'" class="border-right-0" @keyup="
                                       setValue({
                                         rawLabel: form.rawLabel,
                                         label: form.label,
                                         $event,
                                         tmpId: form.tmpId
                                       })
-                                    " :state="renderError({ error: form.error })"  :maxlength="form.maxLength" :placeholder="form.placeholder" />
-                                    </b-input-group>
-                                  </template>
-                                  <template v-else>
-                                    <b-form-input :type="form.type || 'text'" @keyup="
+                                    " :state="renderError({ error: form.error })" :maxlength="form.maxLength"
+                                      :placeholder="form.placeholder" />
+                                  </b-input-group>
+                                </template>
+                                <template v-else>
+                                  <b-form-input :type="form.type || 'text'" @keyup="
                                         setValue({
                                           rawLabel: form.rawLabel,
                                           label: form.label,
                                           $event,
                                           tmpId: form.tmpId
                                         })
-                                      " :state="renderError({ error: form.error })"  :maxlength="form.maxLength" :placeholder="form.placeholder" />
-                                  </template>
-                                </b-form-group>
-                                <!-- <b-form-group>
+                                      " :state="renderError({ error: form.error })" :maxlength="form.maxLength"
+                                    :placeholder="form.placeholder" />
+                                </template>
+                              </b-form-group>
+                              <!-- <b-form-group>
                                   <b-input-group class="input-group-seamless">
                                     <b-form-input placeholder="Username"></b-form-input>
                                   </b-input-group>
@@ -69,28 +69,28 @@
                                     </b-form-input>
                                   </b-input-group>
                                 </b-form-group> -->
-                              </template>
-                              <b-alert :show="isTooMuchFailed()" variant="danger">Anda telah gagal login terlalu banyak.
-                              </b-alert>
-                              <template>
-                                <router-link to="/forgot-password" style="margin-top : 15px;color:">Lupa
-                                  password?</router-link>
-                              </template>
-                              <button class="btn btn-lg btn-block mt-2 " :disabled="isTooMuchFailed()"
-                                style="background-color :#3F7EA7; color:white; border-radius : 10px;">
-                                Masuk
-                              </button>
-                            </b-form>
-                          </div>
-                          <div class="text-left pt-4 text-black">
-                            Tempat praktik Anda belum terdaftar?
-                            <router-link tag="a" to="/register" exact title="Daftar disini">Daftar disini</router-link>
-                          </div>
+                            </template>
+                            <b-alert :show="isTooMuchFailed()" variant="danger">Anda telah gagal login terlalu banyak.
+                            </b-alert>
+                            <template>
+                              <router-link to="/forgot-password" style="margin-top : 15px;color:">Lupa
+                                password?</router-link>
+                            </template>
+                            <button class="btn btn-lg btn-block mt-2 " :disabled="isTooMuchFailed()"
+                              style="background-color :#3F7EA7; color:white; border-radius : 10px;">
+                              Masuk
+                            </button>
+                          </b-form>
+                        </div>
+                        <div class="text-left pt-4 text-black">
+                          Tempat praktik Anda belum terdaftar?
+                          <router-link tag="a" to="/register" exact title="Daftar disini">Daftar disini</router-link>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
+              </div>
             </div>
           </div>
         </div>
@@ -160,7 +160,8 @@
     },
     methods: {
       switchVisibility() {
-        this.formBasicData[1].type == 'password' ? this.formBasicData[1].type = 'text' : this.formBasicData[1].type = 'password';
+        this.formBasicData[1].type == 'password' ? this.formBasicData[1].type = 'text' : this.formBasicData[1].type =
+          'password';
       },
 
       async login() {
@@ -261,7 +262,7 @@
             placeholder: "Email/No.Handphone",
             type: "text",
             ignoreTransform: true,
-            maxLength :50
+            maxLength: 50
           },
           {
             label: "password",
@@ -269,7 +270,7 @@
             type: "password",
             isType: "password",
             ignoreTransform: true,
-            maxLength : 15
+            maxLength: 15
           }
         ].map((item, index) => ({
           ...item,
@@ -320,15 +321,21 @@
 
 
 <style scoped>
-
   .form-login {
-    margin-left : 15px;
+    margin-left: 15px;
   }
 
-  @media only screen and (max-width: 600px) { 
-     .form-login {
-      margin-left : auto;
-      margin-right: 20px ;
-     } 
+  @media only screen and (max-width: 990px) {
+    .form-login {
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  @media only screen and (max-width: 600px) {
+    .form-login {
+      margin-left: auto;
+      margin-right: 20px;
+    }
   }
 </style>

@@ -2,17 +2,18 @@
   <div class="flex-grow-1 w-100 d-flex align-items-center">
     <div class="bg-composed-wrapper--content">
       <div class="row no-gutters">
-        <div class="col-lg-6 mb-2 img-banner-left">
+        <div class="col-sm-6 p-0 img-banner-left">
           <!-- <div class="hero-wrapper bg-composed-wrapper bg-plum-plate min-vh-100" style="height: 100%"> -->
           <div class="flex-grow-1 w-100  align-items-center">
             <!-- <div class="bg-composed-wrapper--image" :style="{
                   backgroundImage:
                     'url(' + require('@/assets/img/register.jpg') + ')'
                 }"></div> -->
-            <VueSlickCarousel :dots="true" :arrows='false' :autoplay="false">
-              <img src="@/assets/img/image_Register1.jpg" alt="Banner izidok">
-              <img src="@/assets/img/image_Register2.jpg" alt="Banner izidok">
-              <img src="@/assets/img/image_Register3.jpg" alt="Banner izidok">
+            <VueSlickCarousel :dots="true" :adaptiveHeight="true" :arrows='false' :autoplay="true" 
+  >
+              <img src="@/assets/img/image_Register1.jpg" style="height:auto" alt="Banner izidok">
+              <img src="@/assets/img/image_Register2.jpg" style="height:auto" alt="Banner izidok">
+              <img src="@/assets/img/image_Register3.jpg" style="height:auto" alt="Banner izidok">
             </VueSlickCarousel>
           </div>
           <!-- </div> -->
@@ -44,7 +45,7 @@
                   </template>
                 </b-form-group> -->
               <template v-if="formBasicData && formBasicData.length">
-                <b-form-group :label="renderLabel({ label: form.rawLabel })" v-for="form in formBasicData"
+                <b-form-group v-for="form in formBasicData"
                   :key="form.tmpId" :class="form.rawLabel == 'No. SIP' ? '' : 'text-capitalize'" :invalid-feedback="
                       renderInvalidFeedback({
                         validationDesc: form['validation-desc']
@@ -61,6 +62,8 @@
                   <!-- <b-form-select v-if="form.type === 'select'" v-model="formData.pilih_spesialisasi" :options="options" class="mt-3"
                       @change="spesialisLainnya"></b-form-select> -->
                   <template v-if="form.isType === 'password' || form.isType == 'password' ">
+                      <label for="">{{form.rawLabel}}</label>
+                  <label for="" style="color:red"> *</label>
                     <b-input-group>
                       <b-input-group-text slot="append" class="border-left-0" v-if="form.name == 'password' "
                         @click="switchVisibilityPassword">
@@ -70,6 +73,7 @@
                         v-if="form.name == 'password_confirmation' " @click="switchVisibilityPasswordConfirmation">
                         <font-awesome-icon class="mx-auto" icon="eye" />
                       </b-input-group-text>
+                     
                       <b-form-input :type="form.type || 'text'" class="border-right-0" @input="
                                       setValue({
                                         rawLabel: form.rawLabel,
@@ -77,26 +81,33 @@
                                         $event,
                                         tmpId: form.tmpId
                                       })
-                                    "  :state="renderError({ error: form.error })" :placeholder="form.placeholder" />
+                                    " :state="renderError({ error: form.error })" :maxlength='form.maxlength'
+                        :placeholder="form.placeholder" />
                     </b-input-group>
                   </template>
-                  <b-form-input v-else :type="form.type || 'text'" @input="
+                  <template  v-else :type="form.type || 'text'" >
+                  
+                  <label for="">{{form.rawLabel}}</label>
+                  <label for="" style="color:red"> *</label>
+                  <b-form-input @input="
                         setValue({
                           rawLabel: form.rawLabel,
-                          label: form.label,
+                          label : form.label,
                           $event,
                           tmpId: form.tmpId
                         })
-                      "  :state="renderError({ error: form.error })" :placeholder="form.placeholder"
-                    v-bind:maxlength="form.maxlength" />
+                      " :state="renderError({ error: form.error })" :placeholder="form.placeholder"
+                  :maxlength="form.maxlength" />
+                    </template>
+                  
                 </b-form-group>
               </template>
-              <div class="form-group mb-4">
+              <div class="form-group">
                 Dengan menekan tombol <strong>Daftar</strong>,
                 <span class="text-capitalize">Anda</span> setuju dengan semua
                 <span class="text-capitalize"><strong>syarat {{ "&" }} ketentuan </strong></span>
                 serta
-                <span class="text-capitalize">kebijakan privasi</span> yang
+                <span class="text-capitalize"><strong>kebijakan privasi</strong></span> yang
                 berlaku
               </div>
               <button type="submit" class="btn btn-lg btn-block text-capitalize"
@@ -178,6 +189,7 @@
       isClicked: false,
       selected: null,
       dataSpesialisasi: null,
+
       options: [{
           value: null,
           text: 'Pilih Spesialisasi'
@@ -412,9 +424,36 @@
           password: {
             required,
             minLength: minLength(6),
-            // maxLength: maxLength(15),
-            // verifyPassword
+            maxLength: maxLength(15),
+            verifyPassword(val) {
+              if (val.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/)) {
+                  return true
+                }
+                else {
+                  return false;
+                }
+              // const {
+              //   required: re
+              // } = this.$v.formData.password;
+              // return new Promise((resolve, reject) => {
+              //   const x = val;
+              //   // /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/
+              //   if (x.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/)) {
+              //     // this.formData.password.verifyPassword = true;
+              //     this.formBasicData[3].error = true
+              //   }
+              //   const z = 'password';
+              //   this.triggerValidation({
+              //     label: z,
+              //     $v: this.$v,
+              //     $vm: this,
+              //     rawLabel: z
+              //   });
+
+              // });
+            }
           },
+     
           konfirmasi_password: {
             required,
             sameAsPassword: sameAs("password"),
@@ -524,6 +563,7 @@
         x;
     },
     methods: {
+          
       switchVisibilityPassword() {
         this.formBasicData[3].type == 'password' ? this.formBasicData[3].type = 'text' : this.formBasicData[3].type =
           'password';
@@ -588,11 +628,9 @@
           }, {});
 
           const postData = {
-            tipe_faskes: this.tipeFaskesData.findIndex(
-              item => item === this.selectedTipeFaskes
-            ) + 1,
             ...tmpPostData
           };
+
           const res = await axios.post(`${this.url_api}/klinik`, postData);
           const {
             status,
@@ -835,14 +873,18 @@
   }
 
   .img-banner-left {
-    position: fixed
+    position: fixed;
   }
 
   .content-register-right {
     position: absolute;
     right: 0px;
   }
-
+  // @media only screen and (max-width: 1084px) {
+  //   .img-banner-left { 
+  //     height: 754px;;
+  //   }
+  // }
   @media only screen and (max-width: 600px) {
     .img-banner-left {
       position: relative;
