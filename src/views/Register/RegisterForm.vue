@@ -9,8 +9,8 @@
                   backgroundImage:
                     'url(' + require('@/assets/img/register.jpg') + ')'
                 }"></div> -->
-            <VueSlickCarousel :dots="true" :adaptiveHeight="true" :arrows='false' :autoplay="true" @lazyLoaded="handleLazyLoaded"
-  @lazyLoadError="handleLazeLoadError">>
+            <VueSlickCarousel :dots="true" :adaptiveHeight="true" :arrows='false' :autoplay="true" 
+  >
               <img src="@/assets/img/image_Register1.jpg" style="height:auto" alt="Banner izidok">
               <img src="@/assets/img/image_Register2.jpg" style="height:auto" alt="Banner izidok">
               <img src="@/assets/img/image_Register3.jpg" style="height:auto" alt="Banner izidok">
@@ -102,12 +102,12 @@
                   
                 </b-form-group>
               </template>
-              <div class="form-group mb-4">
+              <div class="form-group">
                 Dengan menekan tombol <strong>Daftar</strong>,
                 <span class="text-capitalize">Anda</span> setuju dengan semua
                 <span class="text-capitalize"><strong>syarat {{ "&" }} ketentuan </strong></span>
                 serta
-                <span class="text-capitalize">kebijakan privasi</span> yang
+                <span class="text-capitalize"><strong>kebijakan privasi</strong></span> yang
                 berlaku
               </div>
               <button type="submit" class="btn btn-lg btn-block text-capitalize"
@@ -628,11 +628,9 @@
           }, {});
 
           const postData = {
-            tipe_faskes: this.tipeFaskesData.findIndex(
-              item => item === this.selectedTipeFaskes
-            ) + 1,
             ...tmpPostData
           };
+
           const res = await axios.post(`${this.url_api}/klinik`, postData);
           const {
             status,
