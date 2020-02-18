@@ -84,7 +84,10 @@
   };
 </script>
 
-<style scoped>
+<style>
+   .forgot-form .invalid-feedback {
+    color: red !important;
+  }
   .form-login {
        margin-left : 15px;
   }
@@ -94,4 +97,6 @@
       margin-right: 20px ;
      } 
   }
+ 
+
 </style>

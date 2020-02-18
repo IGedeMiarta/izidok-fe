@@ -106,7 +106,8 @@ const validations = {
     );
   },
   renderLabel({ label }) {
-    const importantLabel = `${label}*`;
+    const importantLabel = `${label}`;
+    
     return (
       (this.whitelistValidation &&
         typeof this.whitelistValidation === "function" &&
@@ -115,6 +116,7 @@ const validations = {
       importantLabel
     );
   },
+
   itemFormBasicData({ rawLabel }) {
     if (
       this.formBasicData &&

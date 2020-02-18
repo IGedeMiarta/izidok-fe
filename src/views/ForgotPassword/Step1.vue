@@ -169,6 +169,6 @@
 
 <style>
   .forgot-form .invalid-feedback {
-    color: #fff !important;
+    color: red !important;
   }
 </style>
