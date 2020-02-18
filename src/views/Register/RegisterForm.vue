@@ -189,6 +189,7 @@
       dataSpesialisasi: null,
       passwordVisible: false,
       passwordVisible1: false,
+      timeVerifyPhone: null,
       options: [{
           value: null,
           text: 'Pilih Spesialisasi'
@@ -372,41 +373,46 @@
             maxLength: maxLength(15),
             minLength: minLength(10),
             verifyPhone(val) {
-              const {
-                required: re,
-              } = this.$v.formData['no._handphone'];
-              if (val === "" || !re) return true;
+              if(this.timeVerifyPhone) clearTimeout(this.timeVerifyPhone)
+
               return new Promise((resolve, reject) => {
-                axios
-                  .get(`${this.url_api}/phone/verify?nomor_telp=${val}`)
-                  .then(res => {
-                    const {
-                      data: {
-                        status,
-                        message
+                this.timeVerifyPhone = setTimeout(() => {
+                  const {
+                    required: re,
+                  } = this.$v.formData['no._handphone'];
+                  if (val === "" || !re) resolve(true);
+                  axios
+                    .get(`${this.url_api}/phone/verify?nomor_telp=${val}`)
+                    .then(res => {
+                      const {
+                        data: {
+                          status,
+                          message
+                        }
+                      } = res;
+                      resolve(status);
+                    })
+                    .catch(err => {
+                      if (err.response) {
+                        const x = err.response.data;
+                        if (x && x.nomor_telp) {
+                          resolve(false);
+                        }
+                      } else {
+                        resolve(true);
                       }
-                    } = res;
-                    resolve(status);
-                  })
-                  .catch(err => {
-                    if (err.response) {
-                      const x = err.response.data;
-                      if (x && x.nomor_telp) {
-                        resolve(false);
-                      }
-                    } else {
+                    })
+                    .finally(() => {
+                      const x = "no._handphone";
+                      this.triggerValidation({
+                        label: x,
+                        $v: this.$v,
+                        $vm: this,
+                        rawLabel: x
+                      });
                       resolve(true);
-                    }
-                  })
-                  .finally(() => {
-                    const x = "no._handphone";
-                    this.triggerValidation({
-                      label: x,
-                      $v: this.$v,
-                      $vm: this,
-                      rawLabel: x
                     });
-                  });
+                }, 650);
               });
             }
           },
