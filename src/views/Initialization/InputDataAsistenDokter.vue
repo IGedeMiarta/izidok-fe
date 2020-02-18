@@ -14,11 +14,7 @@
                   v-for="form in formBasicData"
                   :key="form.tmpId"
                   class="text-capitalize"
-                  :invalid-feedback="
-                    renderInvalidFeedback({
-                      validationDesc: form['validation-desc']
-                    })
-                  "
+                  :invalid-feedback="customRenderInvalidFeedback(form)"
                   style="position: relative"
                   :state="renderError({ error: form.error })"
                 >
@@ -28,30 +24,58 @@
                       <span style="color: red" v-if="form.mandatory">*</span>
                     </p>
                   </template>
-                  <b-form-input
-                    :type="form.type || 'text'"
-                    @keyup="
-                      setValue({
-                        rawLabel: form.rawLabel,
-                        label: form.label,
-                        $event,
-                        tmpId: form.tmpId
-                      })
-                    "
-                    :state="renderError({ error: form.error })"
-                    :placeholder="form.placeholder"
-                    maxlength="50"
-                  />
+                  <template v-if="/(handphone)/gi.test(form.label)">
+                    <b-form-input
+                      :type="form.type || 'text'"
+                      @keyup="
+                        setValue({
+                          rawLabel: form.rawLabel,
+                          label: form.label,
+                          $event,
+                          tmpId: form.tmpId
+                        })
+                      "
+                      @keypress="
+                        onKeyInputNumber({
+                          label: form.label,
+                          rawLabel: form.rawLabel,
+                          $event
+                        })
+                      "
+                      :state="renderError({ error: form.error })"
+                      :placeholder="form.placeholder"
+                      maxlength="50"
+                    />
+                  </template>
+                  <template v-else>
+                    <b-form-input
+                      :type="form.type || 'text'"
+                      @keyup="
+                        setValue({
+                          rawLabel: form.rawLabel,
+                          label: form.label,
+                          $event,
+                          tmpId: form.tmpId
+                        })
+                      "
+                      :state="renderError({ error: form.error })"
+                      :placeholder="form.placeholder"
+                      maxlength="50"
+                    />
+                  </template>
                   <template v-if="form.label === 'password'">
-                    <p class="my-2" style="font-size: .8rem">*Password merupakan kombinasi huruf &amp; angka, maks. 15 karakter</p>
+                    <p class="my-2" style="font-size: .8rem">
+                      *Password merupakan kombinasi huruf &amp; angka, maks. 15
+                      karakter
+                    </p>
                   </template>
                 </b-form-group>
 
                 <div class="float-right">
                   <router-link
+                    tag="button"
                     to="/input-tarif"
-                    variant="secondary"
-                    class="text-capitalize mr-2"
+                    class="text-capitalize mr-2 btn btn-danger"
                     >lewati</router-link
                   >
                   <b-button
@@ -76,8 +100,14 @@ import {
   email,
   required,
   minLength,
-  sameAs
+  sameAs,
+  numeric
 } from "vuelidate/lib/validators";
+import axios from "axios";
+
+const verifyPassword = val => {
+  return /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]*$/gi.test(val);
+};
 
 export default {
   beforeRouteEnter(to, from, next) {
@@ -88,6 +118,7 @@ export default {
       next("/");
     }
   },
+  props: ["klinik_id"],
   data: () => ({
     formBasicData: null,
     formData: null,
@@ -102,21 +133,94 @@ export default {
       },
       "no._handphone": {
         required,
+        numeric,
+        verifyPhone(val) {
+          const { required: re, numeric: nc, minLength: ml } = this.$v.formData[
+            "no._handphone"
+          ];
+          if (val === "" || !re || !nc || !ml) return true;
+          return new Promise((resolve, reject) => {
+            axios
+              .get(`${this.url_api}/phone/verify?nomor_telp=${val}`)
+              .then(res => {
+                const {
+                  data: { status, message }
+                } = res;
+                resolve(status);
+              })
+              .catch(err => {
+                if (err.response) {
+                  const x = err.response.data;
+                  if (x && x.nomor_telp) {
+                    resolve(false);
+                  }
+                } else {
+                  resolve(true);
+                }
+              })
+              .finally(() => {
+                const x = "no._handphone";
+                this.triggerValidation({
+                  label: x,
+                  $v: this.$v,
+                  $vm: this,
+                  rawLabel: x
+                });
+              });
+          });
+        },
         minLength: minLength(10),
         maxLength: maxLength(50)
       },
       email: {
         required,
-        maxLength: maxLength(50),
-        email
+        email,
+        verifyEmail(val) {
+          const { required: re, email: em } = this.$v.formData.email;
+          if (val === "" || !re || !em) return true;
+
+          return new Promise((resolve, reject) => {
+            axios
+              .get(`${this.url_api}/email/verify?email=${val}`)
+              .then(res => {
+                const {
+                  data: { status, message }
+                } = res;
+
+                resolve(status);
+              })
+              .catch(err => {
+                if (err.response) {
+                  const x = err.response.data;
+                  if (x && x.email) {
+                    resolve(false);
+                  }
+                } else {
+                  resolve(true);
+                }
+              })
+              .finally(() => {
+                const x = "email";
+                this.triggerValidation({
+                  label: x,
+                  $v: this.$v,
+                  $vm: this,
+                  rawLabel: x
+                });
+              });
+          });
+        },
+        maxLength: maxLength(50)
       },
       password: {
         required,
+        verifyPasswordNoUppercase: verifyPassword,
         minLength: minLength(6),
         maxLength: maxLength(15)
       },
       konfirmasi_password: {
         required,
+        verifyPasswordNoUppercase: verifyPassword,
         sameAsPassword: sameAs("password"),
         minLength: minLength(6),
         maxLength: maxLength(15)
@@ -135,19 +239,65 @@ export default {
     this.formData = this.setFormData();
   },
   methods: {
-    async addOperator() {
+    customRenderInvalidFeedback(form) {
+      const { rawLabel, "validation-desc": valDesc } = form;
+
+      if (/(handphone)/gi.test(rawLabel) && valDesc) {
+        const regex = new RegExp(/telepon/gi);
+        const x = valDesc.findIndex(item => regex.test(item));
+
+        if (x === 0) {
+          return (
+            valDesc && valDesc[x] && valDesc[x].replace(regex, "handphone")
+          );
+        } else {
+          return this.renderInvalidFeedback({
+            validationDesc: form["validation-desc"]
+          });
+        }
+      } else {
+        return this.renderInvalidFeedback({
+          validationDesc: form["validation-desc"]
+        });
+      }
+    },
+    onKeyInputNumber({ label, rawLabel, $event }) {
+      var evt = $event;
+      evt = evt ? evt : window.event;
+      var charCode = evt.which ? evt.which : evt.keyCode;
+      if (
+        charCode > 31 &&
+        (charCode < 48 || charCode > 57) &&
+        charCode !== 46
+      ) {
+        evt.preventDefault();
+      } else {
+        void this.setValue({ label, rawLabel, $event });
+      }
+    },
+    async addAsistenDokter() {
       const { constructPostData } = this;
       try {
         const res = await axios.post(
           `${this.url_api}/operator`,
           constructPostData()
         );
-        const { status, data } = res.data;
-        if (status) {
-          this.$router.push("/input-tarif");
+        const { status, data, message } = res.data;
+        if (!status) {
+          this.$swal({
+            text: `${message || "something went wrong"}`,
+            type: "error"
+          });
+
+          return false;
         }
+
+        this.$router.push({
+          name: "input-tarif",
+          params: { klinik_id: klinik_id }
+        });
       } catch (err) {
-        // console.log(err);
+        console.log(err);
       }
     },
     constructPostData() {
@@ -155,6 +305,10 @@ export default {
       const tmp = Object.keys(formData).reduce((obj, key) => {
         if (/(nama)/gi.test(key)) {
           obj["nama"] = formData[key];
+        } else if (/(handphone)/gi.test(key)) {
+          obj["nomor_telp"] = formData[key];
+        } else if (/(konfirmasi)/gi.test(key)) {
+          obj["password_confirmation"] = formData[key];
         } else {
           obj[key] = formData[key];
         }
@@ -165,7 +319,7 @@ export default {
     submitInputDataOperator() {
       const { formBasicData } = this;
       if (formBasicData.every(item => item.error !== null && !item.error)) {
-        this.addOperator();
+        this.addAsistenDokter();
       } else {
         formBasicData.map(item => {
           this.triggerValidation({ label: item.label, $v: this.$v, $vm: this });

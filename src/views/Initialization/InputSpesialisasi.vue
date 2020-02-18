@@ -25,11 +25,12 @@
                           :options="spesialisasi"
                           @input="
                             setValue({
-                              rawLabel: 'pilih spesialisasi',
+                              label: form.label,
+                              rawLabel: form.rawLabel,
                               $event
                             })
                           "
-                          :value="getValue('pilih_spesialisasi')"
+                          :value="getValue('pilih spesialisasi')"
                           :placeholder="form.placeholder"
                           label="title"
                           class="custom-v-select"
@@ -111,13 +112,14 @@
 </template>
 
 <script>
-import { maxLength, email, required } from "vuelidate/lib/validators";
 import axios from "axios";
+import { maxLength, email, required } from "vuelidate/lib/validators";
 
 export default {
   components: {
     "vue-select": () => import("@/components/VueSelect.vue")
   },
+  props: ["klinik_id"],
   data: () => ({
     formBasicData: null,
     formData: null,
@@ -179,8 +181,29 @@ export default {
   mounted() {
     this.formBasicData = this.setFormBasicData();
     this.formData = this.setFormData();
+    axios.all([this.fetchSpesialisasi()]);
   },
   methods: {
+    async fetchSpesialisasi() {
+      try {
+        const res = await axios.get(`${this.url_api}/spesialisasi`);
+        const {
+          data: { spesialisasi }
+        } = res.data;
+        this.spesialisasi = spesialisasi.map(item => ({
+          label: item.nama,
+          value: item.id
+        }));
+        // if (status) {
+        //   this.$router.push({
+        //     name: "input-tarif",
+        //     params: { klinik_id: klinik_id }
+        //   });
+        // }
+      } catch (err) {
+        console.log(err);
+      }
+    },
     customRenderInvalidFeedback(form) {
       const { rawLabel, "validation-desc": valDesc } = form;
 
@@ -194,25 +217,45 @@ export default {
         });
       }
     },
-    addSpesialisasi() {
-      this.$router.push({
-        name: "input-asisten-dokter"
-      });
-      // const { constructPostData } = this;
-      // try {
-      //   const res = await axios.post(
-      //     `${this.url_api}/operator`,
-      //     constructPostData()
-      //   );
-      //   const { status, data } = res.data;
-      //   if (status) {
-      //     this.$router.push({
-      //       name: "input-asisten-dokter"
-      //     });
-      //   }
-      // } catch (err) {
-      //   // console.log(err);
-      // }
+    determineNextRoute() {
+      const {
+        formData: { "Apakah_Anda_memiliki_Asisten?": aama }
+      } = this;
+      if (aama) {
+        this.$router.push({
+          name: "input-asisten-dokter",
+          params: { klinik_id: this.klinik_id }
+        });
+      } else {
+        this.$router.push({
+          name: "input-tarif",
+          params: { klinik_id: this.klinik_id }
+        });
+      }
+    },
+    async addSpesialisasi() {
+      let statusX;
+      const { constructPostData } = this;
+      try {
+        const res = await axios.put(
+          `${this.url_api}/klinik/${this.klinik_id}`,
+          constructPostData()
+        );
+        const { status, data, message } = res.data;
+        if (!status) {
+          this.$swal({
+            text: `${message || "something went wrong"}`,
+            type: "error"
+          });
+          return false;
+        }
+
+        statusX = status;
+      } catch (err) {
+        console.log(err);
+      } finally {
+        if (statusX) this.determineNextRoute();
+      }
     },
     customInputEvent({ label, rawLabel, $event }) {
       const { key } = $event;
@@ -233,8 +276,11 @@ export default {
     constructPostData() {
       const { formData } = this;
       const tmp = Object.keys(formData).reduce((obj, key) => {
-        if (/(nama)/gi.test(key)) {
-          obj["nama"] = formData[key];
+        if (/(pilih)/gi.test(key)) {
+          const { value } = formData[key];
+          obj["spesialisasi_id"] = value;
+        } else if (/(sip)/gi.test(key)) {
+          obj["nomor_ijin"] = formData[key];
         } else {
           obj[key] = formData[key];
         }
@@ -295,21 +341,25 @@ export default {
 
       return tmp;
     },
-    setValue({ rawLabel, $event = null } = {}) {
+    setValue({ label, rawLabel, $event = null } = {}) {
       let value = $event;
-      const label = rawLabel.split(" ").join("_");
       if (typeof $event === "object") {
         if ($event) {
-          const {
-            target: { value }
-          } = $event;
-          this.formData[label] = value;
+          if ($event && $event.target && $event.target.value) {
+            const {
+              target: { value }
+            } = $event;
+            this.formData[label] = value;
+          } else if ($event && $event.label && $event.value) {
+            this.formData[label] = $event;
+          }
         } else {
-          this.formData[label] = null;
+          this.formData[label] = "";
         }
       } else {
         this.formData[label] = value;
       }
+
       this.triggerValidation({
         label,
         $v: this.$v,
