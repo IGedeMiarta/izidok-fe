@@ -5,23 +5,18 @@
         <div class="col-sm-6 p-0 img-banner-left">
           <!-- <div class="hero-wrapper bg-composed-wrapper bg-plum-plate min-vh-100" style="height: 100%"> -->
           <div class="flex-grow-1 w-100  align-items-center">
-            <!-- <div class="bg-composed-wrapper--image" :style="{
-                  backgroundImage:
-                    'url(' + require('@/assets/img/register.jpg') + ')'
-                }"></div> -->
-            <VueSlickCarousel :dots="true" :adaptiveHeight="true" :arrows='false' :autoplay="true" 
-  >
-              <img src="@/assets/img/image_Register1.jpg" style="height:auto" alt="Banner izidok">
-              <img src="@/assets/img/image_Register2.jpg" style="height:auto" alt="Banner izidok">
-              <img src="@/assets/img/image_Register3.jpg" style="height:auto" alt="Banner izidok">
+            <VueSlickCarousel :dots="true" :adaptiveHeight="true" :arrows='false' :autoplay="true">
+              <img src="@/assets/img/image_Register1.jpg" style="height: 100%" alt="Banner izidok">
+              <img src="@/assets/img/image_Register2.jpg" style="height: 100%" alt="Banner izidok">
+              <img src="@/assets/img/image_Register3.jpg" style="height: 100%" alt="Banner izidok">
             </VueSlickCarousel>
           </div>
           <!-- </div> -->
         </div>
-        <div class="col-lg-6 mt-1 d-flex align-items-center p-5 content-register-right">
+        <div class="col-lg-6 d-flex align-items-center p-1 content-register-right">
 
           <div class="py-1 col-sm-8" style="margin-left:auto;margin-right:auto">
-            <h4 class="mb-2 font-weight-bold text-capitalize">
+            <h4 class="font-weight-bold text-capitalize">
               daftarkan {{ selectedTipeFaskes }} anda
             </h4>
             <b-form @submit.prevent="submitForm">
@@ -45,8 +40,8 @@
                   </template>
                 </b-form-group> -->
               <template v-if="formBasicData && formBasicData.length">
-                <b-form-group v-for="form in formBasicData"
-                  :key="form.tmpId" :class="form.rawLabel == 'No. SIP' ? '' : 'text-capitalize'" :invalid-feedback="
+                <b-form-group v-for="form in formBasicData" :key="form.tmpId"
+                  :class="form.rawLabel == 'No. SIP' ? '' : 'text-capitalize'" :invalid-feedback="
                       renderInvalidFeedback({
                         validationDesc: form['validation-desc']
                       })
@@ -62,18 +57,20 @@
                   <!-- <b-form-select v-if="form.type === 'select'" v-model="formData.pilih_spesialisasi" :options="options" class="mt-3"
                       @change="spesialisLainnya"></b-form-select> -->
                   <template v-if="form.isType === 'password' || form.isType == 'password' ">
-                      <label for="">{{form.rawLabel}}</label>
-                  <label for="" style="color:red"> *</label>
+                    <label for="">{{form.rawLabel}}</label>
+                    <label for="" style="color:red"> *</label>
                     <b-input-group>
                       <b-input-group-text slot="append" class="border-left-0" v-if="form.name == 'password' "
                         @click="switchVisibilityPassword">
-                        <font-awesome-icon class="mx-auto" icon="eye" />
+                        <font-awesome-icon v-if="passwordVisible == false" icon="eye" />
+                        <font-awesome-icon v-else icon="eye-slash" />
                       </b-input-group-text>
                       <b-input-group-text slot="append" class="border-left-0"
                         v-if="form.name == 'password_confirmation' " @click="switchVisibilityPasswordConfirmation">
-                        <font-awesome-icon class="mx-auto" icon="eye" />
+                        <font-awesome-icon v-if="passwordVisible1 == false" icon="eye" />
+                        <font-awesome-icon v-else icon="eye-slash" />
                       </b-input-group-text>
-                     
+
                       <b-form-input :type="form.type || 'text'" class="border-right-0" @input="
                                       setValue({
                                         rawLabel: form.rawLabel,
@@ -85,11 +82,11 @@
                         :placeholder="form.placeholder" />
                     </b-input-group>
                   </template>
-                  <template  v-else :type="form.type || 'text'" >
-                  
-                  <label for="">{{form.rawLabel}}</label>
-                  <label for="" style="color:red"> *</label>
-                  <b-form-input @input="
+                  <template v-else :type="form.type || 'text'">
+
+                    <label for="">{{form.rawLabel}}</label>
+                    <label for="" style="color:red"> *</label>
+                    <b-form-input @input="
                         setValue({
                           rawLabel: form.rawLabel,
                           label : form.label,
@@ -97,9 +94,9 @@
                           tmpId: form.tmpId
                         })
                       " :state="renderError({ error: form.error })" :placeholder="form.placeholder"
-                  :maxlength="form.maxlength" />
-                    </template>
-                  
+                      :maxlength="form.maxlength" />
+                  </template>
+
                 </b-form-group>
               </template>
               <div class="form-group">
@@ -141,6 +138,7 @@
     faFileSignature,
     faComments,
     faEye,
+    faEyeSlash,
     faEdit,
     faImage
   } from "@fortawesome/free-solid-svg-icons";
@@ -154,7 +152,7 @@
     helpers
   } from "vuelidate/lib/validators";
 
-  library.add(faArrowLeft, faEye, faFileSignature, faImage, faComments, faEdit);
+  library.add(faArrowLeft, faEye, faEyeSlash, faFileSignature, faImage, faComments, faEdit);
 
   import VueSlickCarousel from 'vue-slick-carousel'
   // optional style for arrows & dots
@@ -189,7 +187,8 @@
       isClicked: false,
       selected: null,
       dataSpesialisasi: null,
-
+      passwordVisible: false,
+      passwordVisible1: false,
       options: [{
           value: null,
           text: 'Pilih Spesialisasi'
@@ -423,15 +422,13 @@
           // },
           password: {
             required,
-            minLength: minLength(6),
             maxLength: maxLength(15),
             verifyPassword(val) {
               if (val.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/)) {
-                  return true
-                }
-                else {
-                  return false;
-                }
+                return true
+              } else {
+                return false;
+              }
               // const {
               //   required: re
               // } = this.$v.formData.password;
@@ -453,7 +450,7 @@
               // });
             }
           },
-     
+
           konfirmasi_password: {
             required,
             sameAsPassword: sameAs("password"),
@@ -563,14 +560,24 @@
         x;
     },
     methods: {
-          
+
       switchVisibilityPassword() {
         this.formBasicData[3].type == 'password' ? this.formBasicData[3].type = 'text' : this.formBasicData[3].type =
           'password';
+        if (this.formBasicData[3].type == 'text') {
+          this.passwordVisible = true;
+        } else if (this.formBasicData[3].type == 'password') {
+          this.passwordVisible = false;
+        }
       },
       switchVisibilityPasswordConfirmation() {
         this.formBasicData[4].type == 'password' ? this.formBasicData[4].type = 'text' : this.formBasicData[4].type =
           'password';
+        if (this.formBasicData[4].type == 'text') {
+          this.passwordVisible1 = true;
+        } else if (this.formBasicData[4].type == 'password') {
+          this.passwordVisible1 = false;
+        }
       },
       spesialisLainnya() {
         if (this.formData.pilih_spesialisasi === 'e') {
@@ -880,6 +887,7 @@
     position: absolute;
     right: 0px;
   }
+
   // @media only screen and (max-width: 1084px) {
   //   .img-banner-left { 
   //     height: 754px;;
