@@ -4,12 +4,14 @@
       <template v-if="!loggedIn">
 
         <div class="app-content p-0">
-          <div class="d-flex align-items-center h-100">
+          <div class="d-flex align-items-center">
             <div class="flex-grow-1 w-100 d-flex align-items-center">
               <div class="container-fluid">
                 <div class="row">
                   <div class="col-md-6 pl-0 d-none d-lg-flex align-items-center">
-                    <img src="@/assets/login.jpg" class="img-fluid" alt="login izidok" />
+                    <div class="wrap" :style="wrapStyle">
+                      <img src="@/assets/login.jpg" alt="login izidok" :style="wrapImgStyle" />
+                    </div>
                   </div>
                   <div class="col-md-6 pr-0 d-flex align-items-center">
                     <div>
@@ -142,9 +144,18 @@
       passwordVisible: false,
       failedCounter: 0,
       klinik_id: null,
+      windowHeight: 0
     }),
     components: {
       "first-join-component": () => import("@/components/FirstJoin")
+    },
+    computed: {
+      wrapStyle() {
+        return {height: this.windowHeight + 'px'}
+      },
+      wrapImgStyle() {
+        return {"max-height": this.windowHeight + 'px'}
+      },
     },
     validations: {
       formData: {
@@ -161,6 +172,13 @@
     mounted() {
       this.formBasicData = this.setFormBasicData();
       this.formData = this.setFormData();
+
+      this.windowHeight = window.innerHeight;
+      this.$nextTick(() => {
+        window.addEventListener('resize', (e) => {
+          this.windowHeight = window.innerHeight;
+        })
+      })
     },
     methods: {
       switchVisibility() {
@@ -288,7 +306,7 @@
           error: null,
           placeholder: !item.ignoreTransform ?
             startCase(item.placeholder) : item.placeholder,
-          rawLabel:item.label.split(".").join(". "),
+          rawLabel: item.label.split(".").join(". "),
         }));
 
         return noFilter ?
@@ -334,17 +352,36 @@
     margin-left: 15px;
   }
 
-  @media only screen and (max-width: 990px) {
+  @media only screen and (max-width: 990px) and (min-width: 660px) {
     .form-login {
       margin-left: auto;
       margin-right: auto;
     }
   }
 
+  .wrap {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    margin: 0;
+  }
+
+  .wrap img {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-height: 100%;
+    min-width: 100%;
+    transform: translate(-50%, -50%);
+  }
+
   @media only screen and (max-width: 600px) {
     .form-login {
       margin-left: auto;
-      margin-right: 20px;
+      margin-right: auto;
     }
   }
 </style>

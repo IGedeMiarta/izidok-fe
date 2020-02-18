@@ -130,6 +130,7 @@
 <script>
   import axios from "axios";
   import startCase from "lodash/startCase";
+  import debounce from "lodash/debounce";
   import {
     library
   } from "@fortawesome/fontawesome-svg-core";
@@ -189,112 +190,6 @@
       dataSpesialisasi: null,
       passwordVisible: false,
       passwordVisible1: false,
-      timeVerifyPhone: null,
-      options: [{
-          value: null,
-          text: 'Pilih Spesialisasi'
-        },
-        {
-          id: 1,
-          value: 'Umum',
-          text: 'Umum'
-        },
-        {
-          id: 2,
-          value: 'Gigi',
-          text: 'Gigi'
-        },
-        {
-          id: 3,
-          value: 'Spesialis Penyakit Dalam',
-          text: 'Spesialis Penyakit Dalam'
-        },
-        {
-          id: 4,
-          value: 'Spesialis Anak',
-          text: 'Spesialis Anak'
-        },
-        {
-          id: 5,
-          value: 'Spesialis Obstetri & Ginekologi',
-          text: 'Spesialis Obstetri & Ginekologi'
-        },
-        {
-          id: 6,
-          value: 'Spesialis Jantung & Pembuluh Darah',
-          text: 'Spesialis Jantung & Pembuluh Darah'
-        },
-        {
-          id: 7,
-          value: 'Spesialis Kulit & Kelamin',
-          text: 'Spesialis Kulit & Kelamin'
-        },
-        {
-          id: 8,
-          value: 'Spesialis Mata',
-          text: 'Spesialis Mata'
-        },
-        {
-          id: 9,
-          value: 'Spesialis Anak',
-          text: 'Spesialis Anak'
-        },
-        {
-          id: 10,
-          value: 'Spesialis Saraf',
-          text: 'Spesialis Saraf'
-        },
-        {
-          id: 11,
-          value: 'Spesialis THT',
-          text: 'Spesialis THT'
-        },
-        {
-          id: 12,
-          value: 'Spesialis Paru',
-          text: 'Spesialis Paru'
-        },
-        {
-          id: 13,
-          value: 'Spesialis Urologi',
-          text: 'Spesialis Urologi'
-        },
-        {
-          id: 14,
-          value: 'Spesialis Geriatri',
-          text: 'Spesialis Geriatri'
-        },
-        {
-          id: 15,
-          value: 'Spesialis Gigi Anak',
-          text: 'Spesialis Gigi Anak'
-        },
-        {
-          id: 16,
-          value: 'Spesialis Konservatori Gigi',
-          text: 'Spesialis Konservatori Gigi'
-        },
-        {
-          id: 17,
-          value: 'Spesialis Ortodonsia Gigi',
-          text: 'Spesialis Ortodonsia Gigi'
-        },
-        {
-          id: 18,
-          value: 'Spesialis Ortodonsia Gigi',
-          text: 'Spesialis Periodonsia (Gigi)'
-        },
-        {
-          id: 19,
-          value: 'Spesialis Bedah Mulut & Maksilofasial',
-          text: 'Spesialis Bedah Mulut & Maksilofasial'
-        },
-        {
-          id: 20,
-          value: 'e',
-          text: 'Lainya'
-        },
-      ]
     }),
     components: {
       VueSlickCarousel
@@ -414,7 +309,7 @@
                     });
                 }, 650);
               });
-            }
+            },
           },
           // "no._izin_klinik": {
           //   maxLength: maxLength(50)
