@@ -114,6 +114,7 @@
 <script>
 import axios from "axios";
 import { maxLength, email, required } from "vuelidate/lib/validators";
+import { mapMutations, mapState } from "vuex";
 
 export default {
   components: {
@@ -172,10 +173,18 @@ export default {
     }
   },
   computed: {
+    ...mapState(["sidebarCollapsed"]),
     subheading() {
       return {
         text: `*Operator adalah staff yang dapat membantu Anda untuk melakukan aktivitas registrasi, administrasi, maupun pembayaran. <br/> Silahkan masukkan email dan nama untuk mendaftarkan Operator Anda (jika ada) atau lewati langkah ini.`
       };
+    }
+  },
+  beforeMount() {
+    this.setInitPage(true)
+
+    if (!this.sidebarCollapsed) {
+      this.collapseSidebar(true);
     }
   },
   mounted() {
@@ -184,6 +193,10 @@ export default {
     axios.all([this.fetchSpesialisasi()]);
   },
   methods: {
+    ...mapMutations({
+      collapseSidebar: "sidebar/SET_SIDEBAR_COLLAPSED",
+      setInitPage: 'sidebar/SET_INITIALIZATION_PAGE'
+    }),
     async fetchSpesialisasi() {
       try {
         const res = await axios.get(`${this.url_api}/spesialisasi`);

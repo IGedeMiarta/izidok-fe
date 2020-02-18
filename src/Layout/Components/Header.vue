@@ -1,6 +1,6 @@
 <template>
   <div class="app-header">
-    <div class="d-flex">
+    <div class="d-flex" :class="{ 'invisible': initPage }">
       <button
         class="navbar-toggler hamburger hamburger--elastic toggle-sidebar"
         v-bind:class="{ 'is-active': sidebarCollapsed }"
@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "Header",
   components: {
@@ -39,6 +41,9 @@ export default {
     return {};
   },
   computed: {
+    ...mapGetters({
+      initPage: "sidebar/initPage"
+    }),
     sidebarCollapsed: {
       get() {
         return this.$store.state.sidebar.sidebarCollapsed;

@@ -2,9 +2,16 @@ const sidebar = {
   namespaced: true,
   state: {
     sidebarCollapsed: true,
-    sidebarCollapsedMobile: true
+    sidebarCollapsedMobile: true,
+    initializationPage: false
+  },
+  getters: {
+    initPage: state => state.initializationPage
   },
   mutations: {
+    SET_INITIALIZATION_PAGE(state, value) {
+      state.initializationPage = value;
+    },
     SET_SIDEBAR_COLLAPSED(state, value) {
       state.sidebarCollapsed = value;
     },
