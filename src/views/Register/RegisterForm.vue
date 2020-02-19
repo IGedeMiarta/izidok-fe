@@ -13,9 +13,9 @@
           </div>
           <!-- </div> -->
         </div>
-        <div class="col-lg-6 d-flex align-items-center p-1 content-register-right">
+        <div class="col-lg-6 d-flex align-items-center content-register-right">
 
-          <div class="py-1 col-sm-8" style="margin-left:auto;margin-right:auto">
+          <div class=" col-sm-8" style="margin-left:auto;margin-right:auto">
             <h4 class="font-weight-bold text-capitalize">
               daftarkan {{ selectedTipeFaskes }} anda
             </h4>
@@ -45,7 +45,7 @@
                       renderInvalidFeedback({
                         validationDesc: form['validation-desc']
                       })
-                    " :state="renderError({ error: form.error })">
+                    " :state="renderError({ error: form.error })" style="margin-top:-8px;" >
                   <!-- <b-form-input
                       :type="form.type || 'text'"
                       :value="form.value"
@@ -107,11 +107,11 @@
                 <span class="text-capitalize"><strong>kebijakan privasi</strong></span> yang
                 berlaku
               </div>
-              <button type="submit" class="btn btn-lg btn-block text-capitalize"
+              <button type="submit" class="btn btn-md btn-block text-capitalize"
                 style="background-color :#3F7EA7; color:white; border-radius : 10px;">
                 daftar
               </button>
-              <div class="text-center" style="margin-top:15px;">
+              <div class="text-center" style="margin-top:2px;">
                 Anda Sudah Memiliki Akun ?
                 <router-link to="/login">
                   <span class="btn-wrapper--label">Masuk</span>
@@ -307,7 +307,7 @@
                       });
                       resolve(true);
                     });
-                }, 650);
+                }, 450);
               });
             },
           },

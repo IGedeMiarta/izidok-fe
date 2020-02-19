@@ -22,7 +22,7 @@
                           Masukan Email/No. Handphone beserta password Anda
                         </label>
                         <div>
-                          <b-form v-on:submit.prevent="submitForm">
+                          <b-form @submit.prevent="submitForm">
                             <template v-if="formBasicData && formBasicData.length">
                               <b-form-group v-for="form in formBasicData" :key="form.tmpId" class="text-capitalize"
                                 :invalid-feedback="
@@ -151,10 +151,14 @@
     },
     computed: {
       wrapStyle() {
-        return {height: this.windowHeight + 'px'}
+        return {
+          height: this.windowHeight + 'px'
+        }
       },
       wrapImgStyle() {
-        return {"max-height": this.windowHeight + 'px'}
+        return {
+          "max-height": this.windowHeight + 'px'
+        }
       },
     },
     validations: {
@@ -165,7 +169,17 @@
         },
         password: {
           required,
-          minLength: minLength(6),
+          verifyPassword(val) {
+            if (val || val != null) {
+              if (val.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/)) {
+                return true;
+              } else {
+                return false;
+              }
+            } else {
+              return false;
+            }
+          }
         }
       }
     },
