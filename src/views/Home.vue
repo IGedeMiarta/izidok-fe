@@ -113,11 +113,11 @@ export default {
     // TrendPasien: () => import("@/components/TrendPasien")
   },
   mounted() {
-    Promise.all([
-      this.getAntrean(),
-      this.getRawatJalan(),
-      this.getPasienBaru()
-    ]);
+    // Promise.all([
+    //   this.getAntrean(),
+    //   this.getRawatJalan(),
+    //   this.getPasienBaru()
+    // ]);
   },
   computed: {
     now() {

@@ -170,10 +170,10 @@ export default {
               href: "/rawat-jalan/antrean",
               title: "Antrean"
             },
-            {
-              href: "/rekam-medis",
-              title: "Rekam Medis"
-            }
+            // {
+            //   href: "/rekam-medis",
+            //   title: "Rekam Medis"
+            // }
             // {
             //   // href: "/layouts/gradient-sidebar-1",
             //   title: "Resep"
@@ -213,16 +213,16 @@ export default {
         //     }
         //   }
         // },
-        {
-          title: "Halaman Pembayaran",
-          href: "/pembayaran",
-          icon: {
-            element: "font-awesome-icon",
-            attributes: {
-              icon: "calculator"
-            }
-          }
-        }
+        // {
+        //   title: "Halaman Pembayaran",
+        //   href: "/pembayaran",
+        //   icon: {
+        //     element: "font-awesome-icon",
+        //     attributes: {
+        //       icon: "calculator"
+        //     }
+        //   }
+        // }
         // {
         //   title: "Laporan",
         //   icon: {
