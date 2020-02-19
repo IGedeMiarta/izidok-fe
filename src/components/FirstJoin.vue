@@ -48,8 +48,17 @@
 </template>
 
 <script>
+import { mapMutations, mapState } from "vuex";
+
   export default {
     props: ["modalShow", 'klinik_id'],
+    beforeMount() {
+      this.setInitPage(true)
+
+      if (!this.sidebarCollapsed) {
+        this.collapseSidebar(true);
+      }
+    },
     mounted() {
       if (this.modalShow) {
         this.$refs["first-join-modal"].show();
@@ -60,7 +69,14 @@
         windowHeight: 0
       };
     },
+    methods: {
+      ...mapMutations({
+        collapseSidebar: "sidebar/SET_SIDEBAR_COLLAPSED",
+        setInitPage: 'sidebar/SET_INITIALIZATION_PAGE'
+      }),
+    },
     computed: {
+      ...mapState(["sidebarCollapsed"]),
       wrapStyle() {
         return {
           height: this.windowHeight + 'px'

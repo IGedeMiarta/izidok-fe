@@ -130,6 +130,7 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
 import Vue from "vue";
 import startCase from "lodash/startCase";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -169,6 +170,10 @@ export default {
     this.tmpInputTarifData = this.setTmpInputTarifData();
   },
   methods: {
+    ...mapMutations({
+      collapseSidebar: "sidebar/SET_SIDEBAR_COLLAPSED",
+      setInitPage: 'sidebar/SET_INITIALIZATION_PAGE'
+    }),
     setTmpInputTarifData() {
       return this.tmpInputTarifData.map(item => {
         const tmp = Object.keys(item).reduce((obj, key) => {
@@ -270,6 +275,10 @@ export default {
           arr: constructPostData()
         });
         const { status, data } = res.data;
+
+        this.setInitPage(true)
+
+        this.collapseSidebar(false);
 
         this.$router.push({
           path: "/input-data-operator"

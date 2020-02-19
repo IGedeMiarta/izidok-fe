@@ -106,6 +106,7 @@
 </template>
 
 <script>
+  import { mapMutations, mapState } from "vuex";
   import startCase from "lodash/startCase";
   import {
     required,
@@ -150,6 +151,7 @@
       "first-join-component": () => import("@/components/FirstJoin")
     },
     computed: {
+      ...mapState(["sidebarCollapsed, 'initializationPage"]),
       wrapStyle() {
         return {
           height: this.windowHeight + 'px'
@@ -195,6 +197,10 @@
       })
     },
     methods: {
+      ...mapMutations({
+        collapseSidebar: "sidebar/SET_SIDEBAR_COLLAPSED",
+        setInitPage: 'sidebar/SET_INITIALIZATION_PAGE'
+      }),
       switchVisibility() {
         this.formBasicData[1].type == 'password' ? this.formBasicData[1].type = 'text' : this.formBasicData[1].type =
           'password';
@@ -250,6 +256,8 @@
 
             // not first join
             if (!this.firstJoin) {
+              this.setInitPage(false)
+
               this.$router.push('/');
             }
           } else {
