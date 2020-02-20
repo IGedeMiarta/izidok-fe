@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- <div class="d-flex"> -->
-    <b-container>
+    <b-container class="mb-4">
       <b-row>
         <b-col class="pl-0">
           <div class="d-flex text-capitalize align-items-center">
