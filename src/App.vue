@@ -39,6 +39,7 @@ export default {
       }).then((e) => {
         this.$store.commit('SET_BEARER_TOKEN', null);
         this.$store.commit('SET_USER', null);
+        this.$store.commit('SET_AUTHERROR', null);
         this.$router.push('/login');
       });
     }
