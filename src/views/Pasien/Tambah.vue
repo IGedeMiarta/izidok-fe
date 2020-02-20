@@ -95,7 +95,6 @@ export default {
       axios.get(`${this.url_api}/pasien`).then(res => {
         let totalCurrentPasien = res.data.data.pasien.total;
         postData.nomor_rekam_medis = 100000 + (totalCurrentPasien + 1);
-
         this.addPasien(postData);
       });
     },

@@ -50,7 +50,7 @@
                 $event
               })
             " :state="getDataError({ rawLabel: 'nama lengkap' })" :disabled="disabledForm()"
-                :value="getValue('nama lengkap')" :maxlength="60" />
+                :value="getValue('nama')" :maxlength="60" />
             </b-form-group>
           </b-col>
           <b-col sm="6">
@@ -75,7 +75,7 @@
                 $event
               })
             " :state="getDataError({ rawLabel: 'no. handphone' })" :disabled="disabledForm()"
-                :value="getValue('no. handphone')" :maxlength="30" />
+                :value="getValue('nomor_hp')" :maxlength="30" />
             </b-form-group>
           </b-col>
           <b-col sm="2">
@@ -160,10 +160,10 @@
                 ">
               <label for="">{{ renderLabel({ label: 'tanggal lahir'  }) }}</label>
               <label for="" style="color:red"> *</label>
-                <b-input-group>
-                                    <b-input-group-text slot="append">
-                                     <font-awesome-icon class="mx-auto" icon="calendar" />
-                                    </b-input-group-text>
+              <b-input-group>
+                <b-input-group-text slot="append">
+                  <font-awesome-icon class="mx-auto" icon="calendar" />
+                </b-input-group-text>
                 <Datetime input-class="form-control" zone="Asia/Jakarta" format="d LLL yyyy"
                   @input="tanggalLahirSelected" :value="getValue('tanggal lahir')" :disabled="disabledForm()"
                   :input-style="
@@ -215,7 +215,7 @@
                       rawLabel: 'gol. darah',
                       $event
                     })
-                  " :disabled="disabledForm()" :value="getValue('gol. darah')" />
+                  " :disabled="disabledForm()" :value="getValue('golongan_darah')" />
             </b-form-group>
           </b-col>
           <b-col sm="6">
@@ -238,7 +238,7 @@
                   rawLabel: 'no. hp penanggung jawab',
                   $event
                 })
-              " :disabled="disabledForm()" :value="getValue('no. hp penanggung jawab')" :maxlength="15" />
+              " :disabled="disabledForm()" :value="getValue('nomor_hp_penanggung_jawab')" :maxlength="15" />
             </b-form-group>
           </b-col>
           <b-col sm="6">
@@ -285,7 +285,7 @@
                 })
               })
             ">
-              <vue-select :options="cities" v-model="tempat.kota" @input="setDataTempat" :disabled="disabledForm()" />
+              <vue-select :options="cities"  :value="getValue('kota')" v-model="tempat.kota" @input="setDataTempat" :disabled="disabledForm()" />
             </b-form-group>
           </b-col>
           <b-col sm="6">
@@ -313,13 +313,15 @@
           <b-col sm="6">
           </b-col>
           <b-col sm="6">
-            <b-button class="ml-3 text-uppercase" v-b-popover.hover.top="'SIMPAN & MASUK ANTREAN'" variant="primary"
-              style="font-size:17.5px; float:right" type="submit">simpan
+            
+            <template v-if="formType !== 'detail'">
+              <b-button @click="$emit('keluar', true)" class="text-uppercase" :variant="btnVariant()"
+              style="font-size:17.5px;float:right">{{ btnText() }}</b-button>
+              <b-button class="ml-3 text-uppercase" v-b-popover.hover.top="'SIMPAN & MASUK ANTREAN'" variant="primary"
+              style="font-size:17.5px; " type="submit">simpan
               <font-awesome-icon class="mx-auto" icon="caret-down" />
             </b-button>
-            <b-button @click="$emit('keluar', true)" class="text-uppercase" :variant="btnVariant()"
-              style="font-size:17.5px; float:right">{{ btnText() }}</b-button>
-            <template v-if="formType !== 'detail'">
+              
             </template>
             <template v-else>
               <b-button class="ml-3 text-uppercase float-left" variant="success" style="font-size:17.5px;" @click="
@@ -328,6 +330,8 @@
                   params: { idPasien }
                 })
               ">edit</b-button>
+                   <b-button @click="$emit('keluar', true)" class="text-uppercase" :variant="btnVariant()"
+              style="font-size:17.5px; float:right">{{ btnText() }}</b-button>
             </template>
           </b-col>
         </b-row>
@@ -475,11 +479,13 @@
     {
       label: "status perkawinan",
       alias: "status_perkawinan",
+      error : false,
       validations: {}
     },
     {
       label: "jenis identitas",
       alias: "jenis_identitas",
+      error : false,
       validations: {}
     },
     // {
@@ -495,6 +501,7 @@
     {
       label: "provinsi",
       alias: "provinsi",
+      
       validations: {}
     },
     {
@@ -692,12 +699,12 @@
         this.formData['kota'] = this.tempat.kota.id
       },
       startCase: startCase,
-      ocrCompleted(res) {
-        const {
-          assignValuePasien
-        } = this;
-        assignValuePasien(res);
-      },
+      // ocrCompleted(res) {
+      //   const {
+      //     assignValuePasien
+      //   } = this;
+      //   assignValuePasien(res);
+      // },
       // setImage: function (output) {
       //   const tmp = (dataURI, mimetype) => {
       //     var byteString = atob(dataURI.split(",")[1]);
@@ -760,31 +767,23 @@
       //       return val;
       //   }
       // },
-      // assignValuePasien(data) {
-      //   if (data) {
-      //     Object.keys(data).map(item => {
-      //       const y = this.formBasicData.find(x => x.alias === item);
-      //       if (y) {
-      //         const {
-      //           stupidOcrHelper
-      //         } = this;
-      //         Vue.set(
-      //           this.formData,
-      //           y.label,
-      //           stupidOcrHelper({
-      //             alias: y.alias,
-      //             val: (() => {
-      //               return (
-      //                 (typeof data[item] === "string" && data[item].trim()) ||
-      //                 data[item]
-      //               );
-      //             })()
-      //           })
-      //         );
-      //       }
-      //     });
-      //   }
-      // },
+      assignValuePasien(data) {
+        if (data) {
+          Object.keys(data).map(item => {
+            const y = this.formBasicData.find(x => x.alias === item);
+            if (y) {
+              
+              // const {
+              //   stupidOcrHelper
+              // } = this;
+              Vue.set(
+                this.formData,
+                y.label,
+              );
+            }
+          });
+        }
+      },
       btnText() {
         switch (this.formType) {
           case "detail":
@@ -828,12 +827,7 @@
               status,
               data
             } = res.data;
-            if (status) {
-              const {
-                assignValuePasien
-              } = this;
-              assignValuePasien(data);
-            }
+            this.formData = res.data.data;
           } catch (err) {
             console.log(err);
             // alert(err)
@@ -858,7 +852,8 @@
           tmpId: index,
           error: null,
           rawLabel: item.label
-        }));
+        } 
+        ));
       },
       onKeyInputNumber({
         rawLabel,

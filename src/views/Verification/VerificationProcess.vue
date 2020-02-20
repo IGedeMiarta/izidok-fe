@@ -29,7 +29,7 @@
                     </h1> -->
                     <!-- moment(this.pembayaranList['created_at']).format("DD-MMMM-YYYY,  h:mm:ss a"); -->
                     
-                    <template v-if="this.isExpired > now   ">
+                    <template v-if="this.startExpired > now   ">
                       <p class="mb-5">
                         Link aktivasi telah berakhir, silahkan lakukan registrasi ulang!
                         {{now()}}

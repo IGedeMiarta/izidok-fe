@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="app-content--inner p-0 d-flex flex-column">
-      <page-title heading="Tambah Tarif" subheading="Masukkan tarif berikut untuk dapat melakukan penggunaan iziDok."
+      <page-title heading="Tambah Tarif" subheading="Masukkan tarif berikut untuk dapat melakukan penggunaan izidok."
         :breadcrumb="[
           {
             label: 'Manajemen Tarif',

@@ -529,7 +529,7 @@ export default {
           this.options.dokter = res.data.data.dokter.data.map(item => {
             return {
               label: item.nama,
-              value: item.id
+              value: item.user_id
             };
           });
         }
