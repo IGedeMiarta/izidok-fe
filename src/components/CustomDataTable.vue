@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- <div class="d-flex"> -->
     <b-container class="mb-4">
       <b-row>
         <b-col class="pl-0">
@@ -28,35 +27,45 @@
       :fields="fields"
       :sort-by.sync="sortBy"
       :sort-desc.sync="sortDesc"
-      responsive="sm"
-    ></b-table>
-    <!-- </div> -->
+      thead-tr-class="kntl"
+    >
+      <template v-slot:head()="data">
+        {{ data.label }}
+        <!-- turn this input into a slot for custom render -->
+        <b-input
+          size="sm"
+          class="mt-2 w-95"
+          v-if="data.field.searchable"
+        />
+      </template>
+    </b-table>
   </div>
 </template>
 
 <script>
 export default {
+  props: {
+    items: {
+      type: Array,
+      default: () => [],
+      required: true
+    },
+    fields: {
+      type: Array,
+      default: () => [],
+      required: true
+    }
+  },
   data() {
     return {
       sortBy: "age",
       sortDesc: false,
-      fields: [
-        { key: "last_name", sortable: true },
-        { key: "first_name", sortable: true },
-        { key: "age", sortable: true },
-        { key: "isActive", sortable: false }
-      ],
-      items: [
-        {
-          isActive: true,
-          age: 40,
-          first_name: "Dickerson",
-          last_name: "Macdonald"
-        },
-        { isActive: false, age: 21, first_name: "Larsen", last_name: "Shaw" },
-        { isActive: false, age: 89, first_name: "Geneva", last_name: "Wilson" },
-        { isActive: true, age: 38, first_name: "Jami", last_name: "Carney" }
-      ],
+      // fields: [
+      //   { key: "last_name", sortable: true },
+      //   { key: "first_name", sortable: true },
+      //   { key: "age", sortable: true },
+      //   { key: "isActive", sortable: false, searchable: false }
+      // ],
       // etnriesOptions: [
       //   { value: , text: "Please select an option" },
       //   { value: "a", text: "This is First option" },
@@ -77,3 +86,9 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.w-95 {
+  width: 95%;
+}</style
+>

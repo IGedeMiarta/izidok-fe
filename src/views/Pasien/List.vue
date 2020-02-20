@@ -24,7 +24,7 @@
           </div>
         </div>
         <div class="card-body">
-          <div class="row no-padding mb-3">
+          <!-- <div class="row no-padding mb-3">
             <div class="col-md-9 ">
               <b-row>
                 <div class="form-group col-md-4">
@@ -78,7 +78,7 @@
                 </b-col>
               </b-row>
             </div>
-          </div>
+          </div> -->
           <div class="col-md-12 no-padding">
             <!-- <table class="table table-bordered table-hover table-hover mb-5">
               <thead>
@@ -134,21 +134,123 @@
                 </tr>
               </tbody>
             </table> -->
-            <CustomDataTable />
+            <!-- <CustomDataTable :items="pasienList" :fields="fieldList">
+              <template v-slot:cell(jenis_kelamin)="data">
+                {{ jenisKelamin(data.value) }}
+              </template>
+            </CustomDataTable> -->
+            <b-container class="mb-4">
+              <b-row>
+                <b-col class="pl-0">
+                  <div class="d-flex text-capitalize align-items-center">
+                    <span>show</span>
+                    <b-form-select
+                      :options="entriesOptions"
+                      class="w-25 mx-2"
+                      v-model="perPage"
+                    ></b-form-select>
+                    <span>entries</span>
+                  </div>
+                </b-col>
+                <b-col class="pr-0">
+                  <div class="d-flex justify-content-end">
+                    <b-button
+                      variant="primary"
+                      class="text-uppercase align-self-end"
+                      :to="{
+                        name: 'pasien-tambah'
+                      }"
+                      >tambah pasien</b-button
+                    >
+                  </div>
+                </b-col>
+              </b-row>
+            </b-container>
+            <b-table
+              :items="pasienList"
+              :fields="fieldList"
+              :sort-by.sync="sortBy"
+              :sort-desc.sync="sortDesc"
+              thead-tr-class="kntl"
+              :no-local-sorting="true"
+            >
+              <template v-slot:head()="data">
+                {{ data.label }}
+                <b-input
+                  size="sm"
+                  class="mt-2 w-95"
+                  v-if="data.field.searchable"
+                  @input="searchValueChanged($event, data.field.key)"
+                />
+              </template>
+
+              <template v-slot:cell(jenis_kelamin)="data">
+                {{ jenisKelamin(data.value) }}
+              </template>
+
+              <template v-slot:cell(actions)="data">
+                <span>
+                  <b-dropdown
+                    id="dropdown-1"
+                    class="m-md-2 text-capitalize"
+                    variant="primary"
+                    size="sm"
+                    right
+                  >
+                    <template v-slot:button-content>
+                      <font-awesome-icon icon="copy" />
+                    </template>
+                    <b-dropdown-item
+                      @click="
+                        editPasien({
+                          id: data.item.id
+                        })
+                      "
+                      >edit data pasien</b-dropdown-item
+                    >
+                    <b-dropdown-item
+                      @click="
+                        detailPasien({
+                          id: data.item.id
+                        })
+                      "
+                      >view detail pasien</b-dropdown-item
+                    >
+                    <b-dropdown-item
+                      @click="
+                        rekamMedis({
+                          pasien_id: data.item.id,
+                          klinik_id: data.item.klinik_id
+                        })
+                      "
+                      >lihat riwayat rekam medis</b-dropdown-item
+                    >
+                    <b-dropdown-item
+                      @click="
+                        removePasien({
+                          id: data.item.id,
+                          nama: data.item.nama
+                        })
+                      "
+                      >hapus data pasien</b-dropdown-item
+                    >
+                  </b-dropdown>
+                </span>
+              </template>
+            </b-table>
+            <div class="d-flex align-items-center">
+              <span class="px-2"
+                >Display {{ fromPage }} to {{ toPage }} of
+                {{ totalEntries }} entries</span
+              >
+              <b-pagination
+                class="mt-4 flex-fill d-flex justify-content-center"
+                v-model="currentPage"
+                :total-rows="rows"
+                :per-page="perPage"
+              ></b-pagination>
+            </div>
           </div>
-        </div>
-      </div>
-      <div
-        class="col-md-12 bg-neutral-second ninja-shadow"
-        style="border-radius:10px;"
-      >
-        <div class="p-3">
-          <b-pagination
-            class="d-flex justify-content-center mt-4"
-            v-model="currentPage"
-            :total-rows="rows"
-            :per-page="perPage"
-          ></b-pagination>
         </div>
       </div>
     </div>
@@ -157,6 +259,7 @@
 
 <script>
 import startCase from "lodash/startCase";
+import debounce from "lodash/debounce";
 import axios from "axios";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
@@ -164,30 +267,48 @@ import {
   faArrowUp,
   faTrashAlt,
   faSearch,
-  faPencilAlt
+  faPencilAlt,
+  faCopy
 } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
-import { Datetime } from "vue-datetime";
+// import { Datetime } from "vue-datetime";
 import "vue-datetime/dist/vue-datetime.css";
 
 import { DateTime as LuxonDateTime } from "luxon";
 
-library.add(faArrowRight, faArrowUp, faTrashAlt, faSearch, faPencilAlt);
+library.add(faArrowRight, faArrowUp, faTrashAlt, faSearch, faPencilAlt, faCopy);
 
 export default {
   components: {
-    CustomDataTable: () => import("../../components/CustomDataTable"),
-    Datetime
+    // CustomDataTable: () => import("../../components/CustomDataTable")
+    // Datetime
   },
   data() {
     return {
+      sortBy: "",
+      sortDesc: false,
       currentPage: 1,
       rows: 0,
+      fromPage: 0,
+      toPage: 0,
       perPage: 10,
       pasienList: [],
       namaPasien: "",
       noRekamMedis: "",
-      tanggalLahir: ""
+      tanggalLahir: "",
+      searchValue: [],
+      totalEntries: 0
+      // items: [
+      //   {
+      //     isActive: true,
+      //     age: 40,
+      //     first_name: "Dickerson",
+      //     last_name: "Macdonald"
+      //   },
+      //   { isActive: false, age: 21, first_name: "Larsen", last_name: "Shaw" },
+      //   { isActive: false, age: 89, first_name: "Geneva", last_name: "Wilson" },
+      //   { isActive: true, age: 38, first_name: "Jami", last_name: "Carney" }
+      // ]
     };
   },
   mounted() {
@@ -196,9 +317,62 @@ export default {
   watch: {
     currentPage() {
       this.fetchListPasien();
+    },
+    perPage() {
+      this.fetchListPasien();
+    },
+    sortBy() {
+      this.fetchListPasien();
+    },
+    sortDesc() {
+      this.fetchListPasien();
+    },
+    searchValue: {
+      handler: "fetchListPasien",
+      deep: true
+    }
+  },
+  computed: {
+    entriesOptions() {
+      return [5, 10, 25, 50, 100].map(item => ({
+        value: item,
+        text: item
+      }));
+    },
+    fieldList() {
+      const r = val => Boolean(/(no|actions)\b/gi.test(val) ? !1 : 1);
+      const l = val => (val.label ? val.label : val.key.split("_").join(" "));
+      return [
+        { key: "no" },
+        { key: "nomor_rekam_medis" },
+        { key: "nama", label: "nama_pasien" },
+        { key: "jenis_kelamin" },
+        { key: "nomor_hp" },
+        { key: "actions" }
+      ].map(item => ({
+        key: (item.key && item.key) || item,
+        label: startCase(l(item)),
+        sortable: r(item.key),
+        searchable: r(item.key)
+      }));
     }
   },
   methods: {
+    searchValueChanged: debounce(function(val, key) {
+      const { searchValue } = this;
+
+      const z = searchValue.filter(item => item.key !== key);
+      this.searchValue = [
+        ...z,
+        {
+          key,
+          value: val
+        }
+      ];
+    }, 500),
+    rekamMedis({ klinik_id, pasien_id }) {
+      this.$router.push(`/rekam-medis/${klinik_id}/${pasien_id}`);
+    },
     removePasien({ id, nama = null } = {}) {
       this.$swal({
         text: `Apakah anda yakin ingin menghapus data pasien ${nama}?`,
@@ -255,18 +429,49 @@ export default {
         });
       }
     },
+    determineParameter() {
+      const { searchValue, sortBy, sortDesc } = this;
+      let v = "";
+      searchValue.map(item => {
+        v += `&${item.key}=${item.value}`;
+      });
+
+      if (sortBy && sortDesc) {
+        v += `&column=${sortBy}&order=${sortDesc ? "desc" : "asc"}`;
+      }
+
+      return v;
+    },
     async fetchListPasien() {
       try {
         const tanggalLahir =
           this.tanggalLahir && moment(this.tanggalLahir).format("YYYY-MM-DD");
         const res = await axios.get(
-          `${this.url_api}/pasien?limit=10&page=${this.currentPage}&nama_pasien=${this.namaPasien}&no_rekam_medis=${this.noRekamMedis}&tanggal_lahir=${tanggalLahir}`
+          `${this.url_api}/pasien?limit=${this.perPage}&page=${
+            this.currentPage
+          }${this.determineParameter()}`
+          /* &nama_pasien=${this.namaPasien}&no_rekam_medis=${this.noRekamMedis}&tanggal_lahir=${tanggalLahir} */
         );
         const { success, data } = res.data;
         if (success) {
           const { pasien: pasienData, total } = data;
-          const { data: listPasien } = pasienData;
-          this.pasienList = [...listPasien];
+          const {
+            data: listPasien,
+            total: totalEntries,
+            to: toPage,
+            from: fromPage
+          } = pasienData;
+          this.totalEntries = totalEntries;
+          this.toPage = toPage;
+          this.fromPage = fromPage;
+          this.pasienList = [
+            ...listPasien.map((item, index) => {
+              return {
+                ...item,
+                no: (this.currentPage - 1) * this.perPage + index + 1
+              };
+            })
+          ];
           this.rows = pasienData.total;
         }
       } catch (err) {

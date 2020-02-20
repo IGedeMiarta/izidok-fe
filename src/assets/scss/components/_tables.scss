@@ -150,3 +150,10 @@ $bv-escaped-characters: (("<", "%3c"), (">", "%3e"), ("#", "%23"));
     }
   }
 }
+
+// custom datatable
+.kntl {
+  th {
+    vertical-align: top !important;
+  }
+}
