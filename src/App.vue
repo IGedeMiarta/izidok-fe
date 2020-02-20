@@ -25,6 +25,35 @@ export default {
     ...mapGetters(["isLoading"]),
     layout() {
       return (this.$route.meta.layout || default_layout) + "-layout";
+    },
+    auth_error() {
+      return this.$store.state.autherror
+    }
+  },
+  methods: {
+    showAuthError() {
+      this.$swal({
+        allowOutsideClick: false,
+        type: "warning",
+        text: this.$store.state.autherror
+      }).then((e) => {
+        this.$store.commit('SET_BEARER_TOKEN', null);
+        this.$store.commit('SET_USER', null);
+        this.$store.commit('SET_AUTHERROR', null);
+        this.$router.push('/login');
+      });
+    }
+  },
+  watch: {
+    auth_error(newVal, oldVal) {
+      if(newVal) {
+        this.showAuthError()
+      }
+    }
+  },
+  mounted() {
+    if(this.$store.state.autherror) {
+      this.showAuthError()
     }
   }
 };
