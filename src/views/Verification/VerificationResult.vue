@@ -27,9 +27,21 @@
                     {{ text[state] }}
                   </strong>
                   <div slot="modal-footer">
+                   <template v-if="state == 'success' || state == 'failed'">
                     <b-button @click="redirectToLogin" style="background-color :#3F7EA7;margin-right:19px;margin-top : 15px;color:white" >
-                      {{ state == "success" ? "Login" : "Kembali ke Login" }}
+                      <template v-if="state == 'success' ">
+                        Login
+                      </template>
+                      <template v-else-if="state == 'failed'">
+                        Kembali ke Login
+                      </template>
                     </b-button>
+                   </template>
+                   <template v-else> 
+                    <b-button @click="redirectToRegister" style="background-color :#3F7EA7;margin-right:19px;margin-top : 15px;color:white" >  
+                        Kembali ke Registrasi
+                    </b-button>
+                   </template>
                   </div>
                 </b-modal>
               </div>
@@ -52,12 +64,13 @@ export default {
           "Akun Anda berhasil diaktivasi. Silakan login untuk mengakses izidok.",
         "already-activated":
           "Akun Anda gagal diaktivasi. Email anda telah teraktivasi sebelumnya.",
-        failed: "Akun Anda gagal diaktivasi. Lakukan aktivasi ulang."
+        failed: "Akun Anda gagal diaktivasi. Lakukan aktivasi ulang.",
+        expired : "Link aktivasi telah berakhir, silahkan lakukan registrasi ulang!"
       }
     };
   },
   beforeRouteEnter: (to, from, next) => {
-    if (["success", "already-activated", "failed"].includes(to.params.state)) {
+    if (["success", "already-activated", "failed","expired"].includes(to.params.state)) {
       next();
     } else {
       next("/");
@@ -77,6 +90,9 @@ export default {
     },
     redirectToLogin() {
       this.$router.replace("/login");
+    },
+    redirectToRegister(){
+      this.$router.replace("/register");
     }
   },
   mounted() {

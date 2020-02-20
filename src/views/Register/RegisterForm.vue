@@ -14,8 +14,7 @@
           <!-- </div> -->
         </div>
         <div class="col-lg-6 d-flex align-items-center content-register-right">
-
-          <div class=" col-sm-8" style="margin-left:auto;margin-right:auto">
+          <div class="col-sm-10 mt-2" style="margin-left:auto;margin-right:auto">
             <h4 class="font-weight-bold text-capitalize">
               daftarkan {{ selectedTipeFaskes }} anda
             </h4>
@@ -120,7 +119,6 @@
               </div>
             </b-form>
           </div>
-
         </div>
       </div>
     </div>
