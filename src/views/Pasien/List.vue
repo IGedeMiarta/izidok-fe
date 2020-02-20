@@ -244,10 +244,11 @@
                 {{ totalEntries }} entries</span
               >
               <b-pagination
-                class="mt-4 flex-fill d-flex justify-content-center"
+                class="mt-4 d-flex justify-content-center"
                 v-model="currentPage"
                 :total-rows="rows"
                 :per-page="perPage"
+                style="margin-left: 10rem"
               ></b-pagination>
             </div>
           </div>
