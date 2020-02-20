@@ -19,7 +19,8 @@ export default new Vuex.Store({
     URL_API: process.env.VUE_APP_API_URL,
     BEARER_TOKEN: null,
     user: null,
-    loading: false
+    loading: false,
+    autherror: null
   },
   modules: {
     sidebar,
@@ -40,6 +41,9 @@ export default new Vuex.Store({
     },
     SET_LOADING(state, value) {
       state.loading = value || false;
+    },
+    SET_AUTHERROR(state, value) {
+      state.autherror = value || null;
     }
   },
   strict: process.env.NODE_ENV !== "production",

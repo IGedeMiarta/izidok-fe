@@ -19,10 +19,17 @@ export default () => {
   axios.interceptors.response.use(
     response => {
       store.commit(loading, !true);
+      store.commit('SET_AUTHERROR', null);
       return response;
     },
     err => {
       store.commit(loading, !true);
+      if(err.response.status == 469) {
+        store.commit('SET_AUTHERROR', err.response.data.message);
+      }
+      else if(err.response.status == 440) {
+        store.commit('SET_AUTHERROR', 'Sesi login anda telah berakhir!');
+      }
       return Promise.reject(err);
     }
   );
