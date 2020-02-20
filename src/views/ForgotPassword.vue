@@ -7,9 +7,16 @@
             <div class="container-fluid">
               <div class="row">
                 <div class="col-md-6 pl-0 d-none d-lg-flex align-items-center">
-                  <div class="wrap" :style="wrapStyle">
-                    <img src="@/assets/img/forgot.jpg" :style="wrapImgStyle" alt="lupa password izidok" />
-                  </div>
+                  <template v-if="this.currentStep == 1">
+                    <div class="wrap" :style="wrapStyle">
+                      <img src="@/assets/img/forgot1.jpg" :style="wrapImgStyle" alt="lupa password izidok" />
+                    </div>
+                  </template>
+                  <template v-if="this.currentStep == 2">
+                    <div class="wrap" :style="wrapStyle">
+                      <img src="@/assets/img/forgot.jpg" :style="wrapImgStyle" alt="lupa password izidok" />
+                    </div>
+                  </template>
                 </div>
                 <div class="col-md-6 pr-0 d-flex align-items-center">
                   <div>

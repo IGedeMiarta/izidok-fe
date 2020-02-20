@@ -23,68 +23,66 @@
                       class="w-50 mx-auto d-block my-5 img-fluid"
                       alt=""
                     /> -->
-                    <img
-                      src="@/assets/img/logo-izidok-white.png"
-                      class="w-50 mx-auto d-block mt-5 mb-2 img-fluid"
-                    />
+                    <img src="@/assets/img/logo-izidok-white.png" class="w-50 mx-auto d-block mt-5 mb-2 img-fluid" />
                     <!-- <h1 class="mb-3 px-4 font-weight-bold text-capitalize">
                       pendaftaran anda berhasil
                     </h1> -->
-                    <p class="mb-5">
-                      Silahkan cek email Anda untuk melakukan verifikasi akun izidok
-                    </p>
-                    <!-- <h4
+                    <!-- moment(this.pembayaranList['created_at']).format("DD-MMMM-YYYY,  h:mm:ss a"); -->
+                    
+                    <template v-if="this.isExpired > now   ">
+                      <p class="mb-5">
+                        Link aktivasi telah berakhir, silahkan lakukan registrasi ulang!
+                        {{now()}}
+                      </p>
+                      <button class="btn px-5 btn-first my-2 btn-lg btn-block w-75 text-capitalize"
+                        @click="this.redirectToRegister">
+                        Kembali ke Registrasi
+                      </button>
+                    </template>
+                    <template v-else>
+                      <p class="mb-5">
+                        Silahkan cek email Anda untuk melakukan verifikasi akun izidok
+                      </p>
+                      <!-- <h4
                       class="line-height-sm font-weight-light d-block px-1 mb-3 text-white"
                     >
                       Verifikasi akun Anda sekarang. Link verifikasi dikirimkan
                       ke {{ email }}
                     </h4> -->
-                    <p class="d-block mb-2" style="font-weight: 600">
-                      <template v-if="resendLinkActivation < 3">
-                        Tidak mendapatkan email verifikasi?
-                      </template>
-                      <template v-else>
-                        Anda telah mencapai batas limit aktivasi. Silahkan
-                        hubungi Customer Care izidok.
-                      </template>
-                    </p>
-                    <div
-                      class="d-flex flex-column justify-content-center align-items-center"
-                    >
-                      <template v-if="resendLinkActivation < 3">
-                        <button
-                          class="btn px-5 btn-first my-2 btn-lg btn-block w-75 text-capitalize"
-                          :disabled="counter !== 0"
-                          @click="this.triggerResend"
-                        >
-                          Kirim ulang email
-                        </button>
-                      </template>
+                      <p class="d-block mb-2" style="font-weight: 600">
+                        <template v-if="resendLinkActivation < 3">
+                          Tidak mendapatkan email verifikasi?
+                        </template>
+                        <template v-else>
+                          Anda telah mencapai batas limit aktivasi. Silahkan
+                          hubungi Customer Care izidok.
+                        </template>
+                      </p>
+                      <div class="d-flex flex-column justify-content-center align-items-center">
+                        <template v-if="resendLinkActivation < 3">
+                          <button class="btn px-5 btn-first my-2 btn-lg btn-block w-75 text-capitalize"
+                            :disabled="counter !== 0" @click="this.triggerResend">
+                            Kirim ulang email
+                          </button>
+                        </template>
 
-                      <router-link
-                        to="/login"
-                        exact
-                        class="btn btn-lg btn-outline-white btn-block w-75"
-                      >
-                        <!-- <b-button
+                        <router-link to="/login" exact class="btn btn-lg btn-outline-white btn-block w-75">
+                          <!-- <b-button
                         class="px-5 my-2 btn-lg btn-block w-75 text-white"
                         variant="outline-white"
                       > -->
-                        Kembali ke Halaman Login
-                        <!-- </b-button> -->
-                      </router-link>
-                      <template
-                        v-if="intervalCounter && resendLinkActivation <= 3"
-                      >
-                        <p class="my-2">
-                          Tunggu
-                          <span style="color: #3c44b1"
-                            >{{ this.counterValue }}</span
-                          >
-                          detik lagi...
-                        </p>
-                      </template>
-                    </div>
+                          Kembali ke Halaman Login
+                          <!-- </b-button> -->
+                        </router-link>
+                        <template v-if="intervalCounter && resendLinkActivation <= 3">
+                          <p class="my-2">
+                            Tunggu
+                            <span style="color: #3c44b1">{{ this.counterValue }}</span>
+                            detik lagi...
+                          </p>
+                        </template>
+                      </div>
+                    </template>
                   </div>
                 </div>
               </div>
@@ -97,81 +95,99 @@
 </template>
 
 <script>
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import {
-  required,
-  minLength,
-  maxLength,
-  sameAs,
-  email,
-  numeric
-} from "vuelidate/lib/validators";
-import axios from "axios";
+  import {
+    library
+  } from "@fortawesome/fontawesome-svg-core";
+  import {
+    faArrowLeft
+  } from "@fortawesome/free-solid-svg-icons";
+  import {
+    required,
+    minLength,
+    maxLength,
+    sameAs,
+    email,
+    numeric
+  } from "vuelidate/lib/validators";
+  import moment from "moment";
+  import axios from "axios";
 
-library.add(faArrowLeft);
+  library.add(faArrowLeft);
 
-const staticCounter = 60;
+  const staticCounter = 60;
 
-export default {
-  props: ["email", "user_id"],
-  data() {
-    return {
-      resendLinkActivation: 0,
-      counter: staticCounter,
-      intervalCounter: null
-    };
-  },
-  mounted() {
-    this.counterFunc();
-  },
-  computed: {
-    counterValue() {
-      return this.counter;
-    }
-  },
-  methods: {
-    async triggerResend() {
-      try {
-        const { resendLinkActivation } = this;
-        if (resendLinkActivation <= 3) {
-          this.resendLinkActivation++;
-          this.counterFunc();
-
-          const res = await axios.get(
-            `${this.url_api}/email/resend/${this.user_id}`
-          );
-        }
-      } catch (err) {}
+  export default {
+    props: ["email", "user_id", "created_at"],
+    data() {
+      return {
+        resendLinkActivation: 0,
+        counter: staticCounter,
+        intervalCounter: null,
+        startExpired: null,
+        endExpired :null,
+        isExpired : null
+      };
     },
-    counterFunc() {
-      if (this.counter !== staticCounter) {
-        this.counter = staticCounter;
-      }
-      this.intervalCounter = setInterval(() => {
-        if (this.counter > 0) {
-          this.counter--;
-        } else {
-          clearInterval(this.intervalCounter);
-          this.intervalCounter = null;
+    mounted() {
+      this.counterFunc();
+      this.startExpired = moment(this.created_at).format("DD-MMMM-YYYY, h:mm:ss ");
+      console.log('awal',this.startExpired);
+    },
+    computed: {
+      counterValue() {
+        return this.counter;
+      },
+      now() {
+        return moment().format("DD-MMMM-YYYY, h:mm:ss ");
+      },
+    },
+    methods: {
+      redirectToRegister() {
+        this.$router.replace("/register");
+      },
+      async triggerResend() {
+        try {
+          const {
+            resendLinkActivation
+          } = this;
+          if (resendLinkActivation <= 3) {
+            this.resendLinkActivation++;
+            this.counterFunc();
+
+            const res = await axios.get(
+              `${this.url_api}/email/resend/${this.user_id}`
+            );
+          }
+        } catch (err) {}
+      },
+      counterFunc() {
+        if (this.counter !== staticCounter) {
+          this.counter = staticCounter;
         }
-      }, 1000);
+        this.intervalCounter = setInterval(() => {
+          if (this.counter > 0) {
+            this.counter--;
+          } else {
+            clearInterval(this.intervalCounter);
+            this.intervalCounter = null;
+          }
+        }, 1000);
+      }
     }
-  }
-};
+  };
 </script>
 
 <style lang="scss" scoped>
-.confirm-signup-bg {
-  background-image: url("~@/assets/img/confirm-signup.jpg");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-}
-
-.btn-outline-white {
-  &:hover {
-    color: #4190ff !important;
+  .confirm-signup-bg {
+    background-image: url("~@/assets/img/confirm-signup.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
   }
-}
+
+  .btn-outline-white {
+    &:hover {
+      color: #4190ff !important;
+    }
+  }
 </style>

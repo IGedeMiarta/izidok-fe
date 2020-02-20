@@ -21,8 +21,9 @@
 
                     <div class="col-md-10">
                       <br>
+                      <br>
+                      <br>
                       <p style="color:gray">
-                        <br>
                         Selamat bergabung dengan izidok
                       </p>
                       <p style="color:gray">izidok siap membantu untuk memudahkan Anda dalam menangani pasien dan

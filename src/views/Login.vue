@@ -87,7 +87,7 @@
                         </div>
                         <div class="text-left pt-4 text-black">
                           Tempat praktik Anda belum terdaftar?
-                          <router-link tag="a" to="/register" exact title="Daftar disini">Daftar disini</router-link>
+                          <router-link tag="a" to="/register" exact title="Daftar disini">Daftar Disini</router-link>
                         </div>
                       </div>
                     </div>

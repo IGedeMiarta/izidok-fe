@@ -16,7 +16,7 @@
 
     <div class="container">
       <div class="card card-box">
-        <div class="card-header">
+        <div class="card-header"  style="background-color : #d3e8eb">
           <h4 class="text-capitalize my-2">tambah pasien</h4>
         </div>
         <div class="card-body">

@@ -31,40 +31,36 @@
       </span>
     </h4>
     <b-form v-on:submit.prevent="submitForm">
-      <b-container>
-        <b-row>
-          <b-col sm="6">
-            <b-form-group class="text-capitalize" style="position: relative"
-              :state="getDataError({ rawLabel: 'nama lengkap' })" :invalid-feedback="
+      <div class="form-row">
+        <b-form-group class="text-capitalize col-md-6 pr-3" style="position: relative"
+          :state="getDataError({ rawLabel: 'nama lengkap' })" :invalid-feedback="
             renderInvalidFeedback({
               validationDesc: blindlyGetData({
                 rawLabel: 'nama lengkap'
               })
             })
           ">
-              <label for="">{{ renderLabel({ label: 'nama lengkap' }) }}</label>
-              <label for="" style="color:red"> *</label>
-              <b-form-input @keyup="
+          <label for="">{{ renderLabel({ label: 'nama lengkap' }) }}</label>
+          <label for="" style="color:red"> *</label>
+          <b-form-input @keyup="
               setValue({
                 rawLabel: 'nama lengkap',
                 $event
               })
             " :state="getDataError({ rawLabel: 'nama lengkap' })" :disabled="disabledForm()"
-                :value="getValue('nama lengkap')" :maxlength="60" />
-            </b-form-group>
-          </b-col>
-          <b-col sm="6">
-            <b-form-group class="text-capitalize" style="position: relative"
-              :state="getDataError({ rawLabel: 'no. handphone' })" :invalid-feedback="
+            :value="getValue('nama lengkap')" :maxlength="60" />
+        </b-form-group>
+        <b-form-group class="text-capitalize col-md-6 pr-3" style="position: relative"
+          :state="getDataError({ rawLabel: 'no. handphone' })" :invalid-feedback="
             renderInvalidFeedback({
               validationDesc: blindlyGetData({
                 rawLabel: 'no. handphone'
               })
             })
           ">
-              <label for="">{{ renderLabel({ label: 'no. handphone' }) }}</label>
-              <label for="" style="color:red"> *</label>
-              <b-form-input @keypress="
+          <label for="">{{ renderLabel({ label: 'no. handphone' }) }}</label>
+          <label for="" style="color:red"> *</label>
+          <b-form-input @keypress="
               onKeyInputNumber({
                 rawLabel: 'no. handphone',
                 $event
@@ -75,19 +71,20 @@
                 $event
               })
             " :state="getDataError({ rawLabel: 'no. handphone' })" :disabled="disabledForm()"
-                :value="getValue('no. handphone')" :maxlength="30" />
-            </b-form-group>
-          </b-col>
-          <b-col sm="2">
-            <b-form-group :label="renderLabel({ label: 'Jenis Identitas' })" class="text-capitalize"
-              style="position: relative;" :state="getDataError({ rawLabel: 'jenis identitas' })" :invalid-feedback="
+            :value="getValue('no. handphone')" :maxlength="30" />
+        </b-form-group>
+      </div>
+      <div class="form-row">
+        <b-col cols="2">
+          <b-form-group :label="renderLabel({ label: 'Jenis Identitas' })" class="text-capitalize"
+            style="position: relative;" :state="getDataError({ rawLabel: 'jenis identitas' })" :invalid-feedback="
                   renderInvalidFeedback({
                     validationDesc: blindlyGetData({
                       rawLabel: 'jenis identitas'
                     })
                   })
                 ">
-              <b-form-select class="col-md-12" :options="
+            <b-form-select class="col-md-12" :options="
                     ['KTP', 'SIM', 'Paspor', 'Pengenal lainya'].map(item => ({
                       value: item,
                       text: item.toUpperCase()
@@ -98,46 +95,51 @@
                       $event
                     })
                   " :disabled="disabledForm()" :value="getValue('jenis identitas')" />
-            </b-form-group>
-          </b-col>
-          <b-col sm="4">
-            <b-form-group label="No. identitas" class="text-capitalize" style="position: relative"
-              :state="getDataError({ rawLabel: 'nik' })" :invalid-feedback="
+          </b-form-group>
+        </b-col>
+        <b-col cols="4">
+          <b-form-group label="No. identitas" class="text-capitalize pr-2" style="position: relative"
+            :state="getDataError({ rawLabel: 'nik' })" :invalid-feedback="
             renderInvalidFeedback({
               validationDesc: blindlyGetData({
                 rawLabel: 'nik'
               })
             })
           ">
-              <b-form-input @keypress="
+            <b-form-input @keypress="
               onKeyInputNumber({
                 rawLabel: 'nik',
                 $event
               })
             " :disabled="disabledForm()" :value="getValue('nik')" :maxlength="25" />
-            </b-form-group>
-          </b-col>
-          <b-col sm="6">
-            <b-form-group :label="renderLabel({ label: 'email' })" class="text-capitalize" style="position: relative;">
-              <b-form-input @keyup="
+          </b-form-group>
+        </b-col>
+        <b-col cols="6">
+          <b-form-group :label="renderLabel({ label: 'email' })" class="text-capitalize" style="position: relative;">
+            <b-form-input @keyup="
               setValue({
                 rawLabel: 'email',
                 $event
               })
             " :disabled="disabledForm()" :value="getValue('email')" :maxlength="30" />
-            </b-form-group>
-          </b-col>
-          <b-col sm="2">
-            <b-form-group :state="getDataError({ rawLabel: 'jenis kelamin' })" :invalid-feedback="
+          </b-form-group>
+        </b-col>
+
+      </div>
+      <div class="form-row">
+        <b-col cols="6">
+          <b-row>
+            <b-col cols="6">
+              <b-form-group :state="getDataError({ rawLabel: 'jenis kelamin' })" :invalid-feedback="
                   renderInvalidFeedback({
                     validationDesc: blindlyGetData({
                       rawLabel: 'jenis kelamin'
                     })
                   })
                 ">
-              <label for="">{{ renderLabel({label: 'Jenis kelamin'  }) }}</label>
-              <label for="" style="color:red"> *</label>
-              <b-form-radio-group stacked @change="
+                <label for="">{{ renderLabel({label: 'Jenis kelamin'  }) }}</label>
+                <label for="" style="color:red"> *</label>
+                <b-form-radio-group stacked @change="
                     setValue({
                       rawLabel: 'jenis kelamin',
                       $event
@@ -146,66 +148,46 @@
                     { text: 'laki-laki', value: 1 },
                     { text: 'perempuan', value: 0 }
                   ]" :disabled="disabledForm()" :checked="getValue('jenis kelamin')">
-              </b-form-radio-group>
-            </b-form-group>
-          </b-col>
-          <b-col sm="4">
-            <b-form-group class="text-capitalize" style="position: relative"
-              :state="getDataError({ rawLabel: 'tanggal lahir' })" :invalid-feedback="
+                </b-form-radio-group>
+              </b-form-group>
+            </b-col>
+            <b-col cols="6">
+                <b-form-group  class="text-capitalize mr-2" style="position: relative"
+                :state="getDataError({ rawLabel: 'tanggal lahir' })" :invalid-feedback="
                   renderInvalidFeedback({
                     validationDesc: blindlyGetData({
                       rawLabel: 'tanggal lahir'
                     })
                   })
                 ">
-              <label for="">{{ renderLabel({ label: 'tanggal lahir'  }) }}</label>
-              <label for="" style="color:red"> *</label>
-                <b-input-group>
-                                    <b-input-group-text slot="append">
-                                     <font-awesome-icon class="mx-auto" icon="calendar" />
-                                    </b-input-group-text>
-                <Datetime input-class="form-control" zone="Asia/Jakarta" format="d LLL yyyy"
-                  @input="tanggalLahirSelected" :value="getValue('tanggal lahir')" :disabled="disabledForm()"
-                  :input-style="
+                <label for="">{{ renderLabel({ label: 'tanggal lahir'  }) }}</label>
+                <label for="" style="color:red"> *</label>
+                  <b-input-group class="input-group-seamless">
+                    <b-input-group-text slot="append">
+                      <font-awesome-icon class="mx-auto" icon="calendar" />
+                    </b-input-group-text>
+                    <Datetime input-class="form-control" zone="Asia/Jakarta" format="d LLL yyyy"
+                      @input="tanggalLahirSelected" :value="getValue('tanggal lahir')" :disabled="disabledForm()"
+                      :input-style="
                     getDataError({ rawLabel: 'tanggal lahir' }) === null
                       ? null
                       : getDataError({ rawLabel: 'tanggal lahir' })
                       ? null
                       : 'border-color: red'
                   " :max-datetime="maximumDatetime" />
-              </b-input-group>
-            </b-form-group>
-          </b-col>
-          <b-col sm="6">
-            <b-form-group :label="renderLabel({ label: 'nama penanggung jawab' })" class="text-capitalize"
-              style="position: relative" :state="getDataError({ rawLabel: 'nama penanggung jawab' })" :invalid-feedback="
-            renderInvalidFeedback({
-              validationDesc: blindlyGetData({
-                rawLabel: 'nama penanggung jawab'
-              })
-            })
-          ">
-              <b-form-input @keyup="
-              setValue({
-                rawLabel: 'nama penanggung jawab',
-                $event
-              })
-            " :disabled="disabledForm()" :value="getValue('nama penanggung jawab')" :maxlength="30" />
-            </b-form-group>
-          </b-col>
-          <b-col sm="2">
-
-          </b-col>
-          <b-col sm="4">
-            <b-form-group :label="renderLabel({ label: 'gol. darah' })" class="text-capitalize"
-              style="position: relative;" :state="getDataError({ rawLabel: 'gol. darah' })" :invalid-feedback="
+                  </b-input-group>
+                </b-form-group>
+                
+                <b-form-group :label="renderLabel({ label: 'gol. darah' })" class="text-capitalize"
+                  style="position: relative;margin-top :17px;" :state="getDataError({ rawLabel: 'gol. darah' })"
+                  :invalid-feedback="
                   renderInvalidFeedback({
                     validationDesc: blindlyGetData({
                       rawLabel: 'gol. darah'
                     })
                   })
                 ">
-              <b-form-select :options="
+                  <b-form-select class="col-md-12" :options="
                     ['a', 'b', 'ab', 'o'].map(item => ({
                       value: item,
                       text: item.toUpperCase()
@@ -216,19 +198,36 @@
                       $event
                     })
                   " :disabled="disabledForm()" :value="getValue('gol. darah')" />
-            </b-form-group>
-          </b-col>
-          <b-col sm="6">
-            <b-form-group :label="renderLabel({ label: 'no. hp penanggung jawab' })" class="text-capitalize"
-              style="position: relative" :state="getDataError({ rawLabel: 'no. hp penanggung jawab' })"
-              :invalid-feedback="
+                </b-form-group>
+            
+            </b-col>
+          </b-row>
+        </b-col>
+        <b-col cols="6">
+          <b-form-group :label="renderLabel({ label: 'nama penanggung jawab' })" class="text-capitalize"
+            style="position: relative" :state="getDataError({ rawLabel: 'nama penanggung jawab' })" :invalid-feedback="
+            renderInvalidFeedback({
+              validationDesc: blindlyGetData({
+                rawLabel: 'nama penanggung jawab'
+              })
+            })
+          ">
+            <b-form-input @keyup="
+              setValue({
+                rawLabel: 'nama penanggung jawab',
+                $event
+              })
+            " :disabled="disabledForm()" :value="getValue('nama penanggung jawab')" :maxlength="30" />
+          </b-form-group>
+          <b-form-group :label="renderLabel({ label: 'no. hp penanggung jawab' })" class="text-capitalize"
+            style="position: relative" :state="getDataError({ rawLabel: 'no. hp penanggung jawab' })" :invalid-feedback="
               renderInvalidFeedback({
                 validationDesc: blindlyGetData({
                   rawLabel: 'no. hp penanggung jawab'
                 })
               })
             ">
-              <b-form-input @keypress="
+            <b-form-input @keypress="
                 onKeyInputNumber({
                   rawLabel: 'no. hp penanggung jawab',
                   $event
@@ -239,61 +238,65 @@
                   $event
                 })
               " :disabled="disabledForm()" :value="getValue('no. hp penanggung jawab')" :maxlength="15" />
-            </b-form-group>
-          </b-col>
-          <b-col sm="6">
-            <b-form-group class="text-capitalize" style="position: relative"
-              :state="getDataError({ rawLabel: 'alamat rumah' })" :invalid-feedback="
+          </b-form-group>
+        </b-col>
+      </div>
+      <div class="form-row">
+        <b-form-group class="text-capitalize col-md-6 pr-3" style="position: relative"
+          :state="getDataError({ rawLabel: 'alamat rumah' })" :invalid-feedback="
             renderInvalidFeedback({
               validationDesc: blindlyGetData({
                 rawLabel: 'alamat rumah'
               })
             })
           ">
-              <label for="">{{renderLabel({ label: 'alamat rumah' })}}</label>
-              <label for="" style="color:red"> *</label>
-              <b-form-input @keyup="
+          <label for="">{{renderLabel({ label: 'alamat rumah' })}}</label>
+          <label for="" style="color:red"> *</label>
+          <b-form-input @keyup="
               setValue({
                 rawLabel: 'alamat rumah',
                 $event
               })
             " :state="getDataError({ rawLabel: 'alamat rumah' })" :disabled="disabledForm()"
-                :value="getValue('alamat rumah')" :maxlength="100" />
-            </b-form-group>
-          </b-col>
-          <b-col sm="6">
-          </b-col>
-          <b-col sm="6">
-            <b-form-group label="provinsi" class="text-capitalize" style="position: relative"
-              :state="getDataError({ rawLabel: 'provinsi' })" :invalid-feedback="
+            :value="getValue('alamat rumah')" :maxlength="100" />
+        </b-form-group>
+
+      </div>
+      <b-row>
+        <b-col cols="6">
+          <b-form-group label="provinsi" class="text-capitalize" style="position: relative"
+            :state="getDataError({ rawLabel: 'provinsi' })" :invalid-feedback="
               renderInvalidFeedback({
                 validationDesc: blindlyGetData({
                   rawLabel: 'provinsi'
                 })
               })
             ">
-              <vue-select :options="provinces" @input="getCity" :disabled="disabledForm()" v-model="tempat.provinsi" />
-            </b-form-group>
-          </b-col>
-          <b-col sm="6"> </b-col>
-          <b-col sm="6">
-            <b-form-group label="kota" class="text-capitalize" style="position: relative"
-              :state="getDataError({ rawLabel: 'kota' })" :invalid-feedback="
+            <vue-select :options="provinces" @input="getCity"
+              :disabled="disabledForm()" v-model="tempat.provinsi" />
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col cols="6">
+
+          <b-form-group label="kota" class="text-capitalize" style="position: relative"
+            :state="getDataError({ rawLabel: 'kota' })" :invalid-feedback="
               renderInvalidFeedback({
                 validationDesc: blindlyGetData({
                   rawLabel: 'kota'
                 })
               })
             ">
-              <vue-select :options="cities" v-model="tempat.kota" @input="setDataTempat" :disabled="disabledForm()" />
-            </b-form-group>
-          </b-col>
-          <b-col sm="6">
-          </b-col>
-          <b-col sm="6">
-            <b-form-group :label="renderLabel({ label: 'status perkawinan' })" class="text-capitalize"
-              style="position: relative">
-              <b-form-select :options="
+            <vue-select :options="cities" v-model="tempat.kota" @input="setDataTempat" :disabled="disabledForm()" />
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col cols="6">
+          <b-form-group :label="renderLabel({ label: 'status perkawinan' })" class="text-capitalize"
+            style="position: relative">
+            <b-form-select :options="
                 ['Belum Kawin', 'Kawin', 'Cerai Hidup', 'Cerai Mati'].map(
                   (item, index) => ({
                     value: item,
@@ -306,32 +309,29 @@
                   $event
                 })
               " :disabled="disabledForm()" :value="getValue('status perkawinan')" />
-            </b-form-group>
-          </b-col>
-          <b-col sm="6">
-          </b-col>
-          <b-col sm="6">
-          </b-col>
-          <b-col sm="6">
+          </b-form-group>
+        </b-col>
+        <b-col cols="6" class="d-flex align-items-center justify-content-end">
+          <b-button @click="$emit('keluar', true)" class="ml-3 text-uppercase" :variant="btnVariant()"
+            style="font-size:17.5px;">{{ btnText() }}</b-button>
+          <template v-if="formType !== 'detail'">
+
             <b-button class="ml-3 text-uppercase" v-b-popover.hover.top="'SIMPAN & MASUK ANTREAN'" variant="primary"
-              style="font-size:17.5px; float:right" type="submit">simpan
+              style="font-size:17.5px;" type="submit">simpan
               <font-awesome-icon class="mx-auto" icon="caret-down" />
             </b-button>
-            <b-button @click="$emit('keluar', true)" class="text-uppercase" :variant="btnVariant()"
-              style="font-size:17.5px; float:right">{{ btnText() }}</b-button>
-            <template v-if="formType !== 'detail'">
-            </template>
-            <template v-else>
-              <b-button class="ml-3 text-uppercase float-left" variant="success" style="font-size:17.5px;" @click="
+
+          </template>
+          <template v-else>
+            <b-button class="ml-3 text-uppercase float-left" variant="success" style="font-size:17.5px;" @click="
                 $router.push({
                   name: 'pasien-edit',
                   params: { idPasien }
                 })
               ">edit</b-button>
-            </template>
-          </b-col>
-        </b-row>
-      </b-container>
+          </template>
+        </b-col>
+      </b-row>
     </b-form>
   </div>
 </template>
@@ -478,9 +478,9 @@
       validations: {}
     },
     {
-      label: "jenis identitas",
-      alias: "jenis_identitas",
-      validations: {}
+      label : "jenis identitas",
+      alias : "jenis_identitas",
+      validations : {}
     },
     // {
     //   label: "pekerjaan",
@@ -497,7 +497,7 @@
       alias: "provinsi",
       validations: {}
     },
-    {
+     {
       label: "kota",
       alias: "kota",
       validations: {}
@@ -625,9 +625,9 @@
       selectTempat: null,
       provinces: [],
       cities: [],
-      tempat: {
-        provinsi: null,
-        kota: null,
+      tempat : {
+        provinsi : null,
+        kota : null,
       }
     }),
     computed: {
@@ -652,7 +652,7 @@
       // }
       await this.getPasienData();
       this.getProvince();
-
+      
     },
     methods: {
       getProvince() {
@@ -687,9 +687,9 @@
           console.error(error);
         }
       },
-      setDataTempat() {
-        this.formData['provinsi'] = this.tempat.provinsi.id
-        this.formData['kota'] = this.tempat.kota.id
+      setDataTempat(){
+          this.formData['provinsi'] = this.tempat.provinsi.id
+          this.formData['kota'] = this.tempat.kota.id
       },
       startCase: startCase,
       ocrCompleted(res) {
@@ -810,7 +810,7 @@
         return this.formType === "detail";
       },
       tanggalLahirSelected($event) {
-
+        
         if (!$event) return;
         this.setValue({
           rawLabel: "tanggal lahir",

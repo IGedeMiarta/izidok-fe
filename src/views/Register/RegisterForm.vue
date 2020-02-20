@@ -543,15 +543,20 @@
             data,
             message
           } = res.data;
+
+          console.log(res.data);
+
           // console.log();
           if (status) {
             this.$router.push({
               name: "verification-process",
               params: {
                 email: postData.email,
-                user_id: data.user_id
+                user_id: data.user_id,
+                created_at : data.created_at
               }
             });
+            
           } else {
             console.log(match);
             let match = message.match(/(email|nomor_telp) is already in used/);
