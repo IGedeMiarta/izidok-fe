@@ -397,7 +397,7 @@ export default {
           this.rows = total;
         }
       } catch (err) {
-        alert(err);
+        // alert(err);
       }
     },
     async getPasien(id) {
@@ -418,7 +418,7 @@ export default {
           });
         }
       } catch (err) {
-        alert(err);
+        // alert(err);
       }
     },
     clickBtnAction(icon, data) {

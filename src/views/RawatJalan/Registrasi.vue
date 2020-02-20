@@ -519,7 +519,7 @@ export default {
           });
         }
       } catch (err) {
-        alert(err);
+        // alert(err);
       }
     },
     async fetchDokter() {
@@ -534,7 +534,7 @@ export default {
           });
         }
       } catch (err) {
-        alert(err);
+        // alert(err);
       }
     },
     async searchPasien(val) {
@@ -561,7 +561,7 @@ export default {
           });
         }
       } catch (err) {
-        alert(err);
+        // alert(err);
       }
     }
   }

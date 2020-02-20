@@ -342,7 +342,7 @@
           this.$refs['modal-edit'].hide();
           this.fetchListTarif();
         } catch (err) {
-          alert(err);
+          // alert(err);
         }
       },
       async deleteTarif(id) {

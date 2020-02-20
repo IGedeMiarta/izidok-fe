@@ -95,7 +95,7 @@ export default {
           this.goingPlaces();
         }
       } catch (err) {
-        alert(err);
+        // alert(err);
       } finally {
         this.beingSubmit = false;
       }
