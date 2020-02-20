@@ -5,7 +5,7 @@
       :breadcrumb="[
         {
           label: 'Manajemen Pasien',
-          link : '/pasien'
+          link: '/pasien'
         },
         {
           label: 'List Pasien',
@@ -56,16 +56,13 @@
                 </div>
               </b-row>
             </div>
-            <div
-              class="col-md-3 d-flex align-items-end justify-content-center"
-            >
-              <b-row >
+            <div class="col-md-3 d-flex align-items-end justify-content-center">
+              <b-row>
                 <b-col>
                   <div class="form-group">
-                    <b-button variant="primary"  @click="fetchListPasien"
+                    <b-button variant="primary" @click="fetchListPasien"
                       >CARI</b-button
                     >
-                    
                   </div>
                 </b-col>
                 <b-col>
@@ -83,7 +80,7 @@
             </div>
           </div>
           <div class="col-md-12 no-padding">
-            <table class="table table-bordered table-hover table-hover mb-5">
+            <!-- <table class="table table-bordered table-hover table-hover mb-5">
               <thead>
                 <tr class="text-capitalize">
                   <th>no</th>
@@ -136,7 +133,8 @@
                   </td>
                 </tr>
               </tbody>
-            </table>
+            </table> -->
+            <CustomDataTable />
           </div>
         </div>
       </div>
@@ -178,6 +176,7 @@ library.add(faArrowRight, faArrowUp, faTrashAlt, faSearch, faPencilAlt);
 
 export default {
   components: {
+    CustomDataTable: () => import("../../components/CustomDataTable"),
     Datetime
   },
   data() {
@@ -305,5 +304,4 @@ export default {
       margin-left :         
     }
 } */
-        
 </style>
