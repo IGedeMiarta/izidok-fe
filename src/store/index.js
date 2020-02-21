@@ -13,6 +13,8 @@ const vuexPersist = new VuexPersist({
   storage: window.localStorage
 });
 
+const getRoles = state => state && state.user && state.user.roles;
+
 // Create store
 export default new Vuex.Store({
   state: {
@@ -30,7 +32,10 @@ export default new Vuex.Store({
   getters: {
     isLoading(state) {
       return state.loading;
-    }
+    },
+    userRole: getRoles,
+    doctorRole: state =>
+      getRoles(state).some(val => /(dokter|doktor)/gi.test(val.name))
   },
   mutations: {
     SET_BEARER_TOKEN(state, value) {
