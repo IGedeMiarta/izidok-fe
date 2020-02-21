@@ -105,19 +105,17 @@ import {
 } from "vuelidate/lib/validators";
 import axios from "axios";
 
-const verifyPassword = val => {
-  return /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]*$/gi.test(val);
-};
+const verifyPassword = val => /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]*$/gi.test(val);
 
 export default {
-  beforeRouteEnter(to, from, next) {
-    const { name } = from;
-    if (name === "input-spesialisasi") {
-      next();
-    } else {
-      next("/");
-    }
-  },
+  // beforeRouteEnter(to, from, next) {
+  //   const { name } = from;
+  //   if (name === "input-spesialisasi") {
+  //     next();
+  //   } else {
+  //     next("/");
+  //   }
+  // },
   props: ["klinik_id"],
   data: () => ({
     formBasicData: null,
@@ -214,13 +212,29 @@ export default {
       },
       password: {
         required,
-        verifyPasswordNoUppercase: verifyPassword,
+        verifyPasswordNoUppercase(val, vm) {
+          const {
+            required: re,
+            minLength: ml,
+            maxLength: mal
+          } = this.$v.formData.password;
+          if (val === "" || !re || !ml || !mal) return true;
+          return verifyPassword(val);
+        },
         minLength: minLength(6),
         maxLength: maxLength(15)
       },
       konfirmasi_password: {
         required,
-        verifyPasswordNoUppercase: verifyPassword,
+        verifyPasswordNoUppercase(val, vm) {
+          const {
+            required: re,
+            minLength: ml,
+            maxLength: mal
+          } = this.$v.formData.password;
+          if (val === "" || !re || !ml || !mal) return true;
+          return verifyPassword(val);
+        },
         sameAsPassword: sameAs("password"),
         minLength: minLength(6),
         maxLength: maxLength(15)
@@ -294,7 +308,7 @@ export default {
 
         this.$router.push({
           name: "input-tarif",
-          params: { klinik_id: klinik_id }
+          params: { klinik_id: this.klinik_id }
         });
       } catch (err) {
         console.log(err);
