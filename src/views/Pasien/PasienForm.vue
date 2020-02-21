@@ -160,11 +160,11 @@
                 ">
               <label for="">{{ renderLabel({ label: 'tanggal lahir'  }) }}</label>
               <label for="" style="color:red"> *</label>
-              <b-input-group>
+              <!-- <b-input-group>
                 <b-input-group-text slot="append">
                   <font-awesome-icon class="mx-auto" icon="calendar" />
-                </b-input-group-text>
-                <Datetime input-class="form-control" zone="Asia/Jakarta" value-zone="Asia/Jakarta" format="d LLL yyyy"
+                </b-input-group-text> -->
+                <Datetime input-class="form-control" class="d-flex input-group" zone="Asia/Jakarta" value-zone="Asia/Jakarta" format="d LLL yyyy"
                   @input="tanggalLahirSelected" :value="getValue('tanggal lahir')" :disabled="disabledForm()"
                   :input-style="
                     getDataError({ rawLabel: 'tanggal lahir' }) === null
@@ -172,8 +172,16 @@
                       : getDataError({ rawLabel: 'tanggal lahir' })
                       ? null
                       : 'border-color: red'
-                  " :max-datetime="maximumDatetime" />
-              </b-input-group>
+                  " :max-datetime="maximumDatetime" ref="dob">
+                  <template v-slot:after>
+                    <b-input-group-text @click="triggerDob" slot="append" style="
+                    border-top-left-radius:0; border-left-width: 0; border-bottom-left-radius: 0; cursor: pointer
+                    ">
+                      <font-awesome-icon class="mx-auto" icon="calendar" />
+                    </b-input-group-text>
+                  </template>
+                </Datetime>
+              <!-- </b-input-group> -->
             </b-form-group>
           </b-col>
           <b-col sm="6">
@@ -668,6 +676,11 @@
 
     },
     methods: {
+      triggerDob() {
+        const x = this.$refs.dob
+        const { $el: { firstElementChild } } = x
+        firstElementChild && firstElementChild.click()
+      },
       getProvince() {
         axios.get(`${this.url_api}/province`)
           .then((response) => {
