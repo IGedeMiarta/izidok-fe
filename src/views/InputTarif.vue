@@ -117,7 +117,7 @@
                     class="text-capitalize"
                     type="submit"
                     variant="primary"
-                    >lanjutkan</b-button
+                    >simpan</b-button
                   >
                 </b-col>
               </b-row>
@@ -281,7 +281,7 @@ export default {
         this.collapseSidebar(false);
 
         this.$router.push({
-          path: "/input-data-operator"
+          path: "/"
         });
       } catch (err) {
         // console.log(err);

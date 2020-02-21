@@ -82,7 +82,7 @@
                     class="text-capitalize ml-2"
                     type="submit"
                     variant="primary"
-                    >simpan</b-button
+                    >Lanjut</b-button
                   >
                 </div>
               </b-form>
@@ -290,7 +290,7 @@ export default {
       }
     },
     async addAsistenDokter() {
-      const { constructPostData } = this;
+      const { constructPostData, klinik_id } = this;
       try {
         const res = await axios.post(
           `${this.url_api}/operator`,
