@@ -29,15 +29,16 @@
                     </h1> -->
                     <!-- moment(this.pembayaranList['created_at']).format("DD-MMMM-YYYY,  h:mm:ss a"); -->
                     
-                    <template v-if="this.startExpired > now   ">
+                    <template v-if="isExpired">
                       <p class="mb-5">
                         Link aktivasi telah berakhir, silahkan lakukan registrasi ulang!
-                        {{now()}}
                       </p>
-                      <button class="btn px-5 btn-first my-2 btn-lg btn-block w-75 text-capitalize"
-                        @click="this.redirectToRegister">
-                        Kembali ke Registrasi
-                      </button>
+                      <div class="d-flex flex-column justify-content-center align-items-center">
+                        <button class="btn px-5 btn-first my-2 btn-lg btn-block w-75 text-capitalize"
+                          @click="this.redirectToRegister">
+                          Kembali ke Registrasi
+                        </button>
+                      </div>
                     </template>
                     <template v-else>
                       <p class="mb-5">
@@ -74,7 +75,7 @@
                           Kembali ke Halaman Login
                           <!-- </b-button> -->
                         </router-link>
-                        <template v-if="intervalCounter && resendLinkActivation < 3">
+                        <template v-if="resendLinkActivation < 3">
                           <p class="my-2">
                             Tunggu
                             <span style="color: #3c44b1">{{ this.counterValue }}</span>
@@ -123,23 +124,21 @@
         resendLinkActivation: 0,
         counter: staticCounter,
         intervalCounter: null,
-        startExpired: null,
-        endExpired :null,
-        isExpired : null
+        isExpired : false
       };
     },
     mounted() {
       this.counterFunc();
-      this.startExpired = moment(this.created_at).format("DD-MMMM-YYYY, h:mm:ss ");
-      console.log('awal',this.startExpired);
+
+      let expiredAt = moment(this.created_at).add(50, 'minutes');
+      setInterval(() => {
+        this.isExpired = moment() >= expiredAt ? true : false
+      }, 1000)
     },
     computed: {
       counterValue() {
         return this.counter;
-      },
-      now() {
-        return moment().format("DD-MMMM-YYYY, h:mm:ss ");
-      },
+      }
     },
     methods: {
       redirectToRegister() {
@@ -164,6 +163,9 @@
         if (this.counter !== staticCounter) {
           this.counter = staticCounter;
         }
+
+        if(this.intervalCounter) clearInterval(this.intervalCounter);
+
         this.intervalCounter = setInterval(() => {
           if (this.counter > 0) {
             this.counter--;
