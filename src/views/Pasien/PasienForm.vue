@@ -164,7 +164,7 @@
                 <b-input-group-text slot="append">
                   <font-awesome-icon class="mx-auto" icon="calendar" />
                 </b-input-group-text>
-                <Datetime input-class="form-control" zone="Asia/Jakarta" format="d LLL yyyy"
+                <Datetime input-class="form-control" zone="Asia/Jakarta" value-zone="Asia/Jakarta" format="d LLL yyyy"
                   @input="tanggalLahirSelected" :value="getValue('tanggal lahir')" :disabled="disabledForm()"
                   :input-style="
                     getDataError({ rawLabel: 'tanggal lahir' }) === null
