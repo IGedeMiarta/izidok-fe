@@ -28,7 +28,7 @@ export default () => {
         store.commit('SET_AUTHERROR', err.response.data.message);
       }
       else if(err.response.status == 440) {
-        store.commit('SET_AUTHERROR', 'Sesi login anda telah berakhir!');
+        store.commit('SET_AUTHERROR', 'Sesi login Anda telah berakhir. Silahkan login kembali!');
       }
       return Promise.reject(err);
     }
