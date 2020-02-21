@@ -6,14 +6,20 @@
           <!-- <div class="hero-wrapper bg-composed-wrapper bg-plum-plate min-vh-100" style="height: 100%"> -->
           <div class="flex-grow-1 w-100  align-items-center">
             <VueSlickCarousel :dots="true" :adaptiveHeight="true" :arrows='false' :autoplay="true">
-              <img src="@/assets/img/image_Register1.jpg" style="height: 100%" alt="Banner izidok">
-              <img src="@/assets/img/image_Register2.jpg" style="height: 100%" alt="Banner izidok">
-              <img src="@/assets/img/image_Register3.jpg" style="height: 100%" alt="Banner izidok">
+               <div class="wrap" :style="wrapStyle">
+              <img src="@/assets/img/image_Register1.jpg" :style="wrapImgStyle"   alt="Banner izidok 1">
+               </div>
+               <div class="wrap" :style="wrapStyle">
+              <img src="@/assets/img/image_Register2.jpg" :style="wrapImgStyle"    alt="Banner izidok 2">
+               </div>
+                <div class="wrap" :style="wrapStyle">
+              <img src="@/assets/img/image_Register3.jpg" :style="wrapImgStyle" alt="Banner izidok 3">
+              </div>
             </VueSlickCarousel>
           </div>
           <!-- </div> -->
         </div>
-        <div class="col-lg-6 d-flex align-items-center content-register-right">
+        <div class="col-md-6 col-sm-6 d-flex align-items-center content-register-right">
           <div class="col-sm-10 mt-2" style="margin-left:auto;margin-right:auto">
             <h4 class="font-weight-bold text-capitalize">
               daftarkan {{ selectedTipeFaskes }} anda
@@ -44,7 +50,7 @@
                       renderInvalidFeedback({
                         validationDesc: form['validation-desc']
                       })
-                    " :state="renderError({ error: form.error })" style="margin-top:-8px;" >
+                    " :state="renderError({ error: form.error })" style="margin-top:-3px;" >
                   <!-- <b-form-input
                       :type="form.type || 'text'"
                       :value="form.value"
@@ -188,6 +194,7 @@
       dataSpesialisasi: null,
       passwordVisible: false,
       passwordVisible1: false,
+      windowHeight: 0
     }),
     components: {
       VueSlickCarousel
@@ -283,6 +290,7 @@
                           message
                         }
                       } = res;
+                      console.log('data',res)
                       resolve(status);
                     })
                     .catch(err => {
@@ -410,8 +418,24 @@
     },
     mounted() {
       this.setFormData();
+       this.windowHeight = window.innerHeight;
+      this.$nextTick(() => {
+        window.addEventListener('resize', (e) => {
+          this.windowHeight = window.innerHeight;
+        })
+      })
     },
     computed: {
+       wrapStyle() {
+        return {
+          height: this.windowHeight + 'px'
+        }
+      },
+      wrapImgStyle() {
+        return {
+          "max-height": this.windowHeight + 'px'
+        }
+      },
       optionsTipeFaskes() {
         const tmp = this.tipeFaskesData.slice(0);
         return tmp.reverse().map(item => ({
@@ -797,6 +821,25 @@
   //     height: 754px;;
   //   }
   // }
+   .wrap {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    margin: 0;
+  }
+
+  .wrap img {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-height: 100%;
+    min-width: 100%;
+    transform: translate(-50%, -50%);
+  }
+
   @media only screen and (max-width: 600px) {
     .img-banner-left {
       position: relative;

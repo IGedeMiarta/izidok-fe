@@ -323,9 +323,9 @@
           </b-col>
           <b-col sm="6">
             <template v-if="formType !== 'detail'">
-              <b-button class="ml-3 text-uppercase" v-b-popover.hover.top="'SIMPAN & MASUK ANTREAN'" variant="primary"
+              <b-button class="ml-3 text-uppercase" variant="primary"
                 style="font-size:17.5px;float:right " type="submit">simpan
-                <font-awesome-icon class="mx-auto" icon="caret-down" />
+                <!-- <font-awesome-icon class="mx-auto" icon="caret-down" /> -->
               </b-button>
               <b-button @click="$emit('keluar', true)" class="text-uppercase" :variant="btnVariant()"
                 style="font-size:17.5px;float:right">{{ btnText() }}</b-button>

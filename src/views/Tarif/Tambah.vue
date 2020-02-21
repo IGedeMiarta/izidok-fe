@@ -14,6 +14,9 @@
         ]" />
       <div class="container">
         <div class="card card-box mb-5">
+          <div class="card-header" style="background-color : #d3e8eb">
+            <h4>Tambah Tarif</h4>
+          </div>
           <div class="card-body">
             <b-form @submit.prevent="submitInputTarif">
               <b-row class="d-flex align-items-center">
@@ -35,7 +38,7 @@
                               $event
                             })
                           " :state="errorState({ label: 'nama_layanan', index })"
-                          :placeholder="placeholderInput('nama_layanan')" maxlength="30"></b-form-input>
+                          :placeholder="placeholderInput('nama_layanan')" maxlength="50"></b-form-input>
                         <b-form-invalid-feedback class="text-capitalize">
                           {{
                             inputTarif.error &&
@@ -54,7 +57,7 @@
                             })
                           " @input="onInputKode($event, index, inputTarif, 'kode_layanan')"
                           :state="errorState({ label: 'kode_layanan', index })"
-                          :placeholder="placeholderInput('kode_layanan')" maxlength="5"></b-form-input>
+                          :placeholder="placeholderInput('kode_layanan')" maxlength="20"></b-form-input>
                         <b-form-invalid-feedback class="text-capitalize">
                           {{
                             inputTarif.error &&

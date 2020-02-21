@@ -14,8 +14,8 @@
           <div class="col-md-6">
 
           </div>
-            <b-button class="text-uppercase" 
-                style="font-size:14.5px;" to="/pasien/tambah" variant="first">Registrasi Pasien Baru</b-button>
+          <b-button class="text-uppercase" style="font-size:14.5px;" v-b-modal.modal-1 variant="first">Registrasi Pasien
+            Baru</b-button>
         </div>
         <div class="card-body">
           <b-form v-on:submit.prevent="submitForm">
@@ -129,17 +129,15 @@
                         " name="radio-options"></b-form-radio-group>
                     </template>
                     <template v-if="form.type == 'textarea'">
-                      <b-form-textarea id="textarea" 
-                         v-model="formData[form.label]" @keyup="
+                      <b-form-textarea id="textarea" v-model="formData[form.label]" @keyup="
                           setValue({
                             rawLabel: form.rawLabel,
                             label: form.label,
                             $event,
                             tmpId: form.tmpId
                           })
-                        " 
-                       placeholder="Tuliskan keluhan utama secara singkat, mis. sakit kepala, demam 3 hari, dll" rows="3"
-                        max-rows="6"></b-form-textarea>
+                        " placeholder="Tuliskan keluhan utama secara singkat, mis. sakit kepala, demam 3 hari, dll"
+                        rows="3" max-rows="6"></b-form-textarea>
                     </template>
                   </b-form-group>
 
@@ -152,6 +150,71 @@
           </b-form>
         </div>
       </div>
+      <b-modal id="modal-1" style="color:#d3e8eb;" title="Registrasi Pasien Baru">
+        <b-form row>
+          <div class="col-sm-12">
+            <b-form-group id="input-group-1" label-for="input-1">
+              <label for="">Nama Lengkap</label>
+              <label for="" style="color:red">*</label>
+              <b-form-input id="input-1" type="text" required>
+              </b-form-input>
+            </b-form-group>
+          </div>
+          <div class="col-sm-12">
+            <b-form-group id="input-group-1" label-for="input-1">
+              <label for="">No. Handphone</label>
+              <label for="" style="color:red">*</label>
+              <b-form-input id="input-1" type="text" required>
+              </b-form-input>
+            </b-form-group>
+          </div>
+          <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-6">
+                <b-form-group>
+                  <label for="">Jenis kelamin</label>
+                  <label for="" style="color:red"> *</label>
+                  <b-form-radio-group stacked class="text-capitalize" :options="[
+                    { text: 'laki-laki', value: 1 },
+                    { text: 'perempuan', value: 0 }
+                  ]">
+                  </b-form-radio-group>
+                </b-form-group>
+              </div>
+              <div class="col-sm-6">
+                <b-form-group>
+                   <label for="">Tanggal Lahir</label>
+                  <label for="" style="color:red"> *</label>
+                  <Datetime input-class="form-control" class="input-group" zone="Asia/Jakarta" value-zone="Asia/Jakarta"
+                    format="d LLL yyyy" @input="tanggalLahirSelected" :max-datetime="maximumDatetime" :input-style="
+                    getDataError({ rawLabel: 'tanggal lahir' }) === null
+                      ? null
+                      : getDataError({ rawLabel: 'tanggal lahir' })
+                      ? null
+                      : 'border-color: red'
+                  " ref="dob">
+                    <template v-slot:after>
+                      <b-input-group-text @click="triggerDob" slot="append" style="
+                    border-top-left-radius:0; border-left-width: 0; border-bottom-left-radius: 0; cursor: pointer
+                    ">
+                        <font-awesome-icon class="mx-auto" icon="calendar" />
+                      </b-input-group-text>
+                    </template>
+                  </Datetime>
+                </b-form-group>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12">
+             <b-form-group id="input-group-1" label-for="input-1">
+              <label for="">Alamat</label>
+              <label for="" style="color:red">*</label>
+              <b-form-input id="input-1" type="text" required>
+              </b-form-input>
+            </b-form-group>
+          </div>
+        </b-form>
+      </b-modal>
     </div>
   </div>
 </template>
@@ -166,17 +229,27 @@
     numeric
   } from "vuelidate/lib/validators";
   import axios from "axios";
-  // import {
-  //   Datetime
-  // } from "vue-datetime";
-  // import "vue-datetime/dist/vue-datetime.css";
+  import "vue-datetime/dist/vue-datetime.css";
+  import {
+    Datetime
+  } from "vue-datetime";
+  import {
+    library
+  } from "@fortawesome/fontawesome-svg-core";
+  import {
+    faCamera,
+    faCaretDown,
+    faCalendar
+  } from "@fortawesome/free-solid-svg-icons";
+  library.add(faCamera, faCaretDown, faCalendar);
+
   import moment from "moment";
 
   const tmp = [{
       label: "nama pasien",
       type: "select",
       isImportant: "*",
-      col: 4,
+      col: 5,
       validations: {
         required
       }
@@ -184,7 +257,7 @@
     {
       label: "no. rekam medis",
       type: "text",
-      col: 4,
+      col: 3,
       validations: {
         required,
         minLength: minLength(6)
@@ -278,7 +351,7 @@
   export default {
     components: {
       "vue-select": () => import("vue-select"),
-      // Datetime
+      Datetime
     },
     data: () => ({
       formBasicData: null,
@@ -290,6 +363,26 @@
       selected: null,
       pasiens: []
     }),
+    beforeRouteLeave(to, from, next) {
+      if (!this.beingSubmit) {
+        this.$swal({
+          title: startCase("keluar"),
+          text: `Apakah anda yakin untuk keluar dari halaman ini?`,
+          type: "warning",
+          showCancelButton: true,
+          cancelButtonText: startCase("tidak"),
+          confirmButtonText: startCase("ya")
+        }).then(res => {
+          if (res.value) {
+            next();
+          } else {
+            next(false);
+          }
+        });
+      } else {
+        next();
+      }
+    },
     validations() {
       return {
         formData: {
@@ -308,9 +401,21 @@
     computed: {
       minimumDatetime() {
         return moment().format("YYYY-MM-DD");
-      }
+      },
+      maximumDatetime() {
+        return moment().format("YYYY-MM-DD");
+      },
     },
     methods: {
+      triggerDob() {
+        const x = this.$refs.dob
+        const {
+          $el: {
+            firstElementChild
+          }
+        } = x
+        firstElementChild && firstElementChild.click()
+      },
       waktuKonsultasiSelected($event) {
         if ($event) {
           this.setValue({
@@ -385,6 +490,10 @@
           arr[tmp] = "";
           return arr;
         }, {});
+      },
+      tanggalLahirSelected($event) {
+        if (!$event) return;
+        moment($event).format("YYYY-MM-DD")
       },
       setFormBasicData() {
         return tmp.map((item, index) => ({
@@ -465,7 +574,7 @@
           klinik_id: this.$store.state.user.klinik_id || "",
           examination_by: this.formData.dokter.value || "",
           nomor_rekam_medis: this.formData["no._rekam_medis"] || "",
-          nama_pasien: this.formData.nama_pasien.label || "",
+          nama_lengkap: this.formData.nama_pasien.label || "",
           nik: this.formData["no._ktp"] || "123",
           jenis_kelamin: this.formData.jenis_kelamin || "",
           nomor_telp: this.formData.nomor_handphone || "",
@@ -480,7 +589,8 @@
           tensi_sistole: this.formData.tensi_sistole || 0,
           tensi_diastole: this.formData.tensi_diastole || 0,
           nadi: this.formData.nadi || 0,
-          respirasi: 0
+          respirasi: 0,
+          anamnesis: this.formData.anamnesis || ""
         };
 
         try {
@@ -542,9 +652,7 @@
             this.pasiens = pasienData;
             this.options.nama_pasien = pasienData.map(item => {
               return {
-                label: `${item.nama} ~ ${moment(item.tanggal_lahir).format(
-                "DD-MM-YYYY"
-              )}`,
+                label: `${item.nama}`,
                 value: item.id
               };
             });
