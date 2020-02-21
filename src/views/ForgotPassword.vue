@@ -25,7 +25,7 @@
                     <div class="mt-3 col-md-10">
                       <template v-if="this.currentStep == 1">
                         <label class="mb-3 mt-4" style="margin-top:35px; margin-left:20px ;color:gray">
-                          Masukkan email yang terintegrasi dengan Akun
+                          Masukkan email yang terintegrasi dengan Akun : 
                         </label>
                       </template>
                       <template v-if="this.currentStep == 2">
