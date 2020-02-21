@@ -115,7 +115,7 @@
 
   library.add(faArrowLeft);
 
-  const staticCounter = 3;
+  const staticCounter = 60;
 
   export default {
     props: ["email", "user_id", "created_at"],
