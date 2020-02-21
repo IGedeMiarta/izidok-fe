@@ -259,6 +259,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import startCase from "lodash/startCase";
 import debounce from "lodash/debounce";
 import axios from "axios";
@@ -334,6 +335,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      isDoctor: "doctorRole"
+    }),
     entriesOptions() {
       return [5, 10, 25, 50, 100].map(item => ({
         value: item,
@@ -343,14 +347,19 @@ export default {
     fieldList() {
       const r = val => Boolean(/(no|actions)\b/gi.test(val) ? !1 : 1);
       const l = val => (val.label ? val.label : val.key.split("_").join(" "));
-      return [
+      const t = [
         { key: "no" },
         { key: "nomor_rekam_medis" },
         { key: "nama", label: "nama_pasien" },
         { key: "jenis_kelamin" },
         { key: "nomor_hp" },
         { key: "actions" }
-      ].map(item => ({
+      ];
+
+      return (
+        (!this.isDoctor && t.filter(item => item.key !== "actions")) ||
+        t
+      ).map(item => ({
         key: (item.key && item.key) || item,
         label: startCase(l(item)),
         sortable: r(item.key),
