@@ -106,7 +106,10 @@
 </template>
 
 <script>
-  import { mapMutations, mapState } from "vuex";
+  import {
+    mapMutations,
+    mapState
+  } from "vuex";
   import startCase from "lodash/startCase";
   import {
     required,
@@ -171,7 +174,7 @@
         },
         password: {
           required,
-          minLength : minLength(6)
+          minLength: minLength(6)
           // verifyPassword(val) {
           //   if (val || val != null) {
           //     if (val.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/)) {
@@ -238,8 +241,10 @@
           const res = await axios.post(`${this.url_api}/login`, postData);
           const {
             status,
+            message,
             data
           } = res.data;
+
           if (status) {
             this.$store.commit('SET_BEARER_TOKEN', data.token);
             this.loggedIn = true;
@@ -258,9 +263,16 @@
             // not first join
             if (!this.firstJoin) {
               this.setInitPage(false)
-
               this.$router.push('/');
             }
+          } else if (status == false && message == 'Please check your email to activate user...') {
+            this.$router.push({
+              name: "verification-login",
+              params: {
+                email: postData.username,
+                user_id: res.data.user_id,
+              }
+            });
           } else {
             this.$swal({
               title: 'Login gagal',

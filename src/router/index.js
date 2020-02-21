@@ -104,6 +104,14 @@ const routes = [
         props: true
       },
       {
+        path: "login",
+        name: "verification-login",
+        component: () =>
+          import("../views/Verification/VerificationLogin.vue"),
+        meta: { layout: "examples" },
+        props: true
+      },
+      {
         path: "operator/:token",
         name: "verification-operator",
         component: () =>
@@ -248,6 +256,7 @@ router.beforeEach((to, from, next) => {
     "verification-process",
     "verification-operator",
     "verification-result",
+    "verification-login",
     "forgot-password-failed",
     "sukses-page"
   ].includes(name);
