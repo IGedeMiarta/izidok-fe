@@ -171,17 +171,18 @@
         },
         password: {
           required,
-          verifyPassword(val) {
-            if (val || val != null) {
-              if (val.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/)) {
-                return true;
-              } else {
-                return false;
-              }
-            } else {
-              return false;
-            }
-          }
+          minLength : minLength(6)
+          // verifyPassword(val) {
+          //   if (val || val != null) {
+          //     if (val.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}$/)) {
+          //       return true;
+          //     } else {
+          //       return false;
+          //     }
+          //   } else {
+          //     return false;
+          //   }
+          // }
         }
       }
     },

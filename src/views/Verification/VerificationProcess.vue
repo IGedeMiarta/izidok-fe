@@ -74,7 +74,7 @@
                           Kembali ke Halaman Login
                           <!-- </b-button> -->
                         </router-link>
-                        <template v-if="intervalCounter && resendLinkActivation <= 3">
+                        <template v-if="intervalCounter && resendLinkActivation < 3">
                           <p class="my-2">
                             Tunggu
                             <span style="color: #3c44b1">{{ this.counterValue }}</span>

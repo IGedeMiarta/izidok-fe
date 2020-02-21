@@ -103,7 +103,7 @@
               :key="index"
               class="mb-2 pl-3 pr-3"
             >
-              <b-col cols="6">
+              <b-col cols sm="6">
                 <div class="d-flex">
                   <div class="flex-grow-1 text-capitalize">
                     {{ data.label }}
@@ -111,7 +111,7 @@
                   <span>:</span>
                 </div>
               </b-col>
-              <b-col cols="6">
+              <b-col cols sm="6">
                 {{ data.value }}
               </b-col>
             </b-row>
