@@ -1,7 +1,7 @@
 <template>
   <div>
     <page-title
-      heading="Registrasi Rawat Jalan"
+      heading="Registrasi Antrean"
       :breadcrumb="[
         {
           label: 'rawat jalan',
@@ -13,7 +13,7 @@
     <div class="container">
       <div class="card card-box mb-5">
         <div class="card-header">
-          <h4 class="text-capitalize my-2">form registrasi rawat jalan</h4>
+          <h4 class="text-capitalize my-2">form registrasi antrean</h4>
         </div>
         <div class="card-body">
           <b-form v-on:submit.prevent="submitForm">
