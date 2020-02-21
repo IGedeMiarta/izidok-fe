@@ -26,7 +26,7 @@
     </div> -->
     <h4 class="text-capitalize mb-3">
       data pasien
-      <span v-if="idPasien">
+      <span v-if="idPasien && formData">
         (no. rekam medis: {{ formData.nomor_rekam_medis }})
       </span>
     </h4>
