@@ -25,12 +25,12 @@
                     <div class="mt-3 col-md-10">
                       <template v-if="this.currentStep == 1">
                         <label class="mb-3 mt-4" style="margin-top:35px; margin-left:20px ;color:gray">
-                          Masukan email yang terintegrasi dengan akun
+                          Masukkan email yang terintegrasi dengan Akun
                         </label>
                       </template>
                       <template v-if="this.currentStep == 2">
                         <label class="mb-3 mt-4" style="margin-top:35px; margin-left:20px ;color:gray">
-                          Masukan password baru Anda untuk dapat melanjutkan akses ke izidok
+                          Masukkan password baru Anda untuk dapat melanjutkan akses ke izidok
                         </label>
                       </template>
                       <div>
