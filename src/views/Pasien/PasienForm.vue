@@ -49,8 +49,8 @@
                 rawLabel: 'nama lengkap',
                 $event
               })
-            " :state="getDataError({ rawLabel: 'nama lengkap' })" :disabled="disabledForm()"
-                :value="getValue('nama')" :maxlength="60" />
+            " :state="getDataError({ rawLabel: 'nama lengkap' })" :disabled="disabledForm()" :value="getValue('nama')"
+                :maxlength="60" />
             </b-form-group>
           </b-col>
           <b-col sm="6">
@@ -285,7 +285,8 @@
                 })
               })
             ">
-              <vue-select :options="cities"  :value="getValue('kota')" v-model="tempat.kota" @input="setDataTempat" :disabled="disabledForm()" />
+              <vue-select :options="cities" :value="getValue('kota')" v-model="tempat.kota" @input="setDataTempat"
+                :disabled="disabledForm()" />
             </b-form-group>
           </b-col>
           <b-col sm="6">
@@ -313,25 +314,23 @@
           <b-col sm="6">
           </b-col>
           <b-col sm="6">
-            
             <template v-if="formType !== 'detail'">
-              <b-button @click="$emit('keluar', true)" class="text-uppercase" :variant="btnVariant()"
-              style="font-size:17.5px;float:right">{{ btnText() }}</b-button>
               <b-button class="ml-3 text-uppercase" v-b-popover.hover.top="'SIMPAN & MASUK ANTREAN'" variant="primary"
-              style="font-size:17.5px; " type="submit">simpan
-              <font-awesome-icon class="mx-auto" icon="caret-down" />
-            </b-button>
-              
+                style="font-size:17.5px;float:right " type="submit">simpan
+                <font-awesome-icon class="mx-auto" icon="caret-down" />
+              </b-button>
+              <b-button @click="$emit('keluar', true)" class="text-uppercase" :variant="btnVariant()"
+                style="font-size:17.5px;float:right">{{ btnText() }}</b-button>
             </template>
             <template v-else>
-              <b-button class="ml-3 text-uppercase float-left" variant="success" style="font-size:17.5px;" @click="
+              <b-button @click="$emit('keluar', true)" class="text-uppercase" :variant="btnVariant()"
+                style="font-size:17.5px; float:right">{{ btnText() }}</b-button>
+              <b-button class="ml-3 text-uppercase float-right" variant="success" style="font-size:17.5px;" @click="
                 $router.push({
                   name: 'pasien-edit',
                   params: { idPasien }
                 })
               ">edit</b-button>
-                   <b-button @click="$emit('keluar', true)" class="text-uppercase" :variant="btnVariant()"
-              style="font-size:17.5px; float:right">{{ btnText() }}</b-button>
             </template>
           </b-col>
         </b-row>
@@ -390,11 +389,13 @@
     {
       label: "nik",
       alias: "nik",
+      error : false,
       validations: {}
     },
     {
       label: "email",
       alias: "email",
+      error : false,
       validations: {}
     },
     {
@@ -419,6 +420,7 @@
     {
       label: "gol. darah",
       alias: "golongan_darah",
+      error : false,
       validations: {}
     },
     // {
@@ -439,11 +441,13 @@
     {
       label: "nama penanggung jawab",
       alias: "nama_penanggung_jawab",
+      error : false,
       validations: {}
     },
     {
       label: "no. hp penanggung jawab",
       alias: "nomor_hp_penanggung_jawab",
+      error : false,
       validations: {
         // numeric,
         // minLength: minLength(10)
@@ -479,13 +483,13 @@
     {
       label: "status perkawinan",
       alias: "status_perkawinan",
-      error : false,
+      error: false,
       validations: {}
     },
     {
       label: "jenis identitas",
       alias: "jenis_identitas",
-      error : false,
+      error: false,
       validations: {}
     },
     // {
@@ -496,17 +500,19 @@
     {
       label: "nomor rekam medis",
       alias: "nomor_rekam_medis",
+      error : false,
       validations: {}
     },
     {
       label: "provinsi",
       alias: "provinsi",
-      
+      error : false,
       validations: {}
     },
     {
       label: "kota",
       alias: "kota",
+      error : false,
       validations: {}
     },
   ];
@@ -772,7 +778,7 @@
           Object.keys(data).map(item => {
             const y = this.formBasicData.find(x => x.alias === item);
             if (y) {
-              
+
               // const {
               //   stupidOcrHelper
               // } = this;
@@ -852,8 +858,7 @@
           tmpId: index,
           error: null,
           rawLabel: item.label
-        } 
-        ));
+        }));
       },
       onKeyInputNumber({
         rawLabel,
