@@ -49,7 +49,7 @@
                 rawLabel: 'nama lengkap',
                 $event
               })
-            " :state="getDataError({ rawLabel: 'nama lengkap' })" :disabled="disabledForm()" :value="getValue('nama')"
+            " :state="getDataError({ rawLabel: 'nama lengkap' })" :disabled="disabledForm()" :value="getValue('nama lengkap')"
                 :maxlength="60" />
             </b-form-group>
           </b-col>
@@ -75,7 +75,7 @@
                 $event
               })
             " :state="getDataError({ rawLabel: 'no. handphone' })" :disabled="disabledForm()"
-                :value="getValue('nomor_hp')" :maxlength="30" />
+                :value="getValue('no. handphone')" :maxlength="30" />
             </b-form-group>
           </b-col>
           <b-col sm="2">
@@ -285,7 +285,7 @@
                 })
               })
             ">
-              <vue-select :options="cities" :value="getValue('kota')" v-model="tempat.kota" @input="setDataTempat"
+              <vue-select :options="cities" v-model="tempat.kota" @input="setDataTempat"
                 :disabled="disabledForm()" />
             </b-form-group>
           </b-col>
@@ -663,8 +663,8 @@
       this.formBasicData = this.setFormBasicData();
       this.formData = this.setFormData();
       // }
-      await this.getPasienData();
       this.getProvince();
+      await this.getPasienData();
 
     },
     methods: {
@@ -756,35 +756,38 @@
       //       console.log(error);
       //     });
       // },
-      // stupidOcrHelper({
-      //   alias,
-      //   val
-      // }) {
-      //   const mapGender = val => {
-      //     const x = 1;
-      //     return /empu|wan/gi.test(val) ? x * 0 : x;
-      //   };
+      stupidOcrHelper({ alias, val }) {
+        const mapGender = val => {
+          const x = 1;
+          return /empu|wan/gi.test(val) ? x * 0 : x;
+        };
 
-      //   switch (alias.toLowerCase()) {
-      //     case "gender":
-      //       return mapGender(val);
+        switch (alias.toLowerCase()) {
+          case "gender":
+            return mapGender(val);
 
-      //     default:
-      //       return val;
-      //   }
-      // },
+          default:
+            return val;
+        }
+      },
       assignValuePasien(data) {
         if (data) {
           Object.keys(data).map(item => {
             const y = this.formBasicData.find(x => x.alias === item);
             if (y) {
-
-              // const {
-              //   stupidOcrHelper
-              // } = this;
+              const { stupidOcrHelper } = this;
               Vue.set(
                 this.formData,
                 y.label,
+                stupidOcrHelper({
+                  alias: y.alias,
+                  val: (() => {
+                    return (
+                      (typeof data[item] === "string" && data[item].trim()) ||
+                      data[item]
+                    );
+                  })()
+                })
               );
             }
           });
@@ -833,7 +836,21 @@
               status,
               data
             } = res.data;
-            this.formData = res.data.data;
+            if (status) {
+              const { assignValuePasien } = this;
+              assignValuePasien(data);
+              this.tempat.provinsi = { 
+                ...data.provinsi, 
+                label: data.provinsi.provinsi_nama 
+              }
+
+              this.getCity()
+
+              this.tempat.kota = {
+                ...data.kota,
+                label: data.kota.nama
+              }
+            }
           } catch (err) {
             console.log(err);
             // alert(err)
@@ -847,7 +864,9 @@
       },
       setFormData() {
         return this.setFormBasicData().reduce((arr, val) => {
-          arr[val.label.split(" ").join("_")] = "";
+          let key = val.label.split(" ").join("_");
+          arr[key] = "";
+          if(key == 'jenis_identitas') arr[key] = "KTP";
           return arr;
         }, {});
       },
@@ -911,17 +930,18 @@
         const {
           formBasicData
         } = this;
+
+        formBasicData.map(item => {
+          this.triggerValidation({
+            label: item.label,
+            $v: this.$v,
+            $vm: this,
+            rawLabel: item.rawLabel
+          });
+        });
+
         if (formBasicData.every(item => item.error !== null && !item.error)) {
           this.$emit("submitForm", this.formData);
-        } else {
-          formBasicData.map(item => {
-            this.triggerValidation({
-              label: item.label,
-              $v: this.$v,
-              $vm: this,
-              rawLabel: item.rawLabel
-            });
-          });
         }
       }
     }
