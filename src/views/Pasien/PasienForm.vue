@@ -223,7 +223,7 @@
                       rawLabel: 'gol. darah',
                       $event
                     })
-                  " :disabled="disabledForm()" :value="getValue('golongan_darah')" />
+                  " :disabled="disabledForm()" :value="getValue('gol. darah')" />
             </b-form-group>
           </b-col>
           <b-col sm="6">
@@ -246,7 +246,7 @@
                   rawLabel: 'no. hp penanggung jawab',
                   $event
                 })
-              " :disabled="disabledForm()" :value="getValue('nomor_hp_penanggung_jawab')" :maxlength="15" />
+              " :disabled="disabledForm()" :value="getValue('no. hp penanggung jawab')" :maxlength="15" />
             </b-form-group>
           </b-col>
           <b-col sm="6">
