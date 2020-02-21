@@ -75,7 +75,7 @@
                           Kembali ke Halaman Login
                           <!-- </b-button> -->
                         </router-link>
-                        <template v-if="intervalCounter && resendLinkActivation < 3">
+                        <template v-if="resendLinkActivation < 3">
                           <p class="my-2">
                             Tunggu
                             <span style="color: #3c44b1">{{ this.counterValue }}</span>
@@ -115,7 +115,7 @@
 
   library.add(faArrowLeft);
 
-  const staticCounter = 60;
+  const staticCounter = 3;
 
   export default {
     props: ["email", "user_id", "created_at"],
@@ -130,7 +130,7 @@
     mounted() {
       this.counterFunc();
 
-      let expiredAt = moment(this.created_at).add(10, 'minutes');
+      let expiredAt = moment(this.created_at).add(50, 'minutes');
       setInterval(() => {
         this.isExpired = moment() >= expiredAt ? true : false
       }, 1000)
@@ -163,6 +163,9 @@
         if (this.counter !== staticCounter) {
           this.counter = staticCounter;
         }
+
+        if(this.intervalCounter) clearInterval(this.intervalCounter);
+
         this.intervalCounter = setInterval(() => {
           if (this.counter > 0) {
             this.counter--;
