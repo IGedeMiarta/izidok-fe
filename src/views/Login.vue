@@ -86,7 +86,7 @@
                           </b-form>
                         </div>
                         <div class="text-left pt-4 text-black">
-                          Tempat praktik Anda belum terdaftar?
+                          Tempat Praktik Anda belum terdaftar?
                           <router-link tag="a" to="/register" exact title="Daftar disini">Daftar Disini</router-link>
                         </div>
                       </div>
