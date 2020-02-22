@@ -27,12 +27,12 @@
                     {{ text[state] }}
                   </strong>
                   <div slot="modal-footer">
-                   <template v-if="state == 'success' || state == 'failed'">
+                   <template v-if="state == 'success' || state == 'failed' || state == 'already-activated'">
                     <b-button @click="redirectToLogin" style="background-color :#3F7EA7;margin-right:19px;margin-top : 15px;color:white" >
                       <template v-if="state == 'success' ">
                         Login
                       </template>
-                      <template v-else-if="state == 'failed'">
+                      <template v-else>
                         Kembali ke Login
                       </template>
                     </b-button>
