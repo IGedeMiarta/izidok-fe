@@ -575,7 +575,6 @@
     "Promotor Acara",
     "Anggota DPR-RI",
     "Anggota DPD",
-    "Anggota BPK",
     "Presiden",
     "Wakil Presiden",
     "Anggota Mahkamah",
