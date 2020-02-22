@@ -34,6 +34,7 @@
                               $event
                             })
                           "
+                          @input="onInputNamaLayanan($event, index, inputTarif, 'nama_layanan')"
                           :state="errorState({ label: 'nama_layanan', index })"
                           :placeholder="placeholderInput('nama_layanan')"
                           :disabled="index <= 1"
@@ -79,6 +80,7 @@
                           :state="errorState({ label: 'tarif_layanan', index })"
                           :placeholder="placeholderInput('tarif_layanan')"
                           maxlength="12"
+                          class="text-right"
                         ></b-form-input>
                         <b-form-invalid-feedback class="text-capitalize">
                           {{
@@ -146,7 +148,7 @@ export default {
     money: {
       decimal: "",
       thousands: ",",
-      prefix: "",
+      prefix: "Rp. ",
       suffix: "",
       precision: 0
     },
@@ -164,6 +166,7 @@ export default {
         tarif_layanan: null
       }
     ],
+    namaLayananContainer: ["Registrasi Awal", "Konsultasi Dokter"],
     kodeContainer: []
   }),
   mounted() {
@@ -320,6 +323,28 @@ export default {
         tmp[label] = $event;
         Vue.set(this.tmpInputTarifData, index, tmp);
       }
+    },
+    onInputNamaLayanan(val, index, o, p) {
+      // val = val.toUpperCase()
+      // Vue.set(o, p, val)
+      Vue.set(this.namaLayananContainer, index, val)
+      this.namaLayananContainer.forEach((item, i) => {
+        if(index == i) return;
+        if(item == val) {
+          this.tmpInputTarifData[index].error['nama_layanan'].error = false
+          this.tmpInputTarifData[index].error['nama_layanan'].desc = 'Nama layanan tidak boleh sama'
+
+          this.tmpInputTarifData[i].error['nama_layanan'].error = false
+          this.tmpInputTarifData[i].error['nama_layanan'].desc = 'Nama layanan tidak boleh sama'
+        }
+        else {
+          this.tmpInputTarifData[index].error['nama_layanan'].error = true
+          this.tmpInputTarifData[index].error['nama_layanan'].desc = ''
+
+          this.tmpInputTarifData[i].error['nama_layanan'].error = true
+          this.tmpInputTarifData[i].error['nama_layanan'].desc = ''
+        }
+      })
     },
     onInputKode(val, index, o, p) {
       val = val.toUpperCase()
