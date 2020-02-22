@@ -156,6 +156,21 @@
             const res = await axios.get(
               `${this.url_api}/email/resend/${this.user_id}`
             );
+
+            if(res.data.status == false) {
+              if(res.data.message.match(/already/)) {
+                this.$router.push({
+                  name: "verification-result",
+                  params: {state: "already-activated"}
+                });
+              }
+              else if(res.data.message.match(/expired/)) {
+                this.$router.push({
+                  name: "verification-result",
+                  params: {state: "expired"}
+                });
+              }
+            }
           }
         } catch (err) {}
       },
