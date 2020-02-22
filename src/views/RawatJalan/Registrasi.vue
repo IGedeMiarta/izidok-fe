@@ -11,7 +11,7 @@
       <div class="card card-box mb-5">
         <div class="card-header">
           <h4 class="text-capitalize my-2 ">form registrasi antrean</h4>
-          <div class="col-md-6">
+          <div class="col-md-5">
 
           </div>
           <b-button class="text-uppercase" style="font-size:14.5px;" v-b-modal.modal-1 variant="first">Registrasi Pasien
@@ -150,21 +150,23 @@
           </b-form>
         </div>
       </div>
-      <b-modal id="modal-1" style="color:#d3e8eb;" title="Registrasi Pasien Baru">
-        <b-form row>
+      <b-modal ref='modal-pasien' id="modal-1" style="color:#d3e8eb;" title="Registrasi Pasien Baru" hide-footer>
+        <b-form row v-on:submit.prevent="beforeAddPasien">
           <div class="col-sm-12">
             <b-form-group id="input-group-1" label-for="input-1">
               <label for="">Nama Lengkap</label>
               <label for="" style="color:red">*</label>
-              <b-form-input id="input-1" type="text" required>
+              <b-form-input id="input-1" type="text" v-model.lazy="formDataRegister.nama" required>
               </b-form-input>
+              <!-- <div class="error" v-if="!$v.nama.required">Name is required</div>
+              <div class="error" v-if="!$v.nama.minLength">Name must have at lea</div> -->
             </b-form-group>
           </div>
           <div class="col-sm-12">
             <b-form-group id="input-group-1" label-for="input-1">
               <label for="">No. Handphone</label>
               <label for="" style="color:red">*</label>
-              <b-form-input id="input-1" type="text" required>
+              <b-form-input id="input-1" type="text" v-model.trim="formDataRegister.nomor_hp" required>
               </b-form-input>
             </b-form-group>
           </div>
@@ -177,13 +179,13 @@
                   <b-form-radio-group stacked class="text-capitalize" :options="[
                     { text: 'laki-laki', value: 1 },
                     { text: 'perempuan', value: 0 }
-                  ]">
+                  ]" v-model="formDataRegister.jenis_kelamin">
                   </b-form-radio-group>
                 </b-form-group>
               </div>
               <div class="col-sm-6">
                 <b-form-group>
-                   <label for="">Tanggal Lahir</label>
+                  <label for="">Tanggal Lahir</label>
                   <label for="" style="color:red"> *</label>
                   <Datetime input-class="form-control" class="input-group" zone="Asia/Jakarta" value-zone="Asia/Jakarta"
                     format="d LLL yyyy" @input="tanggalLahirSelected" :max-datetime="maximumDatetime" :input-style="
@@ -192,7 +194,7 @@
                       : getDataError({ rawLabel: 'tanggal lahir' })
                       ? null
                       : 'border-color: red'
-                  " ref="dob">
+                  " ref="dob" v-model="formDataRegister.tanggal_lahir">
                     <template v-slot:after>
                       <b-input-group-text @click="triggerDob" slot="append" style="
                     border-top-left-radius:0; border-left-width: 0; border-bottom-left-radius: 0; cursor: pointer
@@ -206,13 +208,19 @@
             </div>
           </div>
           <div class="col-sm-12">
-             <b-form-group id="input-group-1" label-for="input-1">
+            <b-form-group id="input-group-1" label-for="input-1">
               <label for="">Alamat</label>
               <label for="" style="color:red">*</label>
-              <b-form-input id="input-1" type="text" required>
+              <b-form-input id="input-1" type="text" v-model="formDataRegister.alamat_rumah" required>
               </b-form-input>
             </b-form-group>
           </div>
+          <b-button class="ml-3 text-uppercase" variant="danger" style="font-size:17.5px;float:right " @click='hideModal'>
+            Batal
+          </b-button>
+          <b-button class="ml-3 text-uppercase" variant="success" style="font-size:17.5px;float:right " type="submit">
+            simpan
+          </b-button>
         </b-form>
       </b-modal>
     </div>
@@ -257,7 +265,7 @@
     {
       label: "no. rekam medis",
       type: "text",
-      col: 3,
+      col: 4,
       validations: {
         required,
         minLength: minLength(6)
@@ -266,11 +274,12 @@
     {
       label: "nomor handphone",
       type: "text",
-      col: 4,
+      col: 3,
 
       validations: {
         required,
-        numeric
+        numeric,
+        maxLength: maxLength(15)
       }
     },
     {
@@ -353,6 +362,28 @@
       "vue-select": () => import("vue-select"),
       Datetime
     },
+    validations: {
+      nama: {
+        required,
+        maxLength: maxLength(50),
+      },
+      alamat_rumah: {
+        required,
+        minLength: minLength(2),
+        maxLength: maxLength(30)
+      },
+      nomor_hp: {
+        required,
+        numeric,
+        maxLength: maxLength(15)
+      },
+      jenis_kelamin : {
+        required
+      },
+      tanggal_lahir : {
+        required
+      }
+    },
     data: () => ({
       formBasicData: null,
       formData: null,
@@ -361,8 +392,17 @@
         nama_pasien: []
       },
       selected: null,
-      pasiens: []
+      pasiens: [],
+      beingSubmit: false,
+      formDataRegister: {
+        nama: null,
+        nomor_hp: null,
+        tanggal_lahir: null,
+        jenis_kelamin: null,
+        alamat_rumah: null,
+      },
     }),
+    
     beforeRouteLeave(to, from, next) {
       if (!this.beingSubmit) {
         this.$swal({
@@ -407,6 +447,9 @@
       },
     },
     methods: {
+      hideModal (){
+        this.$refs['modal-pasien'].hide()
+      },
       triggerDob() {
         const x = this.$refs.dob
         const {
@@ -415,15 +458,6 @@
           }
         } = x
         firstElementChild && firstElementChild.click()
-      },
-      waktuKonsultasiSelected($event) {
-        if ($event) {
-          this.setValue({
-            label: "waktu_konsultasi",
-            rawLabel: "waktu konsultasi",
-            $event: moment($event).format("YYYY-MM-DD")
-          });
-        }
       },
       overwriteAntrean() {
         this.$swal({
@@ -466,6 +500,54 @@
           .filter(item => item.validations && !item.validations.required)
           .map(item => item.rawLabel);
       },
+      beforeAddPasien(formDataRegister) {
+        // sementara untuk demo nomor rekam medis di buat urutan dulu
+        this.formDataRegister.klinik_id = this.$store.state.user.klinik_id;
+        axios.get(`${this.url_api}/pasien`).then(res => {
+          let totalCurrentPasien = res.data.data.pasien.total;
+          this.formDataRegister.nomor_rekam_medis = 100000 + (totalCurrentPasien + 1);
+          this.addPasien(this.formDataRegister);
+          console.log(this.formDataRegister);
+        });
+      },
+      async addPasien(formDataRegister) {
+        try {
+          this.formDataRegister.tanggal_lahir = moment(this.formDataRegister.tanggal_lahir).format("YYYY-MM-DD")
+          const res = await axios.post(
+            `${this.url_api}/pasien`,
+            this.formDataRegister
+          );
+          const {
+            success,
+            data: {
+              nama,
+              nomor_rekam_medis
+            }
+          } = res.data;
+          this.beingSubmit = true;
+          if (success) {
+            this.$swal({
+              title: startCase("data berhasil disimpan"),
+              text: `Pasien atas nama '${nama}' tersimpan dengan nomor rekam medis ${nomor_rekam_medis}`,
+              type: "success"
+            });
+            this.$router.push("/pasien");
+          }
+        } catch (err) {
+          if (err.response) {
+            const {
+              message
+            } = err.response.data;
+            this.$swal({
+              text: `${message || "something went wrong"}`,
+              type: "error"
+            });
+          }
+          // console.log(err);
+        } finally {
+          this.beingSubmit = false;
+        }
+      },
       submitForm() {
         const {
           formBasicData
@@ -493,8 +575,9 @@
       },
       tanggalLahirSelected($event) {
         if (!$event) return;
-        moment($event).format("YYYY-MM-DD")
+        return moment($event).format("YYYY-MM-DD")
       },
+
       setFormBasicData() {
         return tmp.map((item, index) => ({
           ...item,
@@ -606,14 +689,13 @@
             const {
               nama_pasien
             } = postData;
+            this.beingSubmit = true;
             this.$swal({
               title: `Data Berhasil di simpan`,
               text: `Antrean atas nama ${nama_pasien} tersimpan pada urutan ${nomor_antrian}`,
               type: "success",
-              onOpen: () => {
-                this.$router.push("/rawat-jalan/antrean");
-              }
             });
+            this.$router.push("/rawat-jalan/antrean");
           }
         } catch (err) {
           // alert(err);
