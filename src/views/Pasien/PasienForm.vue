@@ -75,7 +75,7 @@
                 $event
               })
             " :state="getDataError({ rawLabel: 'no. handphone' })" :disabled="disabledForm()"
-                :value="getValue('no. handphone')" :maxlength="30" />
+                :value="getValue('no. handphone')" :maxlength="15" />
             </b-form-group>
           </b-col>
           <b-col sm="2">
@@ -87,12 +87,9 @@
                     })
                   })
                 ">
-              <b-form-select class="col-md-12" :options="
-                    ['KTP', 'SIM', 'Paspor', 'Pengenal lainya'].map(item => ({
-                      value: item,
-                      text: item.toUpperCase()
-                    }))
-                  " @change="
+                <vue-select :options="
+                    ['KTP', 'SIM', 'Paspor', 'Pengenal lainya']
+                  " @input="
                     setValue({
                       rawLabel: 'jenis identitas',
                       $event
@@ -213,12 +210,9 @@
                     })
                   })
                 ">
-              <b-form-select :options="
-                    ['a', 'b', 'ab', 'o'].map(item => ({
-                      value: item,
-                      text: item.toUpperCase()
-                    }))
-                  " @change="
+              <vue-select :options="
+                    ['A', 'B', 'AB', 'O']
+                  " @input="
                     setValue({
                       rawLabel: 'gol. darah',
                       $event
@@ -302,14 +296,9 @@
           <b-col sm="6">
             <b-form-group :label="renderLabel({ label: 'status perkawinan' })" class="text-capitalize"
               style="position: relative">
-              <b-form-select :options="
-                ['Belum Kawin', 'Kawin', 'Cerai Hidup', 'Cerai Mati'].map(
-                  (item, index) => ({
-                    value: item,
-                    text: item
-                  })
-                )
-              " @change="
+              <vue-select :options="
+                ['Belum Kawin', 'Kawin', 'Cerai Hidup', 'Cerai Mati']
+              " @input="
                 setValue({
                   rawLabel: 'status perkawinan',
                   $event
@@ -333,7 +322,7 @@
             <template v-else>
               <b-button @click="$emit('keluar', true)" class="text-uppercase" :variant="btnVariant()"
                 style="font-size:17.5px; float:right">{{ btnText() }}</b-button>
-              <b-button class="ml-3 text-uppercase float-right" variant="success" style="font-size:17.5px;" @click="
+              <b-button class="mr-4 text-uppercase float-right" variant="success" style="font-size:17.5px;" @click="
                 $router.push({
                   name: 'pasien-edit',
                   params: { idPasien }
@@ -878,7 +867,6 @@
         return this.setFormBasicData().reduce((arr, val) => {
           let key = val.label.split(" ").join("_");
           arr[key] = "";
-          if(key == 'jenis_identitas') arr[key] = "KTP";
           return arr;
         }, {});
       },

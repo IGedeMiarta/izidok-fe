@@ -215,7 +215,8 @@
               </b-form-input>
             </b-form-group>
           </div>
-          <b-button class="ml-3 text-uppercase" variant="danger" style="font-size:17.5px;float:right " @click='hideModal'>
+          <b-button class="ml-3 text-uppercase" variant="danger" style="font-size:17.5px;float:right "
+            @click='hideModal'>
             Batal
           </b-button>
           <b-button class="ml-3 text-uppercase" variant="success" style="font-size:17.5px;float:right " type="submit">
@@ -377,10 +378,10 @@
         numeric,
         maxLength: maxLength(15)
       },
-      jenis_kelamin : {
+      jenis_kelamin: {
         required
       },
-      tanggal_lahir : {
+      tanggal_lahir: {
         required
       }
     },
@@ -402,7 +403,7 @@
         alamat_rumah: null,
       },
     }),
-    
+
     beforeRouteLeave(to, from, next) {
       if (!this.beingSubmit) {
         this.$swal({
@@ -447,7 +448,7 @@
       },
     },
     methods: {
-      hideModal (){
+      hideModal() {
         this.$refs['modal-pasien'].hide()
       },
       triggerDob() {
@@ -719,7 +720,7 @@
       async searchPasien(val) {
         try {
           const res = await axios.get(
-            `${this.url_api}/pasien?nama_pasien=${val}`
+            `${this.url_api}/pasien?nama=${val}`
           );
           const {
             data: {
@@ -732,6 +733,9 @@
           } = res;
           if (pasienData) {
             this.pasiens = pasienData;
+            console.log('pasien data', pasienData);
+            console.log('pasiens', this.pasiens);
+            console.log('options', this.options);
             this.options.nama_pasien = pasienData.map(item => {
               return {
                 label: `${item.nama}`,

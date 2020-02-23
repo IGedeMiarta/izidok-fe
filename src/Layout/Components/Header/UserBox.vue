@@ -16,7 +16,13 @@
           {{ userName }}
         </div>
         <span class="text-black-50">
-          {{ userRole }}
+          <template v-if="userRole == 'Operator'">
+              Asisten Dokter
+          </template>
+          <template v-else>
+            {{ userRole }}
+          </template>
+
         </span>
       </div>
       <span class="pl-3">
