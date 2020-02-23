@@ -168,7 +168,7 @@ export default {
           });
         },
         minLength: minLength(10),
-        maxLength: maxLength(50)
+        maxLength: maxLength(15)
       },
       email: {
         required,
@@ -393,12 +393,24 @@ export default {
       const { target } = $event;
       const { value } = target;
       this.formData[label] = value && value.trim();
-      this.triggerValidation({
-        label,
-        $v: this.$v,
-        $vm: this,
-        rawLabel
-      });
+      const confirms = ["password", "konfirmasi_password"];
+      if (confirms.includes(label)) {
+        confirms.forEach(item => {
+          this.triggerValidation({
+            label: item,
+            $v: this.$v,
+            $vm: this,
+            rawLabel: item.split("_").join(" ")
+          });
+        });
+      } else {
+        this.triggerValidation({
+          label,
+          $v: this.$v,
+          $vm: this,
+          rawLabel
+        });
+      }
     }
   }
 };

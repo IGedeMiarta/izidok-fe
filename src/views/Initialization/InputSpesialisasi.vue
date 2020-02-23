@@ -75,13 +75,23 @@
                           Apakah Anda Memiliki Asisten?
                           <span style="color: red">*</span>
                         </p>
-                        <b-form-checkbox
+                        <!-- <b-form-checkbox
                           class="m-0"
                           name="check-button"
                           switch
                           v-model="formData[form.label]"
                         >
-                        </b-form-checkbox>
+                        </b-form-checkbox> -->
+                        <toggle-button
+                          v-model="formData[form.label]"
+                          :labels="{ checked: 'Ya', unchecked: 'Tidak' }"
+                          :width="65"
+                          :color="{
+                            checked: '#3c44b1',
+                            unchecked: '#FF0000',
+                            disabled: '#CCCCCC'
+                          }"
+                        />
                       </div>
                     </b-form-group>
                     <p
@@ -114,10 +124,12 @@
 <script>
 import axios from "axios";
 import { maxLength, email, required } from "vuelidate/lib/validators";
+import { ToggleButton } from "vue-js-toggle-button";
 
 export default {
   components: {
-    "vue-select": () => import("@/components/VueSelect.vue")
+    "vue-select": () => import("@/components/VueSelect.vue"),
+    "toggle-button": ToggleButton
   },
   props: ["klinik_id"],
   data: () => ({
