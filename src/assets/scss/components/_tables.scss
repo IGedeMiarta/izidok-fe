@@ -64,7 +64,7 @@ $bv-escaped-characters: (("<", "%3c"), (">", "%3e"), ("#", "%23"));
 
         &:not(.b-table-sort-icon-left) {
           // Default is icon on the right
-          background-position: right calc(#{$table-cell-padding} / 2) center;
+          background-position: right calc(#{$table-cell-padding} / 2) top 15px;
           padding-right: calc(
             #{$table-cell-padding} + #{$b-table-sort-icon-bg-width}
           );
@@ -72,7 +72,7 @@ $bv-escaped-characters: (("<", "%3c"), (">", "%3e"), ("#", "%23"));
 
         &.b-table-sort-icon-left {
           // Left aligned sort icon
-          background-position: left calc(#{$table-cell-padding} / 2) center;
+          background-position: left calc(#{$table-cell-padding} / 2) top 15px;
           padding-left: calc(
             #{$table-cell-padding} + #{$b-table-sort-icon-bg-width}
           );
@@ -133,7 +133,7 @@ $bv-escaped-characters: (("<", "%3c"), (">", "%3e"), ("#", "%23"));
       > tr > [aria-sort] {
         &:not(.b-table-sort-icon-left) {
           // Default is icon on the right
-          background-position: right calc(#{$table-cell-padding-sm} / 2) center;
+          background-position: right calc(#{$table-cell-padding-sm} / 2) top 15px;
           padding-right: calc(
             #{$table-cell-padding-sm} + #{$b-table-sort-icon-bg-width}
           );
@@ -141,7 +141,7 @@ $bv-escaped-characters: (("<", "%3c"), (">", "%3e"), ("#", "%23"));
 
         &.b-table-sort-icon-left {
           // Left aligned sort icon
-          background-position: left calc(#{$table-cell-padding-sm} / 2) center;
+          background-position: left calc(#{$table-cell-padding-sm} / 2) top 15px;
           padding-left: calc(
             #{$table-cell-padding-sm} + #{$b-table-sort-icon-bg-width}
           );
