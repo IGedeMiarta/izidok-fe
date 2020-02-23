@@ -153,6 +153,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { VMoney } from "v-money";
+import debounce from "lodash/debounce";
 library.add(faPlus, faMinus);
 
 export default {
@@ -422,89 +423,96 @@ export default {
         });
       });
     },
-    onInputKode(val, index, o, p) {
+    onInputKode: debounce(function(val, index, o, p) {
+      const vm = this
       val = val.toUpperCase();
       Vue.set(o, p, val);
-      Vue.set(this.kodeContainer, index, val);
+      Vue.set(vm.kodeContainer, index, val);
 
-      let { tmpInputTarifData, validateAll, generateErrorObj } = this;
+      let { tmpInputTarifData, validateAll, generateErrorObj } = vm;
 
       const lastIndex = tmpInputTarifData[tmpInputTarifData.length - 1];
       var listKode = axios
-        .get(`${this.url_api}/layanan/${val}/kode`)
+        .get(`${vm.url_api}/layanan/${val}/kode`)
         .then(response => {
           if (response.data.success == true) {
-            this.tmpInputTarifData[index].error["kode_layanan"].error = false;
-            this.tmpInputTarifData[index].error["kode_layanan"].desc =
+            vm.tmpInputTarifData[index].error["kode_layanan"].error = false;
+            vm.tmpInputTarifData[index].error["kode_layanan"].desc =
               "Kode layanan Sudah Ada";
           }
         })
         .catch(error => {
           if (error.response.data.success == false) {
-            this.tmpInputTarifData[index].error["kode_layanan"].error = true;
-            this.tmpInputTarifData[index].error["kode_layanan"].desc = "";
+            vm.tmpInputTarifData[index].error["kode_layanan"].error = true;
+            vm.tmpInputTarifData[index].error["kode_layanan"].desc = "";
           }
         });
       // const x = Object.keys(lastIndex);
-      this.kodeContainer.forEach((item, i) => {
+      vm.kodeContainer.forEach(function(item, i) {
         if (index == i) return;
         if (item == val) {
           let listKode = axios
-            .get(`${this.url_api}/layanan/${val}/kode`)
+            .get(`${vm.url_api}/layanan/${val}/kode`)
             .then(response => {
               // kalo ada yang sama dalam api
               if (response.data.success == true) {
-                this.tmpInputTarifData[index].error[
+                vm.tmpInputTarifData[index].error[
                   "kode_layanan"
                 ].error = false;
-                this.tmpInputTarifData[index].error["kode_layanan"].desc =
+                vm.tmpInputTarifData[index].error["kode_layanan"].desc =
                   "Kode layanan Sudah Ada";
               }
             })
             .catch(error => {
               //kalo tidak ada yang sama dari api
               if (error.response.data.success == false) {
-                this.tmpInputTarifData[index].error[
+                vm.tmpInputTarifData[index].error[
                   "kode_layanan"
                 ].error = false;
-                this.tmpInputTarifData[index].error["kode_layanan"].desc =
+                vm.tmpInputTarifData[index].error["kode_layanan"].desc =
                   "Kode Layanan Tidak Boleh Sama";
                 //disini
               }
             });
         } else {
           let listKode = axios
-            .get(`${this.url_api}/layanan/${val}/kode`)
+            .get(`${vm.url_api}/layanan/${val}/kode`)
             .then(function(response) {
               if (response.data.success == true) {
-                this.tmpInputTarifData[index].error[
+                vm.tmpInputTarifData[index].error[
                   "kode_layanan"
                 ].error = false;
-                this.tmpInputTarifData[index].error["kode_layanan"].desc =
+                vm.tmpInputTarifData[index].error["kode_layanan"].desc =
                   "Kode layanan Sudah Ada";
               }
             })
-            .catch(error => {
+            .catch((error) => {
               //kasus inputan setelahnya
               // console.log(error.response.data.success);
+              console.log(error);
 
-              if (error.response.data.success == false) {
-                this.tmpInputTarifData[index].error[
+              if (
+                error &&
+                error.response &&
+                error.response.data &&
+                error.response.data.success == false
+              ) {
+                vm.tmpInputTarifData[index].error[
                   "kode_layanan"
                 ].error = true;
-                this.tmpInputTarifData[index].error["kode_layanan"].desc = "";
+                vm.tmpInputTarifData[index].error["kode_layanan"].desc = "";
               } else {
-                this.tmpInputTarifData[index].error[
+                vm.tmpInputTarifData[index].error[
                   "kode_layanan"
                 ].error = false;
-                this.tmpInputTarifData[index].error["kode_layanan"].desc =
+                vm.tmpInputTarifData[index].error["kode_layanan"].desc =
                   "Kode Layanan Harus Di Isi";
               }
             })
             .finally(() => {});
         }
       });
-    },
+    }, 600),
     addInputTarifData() {
       const { tmpInputTarifData, validateAll, generateErrorObj } = this;
       const lastIndex = tmpInputTarifData[tmpInputTarifData.length - 1];
