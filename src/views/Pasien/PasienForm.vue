@@ -105,13 +105,13 @@
                 rawLabel: 'nik'
               })
             })
-          ">
+          " >
               <b-form-input @keypress="
-              onKeyInputNumber({
+              checkNIK({
                 rawLabel: 'nik',
                 $event
               })
-            " :disabled="disabledForm()" :value="getValue('nik')" :maxlength="25" />
+            "  :disabled="disabledForm()" :state="getDataError({ rawLabel: 'nik' })" :value="getValue('nik')" :maxlength="25"  />
             </b-form-group>
           </b-col>
           <b-col sm="6">
@@ -682,6 +682,23 @@
             // handle error
             console.log(error);
           })
+      },
+      async checkNIK({
+        rawLabel,
+        $event
+      }) {
+        this.onKeyInputNumber({rawLabel, $event});
+        try {
+            const res = await axios.get(`${this.url_api}/identity/verify?jenis_pengenal=${this.formData['jenis_identitas']}&nik=${this.formData['nik']}`);
+            console.log(res.data);
+            if(res.data.status == false){
+              this.formBasicData[2].error = true;
+            } else {
+               this.formBasicData[2].error = false;
+            } 
+        } catch {
+
+        }
       },
       async getCity() {
         try {

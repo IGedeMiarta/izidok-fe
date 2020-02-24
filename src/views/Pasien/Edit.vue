@@ -110,11 +110,15 @@ export default {
     },
     async editPasien(postData) {
       try {
+        
         if(postData.provinsi){
           postData.provinsi = postData.provinsi.id;
           postData.kota = postData.kota.id;
         }
-        console.log(postData.jenis_identitas);
+        if(postData.provinsi == null){
+           postData.provinsi = ''
+           postData.kota = ''
+        }
         const res = await axios.put(
           `${this.url_api}/pasien/${this.idPasien}`,
           this.mapPasienFormData(postData)

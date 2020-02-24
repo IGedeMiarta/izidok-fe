@@ -100,6 +100,7 @@ export default {
     },
     async addPasien(postData) {
       try {
+        console.log(postData)
         const res = await axios.post(
           `${this.url_api}/pasien`,
           this.mapPasienFormData(postData)
