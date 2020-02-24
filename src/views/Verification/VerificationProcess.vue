@@ -41,15 +41,16 @@
                       </div>
                     </template>
                     <template v-else>
+                      <template v-if="fromLogin === true">
+                      <p class="mb-5">
+                        Email Anda telah terdaftar dan sedang menunggu aktivasi
+                      </p>
+                      </template>
+                      <template v-else>
                       <p class="mb-5">
                         Silahkan cek email Anda untuk melakukan verifikasi akun izidok
                       </p>
-                      <!-- <h4
-                      class="line-height-sm font-weight-light d-block px-1 mb-3 text-white"
-                    >
-                      Verifikasi akun Anda sekarang. Link verifikasi dikirimkan
-                      ke {{ email }}
-                    </h4> -->
+                      </template>
                       <p class="d-block mb-2" style="font-weight: 600">
                         <template v-if="resendLinkActivation < 3">
                           Tidak mendapatkan email verifikasi?
@@ -118,7 +119,7 @@
   const staticCounter = 60;
 
   export default {
-    props: ["email", "user_id", "created_at"],
+    props: ["email", "user_id", "created_at", "fromLogin"],
     data() {
       return {
         resendLinkActivation: 0,
@@ -127,8 +128,20 @@
         isExpired: false
       };
     },
+    beforeRouteEnter(to, from, next) {
+      if (to.params.user_id && to.params.created_at) {
+        next();
+      } else {
+        next("/");
+      }
+    },
     mounted() {
-      this.counterFunc();
+      if(this.fromLogin !== true) {
+        this.counterFunc();
+      }
+      else {
+        this.counter = 0;
+      }
 
       let expiredAt = moment(this.created_at).add(50, 'minutes');
       setInterval(() => {

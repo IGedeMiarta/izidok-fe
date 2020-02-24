@@ -266,19 +266,14 @@
             }
           } else if (status == false && message == 'Please check your email to activate user...') {
             this.$router.push({
-              name: "verification-login",
+              name: "verification-process",
               params: {
                 email: postData.username,
                 user_id: res.data.user_id,
+                created_at: res.data.created_at,
+                fromLogin: true
               }
             });
-          // } else if (status == false && message == 'Activation email was expired...') {
-          //   this.$router.push({
-          //     name: "verification-result",
-          //     params: {
-          //       state: "expired"
-          //     }
-          //   });
           } else {
             this.$swal({
               title: 'Login gagal',
