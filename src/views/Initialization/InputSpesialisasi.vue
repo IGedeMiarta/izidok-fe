@@ -94,12 +94,10 @@
                         />
                       </div>
                     </b-form-group>
-                    <p
-                      class="font-italic w-50 border border-dark p-2"
-                      style="background-color: #eee"
-                    >
-                      *Asisten Dokter adalah staff yang dapat membantu anda
-                      untuk melakukan Registrasi, Administrasi, Pembayaran
+                    <p class="font-italic w-50 pt-0">
+                      *Asisten Dokter adalah Staff yang dapat membantu Anda
+                      dalam melakukan aktivitas administrasi seperti input
+                      Registrasi Pasien, Pembayaran, dll.
                     </p>
                   </template>
                 </div>
