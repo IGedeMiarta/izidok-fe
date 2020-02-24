@@ -88,7 +88,7 @@
                           :width="65"
                           :color="{
                             checked: '#3c44b1',
-                            unchecked: '#FF0000',
+                            unchecked: '#f83245',
                             disabled: '#CCCCCC'
                           }"
                         />
