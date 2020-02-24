@@ -20,7 +20,7 @@
           <!-- </div> -->
         </div>
         <div class="col-md-6 col-sm-6 d-flex align-items-center content-register-right">
-          <div class="col-sm-10 mt-3" style="margin-left:auto;margin-right:auto">
+          <div class="col-sm-10 mt-4" style="margin-left:auto;margin-right:auto">
             <h4 class="font-weight-bold text-capitalize">
               daftarkan {{ selectedTipeFaskes }} anda
             </h4>

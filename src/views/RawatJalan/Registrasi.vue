@@ -10,11 +10,14 @@
     <div class="container">
       <div class="card card-box mb-5">
         <div class="card-header">
-          <h4 class="text-capitalize my-2 ">form registrasi antrean</h4>
-          <div class="col-md-5">
+          <div class="col-md-4">
+            <h4 class="text-capitalize my-2 ">form registrasi antrean</h4>
+          </div>
+          <div class="col-md-6">
 
           </div>
-          <b-button class="text-uppercase" style="font-size:14.5px;" v-b-modal.modal-1 variant="first">Registrasi Pasien
+          <b-button class="text-uppercase float-right" style="font-size:14.5px;" v-b-modal.modal-1 variant="first">
+            Registrasi Pasien
             Baru</b-button>
         </div>
         <div class="card-body">
@@ -166,7 +169,7 @@
             <b-form-group id="input-group-1" label-for="input-1">
               <label for="">No. Handphone</label>
               <label for="" style="color:red">*</label>
-              <b-form-input id="input-1" type="text" v-model.trim="formDataRegister.nomor_hp" required>
+              <b-form-input id="input-1" type="number" v-model.trim="formDataRegister.nomor_hp" required>
               </b-form-input>
             </b-form-group>
           </div>
@@ -637,16 +640,19 @@
           nomor_hp: "nomor_handphone"
         };
         for (let prop in pasien) {
+          console.log('prop', prop);
+          console.log('pas', pasien);
+          console.log('fil', filler);
           if (prop == filler || !autoFillForm[prop]) continue;
           if (prop != "jenis_kelamin" && !pasien[prop]) continue;
 
-          if (prop == "nomor_rekam_medis") pasien[prop] = "" + pasien[prop];
-
+          // if (prop == "nomor_rekam_medis") pasien[prop] = "" + pasien[prop];
           this.setValue({
             label: autoFillForm[prop],
             rawLabel: autoFillForm[prop].split("_").join(" "),
             $event: pasien[prop]
           });
+          // }
         }
       },
       async saveRegister() {
@@ -686,18 +692,26 @@
               nomor_antrian
             } = data;
             const {
-              nama_pasien
+              nama_lengkap
             } = postData;
             this.beingSubmit = true;
             this.$swal({
               title: `Data Berhasil di simpan`,
-              text: `Antrean atas nama ${nama_pasien} tersimpan pada urutan ${nomor_antrian}`,
+              text: `Antrean atas nama ${nama_lengkap} tersimpan pada urutan ${nomor_antrian}`,
               type: "success",
             });
             this.$router.push("/rawat-jalan/antrean");
+          } else {
+            this.$swal({
+              type: "failed",
+              text: `Pasien telah berada dalam list antrian`,
+            });
           }
         } catch (err) {
-          // alert(err);
+          this.$swal({
+            text: `Pasien telah berada dalam list antrian`,
+            type: "failed",
+          });
         }
       },
       async fetchDokter() {
@@ -718,29 +732,16 @@
       async searchPasien(val) {
         try {
           const res = await axios.get(
-            `${this.url_api}/pasien?nama=${val}`
+            `${this.url_api}/pasien?nama_pasien=${val}`
           );
-          const {
-            data: {
-              data: {
-                pasien: {
-                  data: pasienData
-                }
-              }
-            }
-          } = res;
-          if (pasienData) {
-            this.pasiens = pasienData;
-            console.log('pasien data', pasienData);
-            console.log('pasiens', this.pasiens);
-            console.log('options', this.options);
-            this.options.nama_pasien = pasienData.map(item => {
-              return {
-                label: `${item.nama}`,
-                value: item.id
-              };
-            });
-          }
+          this.pasiens = res.data.data.pasien;
+          this.options.nama_pasien = res.data.data.pasien.map(item => {
+            return {
+              label: `${item.nama}`,
+              value: item.id
+            };
+          });
+
         } catch (err) {
           // alert(err);
         }

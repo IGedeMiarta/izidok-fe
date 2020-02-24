@@ -18,42 +18,19 @@
               <div class="hero-wrapper bg-composed-wrapper min-vh-100">
                 <div class="flex-grow-1 w-100 d-flex align-items-center">
                   <div class="col-lg-6 px-4 mx-auto text-center text-white">
-                    <!-- <img
-                      src="@/assets/img/illustrations/500.svg"
-                      class="w-50 mx-auto d-block my-5 img-fluid"
-                      alt=""
-                    /> -->
                     <img src="@/assets/img/logo-izidok-white.png" class="w-50 mx-auto d-block mt-5 mb-2 img-fluid" />
-                    <!-- <h1 class="mb-3 px-4 font-weight-bold text-capitalize">
-                      pendaftaran anda berhasil
-                    </h1> -->
-                    <!-- moment(this.pembayaranList['created_at']).format("DD-MMMM-YYYY,  h:mm:ss a"); -->
                     <template v-if="this.isAktif">
                       <p class="mb-5">
                         {{this.isAktif}}
                       </p>
-
                       <router-link to="/login" exact class="btn btn-lg btn-primary btn-block w-100">
-                        <!-- <b-button
-                        class="px-5 my-2 btn-lg btn-block w-75 text-white"
-                        variant="outline-white"
-                      > -->
                         Kembali ke Halaman Login
-                        <!-- </b-button> -->
                       </router-link>
-
                     </template>
-
                     <template v-else>
                       <p class="mb-5">
                         Email Anda telah terdaftar dan sedang menunggu aktivasi
                       </p>
-                      <!-- <h4
-                      class="line-height-sm font-weight-light d-block px-1 mb-3 text-white"
-                    >
-                      Verifikasi akun Anda sekarang. Link verifikasi dikirimkan
-                      ke {{ email }}
-                    </h4> -->
                       <p class="d-block mb-2" style="font-weight: 600">
                         <template v-if="resendLinkActivation < 3">
                           Tidak mendapatkan email verifikasi?
@@ -72,12 +49,7 @@
                         </template>
 
                         <router-link to="/login" exact class="btn btn-lg btn-outline-white btn-block w-75">
-                          <!-- <b-button
-                        class="px-5 my-2 btn-lg btn-block w-75 text-white"
-                        variant="outline-white"
-                      > -->
                           Kembali ke Halaman Login
-                          <!-- </b-button> -->
                         </router-link>
                         <template v-if="intervalCounter && resendLinkActivation < 3">
                           <p class="my-2">
@@ -87,8 +59,6 @@
                           </p>
                         </template>
                       </div>
-
-
                     </template>
                   </div>
                 </div>
@@ -162,12 +132,10 @@
           if (resendLinkActivation <= 3) {
             this.resendLinkActivation++;
             this.counterFunc();
-            console.log(this.resendLinkActivation);
-            if (resendLinkActivation) {
+            
               const res = await axios.get(
                 `${this.url_api}/email/resend/${this.user_id}`
               );
-              console.log(res);
               if (res.data.status == false) {
                 if (res.data.message.match(/already/)) {
                    this.isAktif = 'Akun Anda sudah diaktivasi. Silahkan login untuk masuk ke dalam akun Anda!'
@@ -180,7 +148,7 @@
                   });
                 }
               }
-            }
+            
             // else {
             //     this.isExpired = 'Akun Anda sudah diaktivasi. Silahkan login untuk masuk ke dalam akun Anda!'
             // }

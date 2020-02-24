@@ -265,7 +265,8 @@
           kelamin = null,
           dokter = null,
           waktu = null,
-          pasien_id = null
+          pasien_id = null,
+          transaksi_id = null
         } = {}
       }) {
         try {
@@ -273,7 +274,7 @@
             toggleModal,
             getPasien
           } = this;
-          const res = await getPasien(pasien_id);
+          const res = await getPasien(transaksi_id);
           if (res) {
             const {
               id,
@@ -295,8 +296,8 @@
             x["ktp"].value = ktp;
             x["nama"].value = nama;
             x["hp"].value = hp;
-            x["kelamin"].value = kelamin;
-            x["dokter"].value = dokter;
+            x["kelamin"].value = this.jenisKelamin(kelamin);
+            x["dokter"].value = dokter.nama;
             x["waktu"].value = moment(waktu).format("DD-MM-YYYY HH:mm:ss");
             this.dataRegistrasiPasien = x;
             this.toggleModal();
