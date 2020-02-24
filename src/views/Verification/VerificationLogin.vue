@@ -28,12 +28,12 @@
                       pendaftaran anda berhasil
                     </h1> -->
                     <!-- moment(this.pembayaranList['created_at']).format("DD-MMMM-YYYY,  h:mm:ss a"); -->
-                  <template v-if="this.isExpired">
-                        <p class="mb-5">
-                      {{this.isExpired}}
-                    </p>
+                    <template v-if="this.isAktif">
+                      <p class="mb-5">
+                        {{this.isAktif}}
+                      </p>
 
-                       <router-link to="/login" exact class="btn btn-lg btn-primary btn-block w-100">
+                      <router-link to="/login" exact class="btn btn-lg btn-primary btn-block w-100">
                         <!-- <b-button
                         class="px-5 my-2 btn-lg btn-block w-75 text-white"
                         variant="outline-white"
@@ -41,55 +41,55 @@
                         Kembali ke Halaman Login
                         <!-- </b-button> -->
                       </router-link>
-                          
-                  </template>  
 
-                  <template v-else>
-                    <p class="mb-5">
-                      Email Anda telah terdaftar dan sedang menunggu aktivasi
-                    </p>
-                    <!-- <h4
+                    </template>
+
+                    <template v-else>
+                      <p class="mb-5">
+                        Email Anda telah terdaftar dan sedang menunggu aktivasi
+                      </p>
+                      <!-- <h4
                       class="line-height-sm font-weight-light d-block px-1 mb-3 text-white"
                     >
                       Verifikasi akun Anda sekarang. Link verifikasi dikirimkan
                       ke {{ email }}
                     </h4> -->
-                    <p class="d-block mb-2" style="font-weight: 600">
-                      <template v-if="resendLinkActivation < 3">
-                        Tidak mendapatkan email verifikasi?
-                      </template>
-                      <template v-else>
-                        Anda telah mencapai batas limit aktivasi. Silahkan
-                        hubungi Customer Care izidok.
-                      </template>
-                    </p>
-                    <div class="d-flex flex-column justify-content-center align-items-center">
-                      <template v-if="resendLinkActivation < 3">
-                        <button class="btn px-5 btn-first my-2 btn-lg btn-block w-75 text-capitalize"
-                          :disabled="counter !== 0" @click="this.triggerResend">
-                          Kirim ulang email
-                        </button>
-                      </template>
+                      <p class="d-block mb-2" style="font-weight: 600">
+                        <template v-if="resendLinkActivation < 3">
+                          Tidak mendapatkan email verifikasi?
+                        </template>
+                        <template v-else>
+                          Anda telah mencapai batas limit aktivasi. Silahkan
+                          hubungi Customer Care izidok.
+                        </template>
+                      </p>
+                      <div class="d-flex flex-column justify-content-center align-items-center">
+                        <template v-if="resendLinkActivation < 3">
+                          <button class="btn px-5 btn-first my-2 btn-lg btn-block w-75 text-capitalize"
+                            :disabled="counter !== 0" @click="this.triggerResend">
+                            Kirim ulang email
+                          </button>
+                        </template>
 
-                      <router-link to="/login" exact class="btn btn-lg btn-outline-white btn-block w-75">
-                        <!-- <b-button
+                        <router-link to="/login" exact class="btn btn-lg btn-outline-white btn-block w-75">
+                          <!-- <b-button
                         class="px-5 my-2 btn-lg btn-block w-75 text-white"
                         variant="outline-white"
                       > -->
-                        Kembali ke Halaman Login
-                        <!-- </b-button> -->
-                      </router-link>
-                      <template v-if="intervalCounter && resendLinkActivation < 3">
-                        <p class="my-2">
-                          Tunggu
-                          <span style="color: #3c44b1">{{ this.counterValue }}</span>
-                          detik lagi...
-                        </p>
-                      </template>
-                    </div>
-                          
-                      
-                  </template>
+                          Kembali ke Halaman Login
+                          <!-- </b-button> -->
+                        </router-link>
+                        <template v-if="intervalCounter && resendLinkActivation < 3">
+                          <p class="my-2">
+                            Tunggu
+                            <span style="color: #3c44b1">{{ this.counterValue }}</span>
+                            detik lagi...
+                          </p>
+                        </template>
+                      </div>
+
+
+                    </template>
                   </div>
                 </div>
               </div>
@@ -132,7 +132,7 @@
         intervalCounter: null,
         startExpired: null,
         endExpired: null,
-        isExpired: null
+        isAktif: null
       };
     },
     mounted() {
@@ -162,13 +162,28 @@
           if (resendLinkActivation <= 3) {
             this.resendLinkActivation++;
             this.counterFunc();
-            if(resendLinkActivation.status == true){
-                const res = await axios.get(
-                  `${this.url_api}/email/resend/${this.user_id}`
-                );
-            } else {
-                this.isExpired = 'Akun Anda sudah diaktivasi. Silahkan login untuk masuk ke dalam akun Anda!'
+            console.log(this.resendLinkActivation);
+            if (resendLinkActivation) {
+              const res = await axios.get(
+                `${this.url_api}/email/resend/${this.user_id}`
+              );
+              console.log(res);
+              if (res.data.status == false) {
+                if (res.data.message.match(/already/)) {
+                   this.isAktif = 'Akun Anda sudah diaktivasi. Silahkan login untuk masuk ke dalam akun Anda!'
+                } else if (res.data.message.match(/expired/)) {
+                  this.$router.push({
+                    name: "verification-result",
+                    params: {
+                      state: "expired"
+                    }
+                  });
+                }
+              }
             }
+            // else {
+            //     this.isExpired = 'Akun Anda sudah diaktivasi. Silahkan login untuk masuk ke dalam akun Anda!'
+            // }
           }
         } catch (err) {}
       },

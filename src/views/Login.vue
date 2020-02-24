@@ -244,7 +244,7 @@
             message,
             data
           } = res.data;
-
+          console.log(res.data)
           if (status) {
             this.$store.commit('SET_BEARER_TOKEN', data.token);
             this.loggedIn = true;
@@ -271,6 +271,13 @@
               params: {
                 email: postData.username,
                 user_id: res.data.user_id,
+              }
+            });
+          } else if (status == false && message == 'Activation email was expired...') {
+            this.$router.push({
+              name: "verification-result",
+              params: {
+                state: "expired"
               }
             });
           } else {
