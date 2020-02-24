@@ -45,7 +45,7 @@
                           :state="errorState({ label: 'nama_layanan', index })"
                           :placeholder="placeholderInput('nama_layanan')"
                           :disabled="index <= 1"
-                          maxlength="30"
+                          maxlength="50"
                         ></b-form-input>
                         <b-form-invalid-feedback class="text-capitalize">
                           {{
@@ -181,7 +181,7 @@ export default {
         tarif_layanan: null
       }
     ],
-    namaLayananContainer: ["Registrasi Awal", "Konsultasi Dokter"],
+    namaLayananContainer: ["registrasi awal", "konsultasi dokter"],
     kodeContainer: [],
     errorKodeLayanan: null,
     errorsKodeLayanan: [],
@@ -261,34 +261,30 @@ export default {
       };
     },
     validateAll() {
-      const { tmpInputTarifData, validateInput } = this;
-      const all = tmpInputTarifData.map(item => {
-        const x = Object.keys(item).filter(z => z !== "error");
-        const d = item.error.kode_layanan.error;
-        if (d == false) {
-          this.$swal({
-            type: "error",
-            title: startCase("gagal"),
-            text: startCase("Silakan Benarkan seluruh kolom")
-          });
-        } else {
-          x.map(y => {
-            item.error[y] = validateInput({
-              label: y,
-              $event: item[y]
-            });
-          });
-        }
-      });
+      const valItems = ['kode_layanan', 'nama_layanan', 'tarif_layanan'];
+      this.tmpInputTarifData.forEach(item => {
+        valItems.forEach(valItem => {
+          if(item.error[valItem].error == false) return;
+
+          if(!item[valItem]) {
+            item.error[valItem].error = false;
+            item.error[valItem].desc = valItem.replace("_", " ") + " harus diisi";
+          }
+          else {
+            item.error[valItem].error = true;
+            item.error[valItem].desc = "";
+          }
+        })
+      })
     },
     submitInputTarif() {
       const { tmpInputTarifData, validateAll } = this;
       this.$nextTick(() => {
+        validateAll();
         const z = tmpInputTarifData.map(item => item.error);
         const y = z.map(x => {
-          const v = Object.keys(x);
+          const v = Object.keys(x).slice(1);
           const o = v.every(z => x[z].error);
-          validateAll();
           return o;
         });
         const p = y.every(h => h);
@@ -369,149 +365,122 @@ export default {
         Vue.set(this.tmpInputTarifData, index, tmp);
       }
     },
-    onInputNamaLayanan(val, index, o, p) {
-      val = val.charAt(0).toUpperCase() + val.substring(1);
-      Vue.set(o, p, val);
-      Vue.set(this.namaContainer, index, val);
-      let { tmpInputTarifData, validateAll, generateErrorObj } = this;
-      const lastIndex = tmpInputTarifData[tmpInputTarifData.length - 1];
-      const x = Object.keys(lastIndex);
+    onInputNamaLayanan(valRaw, index, o, p) {
+      if(this._timeoutNamaLayanan) clearTimeout(this._timeoutNamaLayanan);
+      let val = valRaw.toLowerCase()
+      Vue.set(this.namaLayananContainer, index, val);
 
-      this.tmpInputTarifData[0].error["tarif_layanan"].error = true;
-      this.tmpInputTarifData[0].error["tarif_layanan"].desc = "";
+      if(!val) {
+        this.tmpInputTarifData[index].error['nama_layanan'].error = false;
+        this.tmpInputTarifData[index].error['nama_layanan'].desc = 'Nama Layanan harus diisi';
+      }
 
-      this.tmpInputTarifData[0].error["id"].error = true;
+      if(val.match(/[^a-zA-Z0-9\-\ \(\)\/\.]+/) !== null) {
+        this.tmpInputTarifData[index].error['nama_layanan'].error = false;
+        this.tmpInputTarifData[index].error['nama_layanan'].desc = 'Hanya bisa huruf, angka, -, (), /, dan .';
+        return;
+      } 
 
-      this.tmpInputTarifData[0].error["nama_layanan"].error = true;
-      this.tmpInputTarifData[0].error["nama_layanan"].desc = "";
+      let isError = false;
+      this.namaLayananContainer.forEach((item, i) => {
+        if(index == i) return;
+        if(item == val) {
+          this.tmpInputTarifData[index].error['nama_layanan'].error = false;
+          this.tmpInputTarifData[index].error['nama_layanan'].desc = 'Nama layanan tidak boleh sama';
 
-      this.namaContainer.forEach((item, i) => {
-        this.namaContainer.forEach((item, i) => {
-          if (index == i) return;
-          if (item == val) {
-            this.tmpInputTarifData[index].error["nama_layanan"].error = false;
-            this.tmpInputTarifData[index].error["nama_layanan"].desc =
-              "Nama layanan tidak boleh sama";
-
-            this.tmpInputTarifData[i].error["nama_layanan"].error = false;
-            this.tmpInputTarifData[i].error["nama_layanan"].desc =
-              "Nama layanan tidak boleh sama";
-
-            this.tmpInputTarifData[i].error["id"].error = true;
-            this.tmpInputTarifData[index].error["id"].error = true;
-
-            this.tmpInputTarifData[i].error["tarif_layanan"].error = true;
-            this.tmpInputTarifData[i].error["tarif_layanan"].desc = "";
-            this.tmpInputTarifData[index].error["tarif_layanan"].error = true;
-            this.tmpInputTarifData[index].error["tarif_layanan"].desc = "";
-          } else {
-            this.tmpInputTarifData[index].error["nama_layanan"].error = true;
-            this.tmpInputTarifData[index].error["nama_layanan"].desc = "";
-
-            this.tmpInputTarifData[i].error["nama_layanan"].error = true;
-            this.tmpInputTarifData[i].error["nama_layanan"].desc = "";
-
-            this.tmpInputTarifData[i].error["id"].error = true;
-            this.tmpInputTarifData[index].error["id"].error = true;
-
-            this.tmpInputTarifData[i].error["tarif_layanan"].error = true;
-            this.tmpInputTarifData[i].error["tarif_layanan"].desc = "";
-            this.tmpInputTarifData[index].error["tarif_layanan"].error = true;
-            this.tmpInputTarifData[index].error["tarif_layanan"].desc = "";
+          if(i > 1) {
+            this.tmpInputTarifData[i].error['nama_layanan'].error = false;
+            this.tmpInputTarifData[i].error['nama_layanan'].desc = 'Nama layanan tidak boleh sama';
           }
-        });
-      });
+
+          isError = true;
+        }
+        else {
+          this.tmpInputTarifData[index].error['nama_layanan'].error = true;
+          this.tmpInputTarifData[index].error['nama_layanan'].desc = '';
+          
+          this.tmpInputTarifData[i].error['nama_layanan'].error = true;
+          this.tmpInputTarifData[i].error['nama_layanan'].desc = '';
+        }
+      })
+
+      if(!isError) {
+        this._timeoutNamaLayanan = setTimeout(() => {
+          axios
+          .get(`${this.url_api}/layanan/${val}/nama`)
+          .then(response => {
+            if (response.data.success == true) {
+              this.tmpInputTarifData[index].error["nama_layanan"].error = false;
+              this.tmpInputTarifData[index].error["nama_layanan"].desc = "Nama layanan Sudah Ada";
+            }
+          })
+          .catch(error => {
+            if (error.response.data.success == false) {
+              this.tmpInputTarifData[index].error["nama_layanan"].error = true;
+              this.tmpInputTarifData[index].error["nama_layanan"].desc = "";
+            }
+          });
+        }, 600)
+      }
     },
-    onInputKode: debounce(function(val, index, o, p) {
-      const vm = this
+    onInputKode(val, index, o, p) {
+      if(this._timeoutKodeLayanan) clearTimeout(this._timeoutKodeLayanan);
       val = val.toUpperCase();
       Vue.set(o, p, val);
-      Vue.set(vm.kodeContainer, index, val);
+      Vue.set(this.kodeContainer, index, val);
 
-      let { tmpInputTarifData, validateAll, generateErrorObj } = vm;
+      if(val.match(/[^a-zA-Z0-9\-]+/) !== null) {
+        this.tmpInputTarifData[index].error['kode_layanan'].error = false
+        this.tmpInputTarifData[index].error['kode_layanan'].desc = 'Hanya bisa huruf, angka, dan -'
+        return;
+      } 
 
-      const lastIndex = tmpInputTarifData[tmpInputTarifData.length - 1];
-      var listKode = axios
-        .get(`${vm.url_api}/layanan/${val}/kode`)
-        .then(response => {
-          if (response.data.success == true) {
-            vm.tmpInputTarifData[index].error["kode_layanan"].error = false;
-            vm.tmpInputTarifData[index].error["kode_layanan"].desc =
-              "Kode layanan Sudah Ada";
-          }
-        })
-        .catch(error => {
-          if (error.response.data.success == false) {
-            vm.tmpInputTarifData[index].error["kode_layanan"].error = true;
-            vm.tmpInputTarifData[index].error["kode_layanan"].desc = "";
-          }
-        });
-      // const x = Object.keys(lastIndex);
-      vm.kodeContainer.forEach(function(item, i) {
-        if (index == i) return;
-        if (item == val) {
-          let listKode = axios
-            .get(`${vm.url_api}/layanan/${val}/kode`)
-            .then(response => {
-              // kalo ada yang sama dalam api
-              if (response.data.success == true) {
-                vm.tmpInputTarifData[index].error[
-                  "kode_layanan"
-                ].error = false;
-                vm.tmpInputTarifData[index].error["kode_layanan"].desc =
-                  "Kode layanan Sudah Ada";
-              }
-            })
-            .catch(error => {
-              //kalo tidak ada yang sama dari api
-              if (error.response.data.success == false) {
-                vm.tmpInputTarifData[index].error[
-                  "kode_layanan"
-                ].error = false;
-                vm.tmpInputTarifData[index].error["kode_layanan"].desc =
-                  "Kode Layanan Tidak Boleh Sama";
-                //disini
-              }
-            });
-        } else {
-          let listKode = axios
-            .get(`${vm.url_api}/layanan/${val}/kode`)
-            .then(function(response) {
-              if (response.data.success == true) {
-                vm.tmpInputTarifData[index].error[
-                  "kode_layanan"
-                ].error = false;
-                vm.tmpInputTarifData[index].error["kode_layanan"].desc =
-                  "Kode layanan Sudah Ada";
-              }
-            })
-            .catch((error) => {
-              //kasus inputan setelahnya
-              // console.log(error.response.data.success);
-              console.log(error);
+      if(val.length < 3) {
+        this.tmpInputTarifData[index].error['kode_layanan'].error = false
+        this.tmpInputTarifData[index].error['kode_layanan'].desc = 'Kode layanan minimal 3 karakter'
+        return;
+      }
 
-              if (
-                error &&
-                error.response &&
-                error.response.data &&
-                error.response.data.success == false
-              ) {
-                vm.tmpInputTarifData[index].error[
-                  "kode_layanan"
-                ].error = true;
-                vm.tmpInputTarifData[index].error["kode_layanan"].desc = "";
-              } else {
-                vm.tmpInputTarifData[index].error[
-                  "kode_layanan"
-                ].error = false;
-                vm.tmpInputTarifData[index].error["kode_layanan"].desc =
-                  "Kode Layanan Harus Di Isi";
-              }
-            })
-            .finally(() => {});
+      let isError = false;
+      this.kodeContainer.forEach((item, i) => {
+        if(index == i) return;
+        if(item == val) {
+          this.tmpInputTarifData[index].error['kode_layanan'].error = false
+          this.tmpInputTarifData[index].error['kode_layanan'].desc = 'Kode layanan tidak boleh sama'
+
+          this.tmpInputTarifData[i].error['kode_layanan'].error = false
+          this.tmpInputTarifData[i].error['kode_layanan'].desc = 'Kode layanan tidak boleh sama'
+
+          isError = true;
         }
-      });
-    }, 600),
+        else {
+          this.tmpInputTarifData[index].error['kode_layanan'].error = true
+          this.tmpInputTarifData[index].error['kode_layanan'].desc = ''
+          
+          // this.tmpInputTarifData[i].error['kode_layanan'].error = true
+          // this.tmpInputTarifData[i].error['kode_layanan'].desc = ''
+        }
+      })
+
+      if(!isError) {
+        this._timeoutKodeLayanan = setTimeout(() => {
+          axios
+          .get(`${this.url_api}/layanan/${val}/kode`)
+          .then(response => {
+            if (response.data.success == true) {
+              this.tmpInputTarifData[index].error["kode_layanan"].error = false;
+              this.tmpInputTarifData[index].error["kode_layanan"].desc = "Kode layanan Sudah Ada";
+            }
+          })
+          .catch(error => {
+            if (error.response.data.success == false) {
+              this.tmpInputTarifData[index].error["kode_layanan"].error = true;
+              this.tmpInputTarifData[index].error["kode_layanan"].desc = "";
+            }
+          });
+        }, 600)
+      }
+    },
     addInputTarifData() {
       const { tmpInputTarifData, validateAll, generateErrorObj } = this;
       const lastIndex = tmpInputTarifData[tmpInputTarifData.length - 1];
