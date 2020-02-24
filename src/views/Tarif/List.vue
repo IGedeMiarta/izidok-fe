@@ -108,7 +108,7 @@
                         </template>
                         <template
                           v-if="this.checkDataKode == 2 && $v.kode_layanan.$params && $v.kode_layanan.$params.required">
-                          <div class="error">Kode Layanan Sudah Ada</div>
+                          <div class="error" style="font-size:13px;">Kode Layanan Sudah Ada</div>
                         </template>
                       </div>
                       <div class="form-group col-md-3">
