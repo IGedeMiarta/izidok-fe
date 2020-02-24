@@ -108,14 +108,14 @@ import axios from "axios";
 const verifyPassword = val => /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]*$/gi.test(val);
 
 export default {
-  // beforeRouteEnter(to, from, next) {
-  //   const { name } = from;
-  //   if (name === "input-spesialisasi") {
-  //     next();
-  //   } else {
-  //     next("/");
-  //   }
-  // },
+  beforeRouteEnter(to, from, next) {
+    const { name } = from;
+    if (name === "input-spesialisasi") {
+      next();
+    } else {
+      next("/");
+    }
+  },
   props: ["klinik_id"],
   data: () => ({
     formBasicData: null,
