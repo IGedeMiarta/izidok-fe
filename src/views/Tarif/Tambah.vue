@@ -13,98 +13,102 @@
           }
         ]" />
       <div class="container">
-        <div class="card card-box mb-5">
-          <div class="card-header" style="background-color : #d3e8eb">
-            <h4>Tambah Tarif</h4>
-          </div>
-          <div class="card-body">
-            <b-form @submit.prevent="submitInputTarif">
-              <b-row class="d-flex align-items-center">
-                <b-col cols="12">
-                  <b-row class="d-flex align-items-center mb-4">
-                    <b-col cols="4" class="text-capitalize">Nama Layanan</b-col>
-                    <b-col cols="3" class="text-capitalize">Kode Layanan</b-col>
-                    <b-col cols="3" class="text-capitalize">Tarif Layanan</b-col>
-                  </b-row>
-                  <b-row class="d-flex align-items-center mb-3" v-for="(inputTarif, index) in tmpInputTarifData"
-                    :key="inputTarif.id">
-                    <b-col cols="4">
-                      <div role="group">
-                        <b-form-input :value="inputTarif.nama_layanan"
-                          @input="onInputNama($event, index, inputTarif, 'nama_layanan')" @change="
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card card-box mb-5">
+              <div class="card-header" style="background-color : #d3e8eb">
+                <h4>Tambah Tarif</h4>
+              </div>
+              <div class="card-body">
+                <b-form @submit.prevent="submitInputTarif">
+                  <b-row class="d-flex align-items-center">
+                    <b-col sm="12">
+                      <b-row class="d-flex align-items-center mb-3" v-for="(inputTarif, index) in tmpInputTarifData"
+                        :key="inputTarif.id">
+                        <b-col sm="4">
+                          <label for="">Nama Layanan</label>
+                          <div role="group">
+                            <b-form-input :value="inputTarif.nama_layanan"
+                              @input="onInputNama($event, index, inputTarif, 'nama_layanan')" @change="
                             onChangeValue({
                               label: 'nama_layanan',
                               index,
                               $event
                             })
                           " :state="errorState({ label: 'nama_layanan', index })"
-                          :placeholder="placeholderInput('nama_layanan')" maxlength="50"></b-form-input>
-                        <b-form-invalid-feedback class="text-capitalize">
-                          {{
+                              :placeholder="placeholderInput('nama_layanan')" maxlength="50"></b-form-input>
+                            <b-form-invalid-feedback class="text-capitalize">
+                              {{
                             inputTarif.error &&
                               inputTarif.error.nama_layanan.desc
                           }}
-                        </b-form-invalid-feedback>
-                      </div>
-                    </b-col>
-                    <b-col cols="3">
-                      <div role="group">
-                        <b-form-input :value="inputTarif.kode_layanan" @change="
+                            </b-form-invalid-feedback>
+                          </div>
+                        </b-col>
+                        <b-col sm="4">
+                          <label for="">Kode Layanan</label>
+                          <div role="group">
+                            <b-form-input :value="inputTarif.kode_layanan" @change="
                             onChangeValue({
                               label: 'kode_layanan',
                               index,
                               $event
                             })
                           " @input="onInputKode($event, index, inputTarif, 'kode_layanan')"
-                          :state="errorState({ label: 'kode_layanan', index })"
-                          :placeholder="placeholderInput('kode_layanan')" maxlength="20"></b-form-input>
-                        <b-form-invalid-feedback class="text-capitalize">
-                          {{
+                              :state="errorState({ label: 'kode_layanan', index })"
+                              :placeholder="placeholderInput('kode_layanan')" maxlength="20"></b-form-input>
+                            <b-form-invalid-feedback class="text-capitalize">
+                              {{
                             inputTarif.error &&
                               inputTarif.error.kode_layanan.desc
                           }}
-                        </b-form-invalid-feedback>
-                      </div>
-                    </b-col>
-                    <b-col cols="3">
-                      <div role="group">
-                        <b-form-input v-model.lazy="inputTarif.tarif_layanan" v-money="money"
-                          :state="errorState({ label: 'tarif_layanan', index })"
-                          :placeholder="placeholderInput('tarif_layanan')" maxlength="12" class="text-right"></b-form-input>
-                        <b-form-invalid-feedback class="text-capitalize">
-                          {{
+                            </b-form-invalid-feedback>
+                          </div>
+                        </b-col>
+                        <b-col sm="3">
+                          <label for="">Tarif Layanan</label>
+                          <div role="group">
+                            <b-form-input v-model.lazy="inputTarif.tarif_layanan" v-money="money"
+                              :state="errorState({ label: 'tarif_layanan', index })"
+                              :placeholder="placeholderInput('tarif_layanan')" maxlength="12" class="text-right">
+                            </b-form-input>
+                            <b-form-invalid-feedback class="text-capitalize">
+                              {{
                             inputTarif.error &&
                               inputTarif.error.tarif_layanan.desc
                           }}
-                        </b-form-invalid-feedback>
-                      </div>
-                    </b-col>
-                    <b-col cols="2" v-if="index > 0">
-                      <b-button variant="danger" style="padding: .5rem .8rem; border-radius: 100%"
-                        @click="removeInputTarifData(index)">
-                        <font-awesome-icon icon="minus" />
-                      </b-button>
+                            </b-form-invalid-feedback>
+                          </div>
+                        </b-col>
+                        <b-col sm="1" v-if="index > 0">
+                          <b-button variant="danger" style="padding: .5rem .8rem; border-radius: 100%"
+                            @click="removeInputTarifData(index)">
+                            <font-awesome-icon icon="minus" />
+                          </b-button>
+                        </b-col>
+                      </b-row>
                     </b-col>
                   </b-row>
-                </b-col>
-              </b-row>
-              <b-row class="d-flex align-items-center">
-                <b-col cols="9">
-                  <div class="d-flex justify-content-center">
-                    <b-button variant="first" style="padding: .5rem .8rem; border-radius: 100%"
-                      @click="addInputTarifData">
-                      <font-awesome-icon icon="plus" />
-                    </b-button>
-                  </div>
-                </b-col>
-                <b-col cols="3">
-                  <b-button variant="danger" :to="{
+                  <b-row class="d-flex align-items-center">
+                    <b-col sm="9">
+                      <div class="d-flex justify-content-center">
+                        <b-button variant="first" style="padding: .5rem .8rem; border-radius: 100%"
+                          @click="addInputTarifData">
+                          <font-awesome-icon icon="plus" />
+                        </b-button>
+                      </div>
+                    </b-col>
+                    <b-col sm="3">
+                      <b-button variant="danger" :to="{
                         name: 'tarif-list'}">Keluar</b-button>
-                  <b-button class="text-capitalize float-right" type="submit" variant="primary">Simpan</b-button>
-                </b-col>
-              </b-row>
-            </b-form>
+                      <b-button class="text-capitalize float-right" type="submit" variant="primary">Simpan</b-button>
+                    </b-col>
+                  </b-row>
+                </b-form>
+              </div>
+            </div>
           </div>
+
         </div>
       </div>
     </div>
@@ -253,7 +257,7 @@
       }) {
         return {
           error: ($event && true) || false,
-          desc: (!$event && `kolom ${label.replace("_", " ")} harus di isi`) || ""
+          desc: (!$event && `${label.replace("_", " ")} harus di isi`) || ""
         };
       },
       validateAll() {
@@ -340,7 +344,7 @@
           console.log(d);
           // this.tmpInputTarifData[i].error['nama_layanan'].error = false;
           // this.tmpInputTarifData[i].error['nama_layanan'].desc = 'Kode Layanan Sudah Ada';
-       
+
         }
       },
       constructPostData() {
@@ -354,7 +358,7 @@
             if (key == 'tarif_layanan') {
               q = 'tarif';
               // hapus separator ribuan dan jadikan int
-              item[key] = parseInt(item[key].replace(/\D/g, "",'Rp. ', ''))
+              item[key] = parseInt(item[key].replace(/\D/g, "", 'Rp. ', ''))
             }
             obj[q] = item[key];
             return obj;
@@ -417,7 +421,7 @@
               this.tmpInputTarifData[i].error['tarif_layanan'].error = true
               this.tmpInputTarifData[i].error['tarif_layanan'].desc = ''
               this.tmpInputTarifData[index].error['tarif_layanan'].error = true
-              this.tmpInputTarifData[index].error['tarif_layanan'].desc = ''    
+              this.tmpInputTarifData[index].error['tarif_layanan'].desc = ''
 
             } else {
               this.tmpInputTarifData[index].error['nama_layanan'].error = true
@@ -432,7 +436,7 @@
               this.tmpInputTarifData[i].error['tarif_layanan'].error = true
               this.tmpInputTarifData[i].error['tarif_layanan'].desc = ''
               this.tmpInputTarifData[index].error['tarif_layanan'].error = true
-              this.tmpInputTarifData[index].error['tarif_layanan'].desc = ''    
+              this.tmpInputTarifData[index].error['tarif_layanan'].desc = ''
 
             }
           })
@@ -442,7 +446,7 @@
         val = val.toUpperCase();
         Vue.set(o, p, val);
         Vue.set(this.kodeContainer, index, val);
-      
+
         let {
           tmpInputTarifData,
           validateAll,
@@ -463,6 +467,11 @@
               this.tmpInputTarifData[index].error['kode_layanan'].error = true
               this.tmpInputTarifData[index].error['kode_layanan'].desc =
                 '';
+              if (val.length <= 3) {
+                this.tmpInputTarifData[index].error['kode_layanan'].error = false
+                this.tmpInputTarifData[index].error['kode_layanan'].desc =
+                  'Kode layanan minimal 3 karakter';
+              }
             }
           });
         // const x = Object.keys(lastIndex);
@@ -484,7 +493,12 @@
                   this.tmpInputTarifData[index].error['kode_layanan'].error = false
                   this.tmpInputTarifData[index].error['kode_layanan'].desc =
                     'Kode Layanan Tidak Boleh Sama'
-                    //disini
+                  //disini
+                  if (val.length <= 3) {
+                    this.tmpInputTarifData[index].error['kode_layanan'].error = false
+                    this.tmpInputTarifData[index].error['kode_layanan'].desc =
+                      'Kode layanan minimal 3 karakter';
+                  }
                 }
               })
           } else {
@@ -499,11 +513,20 @@
               .catch((error) => {
                 //kasus inputan setelahnya
                 // console.log(error.response.data.success);
-                
                 if (error.response.data.success == false) {
                   this.tmpInputTarifData[index].error['kode_layanan'].error = true
                   this.tmpInputTarifData[index].error['kode_layanan'].desc =
                     '';
+                  if (val.length < 3) {
+                    this.tmpInputTarifData[index].error['kode_layanan'].error = false
+                    this.tmpInputTarifData[index].error['kode_layanan'].desc =
+                      'Kode layanan minimal 3 karakter';
+                  }
+                  if (val.length >= 20) {
+                    this.tmpInputTarifData[index].error['kode_layanan'].error = false
+                    this.tmpInputTarifData[index].error['kode_layanan'].desc =
+                      'Kode layanan maksimal 20 karakter';
+                  }
                 } else {
                   this.tmpInputTarifData[index].error['kode_layanan'].error = false
                   this.tmpInputTarifData[index].error['kode_layanan'].desc =

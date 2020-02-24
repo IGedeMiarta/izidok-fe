@@ -106,12 +106,23 @@
               })
             })
           " >
-              <b-form-input @keypress="
-              checkNIK({
+              <b-form-input 
+             @keypress="
+              onKeyInputNumber({
                 rawLabel: 'nik',
                 $event
               })
-            "  :disabled="disabledForm()" :state="getDataError({ rawLabel: 'nik' })" :value="getValue('nik')" :maxlength="25"  />
+            " @keyup="
+              setValue({
+                rawLabel: 'nik',
+                $event
+              },);
+              checkNIK()
+            " 
+             :disabled="disabledForm()" :state="getDataError({ rawLabel: 'nik' })" :value="getValue('nik')" :maxlength="25"  />
+             <template v-if="this.formBasicData[2].error == true && this.formData.nik !== ''" >
+                <label style="color:red">No. Identitas telah terdaftar</label> 
+             </template>
             </b-form-group>
           </b-col>
           <b-col sm="6">
@@ -633,6 +644,7 @@
       image: null,
       selectTempat: null,
       provinces: [],
+      checkValueNik :null,
       cities: [],
       tempat: {
         provinsi: null,
@@ -683,12 +695,9 @@
             console.log(error);
           })
       },
-      async checkNIK({
-        rawLabel,
-        $event
-      }) {
-        this.onKeyInputNumber({rawLabel, $event});
+      async checkNIK(){
         try {
+            console.log(this.formData['nik']);
             const res = await axios.get(`${this.url_api}/identity/verify?jenis_pengenal=${this.formData['jenis_identitas']}&nik=${this.formData['nik']}`);
             console.log(res.data);
             if(res.data.status == false){

@@ -509,7 +509,8 @@
         this.formDataRegister.klinik_id = this.$store.state.user.klinik_id;
         axios.get(`${this.url_api}/pasien`).then(res => {
           let totalCurrentPasien = res.data.data.pasien.total;
-          this.formDataRegister.nomor_rekam_medis = 100000 + (totalCurrentPasien + 1);
+          // sebelumnya 100000 nambah 0 nya dua
+          this.formDataRegister.nomor_rekam_medis = 10000000 + (totalCurrentPasien + 1);
           this.addPasien(this.formDataRegister);
           console.log(this.formDataRegister);
         });
