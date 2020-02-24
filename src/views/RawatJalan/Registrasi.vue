@@ -578,7 +578,6 @@
         if (!$event) return;
         return moment($event).format("YYYY-MM-DD")
       },
-
       setFormBasicData() {
         return tmp.map((item, index) => ({
           ...item,
@@ -612,7 +611,6 @@
         } else {
           this.formData[label] = value;
         }
-
         if (label == "jenis_kelamin") this.formData[label] = "" + value;
         this.triggerValidation({
           label,
