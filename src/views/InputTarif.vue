@@ -317,9 +317,8 @@ export default {
           icon: "success",
           confirmButtonText: startCase("ya")
         });
-        this.$router.push({
-          path: "/tarif"
-        });
+        this.setInitPage(true);
+        this.$router.push({path: "/"});
       } catch (errror) {
         const x = errror.response.data;
         const y = Object.keys(x);
