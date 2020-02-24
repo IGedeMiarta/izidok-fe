@@ -452,7 +452,8 @@
         } = this;
         let v = "";
         searchValue.map(item => {
-          v += `&${item.key}=${item.value}`;
+          const x = item.key === 'nama' && 'nama_pasien' || item.key
+          v += `&${x}=${item.value}`;
         });
 
         if (sortBy && sortDesc) {
