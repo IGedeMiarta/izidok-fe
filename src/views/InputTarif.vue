@@ -317,7 +317,7 @@ export default {
           icon: "success",
           confirmButtonText: startCase("ya")
         });
-        this.setInitPage(true);
+        this.setInitPage(false);
         this.$router.push({path: "/"});
       } catch (errror) {
         const x = errror.response.data;
