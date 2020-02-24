@@ -460,7 +460,6 @@
               this.tmpInputTarifData[index].error['kode_layanan'].error = false
               this.tmpInputTarifData[index].error['kode_layanan'].desc =
                 'Kode layanan Sudah Ada';
-              console.log('aa')
             }
           })
           .catch((error) => {
