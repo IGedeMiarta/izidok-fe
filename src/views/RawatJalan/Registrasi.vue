@@ -732,7 +732,7 @@
       async searchPasien(val) {
         try {
           const res = await axios.get(
-            `${this.url_api}/pasien?nama_pasien=${val}`
+            `${this.url_api}/pasien?nama_pasien=${val}&paginate=0`
           );
           this.pasiens = res.data.data.pasien;
           this.options.nama_pasien = res.data.data.pasien.map(item => {

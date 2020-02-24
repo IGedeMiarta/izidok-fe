@@ -119,9 +119,8 @@
               <div class="text-center" style="margin-top:2px;">
                 Anda Sudah Memiliki Akun ?
                 <router-link to="/login">
-                  <span class="btn-wrapper--label">Masuk</span>
+                  <span class="btn-wrapper--label">Masuk disini</span>
                 </router-link>
-                disini
               </div>
             </b-form>
           </div>
