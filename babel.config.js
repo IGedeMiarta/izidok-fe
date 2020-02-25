@@ -8,6 +8,7 @@ module.exports = {
         libraryName: "element-ui",
         styleLibraryName: "theme-chalk"
       }
-    ]
+    ],
+    ["@babel/plugin-proposal-pipeline-operator", { proposal: "minimal" }]
   ]
 };
