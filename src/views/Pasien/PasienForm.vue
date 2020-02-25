@@ -88,7 +88,7 @@
                   })
                 ">
                 <vue-select :options="
-                    ['KTP', 'SIM', 'Paspor', 'Pengenal lainya']
+                    ['KTP', 'SIM', 'Paspor']
                   " @input="
                     setValue({
                       rawLabel: 'jenis identitas',
@@ -106,13 +106,22 @@
               })
             })
           " >
-              <b-form-input 
+              <b-form-input v-if="this.formData['jenis_identitas'] !== 'Paspor'"
              @keypress="
               onKeyInputNumber({
                 rawLabel: 'nik',
                 $event
               })
             " @keyup="
+              setValue({
+                rawLabel: 'nik',
+                $event
+              },);
+              checkNIK()
+            " 
+             :disabled="disabledForm()" :state="getDataError({ rawLabel: 'nik' })" :value="getValue('nik')" :maxlength="25"  />
+             <b-form-input v-else
+              @keyup="
               setValue({
                 rawLabel: 'nik',
                 $event
@@ -697,9 +706,7 @@
       },
       async checkNIK(){
         try {
-            console.log(this.formData['nik']);
             const res = await axios.get(`${this.url_api}/identity/verify?jenis_pengenal=${this.formData['jenis_identitas']}&nik=${this.formData['nik']}`);
-            console.log(res.data);
             if(res.data.status == false){
               this.formBasicData[2].error = true;
             } else {

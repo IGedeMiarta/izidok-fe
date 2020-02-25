@@ -517,7 +517,7 @@
                   this.tmpInputTarifData[index].error['kode_layanan'].error = true
                   this.tmpInputTarifData[index].error['kode_layanan'].desc =
                     '';
-                  if (val.length < 3) {
+                  if (val.length <= 3) {
                     this.tmpInputTarifData[index].error['kode_layanan'].error = false
                     this.tmpInputTarifData[index].error['kode_layanan'].desc =
                       'Kode layanan minimal 3 karakter';
