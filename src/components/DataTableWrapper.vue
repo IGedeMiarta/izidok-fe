@@ -6,7 +6,7 @@
           <div class="d-flex text-capitalize align-items-center">
             <span>show</span>
             <b-form-select
-              :options="entriesOpt()"
+              :options="entriesOpt(customEntryOptions)"
               class="w-25 mx-2"
               v-model="perPage"
             ></b-form-select>
@@ -51,16 +51,21 @@ export default {
     callbackFunc: {
       type: Function,
       required: true
+    },
+    customEntryOptions: {
+      type: Object,
+      default: Object
     }
   },
   async mounted() {
-    await (this.callbackFunc && this.callbackFunc
-      |> (_ => _.call(this))
-      |> (_ => _.then(this.processData)));
+    await (this.callbackFunc &&
+      (this.callbackFunc
+        |> (_ => _.call(this))
+        |> (_ => _.then(this.processData))));
   },
   methods: {
     processData(res) {
-      const { rows, fromPage, toPage, totalEntries } = res;
+      const { rows = 0, fromPage = 0, toPage = 0, totalEntries = 0 } = res;
 
       this.rows = rows;
       this.fromPage = fromPage;

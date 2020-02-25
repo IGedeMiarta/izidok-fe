@@ -318,45 +318,36 @@ export default {
       isDoctor: "doctorRole"
     }),
     fieldList() {
+      const {
+        generateFieldList: g,
+        setSearchableAndSortableFieldList: s
+      } = this;
       const r = val => Boolean(/(no|actions)\b/gi.test(val) ? !1 : 1);
-      const l = val => (val.label ? val.label : val.key.split("_").join(" "));
-      const t = [
-        {
-          key: "no"
-        },
-        {
-          key: "nomor_rekam_medis"
-        },
-        {
-          key: "nama",
-          label: "nama_pasien"
-        },
-        {
-          key: "jenis_kelamin"
-        },
-        {
-          key: "nomor_hp"
-        },
-        {
-          key: "actions"
-        }
-      ];
-
-      return t.map(item => ({
-        key: (item.key && item.key) || item,
-        label: startCase(l(item)),
-        sortable: r(item.key),
-        searchable: r(item.key)
-      }));
-      // return (
-      //   (!this.isDoctor && t.filter(item => item.key !== "actions")) ||
-      //   t
-      // ).map(item => ({
-      //   key: (item.key && item.key) || item,
-      //   label: startCase(l(item)),
-      //   sortable: r(item.key),
-      //   searchable: r(item.key)
-      // }));
+      return (
+        [
+          {
+            key: "no"
+          },
+          {
+            key: "nomor_rekam_medis"
+          },
+          {
+            key: "nama",
+            label: "nama_pasien"
+          },
+          {
+            key: "jenis_kelamin"
+          },
+          {
+            key: "nomor_hp"
+          },
+          {
+            key: "actions"
+          }
+        ]
+        |> (v => s({ field: v, customFunc: r }))
+        |> (z => g({ field: z }))
+      );
     }
   },
   methods: {

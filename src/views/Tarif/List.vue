@@ -40,33 +40,98 @@
             </div>
           </div> -->
           <div class="col-md-12 no-padding">
-            <b-container class="mb-4">
-              <b-row>
-                <b-col class="pl-0">
-                  <div class="d-flex text-capitalize align-items-center">
-                    <span>show</span>
-                    <b-form-select
-                      :options="entriesOpt()"
-                      class="w-25 mx-2"
-                      v-model="perPage"
-                    ></b-form-select>
-                    <span>entries</span>
-                  </div>
-                </b-col>
-                <b-col class="pr-0">
-                  <div class="d-flex justify-content-end">
-                    <b-button
+            <DataTableWrapper
+              :perPage="perPage"
+              :currentPage="currentPage"
+              :callbackFunc="fetchListTarif"
+              :customEntryOptions="{ f: 100 }"
+            >
+              <template v-slot:right-header>
+                <b-button
+                  variant="primary"
+                  class="text-uppercase align-self-end"
+                  :to="{
+                    name: 'pasien-tambah'
+                  }"
+                  >tambah tarif</b-button
+                >
+              </template>
+              <b-table
+                :items="pasienList"
+                :fields="fieldList"
+                :sort-by.sync="sortBy"
+                :sort-desc.sync="sortDesc"
+                thead-tr-class="kntl"
+                :no-local-sorting="true"
+              >
+                <template v-slot:head()="data">
+                  {{ data.label }}
+                  <b-input
+                    size="sm"
+                    class="mt-2 w-95"
+                    v-if="data.field.searchable"
+                    @input="searchValueChanged($event, data.field.key)"
+                  />
+                </template>
+
+                <template v-slot:cell(jenis_kelamin)="data">
+                  {{ jenisKelamin(data.value) }}
+                </template>
+
+                <template v-slot:cell(actions)="data">
+                  <span>
+                    <b-dropdown
+                      id="dropdown-1"
+                      class="m-md-2 text-capitalize"
                       variant="primary"
-                      class="text-uppercase align-self-end"
-                      :to="{
-                        name: 'pasien-tambah'
-                      }"
-                      >tambah tarif</b-button
+                      size="sm"
+                      right
                     >
-                  </div>
-                </b-col>
-              </b-row>
-            </b-container>
+                      <template v-slot:button-content>
+                        <font-awesome-icon icon="copy" />
+                      </template>
+                      <b-dropdown-item
+                        @click="
+                          editPasien({
+                            id: data.item.id
+                          })
+                        "
+                        >edit data pasien</b-dropdown-item
+                      >
+
+                      <b-dropdown-item
+                        @click="
+                          detailPasien({
+                            id: data.item.id
+                          })
+                        "
+                        >view detail pasien</b-dropdown-item
+                      >
+                      <template v-if="isOperator == false">
+                        <b-dropdown-item
+                          @click="
+                            rekamMedis({
+                              pasien_id: data.item.id,
+                              klinik_id: data.item.klinik_id
+                            })
+                          "
+                          >lihat riwayat rekam medis</b-dropdown-item
+                        >
+                      </template>
+                      <b-dropdown-item
+                        @click="
+                          removePasien({
+                            id: data.item.id,
+                            nama: data.item.nama
+                          })
+                        "
+                        >hapus data pasien</b-dropdown-item
+                      >
+                    </b-dropdown>
+                  </span>
+                </template>
+              </b-table>
+            </DataTableWrapper>
             <!-- <table class="table table-hover table-hover table-striped mb-5">
               <colgroup width="90px"></colgroup>
               <colgroup width="150px"></colgroup>
@@ -125,103 +190,9 @@
                 </tr>
               </tbody>
             </table> -->
-            <b-table
-              :items="pasienList"
-              :fields="fieldList"
-              :sort-by.sync="sortBy"
-              :sort-desc.sync="sortDesc"
-              thead-tr-class="kntl"
-              :no-local-sorting="true"
-            >
-              <template v-slot:head()="data">
-                {{ data.label }}
-                <b-input
-                  size="sm"
-                  class="mt-2 w-95"
-                  v-if="data.field.searchable"
-                  @input="searchValueChanged($event, data.field.key)"
-                />
-              </template>
-
-              <template v-slot:cell(jenis_kelamin)="data">
-                {{ jenisKelamin(data.value) }}
-              </template>
-
-              <template v-slot:cell(actions)="data">
-                <span>
-                  <b-dropdown
-                    id="dropdown-1"
-                    class="m-md-2 text-capitalize"
-                    variant="primary"
-                    size="sm"
-                    right
-                  >
-                    <template v-slot:button-content>
-                      <font-awesome-icon icon="copy" />
-                    </template>
-                    <b-dropdown-item
-                      @click="
-                        editPasien({
-                          id: data.item.id
-                        })
-                      "
-                      >edit data pasien</b-dropdown-item
-                    >
-
-                    <b-dropdown-item
-                      @click="
-                        detailPasien({
-                          id: data.item.id
-                        })
-                      "
-                      >view detail pasien</b-dropdown-item
-                    >
-                    <template v-if="isOperator == false">
-                      <b-dropdown-item
-                        @click="
-                          rekamMedis({
-                            pasien_id: data.item.id,
-                            klinik_id: data.item.klinik_id
-                          })
-                        "
-                        >lihat riwayat rekam medis</b-dropdown-item
-                      >
-                    </template>
-                    <b-dropdown-item
-                      @click="
-                        removePasien({
-                          id: data.item.id,
-                          nama: data.item.nama
-                        })
-                      "
-                      >hapus data pasien</b-dropdown-item
-                    >
-                  </b-dropdown>
-                </span>
-              </template>
-            </b-table>
-            <div class="d-flex align-items-center">
-              <span class="px-2"
-                >Display {{ fromPage }} to {{ toPage }} of
-                {{ totalEntries }} entries</span
-              >
-              <b-pagination
-                class="mt-4 d-flex justify-content-center"
-                v-model="currentPage"
-                :total-rows="rows"
-                :per-page="perPage"
-                style="margin-left: 10rem"
-              ></b-pagination>
-            </div>
           </div>
         </div>
       </div>
-      <!-- <div class="col-md-12 bg-neutral-second ninja-shadow" style="border-radius:10px;">
-        <div class="p-3">
-          <b-pagination class="d-flex justify-content-center mt-4" v-model="currentPage" :total-rows="rows"
-            :per-page="perPage"></b-pagination>
-        </div>
-      </div> -->
     </div>
     <!-- MODAL -->
     <b-modal
@@ -337,7 +308,8 @@ library.add(faArrowRight, faArrowUp, faTrashAlt, faSearch, faPencilAlt);
 
 export default {
   components: {
-    "font-awesome-icon": FontAwesomeIcon
+    "font-awesome-icon": FontAwesomeIcon,
+    DataTableWrapper: () => import("../../components/DataTableWrapper")
   },
   directives: {
     money: VMoney
@@ -384,9 +356,6 @@ export default {
         text: item
       }));
     }
-  },
-  mounted() {
-    this.fetchListTarif();
   },
   watch: {
     currentPage() {

@@ -1,5 +1,6 @@
 import validations from "./validations";
 import getAuthorizationToken from "../authToken";
+import startCase from "lodash/startCase";
 import isArray from "lodash/isArray";
 
 const GLOBAL_METHODS = {
@@ -11,48 +12,58 @@ const GLOBAL_METHODS = {
   rawAuthHeader: () => ({
     Authorization: getAuthorizationToken()
   }),
-  testX() {
-    function double(x) {
-      return x + x;
-    }
-    function add(x, y) {
-      return x + y;
-    }
-
-    function boundScore(min, max, score) {
-      return Math.max(min, Math.min(max, score));
-    }
-    let person = { score: 25 };
-
-    let newScore =
-      person.score
-      |> double  //50
-      |> (_ => add(7, _))  //14 + 0
-      |> (_ => boundScore(0, 100, _));
-
-    return newScore;
-  },
   entriesOpt({ f = null, arr = [] } = {}) {
+    const o = [5, 10, 25, 50, 100];
     return (
-      ((f, x) => {
-        if (f) {
-          if (isArray(f)) {
-            return x.filter(item => !f.includes(item));
-          } else {
-            return x.filter(item => item !== f);
-          }
-        } else {
-          return x;
-        }
-      })(
+      ((f, x) =>
+        (f &&
+          (isArray(f)
+            ? x.filter(item => !f.includes(item))
+            : x.filter(item => item !== f))) ||
+        x)(
         f,
-        [...new Set([5, 10, 25, 50, 100, ...arr].flat())].sort((a, b) => a - b)
+        (isArray(arr) &&
+          [...new Set([...o, ...arr].flat())].sort((a, b) => a - b)) ||
+          o
       )
       |> (_ =>
         _.map(item => ({
           value: item,
           text: item
         })))
+    );
+  },
+  getLabelTable: val =>
+    (val &&
+      (val.label || val.key) &&
+      (val.label ? val.label : val.key.split("_").join(" "))) ||
+    val,
+  generateFieldList({ field = null }) {
+    const { getLabelTable } = this;
+    return (
+      (field &&
+        isArray(field) &&
+        field.map(item => ({
+          key: (item.key && item.key) || item,
+          label: startCase(getLabelTable(item)),
+          sortable: item.sortable || false,
+          searchable: item.searchable || false
+        }))) ||
+      []
+    );
+  },
+  setSearchableAndSortableFieldList({ field = null, customFunc = val => val }) {
+    return (
+      (field &&
+        isArray(field) &&
+        (field
+          |> (_ =>
+            _.map(item => ({
+              ...item,
+              searchable: customFunc(item.key || item),
+              sortable: customFunc(item.key || item)
+            }))))) ||
+      []
     );
   }
 };
