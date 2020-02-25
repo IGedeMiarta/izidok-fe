@@ -141,7 +141,7 @@
                 <b-col class="pl-0">
                   <div class="d-flex text-capitalize align-items-center">
                     <span>show</span>
-                    <b-form-select :options="entriesOptions" class="w-25 mx-2" v-model="perPage"></b-form-select>
+                    <b-form-select :options="entriesOpt()" class="w-25 mx-2" v-model="perPage"></b-form-select>
                     <span>entries</span>
                   </div>
                 </b-col>

@@ -11,38 +11,50 @@ const GLOBAL_METHODS = {
   rawAuthHeader: () => ({
     Authorization: getAuthorizationToken()
   }),
-  // entriesOptions({ filter = null }) {
-  //   const x = [5, 10, 25, 50, 100];
-  //   return (
-  //     (() => {
-  //       if (filter) {
-  //         if (isArray(filter)) {
-  //           return x.filter(item => !filter.includes(item));
-  //         } else {
-  //           return x.filter(item => item !== filter);
-  //         }
-  //       } else {
-  //         return x;
-  //       }
-  //     })()
-  //     |> map(item => ({
-  //       value: item,
-  //       text: item
-  //     }))
-  //   );
-    // return (if (filter) {
-    //   if (isArray(filter))
-    // })
-    // return (
-    //   (filter && isArray(filter)
-    //     ? x.filter(item => !filter.includes(item))
-    //     : x.filter(item => item !== filter) || x)
-    //   |> map(item => ({
-    //     value: item,
-    //     text: item
-    //   }))
-    // );
-  // }
+  testX() {
+    function double(x) {
+      return x + x;
+    }
+    function add(x, y) {
+      return x + y;
+    }
+
+    function boundScore(min, max, score) {
+      return Math.max(min, Math.min(max, score));
+    }
+    let person = { score: 25 };
+
+    let newScore =
+      person.score
+      |> double  //50
+      |> (_ => add(7, _))  //14 + 0
+      |> (_ => boundScore(0, 100, _));
+
+    return newScore;
+  },
+  entriesOpt({ f = null, arr = [] } = {}) {
+    return (
+      ((f, x) => {
+        if (f) {
+          if (isArray(f)) {
+            return x.filter(item => !f.includes(item));
+          } else {
+            return x.filter(item => item !== f);
+          }
+        } else {
+          return x;
+        }
+      })(
+        f,
+        [...new Set([5, 10, 25, 50, 100, ...arr].flat())].sort((a, b) => a - b)
+      )
+      |> (_ =>
+        _.map(item => ({
+          value: item,
+          text: item
+        })))
+    );
+  }
 };
 
 export default GLOBAL_METHODS;

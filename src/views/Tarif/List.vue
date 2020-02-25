@@ -14,7 +14,7 @@
     <div class="container">
       <div class="card card-box mb-3 ninja-shadow">
         <div class="card-body">
-          <div class="row no-padding">
+          <!-- <div class="row no-padding">
             <div class="col-md-9 no-padding">
               <div class="form-group col-md-4" style="float:left;">
                 <label for="kodetarif">Kode Layanan</label>
@@ -34,8 +34,26 @@
                         name: 'tarif-tambah'}">TAMBAH</b-button>
               </div>
             </div>
-          </div>
+          </div> -->
           <div class="col-md-12 no-padding">
+            <b-container class="mb-4">
+              <b-row>
+                <b-col class="pl-0">
+                  <div class="d-flex text-capitalize align-items-center">
+                    <span>show</span>
+                    <b-form-select :options="entriesOpt()" class="w-25 mx-2" v-model="perPage"></b-form-select>
+                    <span>entries</span>
+                  </div>
+                </b-col>
+                <b-col class="pr-0">
+                  <div class="d-flex justify-content-end">
+                    <b-button variant="primary" class="text-uppercase align-self-end" :to="{
+                        name: 'pasien-tambah'
+                      }">tambah tarif</b-button>
+                  </div>
+                </b-col>
+              </b-row>
+            </b-container>
             <table class="table table-hover table-hover table-striped mb-5">
               <colgroup width="90px"></colgroup>
               <colgroup width="150px"></colgroup>
@@ -210,6 +228,14 @@
         },
         errors: [],
       };
+    },
+    computed: {
+      entriesOptions() {
+        return [5, 10, 25, 50, 100].map(item => ({
+          value: item,
+          text: item
+        }));
+      },
     },
     mounted() {
       this.fetchListTarif();
