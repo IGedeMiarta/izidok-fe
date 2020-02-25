@@ -456,7 +456,7 @@
           v += `&${x}=${item.value}`;
         });
 
-        if (sortBy && sortDesc) {
+        if (sortBy) {
           v += `&column=${sortBy}&order=${sortDesc ? "desc" : "asc"}`;
         }
 
