@@ -57,7 +57,7 @@
                 >
               </template>
               <b-table
-                :items="pasienList"
+                :items="tarifList"
                 :fields="fieldList"
                 :sort-by.sync="sortBy"
                 :sort-desc.sync="sortDesc"
@@ -74,13 +74,23 @@
                   />
                 </template>
 
-                <template v-slot:cell(jenis_kelamin)="data">
-                  {{ jenisKelamin(data.value) }}
+                <template v-slot:cell(tarif)="data">
+                  <p class="text-right mr-4">Rp. {{ data.value }}</p>
                 </template>
 
                 <template v-slot:cell(actions)="data">
-                  <span>
-                    <b-dropdown
+                  <span
+                    class="d-flex align-items-center justify-content-between"
+                  >
+                    <b-button variant="success" size="sm"
+                      ><font-awesome-icon icon="pencil-alt"
+                    /></b-button>
+                    <b-button variant="danger" size="sm"
+                      ><font-awesome-icon icon="trash-alt"
+                    /></b-button>
+                  </span>
+
+                  <!-- <b-dropdown
                       id="dropdown-1"
                       class="m-md-2 text-capitalize"
                       variant="primary"
@@ -127,8 +137,7 @@
                         "
                         >hapus data pasien</b-dropdown-item
                       >
-                    </b-dropdown>
-                  </span>
+                    </b-dropdown> -->
                 </template>
               </b-table>
             </DataTableWrapper>
@@ -297,14 +306,15 @@ import {
   faArrowUp,
   faTrashAlt,
   faSearch,
-  faPencilAlt
+  faPencilAlt,
+  faCopy
 } from "@fortawesome/free-solid-svg-icons";
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import { VMoney } from "v-money";
 
-library.add(faArrowRight, faArrowUp, faTrashAlt, faSearch, faPencilAlt);
+library.add(faArrowRight, faArrowUp, faTrashAlt, faSearch, faPencilAlt, faCopy);
 
 export default {
   components: {
@@ -350,11 +360,31 @@ export default {
     };
   },
   computed: {
-    entriesOptions() {
-      return [5, 10, 25, 50, 100].map(item => ({
-        value: item,
-        text: item
-      }));
+    fieldList() {
+      const {
+        generateFieldList: g,
+        setSearchableAndSortableFieldList: s
+      } = this;
+      return (
+        [
+          {
+            key: "kode_layanan",
+            label: "kode"
+          },
+          {
+            key: "nama_layanan"
+          },
+          {
+            key: "tarif",
+            label: "tarif_layanan"
+          },
+          {
+            key: "actions"
+          }
+        ]
+        |> (v => s({ field: v }))
+        |> (z => g({ field: z }))
+      );
     }
   },
   watch: {
@@ -529,6 +559,17 @@ export default {
         if (success) {
           const { layanan: tarifData, total } = data;
           const { data: listTarif } = tarifData;
+          // listTarif.map(({ item, key }) => {
+          //   console.log(item, key)
+          //   if (key === "tarif") {
+          //     const formatter = new Intl.NumberFormat("en-US", {
+          //       style: "currency",
+          //       currency: "USD"
+          //     });
+          //     const x = formatter.format(item.tarif);
+          //     console.log(x);
+          //   }
+          // });
           this.tarifList = [...listTarif];
           this.rows = tarifData.total;
         }

@@ -52,7 +52,10 @@ const GLOBAL_METHODS = {
       []
     );
   },
-  setSearchableAndSortableFieldList({ field = null, customFunc = val => val }) {
+  setSearchableAndSortableFieldList({
+    field = null,
+    customFunc = val => Boolean(/(actions)\b/gi.test(val) ? !1 : 1)
+  }) {
     return (
       (field &&
         isArray(field) &&
