@@ -182,10 +182,9 @@ export default {
       }
     ],
     namaLayananContainer: ["registrasi awal", "konsultasi dokter"],
-    kodeContainer: [],
+    kodeLayananContainer: [],
     errorKodeLayanan: null,
     errorsKodeLayanan: [],
-    namaContainer: []
   }),
   mounted() {
     this.tmpInputTarifData = this.setTmpInputTarifData();
@@ -367,59 +366,58 @@ export default {
     },
     onInputNamaLayanan(valRaw, index, o, p) {
       if(this._timeoutNamaLayanan) clearTimeout(this._timeoutNamaLayanan);
-      let val = valRaw.toLowerCase()
+      let val = valRaw.toLowerCase().trim()
+      Vue.set(o, p, val);
       Vue.set(this.namaLayananContainer, index, val);
 
       if(!val) {
         this.tmpInputTarifData[index].error['nama_layanan'].error = false;
         this.tmpInputTarifData[index].error['nama_layanan'].desc = 'Nama Layanan harus diisi';
+        return;
       }
 
       if(val.match(/[^a-zA-Z0-9\-\ \(\)\/\.]+/) !== null) {
         this.tmpInputTarifData[index].error['nama_layanan'].error = false;
-        this.tmpInputTarifData[index].error['nama_layanan'].desc = 'Hanya bisa huruf, angka, -, (), /, dan .';
+        this.tmpInputTarifData[index].error['nama_layanan'].desc = 'Hanya bisa huruf, spasi, angka, -, (), /, dan .';
         return;
-      } 
-
-      let isError = false;
+      }
+      
+      let isDuplicate = false;
+      let needDbChecks = [];
       this.namaLayananContainer.forEach((item, i) => {
-        if(index == i) return;
-        if(item == val) {
-          this.tmpInputTarifData[index].error['nama_layanan'].error = false;
-          this.tmpInputTarifData[index].error['nama_layanan'].desc = 'Nama layanan tidak boleh sama';
+        if(i <= 1) return;
+        isDuplicate = false;
+        this.namaLayananContainer.forEach((item2, i2) => {
+          if(i != i2) {
+            if(item == item2) {
+              this.tmpInputTarifData[i].error['nama_layanan'].error = false
+              this.tmpInputTarifData[i].error['nama_layanan'].desc = 'Nama layanan tidak boleh sama'
 
-          if(i > 1) {
-            this.tmpInputTarifData[i].error['nama_layanan'].error = false;
-            this.tmpInputTarifData[i].error['nama_layanan'].desc = 'Nama layanan tidak boleh sama';
+              isDuplicate = true;
+            }
           }
+        })
+        if(isDuplicate == false) {
+          this.tmpInputTarifData[i].error['nama_layanan'].error = true
+          this.tmpInputTarifData[i].error['nama_layanan'].desc = ''
 
-          isError = true;
-        }
-        else {
-          this.tmpInputTarifData[index].error['nama_layanan'].error = true;
-          this.tmpInputTarifData[index].error['nama_layanan'].desc = '';
-          
-          this.tmpInputTarifData[i].error['nama_layanan'].error = true;
-          this.tmpInputTarifData[i].error['nama_layanan'].desc = '';
+          needDbChecks.push(i)
         }
       })
 
-      if(!isError) {
+      if(needDbChecks.length > 0) {
         this._timeoutNamaLayanan = setTimeout(() => {
-          axios
-          .get(`${this.url_api}/layanan/${val}/nama`)
-          .then(response => {
-            if (response.data.success == true) {
-              this.tmpInputTarifData[index].error["nama_layanan"].error = false;
-              this.tmpInputTarifData[index].error["nama_layanan"].desc = "Nama layanan Sudah Ada";
-            }
+          needDbChecks.forEach(item => {
+            axios
+            .get(`${this.url_api}/layanan/${this.tmpInputTarifData[item].nama_layanan}/nama`)
+            .then(response => {
+              if (response.data.success == true) {
+                this.tmpInputTarifData[item].error["nama_layanan"].error = false;
+                this.tmpInputTarifData[item].error["nama_layanan"].desc = "nama layanan Sudah Ada";
+              }
+            })
+            .catch(error => {});
           })
-          .catch(error => {
-            if (error.response.data.success == false) {
-              this.tmpInputTarifData[index].error["nama_layanan"].error = true;
-              this.tmpInputTarifData[index].error["nama_layanan"].desc = "";
-            }
-          });
         }, 600)
       }
     },
@@ -427,7 +425,7 @@ export default {
       if(this._timeoutKodeLayanan) clearTimeout(this._timeoutKodeLayanan);
       val = val.toUpperCase();
       Vue.set(o, p, val);
-      Vue.set(this.kodeContainer, index, val);
+      Vue.set(this.kodeLayananContainer, index, val);
 
       if(val.match(/[^a-zA-Z0-9\-]+/) !== null) {
         this.tmpInputTarifData[index].error['kode_layanan'].error = false
@@ -440,44 +438,42 @@ export default {
         this.tmpInputTarifData[index].error['kode_layanan'].desc = 'Kode layanan minimal 3 karakter'
         return;
       }
+      
+      let isDuplicate = false;
+      let needDbChecks = [];
+      this.kodeLayananContainer.forEach((item, i) => {
+        isDuplicate = false;
+        this.kodeLayananContainer.forEach((item2, i2) => {
+          if(i != i2) {
+            if(item == item2) {
+              this.tmpInputTarifData[i].error['kode_layanan'].error = false
+              this.tmpInputTarifData[i].error['kode_layanan'].desc = 'Kode layanan tidak boleh sama'
 
-      let isError = false;
-      this.kodeContainer.forEach((item, i) => {
-        if(index == i) return;
-        if(item == val) {
-          this.tmpInputTarifData[index].error['kode_layanan'].error = false
-          this.tmpInputTarifData[index].error['kode_layanan'].desc = 'Kode layanan tidak boleh sama'
+              isDuplicate = true;
+            }
+          }
+        })
+        if(isDuplicate == false) {
+          this.tmpInputTarifData[i].error['kode_layanan'].error = true
+          this.tmpInputTarifData[i].error['kode_layanan'].desc = ''
 
-          this.tmpInputTarifData[i].error['kode_layanan'].error = false
-          this.tmpInputTarifData[i].error['kode_layanan'].desc = 'Kode layanan tidak boleh sama'
-
-          isError = true;
-        }
-        else {
-          this.tmpInputTarifData[index].error['kode_layanan'].error = true
-          this.tmpInputTarifData[index].error['kode_layanan'].desc = ''
-          
-          // this.tmpInputTarifData[i].error['kode_layanan'].error = true
-          // this.tmpInputTarifData[i].error['kode_layanan'].desc = ''
+          needDbChecks.push(i)
         }
       })
 
-      if(!isError) {
+      if(needDbChecks.length > 0) {
         this._timeoutKodeLayanan = setTimeout(() => {
-          axios
-          .get(`${this.url_api}/layanan/${val}/kode`)
-          .then(response => {
-            if (response.data.success == true) {
-              this.tmpInputTarifData[index].error["kode_layanan"].error = false;
-              this.tmpInputTarifData[index].error["kode_layanan"].desc = "Kode layanan Sudah Ada";
-            }
+          needDbChecks.forEach(item => {
+            axios
+            .get(`${this.url_api}/layanan/${this.tmpInputTarifData[item].kode_layanan}/kode`)
+            .then(response => {
+              if (response.data.success == true) {
+                this.tmpInputTarifData[item].error["kode_layanan"].error = false;
+                this.tmpInputTarifData[item].error["kode_layanan"].desc = "Kode layanan Sudah Ada";
+              }
+            })
+            .catch(error => {});
           })
-          .catch(error => {
-            if (error.response.data.success == false) {
-              this.tmpInputTarifData[index].error["kode_layanan"].error = true;
-              this.tmpInputTarifData[index].error["kode_layanan"].desc = "";
-            }
-          });
         }, 600)
       }
     },
@@ -510,9 +506,12 @@ export default {
           .slice(0, index)
           .concat(tmpInputTarifData.slice(index + 1, tmpInputTarifData.length));
         this.tmpInputTarifData = tmp;
-        // remap kodeContainer
-        this.kodeContainer = tmp.map(item => {
+        // remap kodeLayananContainer
+        this.kodeLayananContainer = tmp.map(item => {
           return item.kode_layanan;
+        });
+        this.namaLayananContainer = tmp.map(item => {
+          return item.nama_layanan;
         });
       }
     }
