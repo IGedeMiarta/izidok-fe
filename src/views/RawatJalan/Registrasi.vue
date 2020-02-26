@@ -95,9 +95,10 @@
                       </template>
                       <template slot="option" slot-scope="option">
                         {{ option.label }}
+                      
                       </template>
                       <template slot="selected-option" slot-scope="option">
-                        {{ option.label }}
+                          {{ option.label }} 
                       </template>
                     </vue-select>
                     <vue-select :class="{ error: form.error }" :options="options[form.label]" @input="
@@ -160,7 +161,9 @@
             <b-form-group id="input-group-1" label-for="input-1">
               <label for="">No. Handphone</label>
               <label for="" style="color:red">*</label>
-              <b-form-input id="input-1" type="text" :maxlength="15" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" v-model.trim="formDataRegister.nomor_hp" required>
+              <b-form-input id="input-1" type="text" :maxlength="15"
+                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                v-model.trim="formDataRegister.nomor_hp" required>
               </b-form-input>
             </b-form-group>
           </div>
@@ -181,8 +184,9 @@
                 <b-form-group>
                   <label for="">Tanggal Lahir</label>
                   <label for="" style="color:red"> *</label>
-                  <Datetime required input-class="form-control" class="input-group" zone="Asia/Jakarta" value-zone="Asia/Jakarta"
-                    format="d LLL yyyy" @input="tanggalLahirSelected" :max-datetime="maximumDatetime" :input-style="
+                  <Datetime required input-class="form-control" class="input-group" zone="Asia/Jakarta"
+                    value-zone="Asia/Jakarta" format="d LLL yyyy" @input="tanggalLahirSelected"
+                    :max-datetime="maximumDatetime" :input-style="
                     getDataError({ rawLabel: 'tanggal lahir' }) === null
                       ? null
                       : getDataError({ rawLabel: 'tanggal lahir' })
@@ -389,14 +393,14 @@
       selected: null,
       pasiens: [],
       beingSubmit: false,
-      overwriteFormData :{
-        id : null,
+      overwriteFormData: {
+        id: null,
         nama: null,
         nomor_hp: null,
         tanggal_lahir: null,
         jenis_kelamin: null,
         alamat_rumah: null,
-        nomor_rekam_medis : null,
+        nomor_rekam_medis: null,
       },
       formDataRegister: {
         nama: null,
@@ -528,16 +532,22 @@
               nomor_rekam_medis
             }
           } = res.data;
-          this.overwriteFormData = {
-            id : res.data.data.id,
-            nama : res.data.data.nama,
-            tanggal_lahir : res.data.data.tanggal_lahir,
-            nomor_hp : res.data.data.nomor_hp,
-            alamat_rumah : res.data.data.alamat_rumah,
-            jenis_kelamin : res.data.data.jenis_kelamin,
-            nomor_rekam_medis : res.data.data.nomor_rekam_medis,
+          this.formDataRegister = {
+            nama: null,
+            nomor_hp: null,
+            tanggal_lahir: null,
+            jenis_kelamin: null,
+            alamat_rumah: null,
           }
-          console.log(this.overwriteFormData);
+          let pasien = {
+            id: res.data.data.id,
+            nama: `${res.data.data.nama} (${res.data.data.tanggal_lahir})`,
+            tanggal_lahir: res.data.data.tanggal_lahir,
+            nomor_hp: res.data.data.nomor_hp,
+            alamat_rumah: res.data.data.alamat_rumah,
+            jenis_kelamin: res.data.data.jenis_kelamin,
+            nomor_rekam_medis: res.data.data.nomor_rekam_medis,
+          }
           this.beingSubmit = true;
           if (success) {
             this.$swal({
@@ -545,6 +555,16 @@
               text: `Pasien atas nama '${nama}' tersimpan dengan nomor rekam medis ${nomor_rekam_medis}`,
               type: "success"
             });
+            let eventVal = {
+              label: pasien.nama,
+              value: pasien.id
+            }
+            this.options.nama_pasien = [eventVal]
+            setTimeout(() => {
+              this.autoFill(pasien, "nama_pasien");
+              this.setValue({rawLabel: "nama pasien", label: "nama_pasien", $event: eventVal})
+              this.formData['nama_pasien'] = eventVal
+            }, 300)
             this.hideModal();
             // this.$router.push("/rawat-jalan/registrasi");
           }
@@ -567,7 +587,6 @@
         const {
           formBasicData
         } = this;
-
         formBasicData.map(item => {
           this.triggerValidation({
             label: item.label,
@@ -606,6 +625,7 @@
         rawLabel,
         $event = null
       } = {}) {
+        console.log('setValue', label, rawLabel, $event)
         let value = $event;
         if (typeof $event === "object") {
           if ($event) {
@@ -625,6 +645,7 @@
         } else {
           this.formData[label] = value;
         }
+
         if (label == "jenis_kelamin") this.formData[label] = "" + value;
         this.triggerValidation({
           label,
@@ -638,6 +659,7 @@
             id: $event.value
           });
           if (pasien) {
+            console.log('pasein', pasien)
             this.autoFill(pasien, "nama_pasien");
           }
         }
@@ -650,10 +672,10 @@
           jenis_kelamin: "jenis_kelamin",
           nomor_hp: "nomor_handphone"
         };
+        console.log('auto', autoFillForm);
         for (let prop in pasien) {
           console.log('prop', prop);
           console.log('pas', pasien);
-          console.log('fil', filler);
           if (prop == filler || !autoFillForm[prop]) continue;
           if (prop != "jenis_kelamin" && !pasien[prop]) continue;
 
@@ -691,7 +713,6 @@
           respirasi: 0,
           anamnesis: this.formData.anamnesis || ""
         };
-
         try {
           const res = await axios.post(`${this.url_api}/transaksi`, postData);
           const {
@@ -742,16 +763,16 @@
       },
       async searchPasien(val) {
         try {
-            const res = await axios.get(
-              `${this.url_api}/pasien?nama_pasien=${val}&paginate=0`
-            );
-            this.pasiens = res.data.data.pasien;
-            this.options.nama_pasien = res.data.data.pasien.map(item => {
-              return {
-                label: `${item.nama}`,
-                value: item.id
-              };
-            });
+          const res = await axios.get(
+            `${this.url_api}/pasien?nama_pasien=${val}&paginate=0`
+          );
+          this.pasiens = res.data.data.pasien;
+          this.options.nama_pasien = res.data.data.pasien.map(item => {
+            return {
+              label: `${item.nama}`,
+              value: item.id
+            };
+          });
         } catch (err) {
           // alert(err);
         }

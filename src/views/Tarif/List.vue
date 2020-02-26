@@ -199,7 +199,7 @@
                 <input
                   type="text"
                   class="form-control"
-                  maxlength="5"
+                  maxlength="20"
                   v-model.trim="editData.kode_layanan"
                   @input="onInputCode($event)"
                 />
@@ -296,8 +296,8 @@ export default {
       money: {
         decimal: "",
         thousands: ",",
-        prefix: "",
-        suffix: " Rp.",
+        prefix: "Rp.",
+        suffix: " ",
         precision: 0
       },
       currentPage: 1,
@@ -346,7 +346,7 @@ export default {
           },
           {
             key: "tarif",
-            label: "tarif_layanan",
+            label: "tarif layanan",
             class: "kntl-kuda-pre-whitespace"
           },
           {
