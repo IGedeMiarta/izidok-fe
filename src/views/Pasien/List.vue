@@ -138,6 +138,7 @@
               :perPage="perPage"
               :currentPage="currentPage"
               :callbackFunc="fetchListPasien"
+              @valueChanged="handleValueChanged"
             >
               <template v-slot:right-header>
                 <b-button
@@ -351,6 +352,10 @@ export default {
     }
   },
   methods: {
+    handleValueChanged({ perPage, currentPage }) {
+      perPage && (perPage |> (_ => (this.perPage = _)));
+      currentPage && (currentPage |> (_ => (this.currentPage = _)));
+    },
     searchValueChanged: debounce(function(val, key) {
       const { searchValue } = this;
 

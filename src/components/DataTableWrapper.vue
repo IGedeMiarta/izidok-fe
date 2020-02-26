@@ -8,7 +8,7 @@
             <b-form-select
               :options="entriesOpt(customEntryOptions)"
               class="w-25 mx-2"
-              v-model="perPage"
+              v-model="perPageProps"
             ></b-form-select>
             <span>entries</span>
           </div>
@@ -28,7 +28,7 @@
       >
       <b-pagination
         class="mt-4 d-flex justify-content-center"
-        v-model="currentPage"
+        v-model="currentPageProps"
         :total-rows="rows"
         :per-page="perPage"
         style="margin-left: 10rem"
@@ -58,10 +58,11 @@ export default {
     }
   },
   async mounted() {
-    await (this.callbackFunc &&
+    await ((this.callbackFunc &&
       (this.callbackFunc
         |> (_ => _.call(this))
-        |> (_ => _.then(this.processData))));
+        |> (_ => _.then(this.processData)))) ||
+      null);
   },
   methods: {
     processData(res) {
@@ -71,6 +72,12 @@ export default {
       this.fromPage = fromPage;
       this.toPage = toPage;
       this.totalEntries = totalEntries;
+    },
+    valueChanged({ perPage, currentPage }) {
+      this.$emit("valueChanged", {
+        perPage: perPage,
+        currentPage: currentPage
+      });
     }
   },
   data: () => ({
@@ -80,6 +87,24 @@ export default {
     fromPage: 0,
     toPage: 0,
     totalEntries: 0
-  })
+  }),
+  computed: {
+    perPageProps: {
+      get() {
+        return this.perPage;
+      },
+      set(val) {
+        this.valueChanged({ perPage: val });
+      }
+    },
+    currentPageProps: {
+      get() {
+        return this.currentPage;
+      },
+      set(val) {
+        this.valueChanged({ currentPage: val });
+      }
+    }
+  }
 };
 </script>

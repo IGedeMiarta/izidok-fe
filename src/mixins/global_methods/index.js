@@ -47,7 +47,8 @@ const GLOBAL_METHODS = {
           key: (item.key && item.key) || item,
           label: startCase(getLabelTable(item)),
           sortable: item.sortable || false,
-          searchable: item.searchable || false
+          searchable: item.searchable || false,
+          ...item
         }))) ||
       []
     );

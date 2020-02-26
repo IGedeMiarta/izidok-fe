@@ -75,7 +75,7 @@
                 </template>
 
                 <template v-slot:cell(tarif)="data">
-                  <p class="text-right mr-4">Rp. {{ data.value }}</p>
+                  {{ data.value }}
                 </template>
 
                 <template v-slot:cell(actions)="data">
@@ -313,6 +313,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import { VMoney } from "v-money";
+import accounting from "accounting";
 
 library.add(faArrowRight, faArrowUp, faTrashAlt, faSearch, faPencilAlt, faCopy);
 
@@ -356,7 +357,9 @@ export default {
       errors: [],
       fromPage: 0,
       toPage: 0,
-      totalEntries: 0
+      totalEntries: 0,
+      sortBy: "",
+      sortDesc: false
     };
   },
   computed: {
@@ -376,7 +379,8 @@ export default {
           },
           {
             key: "tarif",
-            label: "tarif_layanan"
+            label: "tarif_layanan",
+            class: "kntl-kuda-pre-whitespace"
           },
           {
             key: "actions"
@@ -559,19 +563,15 @@ export default {
         if (success) {
           const { layanan: tarifData, total } = data;
           const { data: listTarif } = tarifData;
-          // listTarif.map(({ item, key }) => {
-          //   console.log(item, key)
-          //   if (key === "tarif") {
-          //     const formatter = new Intl.NumberFormat("en-US", {
-          //       style: "currency",
-          //       currency: "USD"
-          //     });
-          //     const x = formatter.format(item.tarif);
-          //     console.log(x);
-          //   }
-          // });
-          this.tarifList = [...listTarif];
+          const x =
+            listTarif.map(item => item.tarif)
+            |> (_ => accounting.formatColumn(_, "Rp. ", 0, "."));
+          this.tarifList = listTarif.map((item, key) => ({
+            ...item,
+            tarif: x[key]
+          }));
           this.rows = tarifData.total;
+          return this;
         }
       } catch (err) {
         // console.log(err);

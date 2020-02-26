@@ -17,6 +17,11 @@
   th {
     vertical-align: middle;
   }
+
+  td {
+    word-wrap: break-word;
+    word-break: break-word;
+  }
 }
 
 // Table sorting
@@ -133,7 +138,8 @@ $bv-escaped-characters: (("<", "%3c"), (">", "%3e"), ("#", "%23"));
       > tr > [aria-sort] {
         &:not(.b-table-sort-icon-left) {
           // Default is icon on the right
-          background-position: right calc(#{$table-cell-padding-sm} / 2) top 15px;
+          background-position: right calc(#{$table-cell-padding-sm} / 2) top
+            15px;
           padding-right: calc(
             #{$table-cell-padding-sm} + #{$b-table-sort-icon-bg-width}
           );
@@ -155,5 +161,13 @@ $bv-escaped-characters: (("<", "%3c"), (">", "%3e"), ("#", "%23"));
 .kntl {
   th {
     vertical-align: top !important;
+  }
+}
+
+td {
+  &.kntl-kuda-pre-whitespace {
+    text-align: right !important;
+    white-space: pre;
+    padding-right: 2rem;
   }
 }
