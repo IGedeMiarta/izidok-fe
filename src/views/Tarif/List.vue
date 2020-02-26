@@ -186,6 +186,7 @@
                   id="nm_layanan"
                   v-model.trim="editData.nama_layanan"
                   @input="setNameLayanan($event.target.value)"
+                  @keypress="onKeypressNamaLayanan"
                 />
                 <template v-if="editData.nama_layanan === ''">
                   <div class="error" v-if="!$v.nama_layanan.required">
@@ -231,6 +232,7 @@
                   v-money="money"
                   validated="true"
                   maxlength="12"
+                  class="text-right"
                 >
                 </b-form-input>
               </div>
@@ -295,7 +297,7 @@ export default {
         decimal: "",
         thousands: ",",
         prefix: "",
-        suffix: "",
+        suffix: " Rp.",
         precision: 0
       },
       currentPage: 1,
@@ -410,6 +412,16 @@ export default {
     onInputCode($event) {
       this.editData.kode_layanan = $event.target.value.toUpperCase();
       this.checkDataKode = 1;
+    },
+    onKeypressNamaLayanan($event) {
+      const { key } = $event;
+      var evt = $event;
+      evt = evt ? evt : window.event;
+      if (/[^a-zA-Z0-9\-\ \(\)\/\.]/.test(key)) {
+        evt.preventDefault();
+      } else {
+        return evt;
+      }
     },
     setNameLayanan(value) {
       this.nama_layanan = value;
