@@ -64,15 +64,6 @@
                             tmpId: form.tmpId
                           })
                         " :state="renderError({ error: form.error })" />
-                      <b-form-input v-else-if="/(ktp|identitas)/gi.test(form.rawLabel)" :type="form.type || 'text'"
-                        v-model="formData[form.label]" @keyup="
-                          setValue({
-                            rawLabel: form.rawLabel,
-                            label: form.label,
-                            $event,
-                            tmpId: form.tmpId
-                          })
-                        " />
                       <b-form-input v-else :type="form.type || 'text'" v-model.lazy="formData[form.label]" @keyup="
                           setValue({
                             rawLabel: form.rawLabel,
@@ -169,7 +160,7 @@
             <b-form-group id="input-group-1" label-for="input-1">
               <label for="">No. Handphone</label>
               <label for="" style="color:red">*</label>
-              <b-form-input id="input-1" type="number" v-model.trim="formDataRegister.nomor_hp" required>
+              <b-form-input id="input-1" type="text" :maxlength="15" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" v-model.trim="formDataRegister.nomor_hp" required>
               </b-form-input>
             </b-form-group>
           </div>
@@ -179,7 +170,7 @@
                 <b-form-group>
                   <label for="">Jenis kelamin</label>
                   <label for="" style="color:red"> *</label>
-                  <b-form-radio-group stacked class="text-capitalize" :options="[
+                  <b-form-radio-group required stacked class="text-capitalize" :options="[
                     { text: 'laki-laki', value: 1 },
                     { text: 'perempuan', value: 0 }
                   ]" v-model="formDataRegister.jenis_kelamin">
@@ -190,7 +181,7 @@
                 <b-form-group>
                   <label for="">Tanggal Lahir</label>
                   <label for="" style="color:red"> *</label>
-                  <Datetime input-class="form-control" class="input-group" zone="Asia/Jakarta" value-zone="Asia/Jakarta"
+                  <Datetime required input-class="form-control" class="input-group" zone="Asia/Jakarta" value-zone="Asia/Jakarta"
                     format="d LLL yyyy" @input="tanggalLahirSelected" :max-datetime="maximumDatetime" :input-style="
                     getDataError({ rawLabel: 'tanggal lahir' }) === null
                       ? null
@@ -218,12 +209,12 @@
               </b-form-input>
             </b-form-group>
           </div>
+          <b-button class="ml-3 text-uppercase" variant="success" style="font-size:17.5px;float:right " type="submit">
+            simpan
+          </b-button>
           <b-button class="ml-3 text-uppercase" variant="danger" style="font-size:17.5px;float:right "
             @click='hideModal'>
             Batal
-          </b-button>
-          <b-button class="ml-3 text-uppercase" variant="success" style="font-size:17.5px;float:right " type="submit">
-            simpan
           </b-button>
         </b-form>
       </b-modal>
@@ -366,28 +357,28 @@
       "vue-select": () => import("vue-select"),
       Datetime
     },
-    validations: {
-      nama: {
-        required,
-        maxLength: maxLength(50),
-      },
-      alamat_rumah: {
-        required,
-        minLength: minLength(2),
-        maxLength: maxLength(30)
-      },
-      nomor_hp: {
-        required,
-        numeric,
-        maxLength: maxLength(15)
-      },
-      jenis_kelamin: {
-        required
-      },
-      tanggal_lahir: {
-        required
-      }
-    },
+    // validations: {
+    //   nama: {
+    //     required,
+    //     maxLength: maxLength(50),
+    //   },
+    //   alamat_rumah: {
+    //     required,
+    //     minLength: minLength(2),
+    //     maxLength: maxLength(30)
+    //   },
+    //   nomor_hp: {
+    //     required,
+    //     numeric,
+    //     maxLength: maxLength(15)
+    //   },
+    //   jenis_kelamin: {
+    //     required
+    //   },
+    //   tanggal_lahir: {
+    //     required
+    //   }
+    // },
     data: () => ({
       formBasicData: null,
       formData: null,
@@ -398,6 +389,15 @@
       selected: null,
       pasiens: [],
       beingSubmit: false,
+      overwriteFormData :{
+        id : null,
+        nama: null,
+        nomor_hp: null,
+        tanggal_lahir: null,
+        jenis_kelamin: null,
+        alamat_rumah: null,
+        nomor_rekam_medis : null,
+      },
       formDataRegister: {
         nama: null,
         nomor_hp: null,
@@ -512,7 +512,6 @@
           // sebelumnya 100000 nambah 0 nya dua
           this.formDataRegister.nomor_rekam_medis = 10000000 + (totalCurrentPasien + 1);
           this.addPasien(this.formDataRegister);
-          console.log(this.formDataRegister);
         });
       },
       async addPasien(formDataRegister) {
@@ -529,6 +528,16 @@
               nomor_rekam_medis
             }
           } = res.data;
+          this.overwriteFormData = {
+            id : res.data.data.id,
+            nama : res.data.data.nama,
+            tanggal_lahir : res.data.data.tanggal_lahir,
+            nomor_hp : res.data.data.nomor_hp,
+            alamat_rumah : res.data.data.alamat_rumah,
+            jenis_kelamin : res.data.data.jenis_kelamin,
+            nomor_rekam_medis : res.data.data.nomor_rekam_medis,
+          }
+          console.log(this.overwriteFormData);
           this.beingSubmit = true;
           if (success) {
             this.$swal({
@@ -536,7 +545,8 @@
               text: `Pasien atas nama '${nama}' tersimpan dengan nomor rekam medis ${nomor_rekam_medis}`,
               type: "success"
             });
-            this.$router.push("/pasien");
+            this.hideModal();
+            // this.$router.push("/rawat-jalan/registrasi");
           }
         } catch (err) {
           if (err.response) {
@@ -732,17 +742,16 @@
       },
       async searchPasien(val) {
         try {
-          const res = await axios.get(
-            `${this.url_api}/pasien?nama_pasien=${val}&paginate=0`
-          );
-          this.pasiens = res.data.data.pasien;
-          this.options.nama_pasien = res.data.data.pasien.map(item => {
-            return {
-              label: `${item.nama}`,
-              value: item.id
-            };
-          });
-
+            const res = await axios.get(
+              `${this.url_api}/pasien?nama_pasien=${val}&paginate=0`
+            );
+            this.pasiens = res.data.data.pasien;
+            this.options.nama_pasien = res.data.data.pasien.map(item => {
+              return {
+                label: `${item.nama}`,
+                value: item.id
+              };
+            });
         } catch (err) {
           // alert(err);
         }

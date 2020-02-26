@@ -185,6 +185,8 @@ export default {
     kodeLayananContainer: [],
     errorKodeLayanan: null,
     errorsKodeLayanan: [],
+    kodeLayananExistsInDb: [],
+    namaLayananExistsInDb: [],
   }),
   mounted() {
     this.tmpInputTarifData = this.setTmpInputTarifData();
@@ -367,7 +369,7 @@ export default {
     onInputNamaLayanan(valRaw, index, o, p) {
       if(this._timeoutNamaLayanan) clearTimeout(this._timeoutNamaLayanan);
       let val = valRaw.toLowerCase().trim()
-      Vue.set(o, p, val);
+      Vue.set(o, p, valRaw);
       Vue.set(this.namaLayananContainer, index, val);
 
       if(!val) {
@@ -406,6 +408,17 @@ export default {
       })
 
       if(needDbChecks.length > 0) {
+        let newNeedDbChecks = [];
+        needDbChecks.forEach(item => {
+          let valDb = this.tmpInputTarifData[item].nama_layanan;
+          if(this.namaLayananExistsInDb.indexOf(valDb) > -1) {
+            this.tmpInputTarifData[item].error["nama_layanan"].error = false;
+            this.tmpInputTarifData[item].error["nama_layanan"].desc = "Nama layanan Sudah Ada";
+          }
+          else newNeedDbChecks.push(item);
+        });
+        needDbChecks = newNeedDbChecks;
+
         this._timeoutNamaLayanan = setTimeout(() => {
           needDbChecks.forEach(item => {
             axios
@@ -414,9 +427,13 @@ export default {
               if (response.data.success == true) {
                 this.tmpInputTarifData[item].error["nama_layanan"].error = false;
                 this.tmpInputTarifData[item].error["nama_layanan"].desc = "nama layanan Sudah Ada";
+                this.namaLayananExistsInDb.push(this.tmpInputTarifData[item].nama_layanan);
               }
             })
-            .catch(error => {});
+            .catch(error => {})
+            .finally(() => {
+              clearTimeout(this._timeoutNamaLayanan);
+            });
           })
         }, 600)
       }
@@ -462,6 +479,17 @@ export default {
       })
 
       if(needDbChecks.length > 0) {
+        let newNeedDbChecks = [];
+        needDbChecks.forEach(item => {
+          let valDb = this.tmpInputTarifData[item].kode_layanan;
+          if(this.kodeLayananExistsInDb.indexOf(valDb) > -1) {
+            this.tmpInputTarifData[item].error["kode_layanan"].error = false;
+            this.tmpInputTarifData[item].error["kode_layanan"].desc = "Kode layanan Sudah Ada";
+          }
+          else newNeedDbChecks.push(item);
+        });
+        needDbChecks = newNeedDbChecks;
+
         this._timeoutKodeLayanan = setTimeout(() => {
           needDbChecks.forEach(item => {
             axios
@@ -470,9 +498,13 @@ export default {
               if (response.data.success == true) {
                 this.tmpInputTarifData[item].error["kode_layanan"].error = false;
                 this.tmpInputTarifData[item].error["kode_layanan"].desc = "Kode layanan Sudah Ada";
+                this.kodeLayananExistsInDb.push(this.tmpInputTarifData[item].kode_layanan);
               }
             })
-            .catch(error => {});
+            .catch(error => {})
+            .finally(() => {
+              clearTimeout(this._timeoutKodeLayanan);
+            });
           })
         }, 600)
       }
