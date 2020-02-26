@@ -369,7 +369,7 @@ export default {
     onInputNamaLayanan(valRaw, index, o, p) {
       if(this._timeoutNamaLayanan) clearTimeout(this._timeoutNamaLayanan);
       let val = valRaw.toLowerCase().trim()
-      Vue.set(o, p, val);
+      Vue.set(o, p, valRaw);
       Vue.set(this.namaLayananContainer, index, val);
 
       if(!val) {
