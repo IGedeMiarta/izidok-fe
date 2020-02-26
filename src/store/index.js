@@ -22,7 +22,8 @@ export default new Vuex.Store({
     BEARER_TOKEN: null,
     user: null,
     loading: false,
-    autherror: null
+    autherror: null,
+    initPosition: null
   },
   modules: {
     sidebar,
@@ -30,12 +31,15 @@ export default new Vuex.Store({
     struk
   },
   getters: {
-    isLoading(state) {
-      return state.loading;
-    },
+    isLoading: (state) => state.loading,
     userRole: getRoles,
     doctorRole: state =>
-      getRoles(state).some(val => /(dokter|doktor)/gi.test(val.name))
+      getRoles(state).some(val => /(dokter|doktor)/gi.test(val.name)),
+    assistantRole: state =>
+      getRoles(state).some(val => /(asisten|operator)/gi.test(val.name)),
+    getInitiationPosition: (state) => state.initPosition,
+    isFirstLogin: (state) => (state.user && state.user.is_first_login) == 1,
+    getKlinikId: (state) => state.user.klinik_id
   },
   mutations: {
     SET_BEARER_TOKEN(state, value) {
@@ -49,6 +53,12 @@ export default new Vuex.Store({
     },
     SET_AUTHERROR(state, value) {
       state.autherror = value || null;
+    },
+    SET_USER_FIRST_LOGIN(state, value) {
+      state.user.is_first_login = value;
+    },
+    SET_INIT_POSITION(state, value) {
+      state.initPosition = value;
     }
   },
   strict: process.env.NODE_ENV !== "production",

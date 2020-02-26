@@ -123,13 +123,14 @@
 import axios from "axios";
 import { maxLength, email, required } from "vuelidate/lib/validators";
 import { ToggleButton } from "vue-js-toggle-button";
+import store from '@/store'
+import { mapGetters } from "vuex";
 
 export default {
   components: {
     "vue-select": () => import("@/components/VueSelect.vue"),
     "toggle-button": ToggleButton
   },
-  props: ["klinik_id"],
   data: () => ({
     formBasicData: null,
     formData: null,
@@ -164,6 +165,14 @@ export default {
       "Spesialis Kedokteran Fisik & Rehabilitasi"
     ]
   }),
+  beforeRouteEnter(to, from, next) {
+    if(store.getters.isFirstLogin) {
+      next();
+    }
+    else {
+      next("/");
+    }
+  },
   validations: {
     formData: {
       pilih_spesialisasi: {
@@ -182,6 +191,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(["getKlinikId"]),
     subheading() {
       return {
         text: `*Operator adalah staff yang dapat membantu Anda untuk melakukan aktivitas registrasi, administrasi, maupun pembayaran. <br/> Silahkan masukkan email dan nama untuk mendaftarkan Operator Anda (jika ada) atau lewati langkah ini.`
@@ -233,13 +243,11 @@ export default {
       } = this;
       if (aama) {
         this.$router.push({
-          name: "input-asisten-dokter",
-          params: { klinik_id: this.klinik_id }
+          name: "input-asisten-dokter"
         });
       } else {
         this.$router.push({
-          name: "input-tarif",
-          params: { klinik_id: this.klinik_id }
+          name: "input-tarif"
         });
       }
     },
@@ -248,7 +256,7 @@ export default {
       const { constructPostData } = this;
       try {
         const res = await axios.put(
-          `${this.url_api}/klinik/${this.klinik_id}`,
+          `${this.url_api}/klinik/${this.getKlinikId}`,
           constructPostData()
         );
         const { status, data, message } = res.data;

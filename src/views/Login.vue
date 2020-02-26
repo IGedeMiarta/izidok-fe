@@ -99,7 +99,7 @@
         </div>
       </template>
       <template v-if="firstJoin && loggedIn">
-        <first-join-component :modalShow="firstJoin" :klinik_id="klinik_id" />
+        <first-join-component :modalShow="firstJoin" />
       </template>
     </div>
   </div>
@@ -147,7 +147,6 @@
       firstJoin: false,
       passwordVisible: false,
       failedCounter: 0,
-      klinik_id: null,
       windowHeight: 0
     }),
     components: {
@@ -203,7 +202,8 @@
     methods: {
       ...mapMutations({
         collapseSidebar: "sidebar/SET_SIDEBAR_COLLAPSED",
-        setInitPage: 'sidebar/SET_INITIALIZATION_PAGE'
+        setInitPage: 'sidebar/SET_INITIALIZATION_PAGE',
+        setInitPosition: 'SET_INIT_POSITION',
       }),
       switchVisibility() {
         this.formBasicData[1].type == 'password' ? this.formBasicData[1].type = 'text' : this.formBasicData[1].type =
@@ -249,15 +249,8 @@
             this.loggedIn = true;
             this.firstJoin = data.first_login;
 
-            this.klinik_id = null
-            if (data.kliniks && data.kliniks[0]) {
-              this.klinik_id = data.kliniks[0].id
-            }
-            if (data.user.klinik_id) {
-              this.klinik_id = data.user.klinik_id
-            }
-
             this.$store.commit('SET_USER', data.user);
+            this.setInitPosition(data.init_position);
 
             // not first join
             if (!this.firstJoin) {

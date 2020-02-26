@@ -146,7 +146,7 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapMutations, mapGetters } from "vuex";
 import Vue from "vue";
 import startCase from "lodash/startCase";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -154,10 +154,10 @@ import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { VMoney } from "v-money";
 import debounce from "lodash/debounce";
+import store from '@/store'
 library.add(faPlus, faMinus);
 
 export default {
-  props: ["klinik_id"],
   directives: { money: VMoney },
   data: () => ({
     money: {
@@ -188,13 +188,25 @@ export default {
     kodeLayananExistsInDb: [],
     namaLayananExistsInDb: [],
   }),
+  beforeRouteEnter(to, from, next) {
+    if(store.getters.isFirstLogin) {
+      next();
+    }
+    else {
+      next("/");
+    }
+  },
+  computed: {
+    ...mapGetters(["getKlinikId"])
+  },
   mounted() {
     this.tmpInputTarifData = this.setTmpInputTarifData();
   },
   methods: {
     ...mapMutations({
       collapseSidebar: "sidebar/SET_SIDEBAR_COLLAPSED",
-      setInitPage: "sidebar/SET_INITIALIZATION_PAGE"
+      setInitPage: "sidebar/SET_INITIALIZATION_PAGE",
+      setUserFirstLogin: "SET_USER_FIRST_LOGIN"
     }),
     setTmpInputTarifData() {
       return this.tmpInputTarifData.map(item => {
@@ -315,6 +327,7 @@ export default {
           confirmButtonText: startCase("ya")
         });
         this.setInitPage(false);
+        this.setUserFirstLogin(0);
         this.$router.push({path: "/"});
       } catch (errror) {
         const x = errror.response.data;
@@ -347,7 +360,7 @@ export default {
           obj[q] = item[key];
           return obj;
         }, {});
-        z.klinik_id = this.klinik_id;
+        z.klinik_id = this.getKlinikId;
         return z;
       });
       return tmp;

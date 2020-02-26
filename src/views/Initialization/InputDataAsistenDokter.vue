@@ -104,19 +104,20 @@ import {
   numeric
 } from "vuelidate/lib/validators";
 import axios from "axios";
+import store from '@/store'
+import { mapGetters } from "vuex";
 
 const verifyPassword = val => /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]*$/gi.test(val);
 
 export default {
   beforeRouteEnter(to, from, next) {
-    const { name } = from;
-    if (name === "input-spesialisasi") {
+    if(store.getters.isFirstLogin) {
       next();
-    } else {
+    }
+    else {
       next("/");
     }
   },
-  props: ["klinik_id"],
   data: () => ({
     formBasicData: null,
     formData: null,
@@ -242,6 +243,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(["getKlinikId"]),
     subheading() {
       return {
         text: `*Silakan masukkan data pada kolom berikut untuk mendaftarkan Asisten Anda (jika ada), atau lewati langkah ini.`
@@ -290,7 +292,7 @@ export default {
       }
     },
     async addAsistenDokter() {
-      const { constructPostData, klinik_id } = this;
+      const { constructPostData } = this;
       try {
         const res = await axios.post(
           `${this.url_api}/operator`,
@@ -307,8 +309,7 @@ export default {
         }
 
         this.$router.push({
-          name: "input-tarif",
-          params: { klinik_id: this.klinik_id }
+          name: "input-tarif"
         });
       } catch (err) {
         console.log(err);

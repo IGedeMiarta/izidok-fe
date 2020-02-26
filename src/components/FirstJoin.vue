@@ -30,7 +30,7 @@
                         tempat
                         praktik
                         Anda</p>
-                      <router-link :to="{name:'input-spesialisasi',params:{klinik_id:klinik_id}}"
+                      <router-link :to="determineNextRoute()"
                         class="btn btn-lg btn-block mt-4 "
                         style="background-color :#3F7EA7; color:white; border-radius : 10px;">
                         Masuk
@@ -49,10 +49,10 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from "vuex";
+import { mapMutations, mapState, mapGetters } from "vuex";
 
   export default {
-    props: ["modalShow", 'klinik_id'],
+    props: ["modalShow"],
     beforeMount() {
       this.setInitPage(true)
 
@@ -75,9 +75,29 @@ import { mapMutations, mapState } from "vuex";
         collapseSidebar: "sidebar/SET_SIDEBAR_COLLAPSED",
         setInitPage: 'sidebar/SET_INITIALIZATION_PAGE'
       }),
+      determineNextRoute() {
+        let routeName = "home";
+        switch(this.getInitiationPosition) {
+          case "spesialisasi":
+            routeName = "input-spesialisasi";
+            break;
+          case "operator":
+            routeName = "input-asisten-dokter";
+            break;
+          case "tarif":
+            routeName = "input-tarif";
+            break;
+          default:
+            routeName = "home";
+            break;
+        }
+        
+        return {name:routeName}
+      }
     },
     computed: {
       ...mapState(["sidebarCollapsed"]),
+      ...mapGetters(["getInitiationPosition"]),
       wrapStyle() {
         return {
           height: this.windowHeight + 'px'
