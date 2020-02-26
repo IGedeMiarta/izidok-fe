@@ -45,6 +45,7 @@
               :currentPage="currentPage"
               :callbackFunc="fetchListTarif"
               :customEntryOptions="{ f: 100 }"
+              @valueChanged="handleValueChanged"
             >
               <template v-slot:right-header>
                 <b-button
@@ -291,6 +292,7 @@
 import startCase from "lodash/startCase";
 import axios from "axios";
 import { library } from "@fortawesome/fontawesome-svg-core";
+import debounce from "lodash/debounce";
 
 import {
   required,
@@ -359,7 +361,8 @@ export default {
       toPage: 0,
       totalEntries: 0,
       sortBy: "",
-      sortDesc: false
+      sortDesc: false,
+      searchValue: []
     };
   },
   computed: {
@@ -413,6 +416,22 @@ export default {
     }
   },
   methods: {
+    handleValueChanged({ perPage, currentPage }) {
+      perPage && (perPage |> (_ => (this.perPage = _)));
+      currentPage && (currentPage |> (_ => (this.currentPage = _)));
+    },
+    searchValueChanged: debounce(function(val, key) {
+      const { searchValue } = this;
+
+      const z = searchValue.filter(item => item.key !== key);
+      this.searchValue = [
+        ...z,
+        {
+          key,
+          value: val
+        }
+      ];
+    }, 500),
     onInputCode($event) {
       this.editData.kode_layanan = $event.target.value.toUpperCase();
       this.checkDataKode = 1;
@@ -551,6 +570,20 @@ export default {
           text: startCase("Tarif gagal di hapus")
         });
       }
+    },
+    determineParameter() {
+      const { searchValue, sortBy, sortDesc } = this;
+      let v = "";
+      searchValue.map(item => {
+        const x = (item.key === "nama" && "nama_pasien") || item.key;
+        v += `&${x}=${item.value}`;
+      });
+
+      if (sortBy) {
+        v += `&column=${sortBy}&order=${sortDesc ? "desc" : "asc"}`;
+      }
+
+      return v;
     },
     async fetchListTarif() {
       try {
