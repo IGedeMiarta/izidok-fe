@@ -52,7 +52,7 @@
                   variant="primary"
                   class="text-uppercase align-self-end"
                   :to="{
-                    name: 'pasien-tambah'
+                    name: 'tarif-tambah'
                   }"
                   >tambah tarif</b-button
                 >
@@ -83,62 +83,24 @@
                   <span
                     class="d-flex align-items-center justify-content-between"
                   >
-                    <b-button variant="success" size="sm"
+                    <b-button
+                      variant="success"
+                      size="sm"
+                      @click="editModal(data.item)"
                       ><font-awesome-icon icon="pencil-alt"
                     /></b-button>
-                    <b-button variant="danger" size="sm"
+                    <b-button
+                      variant="danger"
+                      size="sm"
+                      @click="
+                        removeTarif({
+                          id: data.item.id,
+                          nama_layanan: data.item.nama_layanan
+                        })
+                      "
                       ><font-awesome-icon icon="trash-alt"
                     /></b-button>
                   </span>
-
-                  <!-- <b-dropdown
-                      id="dropdown-1"
-                      class="m-md-2 text-capitalize"
-                      variant="primary"
-                      size="sm"
-                      right
-                    >
-                      <template v-slot:button-content>
-                        <font-awesome-icon icon="copy" />
-                      </template>
-                      <b-dropdown-item
-                        @click="
-                          editPasien({
-                            id: data.item.id
-                          })
-                        "
-                        >edit data pasien</b-dropdown-item
-                      >
-
-                      <b-dropdown-item
-                        @click="
-                          detailPasien({
-                            id: data.item.id
-                          })
-                        "
-                        >view detail pasien</b-dropdown-item
-                      >
-                      <template v-if="isOperator == false">
-                        <b-dropdown-item
-                          @click="
-                            rekamMedis({
-                              pasien_id: data.item.id,
-                              klinik_id: data.item.klinik_id
-                            })
-                          "
-                          >lihat riwayat rekam medis</b-dropdown-item
-                        >
-                      </template>
-                      <b-dropdown-item
-                        @click="
-                          removePasien({
-                            id: data.item.id,
-                            nama: data.item.nama
-                          })
-                        "
-                        >hapus data pasien</b-dropdown-item
-                      >
-                    </b-dropdown> -->
                 </template>
               </b-table>
             </DataTableWrapper>
@@ -397,6 +359,19 @@ export default {
   watch: {
     currentPage() {
       this.fetchListTarif();
+    },
+    perPage() {
+      this.fetchListTarif();
+    },
+    sortBy() {
+      this.fetchListTarif();
+    },
+    sortDesc() {
+      this.fetchListTarif();
+    },
+    searchValue: {
+      handler: "fetchListTarif",
+      deep: true
     }
   },
   validations: {
@@ -575,7 +550,7 @@ export default {
       const { searchValue, sortBy, sortDesc } = this;
       let v = "";
       searchValue.map(item => {
-        const x = (item.key === "nama" && "nama_pasien") || item.key;
+        const x = (item.key === "kode_layanan" && "nomor_layanan") || item.key;
         v += `&${x}=${item.value}`;
       });
 
@@ -588,14 +563,21 @@ export default {
     async fetchListTarif() {
       try {
         const res = await axios.get(
-          `${this.url_api}/layanan?limit=10&page=${this.currentPage}&nama_layanan=${this.namaLayanan}&kode_layanan=${this.kodeTarif}`
+          `${this.url_api}/layanan?limit=${this.perPage}&page=${
+            this.currentPage
+          }${this.determineParameter()}`
         );
 
         const { success, data } = res.data;
 
         if (success) {
           const { layanan: tarifData, total } = data;
-          const { data: listTarif } = tarifData;
+          const {
+            data: listTarif,
+            total: totalEntries,
+            to: toPage,
+            from: fromPage
+          } = tarifData;
           const x =
             listTarif.map(item => item.tarif)
             |> (_ => accounting.formatColumn(_, "Rp. ", 0, "."));
@@ -604,7 +586,12 @@ export default {
             tarif: x[key]
           }));
           this.rows = tarifData.total;
-          return this;
+          return {
+            ...this,
+            totalEntries,
+            toPage,
+            fromPage
+          };
         }
       } catch (err) {
         // console.log(err);
