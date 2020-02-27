@@ -49,8 +49,8 @@
                 rawLabel: 'nama lengkap',
                 $event
               })
-            " :state="getDataError({ rawLabel: 'nama lengkap' })" :disabled="disabledForm()" :value="getValue('nama lengkap')"
-                :maxlength="60" />
+            " :state="getDataError({ rawLabel: 'nama lengkap' })" :disabled="disabledForm()"
+                :value="getValue('nama lengkap')" :maxlength="60" />
             </b-form-group>
           </b-col>
           <b-col sm="6">
@@ -87,7 +87,7 @@
                     })
                   })
                 ">
-                <vue-select :options="
+              <vue-select :options="
                     ['KTP', 'SIM', 'Paspor']
                   " @input="
                     setValue({
@@ -105,9 +105,8 @@
                 rawLabel: 'nik'
               })
             })
-          " >
-              <b-form-input v-if="this.formData['jenis_identitas'] !== 'Paspor'"
-             @keypress="
+          ">
+              <b-form-input v-if="this.formData['jenis_identitas'] !== 'Paspor'" @keypress="
               onKeyInputNumber({
                 rawLabel: 'nik',
                 $event
@@ -118,20 +117,19 @@
                 $event
               },);
               checkNIK()
-            " 
-             :disabled="disabledForm()" :state="getDataError({ rawLabel: 'nik' })" :value="getValue('nik')" :maxlength="25"  />
-             <b-form-input v-else
-              @keyup="
+            " :disabled="disabledForm()" :state="getDataError({ rawLabel: 'nik' })" :value="getValue('nik')"
+                :maxlength="25" />
+              <b-form-input v-else @keyup="
               setValue({
                 rawLabel: 'nik',
                 $event
               },);
               checkNIK()
-            " 
-             :disabled="disabledForm()" :state="getDataError({ rawLabel: 'nik' })" :value="getValue('nik')" :maxlength="25"  />
-             <template v-if="this.formBasicData[2].error == true && this.formData.nik !== ''" >
-                <label style="color:red">No. Identitas telah terdaftar</label> 
-             </template>
+            " :disabled="disabledForm()" :state="getDataError({ rawLabel: 'nik' })" :value="getValue('nik')"
+                :maxlength="25" />
+              <template v-if="this.formBasicData[2].error == true && this.formData.nik !== ''">
+                <label style="color:red">No. Identitas telah terdaftar</label>
+              </template>
             </b-form-group>
           </b-col>
           <b-col sm="6">
@@ -181,23 +179,23 @@
                 <b-input-group-text slot="append">
                   <font-awesome-icon class="mx-auto" icon="calendar" />
                 </b-input-group-text> -->
-                <Datetime input-class="form-control" class="d-flex input-group" zone="Asia/Jakarta" value-zone="Asia/Jakarta" format="d LLL yyyy"
-                  @input="tanggalLahirSelected" :value="getValue('tanggal lahir')" :disabled="disabledForm()"
-                  :input-style="
+              <Datetime input-class="form-control" class="d-flex input-group" zone="Asia/Jakarta"
+                value-zone="Asia/Jakarta" format="d LLL yyyy" @input="tanggalLahirSelected"
+                :value="getValue('tanggal lahir')" :disabled="disabledForm()" :input-style="
                     getDataError({ rawLabel: 'tanggal lahir' }) === null
                       ? null
                       : getDataError({ rawLabel: 'tanggal lahir' })
                       ? null
                       : 'border-color: red'
                   " :max-datetime="maximumDatetime" ref="dob">
-                  <template v-slot:after>
-                    <b-input-group-text @click="triggerDob" slot="append" style="
+                <template v-slot:after>
+                  <b-input-group-text @click="triggerDob" slot="append" style="
                     border-top-left-radius:0; border-left-width: 0; border-bottom-left-radius: 0; cursor: pointer
                     ">
-                      <font-awesome-icon class="mx-auto" icon="calendar" />
-                    </b-input-group-text>
-                  </template>
-                </Datetime>
+                    <font-awesome-icon class="mx-auto" icon="calendar" />
+                  </b-input-group-text>
+                </template>
+              </Datetime>
               <!-- </b-input-group> -->
             </b-form-group>
           </b-col>
@@ -307,8 +305,7 @@
                 })
               })
             ">
-              <vue-select :options="cities" v-model="tempat.kota" @input="setDataTempat"
-                :disabled="disabledForm()" />
+              <vue-select :options="cities" v-model="tempat.kota" @input="setDataTempat" :disabled="disabledForm()" />
             </b-form-group>
           </b-col>
           <b-col sm="6">
@@ -332,8 +329,8 @@
           </b-col>
           <b-col sm="6">
             <template v-if="formType !== 'detail'">
-              <b-button class="ml-3 text-uppercase" variant="primary"
-                style="font-size:17.5px;float:right " type="submit">simpan
+              <b-button class="ml-3 text-uppercase" variant="primary" style="font-size:17.5px;float:right "
+                type="submit">simpan
                 <!-- <font-awesome-icon class="mx-auto" icon="caret-down" /> -->
               </b-button>
               <b-button @click="$emit('keluar', true)" class="text-uppercase" :variant="btnVariant()"
@@ -406,13 +403,13 @@
     {
       label: "nik",
       alias: "nik",
-      error : false,
+      error: false,
       validations: {}
     },
     {
       label: "email",
       alias: "email",
-      error : false,
+      error: false,
       validations: {}
     },
     {
@@ -437,7 +434,7 @@
     {
       label: "gol. darah",
       alias: "golongan_darah",
-      error : false,
+      error: false,
       validations: {}
     },
     // {
@@ -458,13 +455,13 @@
     {
       label: "nama penanggung jawab",
       alias: "nama_penanggung_jawab",
-      error : false,
+      error: false,
       validations: {}
     },
     {
       label: "no. hp penanggung jawab",
       alias: "nomor_hp_penanggung_jawab",
-      error : false,
+      error: false,
       validations: {
         // numeric,
         // minLength: minLength(10)
@@ -517,19 +514,19 @@
     {
       label: "nomor rekam medis",
       alias: "nomor_rekam_medis",
-      error : false,
+      error: false,
       validations: {}
     },
     {
       label: "provinsi",
       alias: "provinsi",
-      error : false,
+      error: false,
       validations: {}
     },
     {
       label: "kota",
       alias: "kota",
-      error : false,
+      error: false,
       validations: {}
     },
   ];
@@ -653,7 +650,7 @@
       image: null,
       selectTempat: null,
       provinces: [],
-      checkValueNik :null,
+      checkValueNik: null,
       cities: [],
       tempat: {
         provinsi: null,
@@ -687,7 +684,11 @@
     methods: {
       triggerDob() {
         const x = this.$refs.dob
-        const { $el: { firstElementChild } } = x
+        const {
+          $el: {
+            firstElementChild
+          }
+        } = x
         firstElementChild && firstElementChild.click()
       },
       getProvince() {
@@ -704,17 +705,19 @@
             console.log(error);
           })
       },
-      async checkNIK(){
-        try {
-            const res = await axios.get(`${this.url_api}/identity/verify?jenis_pengenal=${this.formData['jenis_identitas']}&nik=${this.formData['nik']}`);
-            if(res.data.status == false){
+      checkNIK() {
+         clearTimeout(this.timeVerifyNIK)
+          this.timeVerifyNIK = setTimeout(async () => {
+            const res = await axios.get(
+              `${this.url_api}/identity/verify?jenis_pengenal=${this.formData['jenis_identitas']}&nik=${this.formData['nik']}`
+              );
+            console.log(res)
+            if (res.data.status == false) {
               this.formBasicData[2].error = true;
             } else {
-               this.formBasicData[2].error = false;
-            } 
-        } catch {
-
-        }
+              this.formBasicData[2].error = false;
+            }
+          },550);
       },
       async getCity() {
         try {
@@ -790,7 +793,10 @@
       //       console.log(error);
       //     });
       // },
-      stupidOcrHelper({ alias, val }) {
+      stupidOcrHelper({
+        alias,
+        val
+      }) {
         const mapGender = val => {
           const x = 1;
           return /empu|wan/gi.test(val) ? x * 0 : x;
@@ -809,7 +815,9 @@
           Object.keys(data).map(item => {
             const y = this.formBasicData.find(x => x.alias === item);
             if (y) {
-              const { stupidOcrHelper } = this;
+              const {
+                stupidOcrHelper
+              } = this;
               Vue.set(
                 this.formData,
                 y.label,
@@ -871,11 +879,13 @@
               data
             } = res.data;
             if (status) {
-              const { assignValuePasien } = this;
+              const {
+                assignValuePasien
+              } = this;
               assignValuePasien(data);
-              this.tempat.provinsi = { 
-                ...data.provinsi, 
-                label: data.provinsi.provinsi_nama 
+              this.tempat.provinsi = {
+                ...data.provinsi,
+                label: data.provinsi.provinsi_nama
               }
 
               this.getCity()
