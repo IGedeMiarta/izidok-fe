@@ -981,8 +981,10 @@
           });
         });
         if (formBasicData.every(item => item.error !== null && !item.error)) {
-          this.formData.provinsi = this.tempat.provinsi.id;
-          this.formData.kota = this.tempat.kota.id;
+          if(this.formData.provinsi){
+            this.formData.provinsi = this.tempat.provinsi.id;
+            this.formData.kota = this.tempat.kota.id;
+          }
           console.log('prov',this.formData.provinsi)
           console.log('kota', this.formData.kota)
           this.$emit("submitForm", this.formData);
