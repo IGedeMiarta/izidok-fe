@@ -63,8 +63,8 @@
                             $event,
                             tmpId: form.tmpId
                           })
-                        " :state="renderError({ error: form.error })" />
-                      <b-form-input v-else :type="form.type || 'text'" v-model.lazy="formData[form.label]" @keyup="
+                        " :state="renderError({ error: form.error })" disabled />
+                      <b-form-input v-else  :type="form.type || 'text'" v-model.lazy="formData[form.label]" @keyup="
                           setValue({
                             rawLabel: form.rawLabel,
                             label: form.label,
@@ -90,7 +90,7 @@
                       " v-if="
                         form.type === 'select' &&
                           form.rawLabel === 'nama pasien'
-                      " :filterable="false" @search="searchPasien" style="font-size:13.4px;" :value="$store.state.selected">
+                      " :filterable="false"  @search="searchPasien" style="font-size:13.4px;">
                       <template slot="no-options" v-if="form.rawLabel === 'nama pasien'">
                         tulis nama lengkap pasien
                       </template>
@@ -121,7 +121,7 @@
                             text: item,
                             value: index
                           }))
-                        " name="radio-options"></b-form-radio-group>
+                        " name="radio-options" disabled></b-form-radio-group>
                     </template>
                     <template v-if="form.type == 'textarea'">
                       <b-form-textarea id="textarea" v-model="formData[form.label]" @keyup="
@@ -436,13 +436,6 @@
       this.formBasicData = this.setFormBasicData();
       this.formData = this.setFormData();
       Promise.all([this.fetchDokter()]);
-      if (this.formData.nama_pasien == "" && this.formData['no._rekam_medis'] !== "" && this.formData[
-        'nomor_handphone'] !== "" && this.formData[
-          'jenis_kelamin'] != "") {
-        this.formData['no._rekam_medis'] = "";
-        this.formData['nomor_handphone'] = "";
-        this.formData['jenis_kelamin'] = "";
-      }
     },
     computed: {
       minimumDatetime() {
@@ -501,9 +494,6 @@
           });
         }
       },
-      clearForm() {
-
-      },
       whitelistValidation() {
         return this.setFormBasicData()
           .filter(item => item.validations && !item.validations.required)
@@ -561,6 +551,7 @@
               value: pasien.id
             }
             this.options.nama_pasien = [eventVal]
+            this.selected = [eventVal];
             setTimeout(() => {
               this.autoFill(pasien, "nama_pasien");
               this.setValue({
@@ -630,7 +621,6 @@
         rawLabel,
         $event = null
       } = {}) {
-        console.log('setValue', label, rawLabel, $event)
         let value = $event;
         if (typeof $event === "object") {
           if ($event) {
@@ -640,15 +630,12 @@
                   value
                 }
               } = $event;
-              console.log('a')
               this.formData[label] = value;
             } else if ($event && $event.label && $event.value) {
-              console.log('b')
               this.formData[label] = $event;
             }
           } else {
             this.formData[label] = "";
-            console.log('c')
             this.formData['no._rekam_medis'] = "";
             this.formData['nomor_handphone'] = "";
             this.formData['jenis_kelamin'] = "";
@@ -657,10 +644,8 @@
             this.formBasicData[3]['error'] = null;
           }
         } else {
-          console.log('d')
           this.formData[label] = value;
         }
-
         if (label == "jenis_kelamin") this.formData[label] = "" + value;
         this.triggerValidation({
           label,
@@ -676,12 +661,6 @@
             this.autoFill(pasien, "nama_pasien");
           }
         } 
-
-        if(label == "nama_pasien" && $event == null || this.formData.nama_pasien == ""){
-    
-        }
-        // console.log('masuk')
-
       },
       autoFill(pasien, filler) {
         let autoFillForm = {
