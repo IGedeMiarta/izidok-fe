@@ -277,7 +277,7 @@ import startCase from "lodash/startCase";
 import axios from "axios";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import debounce from "lodash/debounce";
-import { replace as rep } from "lodash";
+import { replace as rep, differenceWith as dw, isEqual as iE } from "lodash";
 
 import {
   required,
@@ -586,7 +586,7 @@ export default {
     async updateTarif(dataEdit) {
       const { shallowCopyEditData } = this;
       const { tarif: scTarif } = shallowCopyEditData;
-      const { tarif } = dataEdit;
+      const { nama_layanan, tarif } = dataEdit;
       const conv = val => rep(val && val.trim(), /[^0-9]/gi, "");
       const tmp = {
         ...dataEdit,
@@ -596,7 +596,20 @@ export default {
         ...shallowCopyEditData,
         tarif: conv(scTarif)
       };
-      console.log(tmp, x);
+      let z = [];
+      const v = Object.keys(tmp).map(val => {
+        if (x[val] !== tmp[val]) {
+          z = [...z, val];
+        }
+      });
+      if (z.length > 0) {
+        this.$swal({
+          type: "question",
+          // title: startCase("gagal"),
+          text: `Apakah anda yakin untuk mengubah ${startCase(z[0])} ${startCase(nama_layanan)}`
+        });
+      }
+      // console.log(dw([tmp], [x], iE));
       // console.log(tmp);
       // var checkError = this.$v.nama_layanan.$error;
       // var checkErrorKodeLayanan = this.$v.kode_layanan.$error;
