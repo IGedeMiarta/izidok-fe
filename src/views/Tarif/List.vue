@@ -188,10 +188,12 @@
                   @input="setNameLayanan($event.target.value)"
                   @keypress="onKeypressNamaLayanan"
                 />
+                {{ $v.editData.nama_layanan }}
                 <template v-if="editData.nama_layanan === ''">
                   <div class="error" v-if="!$v.nama_layanan.required">
                     Nama layanan harus di isi
                   </div>
+                  
                 </template>
               </div>
               <div class="form-group col-md-3">
@@ -377,19 +379,21 @@ export default {
     }
   },
   validations: {
-    kode_layanan: {
-      required,
-      maxLength: maxLength(5)
-    },
-    nama_layanan: {
-      required,
-      minLength: minLength(2),
-      maxLength: maxLength(30)
-    },
-    tarif: {
-      required,
-      numeric,
-      maxLength: maxLength(12)
+    editData: {
+      kode_layanan: {
+        required,
+        maxLength: maxLength(5)
+      },
+      nama_layanan: {
+        required,
+        minLength: minLength(2),
+        maxLength: maxLength(50)
+      },
+      tarif: {
+        required,
+        numeric,
+        maxLength: maxLength(12)
+      }
     }
   },
   methods: {
@@ -425,7 +429,7 @@ export default {
     },
     setNameLayanan(value) {
       this.nama_layanan = value;
-      this.$v.nama_layanan.$touch();
+      this.$v.editData.nama_layanan.$touch();
     },
     removeTarif({ id, nama_layanan = null } = {}) {
       this.$swal({

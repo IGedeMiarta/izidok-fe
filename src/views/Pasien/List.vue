@@ -334,7 +334,7 @@ export default {
           },
           {
             key: "nama",
-            label: "nama_pasien"
+            label: "nama pasien"
           },
           {
             key: "jenis_kelamin"
