@@ -90,7 +90,7 @@
                       " v-if="
                         form.type === 'select' &&
                           form.rawLabel === 'nama pasien'
-                      " :filterable="false" @search="searchPasien" style="font-size:13.4px;">
+                      " :filterable="false" @search="searchPasien" style="font-size:13.4px;" :value="$store.state.selected">
                       <template slot="no-options" v-if="form.rawLabel === 'nama pasien'">
                         tulis nama lengkap pasien
                       </template>
@@ -640,12 +640,15 @@
                   value
                 }
               } = $event;
+              console.log('a')
               this.formData[label] = value;
             } else if ($event && $event.label && $event.value) {
+              console.log('b')
               this.formData[label] = $event;
             }
           } else {
             this.formData[label] = "";
+            console.log('c')
             this.formData['no._rekam_medis'] = "";
             this.formData['nomor_handphone'] = "";
             this.formData['jenis_kelamin'] = "";
@@ -654,6 +657,7 @@
             this.formBasicData[3]['error'] = null;
           }
         } else {
+          console.log('d')
           this.formData[label] = value;
         }
 
