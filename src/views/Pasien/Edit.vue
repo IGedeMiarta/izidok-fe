@@ -95,6 +95,7 @@ export default {
     },
     submitForm(data) {
       this.beingSubmit = true;
+      console.log('submit',data)
       this.editPasien(data);
     },
     goingPlaces() {
@@ -110,15 +111,15 @@ export default {
     },
     async editPasien(postData) {
       try {
-        
-        if(postData.provinsi){
-          postData.provinsi = postData.provinsi.id;
-          postData.kota = postData.kota.id;
-        }
-        if(postData.provinsi == null){
-           postData.provinsi = ''
-           postData.kota = ''
-        }
+        console.log('awal',postData);
+        // if(postData.provinsi){
+        //   postData.provinsi = postData.provinsi.id;
+        //   postData.kota = postData.kota.id;
+        // }
+        // if(postData.provinsi == null){
+        //    postData.provinsi = ''
+        //    postData.kota = ''
+        // }
         const res = await axios.put(
           `${this.url_api}/pasien/${this.idPasien}`,
           this.mapPasienFormData(postData)
