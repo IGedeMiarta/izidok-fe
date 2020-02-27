@@ -79,6 +79,7 @@
                           })
                         " />
                     </template>
+
                     <vue-select :class="{ error: form.error }" :options="options[form.label]" @input="
                         setValue({
                           rawLabel: form.rawLabel,
@@ -95,10 +96,9 @@
                       </template>
                       <template slot="option" slot-scope="option">
                         {{ option.label }}
-                      
                       </template>
                       <template slot="selected-option" slot-scope="option">
-                          {{ option.label }} 
+                        {{ option.label }}
                       </template>
                     </vue-select>
                     <vue-select :class="{ error: form.error }" :options="options[form.label]" @input="
@@ -393,15 +393,6 @@
       selected: null,
       pasiens: [],
       beingSubmit: false,
-      overwriteFormData: {
-        id: null,
-        nama: null,
-        nomor_hp: null,
-        tanggal_lahir: null,
-        jenis_kelamin: null,
-        alamat_rumah: null,
-        nomor_rekam_medis: null,
-      },
       formDataRegister: {
         nama: null,
         nomor_hp: null,
@@ -445,6 +436,13 @@
       this.formBasicData = this.setFormBasicData();
       this.formData = this.setFormData();
       Promise.all([this.fetchDokter()]);
+      if (this.formData.nama_pasien == "" && this.formData['no._rekam_medis'] !== "" && this.formData[
+        'nomor_handphone'] !== "" && this.formData[
+          'jenis_kelamin'] != "") {
+        this.formData['no._rekam_medis'] = "";
+        this.formData['nomor_handphone'] = "";
+        this.formData['jenis_kelamin'] = "";
+      }
     },
     computed: {
       minimumDatetime() {
@@ -502,6 +500,9 @@
             $event
           });
         }
+      },
+      clearForm() {
+
       },
       whitelistValidation() {
         return this.setFormBasicData()
@@ -562,9 +563,13 @@
             this.options.nama_pasien = [eventVal]
             setTimeout(() => {
               this.autoFill(pasien, "nama_pasien");
-              this.setValue({rawLabel: "nama pasien", label: "nama_pasien", $event: eventVal})
+              this.setValue({
+                rawLabel: "nama pasien",
+                label: "nama_pasien",
+                $event: eventVal
+              })
               this.formData['nama_pasien'] = eventVal
-            }, 300)
+            }, 200)
             this.hideModal();
             // this.$router.push("/rawat-jalan/registrasi");
           }
@@ -641,6 +646,12 @@
             }
           } else {
             this.formData[label] = "";
+            this.formData['no._rekam_medis'] = "";
+            this.formData['nomor_handphone'] = "";
+            this.formData['jenis_kelamin'] = "";
+            this.formBasicData[1]['error'] = null;
+            this.formBasicData[2]['error'] = null;
+            this.formBasicData[3]['error'] = null;
           }
         } else {
           this.formData[label] = value;
@@ -653,16 +664,20 @@
           $vm: this,
           rawLabel
         });
-
         if (label == "nama_pasien") {
           const pasien = find(this.pasiens, {
             id: $event.value
           });
           if (pasien) {
-            console.log('pasein', pasien)
             this.autoFill(pasien, "nama_pasien");
           }
+        } 
+
+        if(label == "nama_pasien" && $event == null || this.formData.nama_pasien == ""){
+    
         }
+        // console.log('masuk')
+
       },
       autoFill(pasien, filler) {
         let autoFillForm = {
@@ -672,10 +687,7 @@
           jenis_kelamin: "jenis_kelamin",
           nomor_hp: "nomor_handphone"
         };
-        console.log('auto', autoFillForm);
         for (let prop in pasien) {
-          console.log('prop', prop);
-          console.log('pas', pasien);
           if (prop == filler || !autoFillForm[prop]) continue;
           if (prop != "jenis_kelamin" && !pasien[prop]) continue;
 
@@ -773,6 +785,7 @@
               value: item.id
             };
           });
+
         } catch (err) {
           // alert(err);
         }

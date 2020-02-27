@@ -111,7 +111,6 @@ export default {
     },
     async editPasien(postData) {
       try {
-        console.log('awal',postData);
         // if(postData.provinsi){
         //   postData.provinsi = postData.provinsi.id;
         //   postData.kota = postData.kota.id;
