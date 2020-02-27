@@ -54,7 +54,7 @@ import { mapMutations, mapState, mapGetters } from "vuex";
   export default {
     props: ["modalShow"],
     beforeMount() {
-      this.setInitPage(true)
+      this.setInitPage(this.getInitiationPosition == "" ? false : true)
 
       if (!this.sidebarCollapsed) {
         this.collapseSidebar(true);
@@ -97,7 +97,7 @@ import { mapMutations, mapState, mapGetters } from "vuex";
     },
     computed: {
       ...mapState(["sidebarCollapsed"]),
-      ...mapGetters(["getInitiationPosition"]),
+      ...mapGetters(["getInitiationPosition", "isFirstLogin"]),
       wrapStyle() {
         return {
           height: this.windowHeight + 'px'
