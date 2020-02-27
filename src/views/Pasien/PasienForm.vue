@@ -79,7 +79,7 @@
             </b-form-group>
           </b-col>
           <b-col sm="2">
-            <b-form-group :label="renderLabel({ label: 'Jenis Identitas' })" class="text-capitalize"
+            <b-form-group :label="renderLabel({ label: 'jenis identitas' })" class="text-capitalize"
               style="position: relative;" :state="getDataError({ rawLabel: 'jenis identitas' })" :invalid-feedback="
                   renderInvalidFeedback({
                     validationDesc: blindlyGetData({
@@ -887,9 +887,7 @@
                 ...data.provinsi,
                 label: data.provinsi.provinsi_nama
               }
-
               this.getCity()
-
               this.tempat.kota = {
                 ...data.kota,
                 label: data.kota.nama
@@ -982,8 +980,13 @@
             rawLabel: item.rawLabel
           });
         });
-
         if (formBasicData.every(item => item.error !== null && !item.error)) {
+          if(this.formData.provinsi){
+            this.formData.provinsi = this.tempat.provinsi.id;
+            this.formData.kota = this.tempat.kota.id;
+          }
+          console.log('prov',this.formData.provinsi)
+          console.log('kota', this.formData.kota)
           this.$emit("submitForm", this.formData);
         }
       }

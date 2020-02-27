@@ -188,12 +188,10 @@
                   @input="setNameLayanan($event.target.value)"
                   @keypress="onKeypressNamaLayanan"
                 />
-                {{ $v.editData.nama_layanan }}
                 <template v-if="editData.nama_layanan === ''">
                   <div class="error" v-if="!$v.nama_layanan.required">
                     Nama layanan harus di isi
                   </div>
-                  
                 </template>
               </div>
               <div class="form-group col-md-3">
@@ -204,6 +202,7 @@
                   maxlength="20"
                   v-model.trim="editData.kode_layanan"
                   @input="onInputCode($event)"
+                  @keypress="onKeypressKodeLayanan"
                 />
                 <template
                   v-if="
@@ -233,7 +232,7 @@
                   v-model.lazy="editData.tarif"
                   v-money="money"
                   validated="true"
-                  maxlength="12"
+                  maxlength="19"
                   class="text-right"
                 >
                 </b-form-input>
@@ -298,7 +297,7 @@ export default {
       money: {
         decimal: "",
         thousands: ",",
-        prefix: "Rp.",
+        prefix: "Rp. ",
         suffix: " ",
         precision: 0
       },
@@ -418,10 +417,29 @@ export default {
       this.checkDataKode = 1;
     },
     onKeypressNamaLayanan($event) {
-      const { key } = $event;
+      const {
+        key,
+        target: { value }
+      } = $event;
       var evt = $event;
       evt = evt ? evt : window.event;
-      if (/[^a-zA-Z0-9\-\ \(\)\/\.]/.test(key)) {
+      if (
+        /[^a-zA-Z0-9\-\ \(\)\/\.]/.test(key) ||
+        (value && value.trim().length >= 50)
+      ) {
+        evt.preventDefault();
+      } else {
+        return evt;
+      }
+    },
+    onKeypressKodeLayanan($event) {
+      const {
+        key,
+        target: { value }
+      } = $event;
+      var evt = $event;
+      evt = evt ? evt : window.event;
+      if (/[^a-zA-Z0-9\-]/.test(key) || (value && value.trim().length >= 20)) {
         evt.preventDefault();
       } else {
         return evt;

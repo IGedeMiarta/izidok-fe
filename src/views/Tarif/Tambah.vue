@@ -417,7 +417,7 @@
         this._timeoutNamaLayanan = setTimeout(() => {
           needDbChecks.forEach(item => {
             axios
-            .get(`${this.url_api}/layanan/${this.tmpInputTarifData[item].nama_layanan}/nama`)
+            .get(`${this.url_api}/layanan/nama/${this.tmpInputTarifData[item].nama_layanan}`)
             .then(response => {
               if (response.data.success == true) {
                 this.tmpInputTarifData[item].error["nama_layanan"].error = false;
@@ -488,7 +488,7 @@
         this._timeoutKodeLayanan = setTimeout(() => {
           needDbChecks.forEach(item => {
             axios
-            .get(`${this.url_api}/layanan/${this.tmpInputTarifData[item].kode_layanan}/kode`)
+            .get(`${this.url_api}/layanan/kode/${this.tmpInputTarifData[item].kode_layanan}`)
             .then(response => {
               if (response.data.success == true) {
                 this.tmpInputTarifData[item].error["kode_layanan"].error = false;
