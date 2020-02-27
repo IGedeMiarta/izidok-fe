@@ -173,6 +173,7 @@
       :hide-footer="true"
       size="lg"
       centered
+      @hide="resetModal"
     >
       <div class="card shadow-none border-0">
         <div class="card-body">
@@ -187,11 +188,18 @@
                   v-model.trim="editData.nama_layanan"
                   @input="setNameLayanan($event.target.value)"
                   @keypress="onKeypressNamaLayanan"
+                  :class="isError('nama_layanan')"
                 />
                 <template v-if="editData.nama_layanan === ''">
-                  <div class="error" v-if="!$v.nama_layanan.required">
-                    Nama layanan harus di isi
-                  </div>
+                  Nama layanan harus di isi
+                </template>
+                <template v-else-if="getErrorValidation('nama_layanan')">
+                  <b-form-invalid-feedback
+                    :force-show="true"
+                    class="text-capitalize"
+                  >
+                    {{ getErrorValidation("nama_layanan") }}
+                  </b-form-invalid-feedback>
                 </template>
               </div>
               <div class="form-group col-md-3">
@@ -203,15 +211,24 @@
                   v-model.trim="editData.kode_layanan"
                   @input="onInputCode($event)"
                   @keypress="onKeypressKodeLayanan"
+                  :class="isError('kode_layanan')"
                 />
                 <template
                   v-if="
-                    editData.kode_layanan == '' || editData.kode_layanan == ' '
+                    (editData.kode_layanan &&
+                      editData.kode_layanan.trim() === '') ||
+                      !editData.kode_layanan
                   "
                 >
-                  <div class="error" v-if="!$v.kode_layanan.required">
-                    Kode layanan harus di isi
-                  </div>
+                  Kode layanan harus di isi
+                </template>
+                <template v-else-if="getErrorValidation('kode_layanan')">
+                  <b-form-invalid-feedback
+                    :force-show="true"
+                    class="text-capitalize"
+                  >
+                    {{ getErrorValidation("kode_layanan") }}
+                  </b-form-invalid-feedback>
                 </template>
                 <template v-if="this.checkDataKode == 1"> </template>
                 <template
@@ -228,14 +245,16 @@
               </div>
               <div class="form-group col-md-3">
                 <label for="inputLayanan">Tarif Layanan</label>
-                <b-form-input
-                  v-model.lazy="editData.tarif"
-                  v-money="money"
-                  validated="true"
-                  maxlength="19"
-                  class="text-right"
-                >
-                </b-form-input>
+                <b-input-group append="Rp.">
+                  <b-form-input
+                    v-model.lazy="editData.tarif"
+                    v-money="money"
+                    validated="true"
+                    maxlength="19"
+                    class="text-right"
+                  >
+                  </b-form-input>
+                </b-input-group>
               </div>
               <div class="form-group col-md-2" style="margin-top:30px;">
                 <b-button
@@ -258,6 +277,7 @@ import startCase from "lodash/startCase";
 import axios from "axios";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import debounce from "lodash/debounce";
+import { replace as rep, differenceWith as dw, isEqual as iE } from "lodash";
 
 import {
   required,
@@ -297,7 +317,7 @@ export default {
       money: {
         decimal: "",
         thousands: ",",
-        prefix: "Rp. ",
+        prefix: "",
         suffix: " ",
         precision: 0
       },
@@ -321,13 +341,15 @@ export default {
         nama_layanan: null,
         tarif: null
       },
+      shallowCopyEditData: null,
       errors: [],
       fromPage: 0,
       toPage: 0,
       totalEntries: 0,
       sortBy: "",
       sortDesc: false,
-      searchValue: []
+      searchValue: [],
+      validationError: Object()
     };
   },
   computed: {
@@ -396,6 +418,29 @@ export default {
     }
   },
   methods: {
+    resetModal() {
+      const { validationError } = this;
+      const x = Object.keys(validationError);
+      x.map(item => {
+        this.validationError[item] = null;
+      });
+    },
+    isError(key) {
+      if (key) {
+        const { validationError } = this;
+        const { [key]: tmp } = validationError;
+
+        return (
+          (tmp && (!tmp ? { "is-valid": true } : { "is-invalid": true })) ||
+          null
+        );
+      } else {
+        return null;
+      }
+    },
+    getErrorValidation(key) {
+      return this.validationError[key];
+    },
     handleValueChanged({ perPage, currentPage }) {
       perPage && (perPage |> (_ => (this.perPage = _)));
       currentPage && (currentPage |> (_ => (this.currentPage = _)));
@@ -412,10 +457,6 @@ export default {
         }
       ];
     }, 500),
-    onInputCode($event) {
-      this.editData.kode_layanan = $event.target.value.toUpperCase();
-      this.checkDataKode = 1;
-    },
     onKeypressNamaLayanan($event) {
       const {
         key,
@@ -445,10 +486,77 @@ export default {
         return evt;
       }
     },
-    setNameLayanan(value) {
-      this.nama_layanan = value;
-      this.$v.editData.nama_layanan.$touch();
+    resetValidationError(key) {
+      if (key) {
+        const x = (this.validationError[key] = null);
+      }
     },
+    async validateNamaLayanan(val) {
+      const key = "nama_layanan";
+      try {
+        const res = await axios.get(`${this.url_api}/layanan/nama/${val}`);
+        const { status, data } = res.data;
+        if (data && data.length) {
+          this.validationError = {
+            ...this.validationError,
+            [key]: "nama layanan tidak boleh sama"
+          };
+        } else {
+          this.resetValidationError(key);
+        }
+      } catch (err) {
+        console.log(err);
+        this.resetValidationError(key);
+      }
+    },
+    async validateKodeLayanan(val) {
+      const key = "kode_layanan";
+      try {
+        const res = await axios.get(`${this.url_api}/layanan/kode/${val}`);
+        const { status, data } = res.data;
+        if (data && data.length) {
+          this.validationError = {
+            ...this.validationError,
+            [key]: "kode layanan tidak boleh sama"
+          };
+        } else {
+          this.resetValidationError(key);
+        }
+      } catch (err) {
+        console.log(err);
+        this.resetValidationError(key);
+      }
+    },
+    onInputCode: debounce(function($event) {
+      const {
+        target: { value }
+      } = $event;
+      const key = "kode_layanan";
+      const {
+        shallowCopyEditData: { [key]: a }
+      } = this;
+
+      this.editData.kode_layanan = value.toUpperCase();
+      // this.checkDataKode = 1;
+
+      if (value && value !== a) {
+        this.validateKodeLayanan(value);
+      } else {
+        this.resetValidationError(key);
+      }
+    }, 600),
+    setNameLayanan: debounce(function(value) {
+      const key = "nama_layanan";
+      const {
+        shallowCopyEditData: { [key]: a }
+      } = this;
+      this[key] = value;
+      if (value && value !== a) {
+        this.validateNamaLayanan(value);
+      } else {
+        this.resetValidationError(key);
+      }
+    }, 600),
     removeTarif({ id, nama_layanan = null } = {}) {
       this.$swal({
         text: `Apakah anda yakin ingin menghapus data tarif ${nama_layanan}?`,
@@ -463,76 +571,105 @@ export default {
       });
     },
     editModal(data) {
-      this.$refs["modal-edit"].show();
-      this.editData = {
+      const x = {
         id: data.id,
         kode_layanan: data.kode_layanan,
         nama_layanan: data.nama_layanan,
         tarif: data.tarif
       };
+      this.shallowCopyEditData = Object.assign({}, x);
+      this.editData = x;
       this.kodeLayananBeforeEdit = data.kode_layanan;
       this.checkDataKode = 1;
+      this.$refs["modal-edit"].show();
     },
     async updateTarif(dataEdit) {
-      var checkError = this.$v.nama_layanan.$error;
-      var checkErrorKodeLayanan = this.$v.kode_layanan.$error;
-      var { checkDataKode } = this;
-      // jika kode layanan ada yang sama
-      if (this.kodeLayananBeforeEdit == dataEdit.kode_layanan) {
-        if (
-          checkError == false &&
-          dataEdit.namaLayanan !== " " &&
-          dataEdit.namaLayanan !== ""
-        ) {
-          checkDataKode = 1;
-          this.updateProsesTarif(dataEdit);
+      const { shallowCopyEditData } = this;
+      const { tarif: scTarif } = shallowCopyEditData;
+      const { nama_layanan, tarif } = dataEdit;
+      const conv = val => rep(val && val.trim(), /[^0-9]/gi, "");
+      const tmp = {
+        ...dataEdit,
+        tarif: conv(tarif)
+      };
+      const x = {
+        ...shallowCopyEditData,
+        tarif: conv(scTarif)
+      };
+      let z = [];
+      const v = Object.keys(tmp).map(val => {
+        if (x[val] !== tmp[val]) {
+          z = [...z, val];
         }
-      } else {
-        const { updateProsesTarif } = this;
-        let listKode = axios
-          .get(`${this.url_api}/layanan/${dataEdit.kode_layanan}/kode`)
-          .then(response => {
-            checkDataKode = 2;
-          })
-          .catch(error => {
-            //kalo ada yang sama
-            // kalo true layanan tidak ada maka di buat
-            //kalo ada data
-            if (error.response.data) {
-              if (
-                (error.response.data.success == false &&
-                  dataEdit.namaLayanan == " ") ||
-                dataEdit.namaLayanan == ""
-              ) {
-                checkDataKode = 1;
-              } else if (checkErrorKodeLayanan == false) {
-                // checkErrorKodeLayanan = true;
-                if (
-                  dataEdit.kode_layanan == "" ||
-                  dataEdit.kode_layanan == " "
-                ) {
-                  this.$v.kode_layanan.required = true;
-                } else {
-                  // kalau 2 kode layanan sudah ada
-                  checkDataKode = 1;
-                  this.updateProsesTarif(dataEdit);
-                }
-              } else if (
-                error.response.data.success == false &&
-                checkDataKode == 1
-              ) {
-                checkErrorKodeLayanan = true;
-                checkDataKode = 1;
-              } else {
-                checkDataKode = 1;
-                this.updateProsesTarif(dataEdit);
-              }
-            }
-          })
-          .finally(() => {
-            this.checkDataKode = checkDataKode;
-          });
+      });
+      if (z.length > 0) {
+        this.$swal({
+          type: "question",
+          // title: startCase("gagal"),
+          text: `Apakah anda yakin untuk mengubah ${startCase(z[0])} ${startCase(nama_layanan)}`
+        });
       }
+      // console.log(dw([tmp], [x], iE));
+      // console.log(tmp);
+      // var checkError = this.$v.nama_layanan.$error;
+      // var checkErrorKodeLayanan = this.$v.kode_layanan.$error;
+      // var { checkDataKode } = this;
+      // // jika kode layanan ada yang sama
+      // if (this.kodeLayananBeforeEdit == dataEdit.kode_layanan) {
+      //   if (
+      //     checkError == false &&
+      //     dataEdit.namaLayanan !== " " &&
+      //     dataEdit.namaLayanan !== ""
+      //   ) {
+      //     checkDataKode = 1;
+      //     this.updateProsesTarif(dataEdit);
+      //   }
+      // } else {
+      //   const { updateProsesTarif } = this;
+      //   let listKode = axios
+      //     .get(`${this.url_api}/layanan/${dataEdit.kode_layanan}/kode`)
+      //     .then(response => {
+      //       checkDataKode = 2;
+      //     })
+      //     .catch(error => {
+      //       //kalo ada yang sama
+      //       // kalo true layanan tidak ada maka di buat
+      //       //kalo ada data
+      //       if (error.response.data) {
+      //         if (
+      //           (error.response.data.success == false &&
+      //             dataEdit.namaLayanan == " ") ||
+      //           dataEdit.namaLayanan == ""
+      //         ) {
+      //           checkDataKode = 1;
+      //         } else if (checkErrorKodeLayanan == false) {
+      //           // checkErrorKodeLayanan = true;
+      //           if (
+      //             dataEdit.kode_layanan == "" ||
+      //             dataEdit.kode_layanan == " "
+      //           ) {
+      //             this.$v.kode_layanan.required = true;
+      //           } else {
+      //             // kalau 2 kode layanan sudah ada
+      //             checkDataKode = 1;
+      //             this.updateProsesTarif(dataEdit);
+      //           }
+      //         } else if (
+      //           error.response.data.success == false &&
+      //           checkDataKode == 1
+      //         ) {
+      //           checkErrorKodeLayanan = true;
+      //           checkDataKode = 1;
+      //         } else {
+      //           checkDataKode = 1;
+      //           this.updateProsesTarif(dataEdit);
+      //         }
+      //       }
+      //     })
+      //     .finally(() => {
+      //       this.checkDataKode = checkDataKode;
+      //     });
+      // }
     },
     async updateProsesTarif(dataEdit) {
       try {
@@ -584,7 +721,8 @@ export default {
       const { searchValue, sortBy, sortDesc } = this;
       let v = "";
       searchValue.map(item => {
-        const x = (item.key === "kode_layanan" && "nomor_layanan") || item.key;
+        const x =
+          (false && item.key === "kode_layanan" && "nomor_layanan") || item.key;
         v += `&${x}=${item.value}`;
       });
 

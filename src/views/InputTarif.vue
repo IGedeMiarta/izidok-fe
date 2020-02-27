@@ -93,7 +93,7 @@
                           v-money="money"
                           :state="errorState({ label: 'tarif_layanan', index })"
                           :placeholder="placeholderInput('tarif_layanan')"
-                          maxlength="12"
+                          maxlength="19"
                           class="text-right"
                         ></b-form-input>
                         <b-form-invalid-feedback class="text-capitalize">
@@ -188,14 +188,14 @@ export default {
     kodeLayananExistsInDb: [],
     namaLayananExistsInDb: [],
   }),
-  // beforeRouteEnter(to, from, next) {
-  //   if(store.getters.isFirstLogin) {
-  //     next();
-  //   }
-  //   else {
-  //     next("/");
-  //   }
-  // },
+  beforeRouteEnter(to, from, next) {
+    if(store.getters.isFirstLogin) {
+      next();
+    }
+    else {
+      next("/");
+    }
+  },
   computed: {
     ...mapGetters(["getKlinikId"])
   },
@@ -380,7 +380,6 @@ export default {
       }
     },
     onInputNamaLayanan(valRaw, index, o, p) {
-      if(this._timeoutNamaLayanan) clearTimeout(this._timeoutNamaLayanan);
       let val = valRaw.toLowerCase().trim()
       Vue.set(o, p, valRaw);
       Vue.set(this.namaLayananContainer, index, val);
@@ -396,63 +395,10 @@ export default {
         this.tmpInputTarifData[index].error['nama_layanan'].desc = 'Hanya bisa huruf, spasi, angka, -, (), /, dan .';
         return;
       }
-      
-      let isDuplicate = false;
-      let needDbChecks = [];
-      this.namaLayananContainer.forEach((item, i) => {
-        if(i <= 1) return;
-        isDuplicate = false;
-        this.namaLayananContainer.forEach((item2, i2) => {
-          if(i != i2) {
-            if(item == item2) {
-              this.tmpInputTarifData[i].error['nama_layanan'].error = false
-              this.tmpInputTarifData[i].error['nama_layanan'].desc = 'Nama layanan tidak boleh sama'
 
-              isDuplicate = true;
-            }
-          }
-        })
-        if(isDuplicate == false) {
-          this.tmpInputTarifData[i].error['nama_layanan'].error = true
-          this.tmpInputTarifData[i].error['nama_layanan'].desc = ''
-
-          needDbChecks.push(i)
-        }
-      })
-
-      if(needDbChecks.length > 0) {
-        let newNeedDbChecks = [];
-        needDbChecks.forEach(item => {
-          let valDb = this.tmpInputTarifData[item].nama_layanan;
-          if(this.namaLayananExistsInDb.indexOf(valDb) > -1) {
-            this.tmpInputTarifData[item].error["nama_layanan"].error = false;
-            this.tmpInputTarifData[item].error["nama_layanan"].desc = "Nama layanan Sudah Ada";
-          }
-          else newNeedDbChecks.push(item);
-        });
-        needDbChecks = newNeedDbChecks;
-
-        this._timeoutNamaLayanan = setTimeout(() => {
-          needDbChecks.forEach(item => {
-            axios
-            .get(`${this.url_api}/layanan/nama/${this.tmpInputTarifData[item].nama_layanan}`)
-            .then(response => {
-              if (response.data.success == true) {
-                this.tmpInputTarifData[item].error["nama_layanan"].error = false;
-                this.tmpInputTarifData[item].error["nama_layanan"].desc = "nama layanan Sudah Ada";
-                this.namaLayananExistsInDb.push(this.tmpInputTarifData[item].nama_layanan);
-              }
-            })
-            .catch(error => {})
-            .finally(() => {
-              clearTimeout(this._timeoutNamaLayanan);
-            });
-          })
-        }, 600)
-      }
+      this.verifyExistsAndDuplicateLayanan("nama");
     },
     onInputKode(val, index, o, p) {
-      if(this._timeoutKodeLayanan) clearTimeout(this._timeoutKodeLayanan);
       val = val.toUpperCase();
       Vue.set(o, p, val);
       Vue.set(this.kodeLayananContainer, index, val);
@@ -468,24 +414,28 @@ export default {
         this.tmpInputTarifData[index].error['kode_layanan'].desc = 'Kode layanan minimal 3 karakter'
         return;
       }
-      
+
+      this.verifyExistsAndDuplicateLayanan("kode");
+    },
+    verifyExistsAndDuplicateLayanan(by="kode") {
       let isDuplicate = false;
       let needDbChecks = [];
-      this.kodeLayananContainer.forEach((item, i) => {
+      this[`${by}LayananContainer`].forEach((item, i) => {
+        if(by == "nama" && i <= 1) return;
         isDuplicate = false;
-        this.kodeLayananContainer.forEach((item2, i2) => {
+        this[`${by}LayananContainer`].forEach((item2, i2) => {
           if(i != i2) {
             if(item == item2) {
-              this.tmpInputTarifData[i].error['kode_layanan'].error = false
-              this.tmpInputTarifData[i].error['kode_layanan'].desc = 'Kode layanan tidak boleh sama'
+              this.tmpInputTarifData[i].error[`${by}_layanan`].error = false
+              this.tmpInputTarifData[i].error[`${by}_layanan`].desc = `${startCase(by)} layanan tidak boleh sama`
 
               isDuplicate = true;
             }
           }
         })
         if(isDuplicate == false) {
-          this.tmpInputTarifData[i].error['kode_layanan'].error = true
-          this.tmpInputTarifData[i].error['kode_layanan'].desc = ''
+          this.tmpInputTarifData[i].error[`${by}_layanan`].error = true
+          this.tmpInputTarifData[i].error[`${by}_layanan`].desc = ''
 
           needDbChecks.push(i)
         }
@@ -494,29 +444,30 @@ export default {
       if(needDbChecks.length > 0) {
         let newNeedDbChecks = [];
         needDbChecks.forEach(item => {
-          let valDb = this.tmpInputTarifData[item].kode_layanan;
-          if(this.kodeLayananExistsInDb.indexOf(valDb) > -1) {
-            this.tmpInputTarifData[item].error["kode_layanan"].error = false;
-            this.tmpInputTarifData[item].error["kode_layanan"].desc = "Kode layanan Sudah Ada";
+          let valDb = this.tmpInputTarifData[item][`${by}_layanan`];
+          if(this[`${by}LayananExistsInDb`].indexOf(valDb) > -1) {
+            this.tmpInputTarifData[item].error[`${by}_layanan`].error = false;
+            this.tmpInputTarifData[item].error[`${by}_layanan`].desc = `${startCase(by)} layanan Sudah Ada`;
           }
           else newNeedDbChecks.push(item);
         });
         needDbChecks = newNeedDbChecks;
 
-        this._timeoutKodeLayanan = setTimeout(() => {
+        if(this[`_timeout${startCase(by)}Layanan`]) clearTimeout(this[`_timeout${startCase(by)}Layanan`]);
+        this[`_timeout${startCase(by)}Layanan`] = setTimeout(() => {
           needDbChecks.forEach(item => {
             axios
-            .get(`${this.url_api}/layanan/kode/${this.tmpInputTarifData[item].kode_layanan}`)
+            .get(`${this.url_api}/layanan/${by}/${this.tmpInputTarifData[item][`${by}_layanan`]}`)
             .then(response => {
               if (response.data.success == true) {
-                this.tmpInputTarifData[item].error["kode_layanan"].error = false;
-                this.tmpInputTarifData[item].error["kode_layanan"].desc = "Kode layanan Sudah Ada";
-                this.kodeLayananExistsInDb.push(this.tmpInputTarifData[item].kode_layanan);
+                this.tmpInputTarifData[item].error[`${by}_layanan`].error = false;
+                this.tmpInputTarifData[item].error[`${by}_layanan`].desc = `${startCase(by)} layanan Sudah Ada`;
+                this[`${by}LayananExistsInDb`].push(this.tmpInputTarifData[item][`${by}_layanan`]);
               }
             })
             .catch(error => {})
             .finally(() => {
-              clearTimeout(this._timeoutKodeLayanan);
+              clearTimeout(this[`_timeout${startCase(by)}Layanan`]);
             });
           })
         }, 600)
@@ -547,17 +498,28 @@ export default {
     removeInputTarifData(index) {
       const { tmpInputTarifData } = this;
       if (tmpInputTarifData.length > 2) {
+        const tmpExistsInDb = {
+          kode_layanan: tmpInputTarifData[index].kode_layanan, 
+          nama_layanan: tmpInputTarifData[index].nama_layanan
+        }
         const tmp = tmpInputTarifData
           .slice(0, index)
           .concat(tmpInputTarifData.slice(index + 1, tmpInputTarifData.length));
         this.tmpInputTarifData = tmp;
         // remap kodeLayananContainer
-        this.kodeLayananContainer = tmp.map(item => {
-          return item.kode_layanan;
-        });
-        this.namaLayananContainer = tmp.map(item => {
-          return item.nama_layanan;
-        });
+        this.kodeLayananContainer = tmp.map(item => item.kode_layanan);
+        this.namaLayananContainer = tmp.map(item => item.nama_layanan);
+        
+        if(tmpExistsInDb.kode_layanan) 
+          this.kodeLayananExistsInDb
+            .splice(this.kodeLayananExistsInDb.indexOf(tmpExistsInDb.kode_layanan), 1)
+        
+        if(tmpExistsInDb.nama_layanan) 
+          this.namaLayananExistsInDb
+            .splice(this.namaLayananExistsInDb.indexOf(tmpExistsInDb.nama_layanan), 1)
+        
+        this.verifyExistsAndDuplicateLayanan("kode")
+        this.verifyExistsAndDuplicateLayanan("nama")
       }
     }
   }
