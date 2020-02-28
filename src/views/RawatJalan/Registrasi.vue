@@ -211,8 +211,9 @@
             <b-form-group id="input-group-1" label-for="input-1">
               <label for="">Alamat</label>
               <label for="" style="color:red">*</label>
-              <b-form-input id="input-1" type="text" v-model="formDataRegister.alamat_rumah" required>
-              </b-form-input>
+             <b-form-textarea id="input-1" rows="3"
+      max-rows="6" type="text" v-model="formDataRegister.alamat_rumah" required>
+             </b-form-textarea>
             </b-form-group>
           </div>
           <b-button class="ml-3 text-uppercase" variant="success" style="font-size:17.5px;float:right " type="submit">
@@ -303,14 +304,7 @@
         required
       }
     },
-    // {
-    //   label: "waktu konsultasi",
-    //   type: "text",
-    //   col: 6,
-    //   validations: {
-    //     required
-    //   }
-    // },
+  
     {
       label: "tinggi badan",
       type: "text",
@@ -703,9 +697,9 @@
             waktu_konsultasi,
           tinggi_badan: this.formData.tinggi_badan || 0,
           berat_badan: this.formData.berat_badan || 0,
-          suhu: this.formData.suhu_badan || 0,
-          tensi_sistole: this.formData.tensi_sistole || 0,
-          tensi_diastole: this.formData.tensi_diastole || 0,
+          suhu: this.formData.suhu || 0,
+          tensi_sistole: this.formData.sistole || 0,
+          tensi_diastole: this.formData.diastole || 0,
           nadi: this.formData.nadi || 0,
           respirasi: 0,
           anamnesis: this.formData.anamnesis || ""

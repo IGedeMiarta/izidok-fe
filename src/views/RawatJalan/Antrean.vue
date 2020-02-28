@@ -69,10 +69,15 @@
             <b-row v-for="(data, index) in dataRegistrasiPasien" :key="index" class="mb-2 pl-3 pr-3">
               <b-col sm="6">
                 <div class="d-flex">
-                  <div class="flex-grow-1 text-capitalize">
-                    {{ data.label }}
+                  <template v-if="data.label == 'TANDA TANDA VITAL' || data.label == 'DATA PASIEN'">
+                    <strong>{{data.label}}</strong>
+                  </template>
+                  <template v-else>
+                    <div class="flex-grow-1 text-capitalize">
+                     {{ data.label }}
                   </div>
                   <span>:</span>
+                  </template>
                 </div>
               </b-col>
               <b-col sm="6">
@@ -99,7 +104,6 @@
                 {{ data.label }}
                 <b-input size="sm" class="mt-2 w-95"  v-if="data.field.searchable"
                   @input="searchValueChanged($event, data.field.key)"  />
-                   <!-- @input="searchValueChanged($event, data.field.key)" -->
               </template>
 
               <template v-slot:cell(jenis_kelamin)="data">
@@ -124,12 +128,6 @@
                     <b-dropdown-item @click="
                           assignDataRegistrasiPasien(data);
                         ">Detail Registrasi Antrean</b-dropdown-item>
-<!-- @click="
-                          detailPasien({
-                            id: data.item.id
-                          })
-                        " -->
-                    <!-- <b-dropdown-item >view detail pasien</b-dropdown-item> -->
                     <template v-if="isOperator == false">
                       <b-dropdown-item @click="
                             rekamMedis(data)
@@ -188,6 +186,9 @@ import {
   locale.use(lang);
 
   const __dataRegistrasiPasien = {
+    dp: {
+      label: "DATA PASIEN",
+    },
     nama: {
       label: "nama pasien",
       value: null
@@ -208,34 +209,38 @@ import {
       label: "dokter",
       value: null
     },
-    anamnesis : {
-      label : "anamnesis",
-      value : null
+    tanda: {
+      label: "TANDA TANDA VITAL",
     },
+    
     tb : {
-      label : "tinggi badan",
+      label : "tinggi badan ",
       value : null,
     },
     bb : {
-      label : "berat badan",
+      label : "berat badan ",
       value : null
     },
     suhu : {
       label : "suhu",
       value : null,
     },
+    tensi_diastole : {
+      label : "tekanan diastole",
+      value : null
+    },
+    tensi_sistole : {
+      label : "tekanan sistole",
+      value : null
+    },
     nadi : {
       label : "nadi",
       value : null,
     },
-    tensi_diastole : {
-      label : "tensi diastole",
+    anamnesis : {
+      label : "anamnesis",
       value : null
     },
-    tensi_sistole : {
-      label : "tensi sistole",
-      value : null
-    }
   };
 
   export default {
@@ -328,11 +333,11 @@ import {
               key: "actions"
             },
             {
-                key: "status"
+                key: "status",
             }
            ] 
              |> (v => s({ field: v, customFunc: r }))
-        |> (z => g({ field: z }))
+             |> (z => g({ field: z }))
         );
       }
     },
@@ -434,7 +439,6 @@ import {
             this.fromPage = fromPage;
             this.pasiens = [
               ...listAntrean.map((item, index) => {
-                console.log(item)
                 return {
                   id : item.id,
                   waktu_konsultasi: item.waktu_konsultasi,
@@ -508,34 +512,30 @@ import {
               }
             } = res;
             const x = __dataRegistrasiPasien;
-            console.log('res',res);
-            console.log('anam',anamnesis);
             x["nama"].value = nama;
             x["rekam_medis"].value = nomor_rekam_medis;
             x["hp"].value = hp;
             x["kelamin"].value = this.jenisKelamin(kelamin);
             x["dokter"].value = dokter.nama;
 
-            x["tb"].value = tb;
-            x["bb"].value = bb;
-            x["suhu"].value = suhu;
+            x["tb"].value = tb + ' (cm)';
+            x["bb"].value = bb + ' (kg)';
+            x["suhu"].value = suhu +' (cm)';
             x["tensi_sistole"].value = tensi_sistole;
             x["tensi_diastole"].value = tensi_diastole;
             x["nadi"].value = nadi;
-            x["anamnesis"].value = anamnesa;
+            x["anamnesis"].value = anamnesis;
 
             this.dataRegistrasiPasien = x;
             this.toggleModal();
           }
         } catch (err) {
-          console.log(err);
         }
       },
       rekamMedis(data) {
         const {
           item
         } = data;
-        console.log(data)
         this.$router.push(`/rekam-medis/${item.id}/${item.pasien_id}`);
       },
       toggleModal() {
@@ -610,11 +610,13 @@ import {
             const {
               waktu_konsultasi,
               examination_by: dokter_id,
+              anamnesa,
               pasien
             } = data;
             return {
               waktu_konsultasi,
               dokter_id,
+              anamnesa,
               pasien
             };
           } else {
@@ -722,7 +724,6 @@ import {
             });
           }
         } catch (err) {
-          console.log(err);
         }
       },
       tanggalSelected($event) {
