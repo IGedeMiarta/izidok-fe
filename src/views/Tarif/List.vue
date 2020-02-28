@@ -701,7 +701,7 @@ export default {
             title: startCase("deleted"),
             text: startCase("Tarif berhasil di hapus")
           });
-          this.$router.go("/tarif");
+          this.fetchListTarif();
         } else {
           this.$swal({
             type: "error",

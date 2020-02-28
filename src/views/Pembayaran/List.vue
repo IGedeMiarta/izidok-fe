@@ -142,7 +142,7 @@
       async fetchListpembayaran() {
         try {
           var today = new Date();
-          var date = today.getFullYear() + '-' + '0' + (today.getMonth() + 1) + '-' + '0' + today.getDate();
+          var date = today.getFullYear() + '-' + '0' + (today.getMonth() + 1) + '-' +  today.getDate();
           const res = await axios.get(
             `${this.url_api}/pembayaran?from=${date}&to=${date}`
           );

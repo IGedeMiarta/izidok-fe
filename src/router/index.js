@@ -202,12 +202,12 @@ const routes = [
     component: () => import("../views/Operator.vue"),
     children: [
       {
-        path: "/operator/list",
+        path: "",
         name: "operator-list",
         component: () => import("../views/Operator/List.vue")
       },
       {
-        path: "/operator/tambah",
+        path: "tambah",
         name: "operator-tambah",
         component: () => import("../views/Operator/Tambah.vue")
       }
