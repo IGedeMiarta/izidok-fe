@@ -10,15 +10,17 @@
     <div class="container">
       <div class="card card-box mb-5">
         <div class="card-header">
-          <div class="col-md-4">
+          <div class="col-sm-4 float-left">
             <h4 class="text-capitalize my-2 ">form registrasi antrean</h4>
           </div>
-          <div class="col-md-6">
+          <div class="col-sm-5">
 
           </div>
-          <b-button class="text-uppercase float-right" style="font-size:14.5px;" v-b-modal.modal-1 variant="first">
-            Registrasi Pasien
+          <div class="col-sm-3">
+          <b-button class="text-uppercase" style="font-size:14.5px;float:right" v-b-modal.modal-1  variant="primary">
+            Tambah Pasien
             Baru</b-button>
+          </div>
         </div>
         <div class="card-body">
           <b-form v-on:submit.prevent="submitForm">

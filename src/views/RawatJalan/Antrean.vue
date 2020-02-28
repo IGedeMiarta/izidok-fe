@@ -7,19 +7,19 @@
           link: '/antrean'
         }
       ]" />
-    <div class="container">
+    <div class="container-fluid">
       <div class="card card-box mb-5">
         <div class="card-body">
-          <div class="accordion mb-5">
-            <div class="card card-box">
+          <!-- <div class="accordion mb-5"> -->
+            <!-- <div class="card card-box">
               <div class="card-header">
                 <b-button class="btn-link btn-lg d-flex align-items-center justify-content-between shadow-none"
                   v-b-toggle.accordion-1>
                   <div class="d-block">
                     <h5 class="d-block">Filter Data</h5>
                     <h6 class="d-block text-capitalize">klik untuk filter</h6>
-                  </div>
-                  <!-- <font-awesome-icon icon="angle-up" class="font-size-xl" /> -->
+                  </div> -->
+                  <!-- <font-awesome-icon icon="angle-up" class="font-size-xl" />
                 </b-button>
               </div>
               <b-collapse id="accordion-1" :visible="false" accordion="accordion-example" role="tabpanel"
@@ -27,12 +27,12 @@
                 <b-container>
                   <b-row>
                     <b-col>
-                      <b-form-group label="tanggal" class="text-capitalize">
+                      <b-form-group label="tanggal" class="text-capitalize"> -->
                         <!-- <b-form-input /> -->
-                        <date-picker class="w-100" type="daterange" start-placeholder="Start date"
+                        <!-- <date-picker class="w-100" type="daterange" start-placeholder="Start date"
                           end-placeholder="End date" :picker-options="pickerOptions" v-model="daterangeValue"
-                          format="dd-MM-yyyy" value-format="dd-MM-yyyy" />
-                      </b-form-group>
+                          format="dd-MM-yyyy" value-format="dd-MM-yyyy" /> -->
+                      <!-- </b-form-group>
                     </b-col>
                     <b-col>
                       <b-form-group label="no rekam medis" class="text-capitalize">
@@ -61,14 +61,13 @@
                 </b-container>
               </b-collapse>
             </div>
-          </div>
+          </div> -->
           <div class="d-flex justify-content-end mb-4">
-            <b-button :to="{ name: 'registrasi-rawat-jalan' }" variant="primary" class="text-capitalize ml-2">registrasi
-              rawat jalan</b-button>
+            
           </div>
-          <b-modal ref="my-modal" title="Data Registrasi Pasien">
+          <b-modal ref="my-modal" title="Detail Registrasi Antrean">
             <b-row v-for="(data, index) in dataRegistrasiPasien" :key="index" class="mb-2 pl-3 pr-3">
-              <b-col cols sm="6">
+              <b-col sm="6">
                 <div class="d-flex">
                   <div class="flex-grow-1 text-capitalize">
                     {{ data.label }}
@@ -76,7 +75,7 @@
                   <span>:</span>
                 </div>
               </b-col>
-              <b-col cols="6">
+              <b-col sm="6">
                 {{ data.value }}
               </b-col>
             </b-row>
@@ -92,16 +91,14 @@
           <DataTableWrapper :perPage="perPage" :currentPage="currentPage" :callbackFunc="fetchListAntrean"
             @valueChanged="handleValueChanged">
             <template v-slot:right-header>
-              <!-- <b-button variant="primary" class="text-uppercase align-self-end" :to="{
-                    name: 'pasien-tambah'
-                  }">tambah pasien</b-button> -->
+           <b-button :to="{ name: 'registrasi-rawat-jalan' }" variant="primary" class="text-capitalize ml-2">Tambah Antrean</b-button>
             </template>
             <b-table :items="pasiens" :fields="fieldList" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc"
-              thead-tr-class="kntl" :no-local-sorting="true">
-              <template v-slot:head()="data">
+              thead-tr-class="kntl" :no-local-sorting="true" class="text-center">
+              <template v-slot:head()="data" >
                 {{ data.label }}
-                <b-input size="sm" class="mt-2 w-95" v-if="data.field.searchable"
-                  />
+                <b-input size="sm" class="mt-2 w-95"  v-if="data.field.searchable"
+                  @input="searchValueChanged($event, data.field.key)"  />
                    <!-- @input="searchValueChanged($event, data.field.key)" -->
               </template>
 
@@ -109,6 +106,15 @@
                 {{ jenisKelamin(data.value) }}
               </template>
 
+              <template  v-slot:cell(status)="data">
+                 <template v-if="data.value == 'MENUNGGU'">
+                     <b-button variant="warning" size="sm" style="font-size:13px;">{{data.value}}</b-button>
+                  </template>
+                  <template v-if="data.value == 'KONSULTASI'">
+                    <b-button variant="primary" size="sm" style="font-size:13px;">{{data.value}}
+                    </b-button>
+                  </template>
+              </template>
               <template v-slot:cell(actions)="data">
                 <span>
                   <b-dropdown id="dropdown-1" class="m-md-2 text-capitalize" variant="primary" size="sm" right>
@@ -116,30 +122,25 @@
                       <font-awesome-icon icon="copy" />
                     </template>
                     <b-dropdown-item @click="
-                          editPasien({
-                            id: data.item.id
-                          })
-                        ">edit data pasien</b-dropdown-item>
+                          assignDataRegistrasiPasien(data);
+                        ">Detail Registrasi Antrean</b-dropdown-item>
 <!-- @click="
                           detailPasien({
                             id: data.item.id
                           })
                         " -->
-                    <b-dropdown-item >view detail pasien</b-dropdown-item>
+                    <!-- <b-dropdown-item >view detail pasien</b-dropdown-item> -->
                     <template v-if="isOperator == false">
                       <b-dropdown-item @click="
-                            rekamMedis({
-                              pasien_id: data.item.id,
-                              klinik_id: data.item.klinik_id
-                            })
-                          ">lihat riwayat rekam medis</b-dropdown-item>
+                            rekamMedis(data)
+                          ">Tulis rekam medis</b-dropdown-item>
                     </template>
                     <b-dropdown-item @click="
-                          removePasien({
+                          pembatalanAntrean({
                             id: data.item.id,
-                            nama: data.item.nama
+                            namaPasien: data.item.nama
                           })
-                        ">hapus data pasien</b-dropdown-item>
+                        ">hapus antrean</b-dropdown-item>
                   </b-dropdown>
                 </span>
               </template>
@@ -158,9 +159,9 @@
   } from "vuex";
   import startCase from "lodash/startCase";
   import debounce from "lodash/debounce";
-  import {
-    DatePicker
-  } from "element-ui";
+  // import {
+  //   DatePicker
+  // } from "element-ui";
   import "element-ui/lib/theme-chalk/index.css";
 
   import {
@@ -186,41 +187,61 @@ import {
   library.add(faArrowRight, faArrowUp, faTrashAlt, faSearch, faPencilAlt, faCopy);
   locale.use(lang);
 
-  // const __dataRegistrasiPasien = {
-  //   rekam_medis: {
-  //     label: "no. rekam medis",
-  //     value: null
-  //   },
-  //   ktp: {
-  //     label: "no. ktp",
-  //     value: null
-  //   },
-  //   nama: {
-  //     label: "nama lengkap",
-  //     value: null
-  //   },
-  //   hp: {
-  //     label: "no. handphone",
-  //     value: null
-  //   },
-  //   kelamin: {
-  //     label: "jenis kelamin",
-  //     value: null
-  //   },
-  //   dokter: {
-  //     label: "dokter",
-  //     value: null
-  //   },
-  //   waktu: {
-  //     label: "waktu konsultasi",
-  //     value: null
-  //   }
-  // };
+  const __dataRegistrasiPasien = {
+    nama: {
+      label: "nama pasien",
+      value: null
+    },
+    rekam_medis: {
+      label: "no. rekam medis",
+      value: null
+    },
+    hp: {
+      label: "no. handphone",
+      value: null
+    },
+    kelamin: {
+      label: "jenis kelamin",
+      value: null
+    },
+    dokter: {
+      label: "dokter",
+      value: null
+    },
+    anamnesis : {
+      label : "anamnesis",
+      value : null
+    },
+    tb : {
+      label : "tinggi badan",
+      value : null,
+    },
+    bb : {
+      label : "berat badan",
+      value : null
+    },
+    suhu : {
+      label : "suhu",
+      value : null,
+    },
+    nadi : {
+      label : "nadi",
+      value : null,
+    },
+    tensi_diastole : {
+      label : "tensi diastole",
+      value : null
+    },
+    tensi_sistole : {
+      label : "tensi sistole",
+      value : null
+    }
+  };
 
   export default {
     components: {
       // Datetime,
-      DatePicker,
+      // DatePicker,
       DataTableWrapper: () => import("../../components/DataTableWrapper")
     },
     data: () => ({
@@ -248,7 +269,9 @@ import {
       namaPasien: "",
       waktuRegistrasi: "",
       tanggal: null,
-      searchValue: null,
+      searchValue: [],
+      totalEntries: 0,
+      isOperator: "",
       statusAntrean: "Menunggu",
       sortBy: "",
       sortDesc: false,
@@ -284,10 +307,12 @@ import {
         const r = val => Boolean(/(actions)\b/gi.test(val) ? !1 : 1);
         return (
           [{
-              key: "waktu_konsultasi"
+              key: "waktu_konsultasi",
+              label: "waktu registrasi"
             },
             {
-              key: "nomor_antrian"
+              key: "nomor_antrian",
+              label: "no. urut"
             },
             {
               key: "nama",
@@ -306,13 +331,8 @@ import {
                 key: "status"
             }
            ] 
-          |> (v => s({
-            field: v,
-            customFunc: r
-          })) 
-          |> (z => g({
-            field: z
-          }))
+             |> (v => s({ field: v, customFunc: r }))
+        |> (z => g({ field: z }))
         );
       }
     },
@@ -320,6 +340,11 @@ import {
       moment.locale("id");
       this.tanggal = moment().format("YYYY-MM-DD");
       // this.fetchAntrean();
+      if (!this.isDoctor) {
+        this.isOperator = true;
+      } else {
+        this.isOperator = false;
+      }
       // this.fetchListAntrean();
     },
     watch: {
@@ -352,7 +377,6 @@ import {
         const {
           searchValue
         } = this;
-
         const z = searchValue.filter(item => item.key !== key);
         this.searchValue = [
           ...z,
@@ -362,12 +386,6 @@ import {
           }
         ];
       }, 500),
-      rekamMedis({
-        klinik_id,
-        pasien_id
-      }) {
-        this.$router.push(`/rekam-medis/${klinik_id}/${pasien_id}`);
-      },
       determineParameter() {
         const {
           searchValue,
@@ -375,11 +393,12 @@ import {
           sortDesc
         } = this;
         let v = "";
-        // searchValue.map(item => {
-        //   console.log('a',item)
-        //   // const x = (item.key === "nama" && "nama_pasien") || item.key;
-        //   // v += `&${x}=${item.value}`;
-        // });
+        searchValue.map(item => {
+        const x =
+           (item.key === "nama" && "nama_pasien") || item.key;
+          v += `&${x}=${item.value}`;
+        });
+
         if (sortBy) {
           v += `&column=${sortBy}&order=${sortDesc ? "desc" : "asc"}`;
         }
@@ -415,7 +434,6 @@ import {
             this.fromPage = fromPage;
             this.pasiens = [
               ...listAntrean.map((item, index) => {
-                console.log(item)
                 return {
                   id : item.id,
                   waktu_konsultasi: item.waktu_konsultasi,
@@ -424,7 +442,7 @@ import {
                   jenis_kelamin: item.pasien.jenis_kelamin,
                   nama: item.pasien.nama,
                   nomor_hp: item.pasien.nomor_hp,
-                  // ...item,
+                  pasien_id :item.pasien_id,
                   no: (this.currentPage - 1) * this.perPage + index + 1
                 };
               })
@@ -439,62 +457,87 @@ import {
       changePage(page) {
         this.fetchAntrean(page);
       },
-      // async assignDataRegistrasiPasien({
-      //   item: {
-      //     rekam_medis = null,
-      //     ktp = null,
-      //     nama = null,
-      //     hp = null,
-      //     kelamin = null,
-      //     dokter = null,
-      //     waktu = null,
-      //     pasien_id = null,
-      //     transaksi_id = null
-      //   } = {}
-      // }) {
-      //   try {
-      //     const {
-      //       toggleModal,
-      //       getPasien
-      //     } = this;
-      //     const res = await getPasien(transaksi_id);
-      //     if (res) {
-      //       const {
-      //         id,
-      //         dokter_id: dokter,
-      //         pasien_id,
-      //         nomor_antrian,
-      //         klinik_id,
-      //         waktu_konsultasi: waktu,
-      //         pasien: {
-      //           nomor_rekam_medis,
-      //           nik: ktp,
-      //           nama,
-      //           nomor_hp: hp,
-      //           jenis_kelamin: kelamin
-      //         }
-      //       } = res;
-      //       const x = __dataRegistrasiPasien;
-      //       x["rekam_medis"].value = nomor_rekam_medis;
-      //       x["ktp"].value = ktp;
-      //       x["nama"].value = nama;
-      //       x["hp"].value = hp;
-      //       x["kelamin"].value = this.jenisKelamin(kelamin);
-      //       x["dokter"].value = dokter.nama;
-      //       x["waktu"].value = moment(waktu).format("DD-MM-YYYY HH:mm:ss");
-      //       this.dataRegistrasiPasien = x;
-      //       this.toggleModal();
-      //     }
-      //   } catch (err) {
-      //     console.log(err);
-      //   }
-      // },
-      // rekamMedis(data) {
-      //   const {
-      //     item
-      //   } = data;
-      //   this.$router.push(`/rekam-medis/${item.transaksi_id}/${item.pasien_id}`);
-      // },
+      async assignDataRegistrasiPasien({
+        item: {
+          rekam_medis = null,
+          ktp = null,
+          nama = null,
+          hp = null,
+          kelamin = null,
+          dokter = null,
+          waktu = null,
+          pasien_id = null,
+          id = null,
+          anamnesis = null,
+          tb = null,
+          bb = null,
+          suhu = null,
+          nadi = null,
+          tensi_diastole = null,
+          tensi_sistole = null,
+        } = {}
+      }) {
+        try {
+          const {
+            toggleModal,
+            getPasien
+          } = this;
+          const res = await getPasien(id);
+          if (res) {
+            const {
+              id,
+              dokter_id: dokter,
+              pasien_id,
+              nomor_antrian,
+              klinik_id,
+              anamnesa ,
+              waktu_konsultasi: waktu,
+              pasien: {
+                nomor_rekam_medis,
+                nik: ktp,
+                nama,
+                nomor_hp: hp,
+                jenis_kelamin: kelamin,
+                tensi_sistole : tensi_sistole,
+                tensi_diastole : tensi_diastole,
+                nadi : nadi,
+                suhu : suhu,
+                tinggi_badan: tb,
+                berat_badan : bb,
+
+              }
+            } = res;
+            const x = __dataRegistrasiPasien;
+            console.log('res',res);
+
+            x["nama"].value = nama;
+            x["rekam_medis"].value = nomor_rekam_medis;
+            x["hp"].value = hp;
+            x["kelamin"].value = this.jenisKelamin(kelamin);
+            x["dokter"].value = dokter.nama;
+
+            x["tb"].value = tb;
+            x["bb"].value = bb;
+            x["suhu"].value = suhu;
+            x["tensi_sistole"].value = tensi_sistole;
+            x["tensi_diastole"].value = tensi_diastole;
+            x["nadi"].value = nadi;
+            x["anamnesis"].value = anamnesa;
+
+            this.dataRegistrasiPasien = x;
+            this.toggleModal();
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      },
+      rekamMedis(data) {
+        const {
+          item
+        } = data;
+        console.log(data)
+        this.$router.push(`/rekam-medis/${item.id}/${item.pasien_id}`);
+      },
       toggleModal() {
         // We pass the ID of the button that we want to return focus to
         // when the modal has hidden
@@ -552,39 +595,38 @@ import {
       //     // alert(err);
       //   }
       // },
-      // async getPasien(id) {
-      //   if (!id) {
-      //     return false;
-      //   }
-
-      //   try {
-      //     const res = await axios.get(`${this.url_api}/transaksi/${id}`);
-      //     const {
-      //       status,
-      //       data,
-      //       message
-      //     } = res.data;
-      //     if (status) {
-      //       const {
-      //         waktu_konsultasi,
-      //         examination_by: dokter_id,
-      //         pasien
-      //       } = data;
-      //       return {
-      //         waktu_konsultasi,
-      //         dokter_id,
-      //         pasien
-      //       };
-      //     } else {
-      //       this.$swal({
-      //         text: message,
-      //         type: "warning"
-      //       });
-      //     }
-      //   } catch (err) {
-      //     // alert(err);
-      //   }
-      // },
+      async getPasien(id) {
+        if (!id) {
+          return false;
+        }
+        try {
+          const res = await axios.get(`${this.url_api}/transaksi/${id}`);
+          const {
+            status,
+            data,
+            message
+          } = res.data;
+          if (status) {
+            const {
+              waktu_konsultasi,
+              examination_by: dokter_id,
+              pasien
+            } = data;
+            return {
+              waktu_konsultasi,
+              dokter_id,
+              pasien
+            };
+          } else {
+            this.$swal({
+              text: message,
+              type: "warning"
+            });
+          }
+        } catch (err) {
+          // alert(err);
+        }
+      },
       // clickBtnAction(icon, data) {
       //   const {
       //     pembatalanAntrean,
@@ -641,51 +683,51 @@ import {
       //     }
       //   });
       // },
-      // pembatalanAntrean({
-      //   namaPasien = null,
-      //   transaksi_id
-      // } = {}) {
-      //   this.$swal({
-      //     title: startCase("pembatalan antrean"),
-      //     text: `Apakah antrean pasien ${namaPasien} benar akan dibatalkan?`,
-      //     type: "question",
-      //     showCancelButton: true,
-      //     cancelButtonText: startCase("tidak"),
-      //     confirmButtonText: startCase("ya")
-      //   }).then(res => {
-      //     const {
-      //       value
-      //     } = res;
-      //     if (value) {
-      //       this.updateStatusAntrean("batal", transaksi_id);
-      //     }
-      //   });
-      // },
-      // async updateStatusAntrean(antreanStatus, id) {
-      //   try {
-      //     const res = await axios.put(`${this.url_api}/transaksi/${id}`, {
-      //       status: antreanStatus.toUpperCase()
-      //     });
-      //     const {
-      //       status,
-      //       data,
-      //       message
-      //     } = res.data;
-      //     if (status) {
-      //       this.fetchAntrean();
-      //     } else {
-      //       this.$swal({
-      //         text: message,
-      //         type: "warning"
-      //       });
-      //     }
-      //   } catch (err) {
-      //     console.log(err);
-      //   }
-      // },
-      // tanggalSelected($event) {
-      //   this.tanggal = moment($event).format("YYYY-MM-DD");
-      // }
+      pembatalanAntrean({
+        namaPasien = null,
+        id
+      } = {}) {
+        this.$swal({
+          title: startCase("pembatalan antrean"),
+          text: `Apakah antrean pasien ${namaPasien} benar akan dibatalkan?`,
+          type: "question",
+          showCancelButton: true,
+          cancelButtonText: startCase("tidak"),
+          confirmButtonText: startCase("ya")
+        }).then(res => {
+          const {
+            value
+          } = res;
+          if (value) {
+            this.updateStatusAntrean("batal", id);
+          }
+        });
+      },
+      async updateStatusAntrean(antreanStatus, id) {
+        try {
+          const res = await axios.put(`${this.url_api}/transaksi/${id}`, {
+            status: antreanStatus.toUpperCase()
+          });
+          const {
+            status,
+            data,
+            message
+          } = res.data;
+          if (status) {
+            this.fetchListAntrean();
+          } else {
+            this.$swal({
+              text: message,
+              type: "warning"
+            });
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      },
+      tanggalSelected($event) {
+        this.tanggal = moment($event).format("YYYY-MM-DD");
+      }
     }
   };
 </script>
