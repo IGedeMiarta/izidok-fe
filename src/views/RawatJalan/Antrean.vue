@@ -1,6 +1,6 @@
 <template>
   <div>
-    <page-title heading="Antrean Rawat Jalan" :breadcrumb="[
+    <page-title heading="Antrean Pasien" :breadcrumb="[
         {
           label: 'rawat jalan',
           active: true,
@@ -434,14 +434,15 @@ import {
             this.fromPage = fromPage;
             this.pasiens = [
               ...listAntrean.map((item, index) => {
+                console.log(item)
                 return {
                   id : item.id,
                   waktu_konsultasi: item.waktu_konsultasi,
                   nomor_antrian: item.nomor_antrian,
                   status: item.status,
-                  jenis_kelamin: item.pasien.jenis_kelamin,
-                  nama: item.pasien.nama,
-                  nomor_hp: item.pasien.nomor_hp,
+                  jenis_kelamin: item.jenis_kelamin,
+                  nama: item.nama,
+                  nomor_hp: item.nomor_hp,
                   pasien_id :item.pasien_id,
                   no: (this.currentPage - 1) * this.perPage + index + 1
                 };
@@ -490,7 +491,7 @@ import {
               pasien_id,
               nomor_antrian,
               klinik_id,
-              anamnesa ,
+              anamnesa :anamnesis,
               waktu_konsultasi: waktu,
               pasien: {
                 nomor_rekam_medis,
@@ -504,12 +505,11 @@ import {
                 suhu : suhu,
                 tinggi_badan: tb,
                 berat_badan : bb,
-
               }
             } = res;
             const x = __dataRegistrasiPasien;
             console.log('res',res);
-
+            console.log('anam',anamnesis);
             x["nama"].value = nama;
             x["rekam_medis"].value = nomor_rekam_medis;
             x["hp"].value = hp;

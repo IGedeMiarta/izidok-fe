@@ -80,7 +80,7 @@
                           <div role="group">
                             <b-form-input v-model.lazy="inputTarif.tarif_layanan" v-money="money"
                               :state="errorState({ label: 'tarif_layanan', index })"
-                              :placeholder="placeholderInput('tarif_layanan')" maxlength="12" class="text-right">
+                              :placeholder="placeholderInput('tarif_layanan')" :maxlength="19" class="text-right">
                             </b-form-input>
                             <b-form-invalid-feedback class="text-capitalize">
                               {{
