@@ -1,17 +1,15 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import VuexPersist from "vuex-persist";
 import sidebar from "./modules/sidebar";
 import rekamMedis from "./modules/rekamMedis";
 import struk from "./modules/struk";
+import createPersistedState from "vuex-persistedstate";
+import SecureLS from 'secure-ls';
 
 // Load Vuex
 Vue.use(Vuex);
 
-const vuexPersist = new VuexPersist({
-  key: "izidok",
-  storage: window.localStorage
-});
+const ls = new SecureLS({ isCompression: false });
 
 const getRoles = state => state && state.user && state.user.roles;
 
@@ -62,5 +60,13 @@ export default new Vuex.Store({
     }
   },
   strict: process.env.NODE_ENV !== "production",
-  plugins: [vuexPersist.plugin]
+  plugins: [
+    createPersistedState({
+      key: "_izd_",
+      storage: {
+        getItem: key => ls.get(key),
+        setItem: (key, value) => ls.set(key, value),
+        removeItem: key => ls.remove(key)
+      }
+    })]
 });
