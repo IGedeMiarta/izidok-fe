@@ -102,11 +102,9 @@ export default {
       const tmp = {
         name: "pasien-list"
       };
-
       if (this.beingSubmit) {
         tmp.onComplete = this.simpan();
       }
-
       this.$router.push(tmp);
     },
     async editPasien(postData) {

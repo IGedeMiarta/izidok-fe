@@ -53,7 +53,7 @@
             </li> -->
           <template v-if="userRole !== 'Operator'">
             <li class="nav-item">
-              <a class="nav-link" href="javascript:void(0);">
+              <a class="nav-link" href="javascript:void(0);" @click="pageProfile">
                 Pengaturan Akun
               </a>
             </li>

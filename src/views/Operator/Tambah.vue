@@ -64,9 +64,8 @@
                           :maxlength="form.maxlength" />
                       </template>
                     </b-form-group>
-
                     <div class="float-right">
-                      <router-link to="operator" variant="secondary" class="text-capitalize mr-2">Keluar</router-link>
+                      <router-link to="{name : 'operator-list'}" variant="secondary" class="text-capitalize mr-2">Keluar</router-link>
                       <b-button class="text-capitalize ml-2" type="submit" variant="primary">simpan</b-button>
                     </div>
                   </b-form>

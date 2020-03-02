@@ -14,42 +14,33 @@
       <div class="card card-box mb-3 ninja-shadow">
         <div class="card-body">
           <div class="row no-padding">
-            <div class="col-md-9 no-padding">
-              <div class="form-group col-md-6" style="float:left;">
-                <label for="inputEmail4">Nama</label>
-                <input type="email" class="form-control" id="inputEmail4" />
-              </div>
-              <div class="form-group col-md-6" style="float:left;padding-top:30px;padding-left:0;">
-                <b-button variant="first">CARI</b-button>
-              </div>
-            </div>
-            <div class="col-md-3 no-padding">
               <div class="form-group col-md-12" style="padding-top: 30px; padding-left: 0px;">
                 <b-button variant="primary" class="float-right" @click="createOperator">TAMBAH ASISTEN DOKTER</b-button>
               </div>
-            </div>
           </div>
           <div class="col-md-12 no-padding">
             <table class="table table-hover table-hover mb-5">
               <thead>
                 <tr class="text-capitalize">
-                  <th>no</th>
-                  <th>nama asisten dokter</th>
+                  <th>nama asisten</th>
                   <th>email</th>
-                  <th>nomer hp</th>
+                  <th>no. handphone</th>
+                  <th>Terakhir Aktif</th>
                   <th class="no-sort text-center">Actions</th>
+                  <th class="no-sort text-center">Status</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(item, index) in dataOperator" :key="item.id">
-                  <td>{{index + 1}}</td>
+                <tr v-for="(item) in dataOperator" :key="item.id">
                   <td>{{item.nama}}</td>
                   <td>{{item.user.email}}</td>
                   <td>{{item.user.nomor_telp}}</td>
+                  <td>2</td>
+                  
                   <td class="text-center">
-                    <b-link class="btn bg-info text-light font-size-md pl-2 pr-2 btn-sm ml-1 mr-1"
-                      @click="showModal(item)">
-                      <font-awesome-icon icon="search" />
+                    <b-link class="btn text-light font-size-md pl-2 pr-2 btn-sm ml-1 mr-1"
+                      @click="showModal(item)" style="background-color:yellow;">
+                      <font-awesome-icon icon="pencil-alt" style="color:black;" />
                     </b-link>
                     <b-link class="btn bg-danger text-light font-size-md pl-2 pr-2 btn-sm ml-1 mr-1" @click="removeOperator({
                             id: item.id,
@@ -57,6 +48,19 @@
                         })">
                       <font-awesome-icon icon="trash-alt" />
                     </b-link>
+                  </td>
+                  <td class="text-center">Aktif
+                     <toggle-button
+                          style="margin-top:8px;margin-left:5px;"
+                          v-model="status"
+                          :labels="{ checked: 'Ya', unchecked: 'Tidak' }"
+                          :width="60"
+                          :color="{
+                            checked: '#3c44b1',
+                            unchecked: '#f83245',
+                            disabled: '#CCCCCC'
+                          }"
+                        />
                   </td>
                 </tr>
               </tbody>
@@ -87,8 +91,12 @@
                           $event,
                           tmpId: form.tmpId
                         })
-                      "  :state="renderError({ error: form.error })" />
+                      "  :state="renderError({ error: form.error })"  :value="getValue(form.label)"  />
             </b-form-group>
+             <b-button class="ml-3 text-uppercase" variant="primary" style="font-size:17.5px;float:right "
+                type="submit">simpan
+                <!-- <font-awesome-icon class="mx-auto" icon="caret-down" /> -->
+              </b-button>
           </div>
         </b-form>
       </b-modal>
@@ -122,13 +130,14 @@
   import {
     FontAwesomeIcon
   } from "@fortawesome/vue-fontawesome";
-
+  import { ToggleButton } from "vue-js-toggle-button";
   library.add(faArrowRight, faEye,
     faEyeSlash, faArrowUp, faTrashAlt, faSearch, faPencilAlt);
 
   export default {
     components: {
-      "font-awesome-icon": FontAwesomeIcon
+      "font-awesome-icon": FontAwesomeIcon,
+      "toggle-button": ToggleButton
     },
     data() {
       return {
@@ -139,13 +148,14 @@
         perPage: 10,
         formBasicData: null,
         formData: null,
+        status : null,
         passwordVisible: false,
         passwordVisible1: false,
       };
     },
     validations: {
       formData: {
-        nama_operator: {
+        nama: {
           required,
           maxLength: maxLength(50)
         },
@@ -267,19 +277,33 @@
       this.getOperator();
     },
     methods: {
-      submitForm() {
-
+      submitForm(item){
+        this.updateProses(item);
       },
       showModal(item) {
         this.$refs['modal-operator'].show()
-        this.dataEdit = item;
-        console.log('data edit',this.dataEdit)
+        this.dataEdit = {
+          id : item.id,
+          nama: item.user.nama,
+          email : item.user.email,
+          password: null,
+          konfirmasi_password: null,
+          'no._handphone' :item.user.nomor_telp,
+        }
+        this.formData = this.dataEdit;
       },
       async updateProses(item) {
         try {
+          console.log(this.formData);
+         
           const res = await axios.put(
             `${this.url_api}/operator/${item.user_id}`,
-
+            {
+                id : item.id,
+                nama: item.user.nama,
+                email : item.user.email,
+                nomor_telp :item.user.nomor_telp,
+            }
           );
           const {
             status,
@@ -304,7 +328,7 @@
       },
       setFormBasicData() {
         const tmp = [{
-            label: "nama operator",
+            label: "nama",
             placeholder: "Masukkan nama operator",
             type: "text",
             name: "nama",
@@ -373,7 +397,7 @@
         }
       },
       createOperator() {
-        this.$router.push('operator/tambah');
+        this.$router.push({ name : 'operator-tambah'});
       },
       async getOperator() {
         try {

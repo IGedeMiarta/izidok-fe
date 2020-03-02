@@ -69,6 +69,7 @@ import {
   faHome,
   faBriefcaseMedical,
   faUser,
+   faUsers,
   faSuitcase,
   faPlusSquare,
   faCalculator,
@@ -82,6 +83,7 @@ library.add(
   faHome,
   faBriefcaseMedical,
   faUser,
+  faUsers,
   faSuitcase,
   faPlusSquare,
   faCalculator,
@@ -203,6 +205,16 @@ export default {
             }
           },
           child: manajemenKlinikChild()
+        },
+        {
+          title: "Manajemen pengguna",
+          href: "/operator",
+          icon: {
+            element: "font-awesome-icon",
+            attributes: {
+              icon: "users"
+            }
+          },
         },
         // {
         //   title: "Halaman Farmasi",

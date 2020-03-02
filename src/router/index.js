@@ -207,7 +207,7 @@ const routes = [
         component: () => import("../views/Operator/List.vue")
       },
       {
-        path: "tambah",
+        path: "/operator/tambah",
         name: "operator-tambah",
         component: () => import("../views/Operator/Tambah.vue")
       }
