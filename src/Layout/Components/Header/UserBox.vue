@@ -51,6 +51,13 @@
                 </a>
               </div>
             </li> -->
+          <template v-if="userRole !== 'Operator'">
+            <li class="nav-item">
+              <a class="nav-link" href="javascript:void(0);">
+                Pengaturan Akun
+              </a>
+            </li>
+          </template>
             <li class="nav-item">
               <a class="nav-link" href="javascript:void(0);">
                 ubah password
@@ -104,6 +111,13 @@ export default {
     }
   },
   methods: {
+    pageProfile(){
+      var checkRole = this.$store.state.user.roles[0];
+      if(checkRole)
+      {
+        this.$router.push('/profile');
+      }
+    },
     showTooltip() {
       this.$refs.tooltipSuccess._toolpop
         .getTipElement()

@@ -219,6 +219,11 @@ const routes = [
     component: () => import("../views/RiwayatRekamMedis.vue")
   },
   {
+    path: "/profile",
+    name: "profile",
+    component: () => import("../views/Profile/Profile.vue")
+  },
+  {
     path: "/tarif",
     name: "tarif",
     component: () => import("../views/Tarif.vue"),

@@ -163,8 +163,8 @@
             <b-form-group id="input-group-1" label-for="input-1">
               <label for="">No. Handphone</label>
               <label for="" style="color:red">*</label>
-              <b-form-input id="input-1" type="text" :maxlength="15"
-                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+              <b-form-input id="input-1" type="text"  pattern=".{10,15}"  :maxlength="15"
+                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')"
                 v-model.trim="formDataRegister.nomor_hp" required>
               </b-form-input>
             </b-form-group>
