@@ -286,6 +286,15 @@ export default {
       this.fileReaderPromises = [];
 
       for (let i = 0; i < event.target.files.length; i++) {
+        if(i == 3 || this.selectedFiles.length == 3){
+          this.$swal({
+            type: "error",
+            title: "File Telah Mencapai Batas Maximal",
+            text:
+              "Anda hanya bisa mengunggah 3 file dalam 1x visit pasien!"
+          });
+          return;
+        }
         let file = event.target.files[i];
         let extension = file.name.split(".").pop();
 
@@ -340,7 +349,7 @@ export default {
               value: this.uploadedFiles
             });
 
-            console.log(this.uploadedFiles);
+            // console.log(this.uploadedFiles);
           }
         });
       });

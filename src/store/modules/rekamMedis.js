@@ -37,18 +37,22 @@ const getters = {
 };
 
 const actions = {
-    resetCartState({ commit }) {
+    // call at the first time to reset the state
+    resetState({ commit }) {
         console.log('reset state called...');
         commit('resetState')
     },
+
+    // get initial data from backend
     async fetchData({ commit, dispatch }) {
         console.log('fetch data called...');
 
-        dispatch('resetCartState');
+        dispatch('resetState');
 
         const pasien_id = router.currentRoute.params.pasien_id;
         const transklinik_id = router.currentRoute.params.transklinik_id;
 
+        // update transklinik (antrean) status to "KONSULTASI"
         const TransStatus = await axios.put(
             store.state.URL_API + "/transaksi/" + transklinik_id, {
             status: 'KONSULTASI'
@@ -56,35 +60,45 @@ const actions = {
 
         console.log('Rawat Jalan Status: ', TransStatus.data.data.status);
 
+        // get pasien data (Tensi, BB, TB, Respirasi, Sistole, Diastole)
         const res_pasien = await axios.get(store.state.URL_API + "/pasien/" + pasien_id);
 
         commit('setPasien', res_pasien.data);
     },
 
+    // this function called from Anamnesa.vue
     updateAnamnesa({ commit }, payload) {
         commit('setPostData', payload);
     },
 
+    // preparing the payload to send to backend
     updatePostData({ commit }, payload) {
         commit('setPostData', payload);
     },
 
+    // this function called on canvas changed
     updateCanvas({ commit }, payload) {
         commit('setCanvas', payload);
     },
 
+    // this function to update (next konsul & agreement)
     updateSavingParams({ commit }, payload) {
         commit('setIsSaving', payload);
     },
 
+    //saving rekam medis
     async saveRekamMedis({ commit, state }) {
         console.log('save rekam-medis called...');
+
+        // get pasien_id and transklinik_id from the route
         const pasien_id = router.currentRoute.params.pasien_id;
         const transklinik_id = router.currentRoute.params.transklinik_id;
 
         state.postData['transklinik_id'] = transklinik_id;
         state.postData['pasien_id'] = pasien_id;
 
+        // if canvas is draw, send to backend
+        // start
         if (state.postData['anamnesa_is_draw']) {
             state.postData['anamnesa_draw'] = state.canvas_anamnesa.toDataURL("image/png");
         }
@@ -104,12 +118,15 @@ const actions = {
         if (state.postData['pemeriksaan_penunjang_is_draw']) {
             state.postData['pemeriksaan_penunjang_draw'] = state.canvas_pemeriksaan_penunjang.toDataURL("image/png");
         }
+        // end
 
+        // agreement
         if (!state.postData['agreement']) {
             commit('setIsSaving', { key: 'is_agree', value: false });
             return;
         }
 
+        // next konsul
         if (!state.postData['next_konsultasi']) {
             commit('setIsSaving', { key: 'is_next_konsul', value: false });
             return;
@@ -117,6 +134,7 @@ const actions = {
 
         console.log(state.postData);
 
+        // process send to backend
         try {
             commit('setIsSaving', { key: 'is_saving', value: true });
 
@@ -131,6 +149,7 @@ const actions = {
 
             commit('setIsSaving', { key: 'is_saving', value: false });
 
+            // if successful, update transklinik (antrean) status to "SELESAI"
             const TransStatus = await axios.put(
                 store.state.URL_API + "/transaksi/" + transklinik_id, {
                 status: 'SELESAI'
