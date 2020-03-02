@@ -584,30 +584,40 @@ export default {
       this.$refs["modal-edit"].show();
     },
     async updateTarif(dataEdit) {
-      const { shallowCopyEditData } = this;
+      const { shallowCopyEditData, validationError } = this;
       const { tarif: scTarif } = shallowCopyEditData;
       const { nama_layanan, tarif } = dataEdit;
-      const conv = val => rep(val && val.trim(), /[^0-9]/gi, "");
-      const tmp = {
-        ...dataEdit,
-        tarif: conv(tarif)
-      };
-      const x = {
-        ...shallowCopyEditData,
-        tarif: conv(scTarif)
-      };
-      let z = [];
-      const v = Object.keys(tmp).map(val => {
-        if (x[val] !== tmp[val]) {
-          z = [...z, val];
-        }
-      });
-      if (z.length > 0) {
-        this.$swal({
-          type: "question",
-          // title: startCase("gagal"),
-          text: `Apakah anda yakin untuk mengubah ${startCase(z[0])} ${startCase(nama_layanan)}`
+
+      if (
+        validationError &&
+        Object.keys(validationError).every(val => !validationError[val])
+      ) {
+        const conv = val => rep(val && val.trim(), /[^0-9]/gi, "");
+        const tmp = {
+          ...dataEdit,
+          tarif: conv(tarif)
+        };
+        const x = {
+          ...shallowCopyEditData,
+          tarif: conv(scTarif)
+        };
+        let z = [];
+        const v = Object.keys(tmp).map(val => {
+          if (x[val] !== tmp[val]) {
+            z = [...z, val];
+          }
         });
+        if (z.length > 0) {
+          this.$swal({
+            type: "question",
+            html: `<p>Apakah anda yakin untuk mengubah ${z
+              .map(val => startCase(val))
+              .join(", ")}</p> <p>"${startCase(nama_layanan)}"</p>`,
+            showCancelButton: true
+          }).then(({ value }) => value && this.updateProsesTarif(dataEdit));
+        } else {
+          this.updateProsesTarif(dataEdit);
+        }
       }
       // console.log(dw([tmp], [x], iE));
       // console.log(tmp);
@@ -679,16 +689,17 @@ export default {
           dataEdit
         );
         const { status, data } = res.data;
+      } catch (err) {
+        // alert(err);
+      } finally {
+        this.$refs["modal-edit"].hide();
         this.$swal({
           title: "Edit Tarif Berhasil",
           text: "Data berhasil tersimpan",
           icon: "success",
           confirmButtonText: startCase("ya")
         });
-        this.$refs["modal-edit"].hide();
         this.fetchListTarif();
-      } catch (err) {
-        // alert(err);
       }
     },
     async deleteTarif(id) {
