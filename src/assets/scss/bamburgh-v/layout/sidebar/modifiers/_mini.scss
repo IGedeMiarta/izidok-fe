@@ -1,0 +1,89 @@
+// Sidebar mini
+
+.app-sidebar-mini {
+
+  .app-sidebar {
+    width: $sidebar-width-mini;
+  }
+
+  @include media-breakpoint-up(lg) {
+    .app-content {
+      padding-left: $sidebar-width-mini;
+      position: absolute;
+      bottom: 0;
+      top: 0;
+      width: 100%;
+    }
+
+    .app-header {
+      left: $sidebar-width-mini;
+    }
+  }
+
+  .sidebar-navigation {
+    &--mini {
+      ul {
+        @include list-unstyled;
+
+        li {
+          padding: 3px ($layout-spacer / 2);
+
+          &:first-child {
+            padding-top: ($layout-spacer / 2);
+          }
+
+          a {
+            padding: ($layout-spacer / 3) 0;
+            text-align: center;
+            display: flex;
+            @include border-radius($border-radius);
+            transition: $transition-base;
+
+            span {
+              margin: 0 auto;
+              display: block;
+            }
+
+            svg {
+              transition: $transition-base;
+              width: 24px;
+              height: 24px;
+              display: block;
+              margin: 0 auto;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .toggle-sidebar {
+    display: none;
+  }
+  @include media-breakpoint-up(lg) {
+    .search-link {
+      border-left: 0;
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
+
+@include media-breakpoint-down(md) {
+  .app-sidebar-mini {
+    .app-sidebar {
+      left: -$sidebar-width-mini;
+    }
+  }
+}
+
+.sidebar-open-mobile {
+  &.app-sidebar-mini {
+    .app-sidebar {
+      left: 0;
+    }
+    .app-content {
+      transform: translate3d($sidebar-width-mini,0,0);
+    }
+  }
+}

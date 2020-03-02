@@ -1,0 +1,112 @@
+// Sidebar collapsed
+@include media-breakpoint-up(lg) {
+  .sidebar-collapsed {
+    .app-sidebar {
+      width: $sidebar-width-collapsed;
+
+      .vsm-dropdown {
+        opacity: 0;
+        visibility: hidden;
+        height: 0 !important;
+        overflow: hidden;
+      }
+
+      .vsm-header {
+        height: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+
+      .sidebar-navigation {
+        .vsm-list {
+          .vsm-item {
+            .vsm-link {
+              &[disabled]:hover {
+                background-image: none;
+                background-color: transparent;
+                color: #333;
+
+                svg {
+                  color: #ddd;
+                  fill: #ddd;
+                }
+              }
+
+              .vsm-title {
+                transform: translate3d(-25px, 0, 0);
+                opacity: 0;
+                visibility: hidden;
+              }
+            }
+          }
+        }
+      }
+
+      &--footer {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      &.sidebar-disable:hover {
+        a {
+          cursor: default;
+        }
+
+        .ps__scrollbar-x-rail {
+          display: none;
+        }
+      }
+
+      &:not(.sidebar-disable):hover {
+        width: $sidebar-width;
+
+        .vsm-dropdown {
+          opacity: 1;
+          visibility: visible;
+          height: auto !important;
+        }
+
+        .sidebar-navigation {
+          .vsm-list {
+            .vsm-item {
+              .vsm-link {
+                .vsm-title {
+                  transform: translate3d(0px, 0, 0);
+                  opacity: 1;
+                  visibility: visible;
+                }
+              }
+            }
+          }
+        }
+
+        .vsm-header {
+          height: initial;
+          padding: $spacer;
+          overflow: auto;
+        }
+
+        .app-sidebar--footer {
+          opacity: 1;
+          visibility: visible;
+        }
+
+        .app-sidebar--header {
+          .toggle-sidebar {
+            visibility: visible;
+            opacity: 1;
+            overflow: initial;
+          }
+        }
+      }
+    }
+
+    .app-content {
+      padding-left: $sidebar-width-collapsed;
+    }
+
+    .app-header {
+      left: $sidebar-width-collapsed;
+    }
+  }
+}

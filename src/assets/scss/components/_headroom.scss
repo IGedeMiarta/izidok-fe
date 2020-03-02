@@ -1,0 +1,31 @@
+// Headroom.js sticky
+
+.headroom {
+  position: fixed !important;
+  will-change: transform;
+  top: 0;
+  width: 100%;
+  left: 0;
+  transition: transform .2s;
+
+  @include media-breakpoint-down(lg) {
+    position: relative !important;
+  }
+
+}
+
+.headroom--pinned {
+  transform: translateY(0%);
+}
+
+.headroom--unpinned {
+  transform: translateY(-100%);
+}
+
+.headroom--not-top {
+  background: $white;
+
+  &.headroom--pinned {
+    box-shadow: 0 1px 15px rgba(130, 130, 134, 0.3);
+  }
+}
