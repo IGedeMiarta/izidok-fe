@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="d-flex align-items-center mb-3">
-      <span class="text-capitalize mr-2" style="width: 150px"
+      <span class="text-capitalize mx-2" style="width: 150px"
         >antrean hari ini :</span
       >
-      <b-input class="w-50 mr-2" />
+      <b-input class="w-50 mr-2" size="sm" />
       <div class="d-flex justify-content-between ml-2">
         <b-button variant="primary" size="sm" class="text-capitalize mr-2"
           >tambah antrean</b-button

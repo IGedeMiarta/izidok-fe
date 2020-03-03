@@ -1,39 +1,28 @@
 <template>
-  <div>
-    <a
-      class="card border-0 card-box card-box-hover-rise card-box-hover text-white align-box-row align-items-start mb-5"
-      :class="bgColor"
-    >
+  <a
+    class="card border-0 card-box card-box-hover-rise card-box-hover text-white align-box-row align-items-start mb-5 w-100 card-dashboard"
+    :class="bgColor"
+  >
+    <div class="px-2 py-3 w-100 d-flex align-items-center flex-row">
       <div>
-        <div class="px-4 pt-4 pb-0">
-          <div class="display-4 font-weight-bold">
-            {{ highlight }}
-          </div>
-          <div
-            class="font-weight-bold text-white mt-3 font-size-sm text-capitalize"
-          >
-            {{ title }}
-          </div>
-        </div>
-        <!-- <div
-          class="divider mt-2 mb-3 border-2 w-25 bg-white rounded border-white"
-        ></div> -->
         <div
-          class="mt-4 d-flex align-items-center border-top"
+          class="font-weight-bold text-white my-1 font-size-sm text-capitalize"
         >
-          <div class="py-2 px-4 d-flex flex-grow-1 justify-content-center">
-            <span class="text-capitalize">lebih lanjut</span>
-            <div class="ml-auto align-self-center">
-              <font-awesome-icon icon="chevron-right" class="font-size-xl" />
-            </div>
+          {{ title }}
+        </div>
+        <div class="d-flex align-items-center">
+          <div class="display-3 font-weight-bold">
+            {{ highlight }}
           </div>
         </div>
       </div>
-      <!-- <div class="ml-auto align-self-center">
-        <font-awesome-icon icon="chevron-right" class="font-size-xl" />
-      </div> -->
-    </a>
-  </div>
+      <div class="d-flex flex-grow-1 justify-content-center">
+        <div class="ml-auto align-self-end">
+          <font-awesome-icon icon="chevron-right" class="font-size-xl" />
+        </div>
+      </div>
+    </div>
+  </a>
 </template>
 
 <script>
@@ -64,3 +53,10 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.card-dashboard {
+  background-position: bottom center;
+  // background-image: url("../assets/img/home-bg1.png") !important;
+}
+</style>
