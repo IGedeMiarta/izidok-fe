@@ -17,8 +17,8 @@
           <div class="col-md-12 no-padding">
             <DataTableWrapper :perPage="perPage" :currentPage="currentPage" :callbackFunc="fetchListPembayaran"
               @valueChanged="handleValueChanged">
-              <b-table :items="pembayaranList" :fields="fieldList" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc"
-                thead-tr-class="kntl" :no-local-sorting="true" class="text-center">
+              <b-table :items="pembayaranList" :fields="fieldList" thead-tr-class="kntl" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc"
+                :no-local-sorting="true" class="text-center">
                 <template v-slot:head()="data">
                   {{ data.label }}
                   <b-input size="sm" class="mt-2 w-95" v-if="data.field.searchable"
@@ -28,28 +28,45 @@
                 <template v-slot:cell(jenis_kelamin)="data">
                   {{ jenisKelamin(data.value) }}
                 </template>
-
+                {{data}}
                 <template v-slot:cell(status)="data">
-                  <template v-if="data.value == 'MENUNGGU'">
-                    <b-button variant="warning" size="sm" style="font-size:13px;">{{data.value}}</b-button>
+                  <template v-if="data.value == 'BELUM LUNAS'">
+                    <strong style="color:red">{{data.value}}</strong> 
                   </template>
-                  <template v-if="data.value == 'KONSULTASI'">
-                    <b-button variant="primary" size="sm" style="font-size:13px;">{{data.value}}
-                    </b-button>
+                  <template v-if="data.value == 'LUNAS'">
+                    <strong>{{data.value}}</strong>
                   </template>
                 </template>
                 <template v-slot:cell(actions)="data">
-                  <span>
-                    <b-dropdown id="dropdown-1" class="m-md-2 text-capitalize" variant="primary" size="sm" right>
-                      <template v-slot:button-content>
-                        <font-awesome-icon icon="copy" />
-                      </template>
-                      <b-dropdown-item>Detail Registrasi Antrean</b-dropdown-item>
-                      <template v-if="isOperator == false">
-                        <b-dropdown-item>Tulis rekam medis</b-dropdown-item>
-                      </template>
-                      <b-dropdown-item>hapus antrean</b-dropdown-item>
-                    </b-dropdown>
+                  
+                  <span
+                    class="d-flex align-items-center justify-content-between"
+                  >
+                  <template v-if="data.item.status == 'BELUM LUNAS'">
+                       <b-button 
+                       style="background-color : #C0C5C8"
+                      variant="gray"
+                      class="mr-1"
+                      size="sm" disabled
+                      ><font-awesome-icon icon="search"
+                    /></b-button>
+                  </template>
+                  <template v-else>
+                         <b-button 
+                      variant="primary"
+                      size="sm" 
+                      class="mr-1"
+                      v-b-tooltip.hover title="Lihat Struk"
+                      ><font-awesome-icon icon="search"
+                    /></b-button>
+                  </template>
+                 
+                    <b-button
+                      variant="success"
+                      size="sm"
+                      v-b-tooltip.hover title="Halaman Pembayaran"
+                      ><font-awesome-icon icon="money-bill-wave"
+                    /></b-button>
                   </span>
                 </template>
               </b-table>
@@ -75,14 +92,15 @@
     faArrowUp,
     faTrashAlt,
     faSearch,
-    faPencilAlt
+    faPencilAlt,
+    faMoneyBillWave
   } from "@fortawesome/free-solid-svg-icons";
 
   import {
     FontAwesomeIcon
   } from "@fortawesome/vue-fontawesome";
   import debounce from "lodash/debounce";
-  library.add(faArrowRight, faArrowUp, faTrashAlt, faSearch, faPencilAlt);
+  library.add(faArrowRight,faMoneyBillWave, faArrowUp, faTrashAlt, faSearch, faPencilAlt);
 
   export default {
     components: {
@@ -112,10 +130,10 @@
           generateFieldList: g,
           setSearchableAndSortableFieldList: s
         } = this;
-        const r = val => Boolean(/(actions)\b/gi.test(val) ? !1 : 1);
+        const r = val => Boolean(/(no|actions)\b/gi.test(val) ? !1 : 1);
         return (
           [{
-              label: "no"
+              key: "no"
             },
             {
               key: "nomor_rekam_medis",
@@ -199,29 +217,28 @@
             success,
             data
           } = res.data;
+          console.log(data);
           if (success) {
             const {
-              pembayaran: pembayaranData,
-              total
-            } = data;
-            const {
-              data: listPasien,
+              total,
+                data: listPembayaran,
               total: totalEntries,
               to: toPage,
               from: fromPage
-            } = pembayaranData;
+            } = data;
+            
             this.totalEntries = totalEntries;
             this.toPage = toPage;
             this.fromPage = fromPage;
             this.pembayaranList = [
-              ...listPasien.map((item, index) => {
+              ...listPembayaran.map((item, index) => {
                 return {
                   ...item,
                   no: (this.currentPage - 1) * this.perPage + index + 1
                 };
               })
             ];
-            this.rows = pembayaranData.total;
+            this.rows = data.total;
             return this;
           }
         } catch (err) {

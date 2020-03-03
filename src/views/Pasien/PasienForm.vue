@@ -649,8 +649,8 @@
       heightFoto: "",
       image: null,
       selectTempat: null,
-      provinces: [],
       checkValueNik: null,
+      provinces: [],
       cities: [],
       tempat: {
         provinsi: null,

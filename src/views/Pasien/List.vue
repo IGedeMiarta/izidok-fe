@@ -1,10 +1,10 @@
 <template>
   <div>
     <page-title
-      heading="Manajemen Pasien"
+      heading="Daftar Pasien"
       :breadcrumb="[
         {
-          label: 'Manajemen Pasien',
+          label: 'Daftar Pasien',
           link: '/pasien'
         },
         {
@@ -16,13 +16,6 @@
 
     <div class="container">
       <div class="card card-box mb-3 ninja-shadow">
-        <div class="card-header">
-          <div class="card-header--title">
-            <h3>Manajemen Pasien</h3>
-            <!--  <small>Custom</small>
-              <b>Example widget with table inside.</b> -->
-          </div>
-        </div>
         <div class="card-body">
           <!-- <div class="row no-padding mb-3">
             <div class="col-md-9 ">
