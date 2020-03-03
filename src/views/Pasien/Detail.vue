@@ -1,10 +1,10 @@
 <template>
   <div>
     <page-title
-      heading="Manajemen Pasien"
+      heading="Daftar Pasien"
       :breadcrumb="[
         {
-          label: 'Manajemen Pasien',
+          label: 'Daftar Pasien',
           link : '/pasien'
         },
         {

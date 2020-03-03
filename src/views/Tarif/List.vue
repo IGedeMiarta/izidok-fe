@@ -207,7 +207,7 @@
                 <input
                   type="text"
                   class="form-control"
-                  maxlength="20"
+                  maxlength="5"
                   v-model.trim="editData.kode_layanan"
                   @input="onInputCode($event)"
                   @keypress="onKeypressKodeLayanan"

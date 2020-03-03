@@ -17,9 +17,9 @@
 
           </div>
           <div class="col-sm-3">
-          <b-button class="text-uppercase" style="font-size:14.5px;float:right" v-b-modal.modal-1  variant="primary">
-            Tambah Pasien
-            Baru</b-button>
+            <b-button class="text-uppercase" style="font-size:14.5px;float:right" v-b-modal.modal-1 variant="primary">
+              Tambah Pasien
+              Baru</b-button>
           </div>
         </div>
         <div class="card-body">
@@ -66,7 +66,7 @@
                             tmpId: form.tmpId
                           })
                         " :state="renderError({ error: form.error })" disabled />
-                      <b-form-input v-else  :type="form.type || 'text'" v-model.lazy="formData[form.label]" @keyup="
+                      <b-form-input v-else :type="form.type || 'text'" v-model.lazy="formData[form.label]" @keyup="
                           setValue({
                             rawLabel: form.rawLabel,
                             label: form.label,
@@ -92,7 +92,7 @@
                       " v-if="
                         form.type === 'select' &&
                           form.rawLabel === 'nama pasien'
-                      " :filterable="false"  @search="searchPasien" style="font-size:13.4px;">
+                      " :filterable="false" @search="searchPasien" style="font-size:13.4px;">
                       <template slot="no-options" v-if="form.rawLabel === 'nama pasien'">
                         tulis nama lengkap pasien
                       </template>
@@ -153,17 +153,41 @@
             <b-form-group id="input-group-1" label-for="input-1">
               <label for="">Nama Lengkap</label>
               <label for="" style="color:red">*</label>
-              <b-form-input id="input-1" type="text" v-model.lazy="formDataRegister.nama" required>
+              <b-form-input type="text" v-model.lazy="formDataRegister.nama" required>
               </b-form-input>
               <!-- <div class="error" v-if="!$v.nama.required">Name is required</div>
               <div class="error" v-if="!$v.nama.minLength">Name must have at lea</div> -->
             </b-form-group>
           </div>
           <div class="col-sm-12">
+            <div class="row">
+              <div class="col-md-4">
+                <b-form-group label="jenis identitas" class="text-capitalize" style="position: relative;">
+                  <vue-select :options="
+                    ['KTP', 'SIM', 'Paspor']
+                  " v-model="formDataRegister['jenis_identitas']" />
+                </b-form-group>
+              </div>
+              <div class="col-md-8">
+                <b-form-group label="No. identitas" class="text-capitalize" style="position: relative">
+                  <b-form-input v-if="this.formDataRegister['jenis_identitas'] !== 'Paspor'"
+                    v-model.trim="formDataRegister['nik']"
+                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')"
+                    :maxlength="25"   @keyup="checkNIK" />
+                  <b-form-input v-else :maxlength="25" type="text" v-model.trim="formDataRegister['nik']"
+                    @keyup="checkNIK" />
+                  <template v-if="this.$v.formDataRegister['nik'].error == true">
+                    <label style="color:red">No. Identitas telah terdaftar</label>
+                  </template>
+                </b-form-group>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12">
             <b-form-group id="input-group-1" label-for="input-1">
               <label for="">No. Handphone</label>
               <label for="" style="color:red">*</label>
-              <b-form-input id="input-1" type="text"  pattern=".{10,15}"  :maxlength="15"
+              <b-form-input id="input-1" type="text" pattern=".{10,15}" :maxlength="15"
                 oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')"
                 v-model.trim="formDataRegister.nomor_hp" required>
               </b-form-input>
@@ -205,15 +229,61 @@
                   </Datetime>
                 </b-form-group>
               </div>
+              <div class="col-sm-6">
+
+              </div>
+              <div class="col-sm-6">
+                <b-form-group label="gol. darah" class="text-capitalize" style="position: relative;">
+                  <vue-select :options="
+                    ['A', 'B', 'AB', 'O']
+                  " v-model="formDataRegister.golongan_darah" />
+                </b-form-group>
+              </div>
             </div>
           </div>
           <div class="col-sm-12">
             <b-form-group id="input-group-1" label-for="input-1">
               <label for="">Alamat</label>
               <label for="" style="color:red">*</label>
-             <b-form-textarea id="input-1" rows="3"
-      max-rows="6" type="text" v-model="formDataRegister.alamat_rumah" required>
-             </b-form-textarea>
+              <b-form-textarea id="input-1" rows="3" max-rows="6" type="text" v-model="formDataRegister.alamat_rumah"
+                required>
+              </b-form-textarea>
+            </b-form-group>
+          </div>
+          <div class="col-sm-12">
+            <b-form-group label="provinsi" class="text-capitalize">
+              <vue-select :options="provinces" @input="getCity" v-model="tempat.provinsi" />
+            </b-form-group>
+          </div>
+          <div class="col-sm-12">
+            <b-form-group label="kota" class="text-capitalize">
+              <vue-select :options="cities" v-model="tempat.kota" @input="setDataTempat" />
+            </b-form-group>
+          </div>
+          <div class="col-sm-12">
+            <b-form-group label="status perkawinan" class="text-capitalize">
+              <vue-select :options="
+                ['Belum Kawin', 'Kawin', 'Cerai Hidup', 'Cerai Mati']
+              " v-model="formDataRegister.status_perkawinan" />
+            </b-form-group>
+          </div>
+          <div class="col-sm-12">
+            <b-form-group label="email" class="text-capitalize">
+              <b-form-input type="email" v-model="formDataRegister.email" />
+            </b-form-group>
+          </div>
+          <div class="col-sm-12">
+            <b-form-group label="nama penanggung jawab" class="text-capitalize">
+              <b-form-input type="text" v-model.lazy="formDataRegister.nama_penanggung_jawab" />
+            </b-form-group>
+          </div>
+          <div class="col-sm-12">
+            <b-form-group id="input-group-1" label-for="input-1">
+              <label for="">No. HP penanggung Jawab</label>
+              <b-form-input id="input-1" type="text" pattern=".{10,15}" :maxlength="15"
+                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')"
+                v-model.trim="formDataRegister.nomor_hp_penanggung_jawab">
+              </b-form-input>
             </b-form-group>
           </div>
           <b-button class="ml-3 text-uppercase" variant="success" style="font-size:17.5px;float:right " type="submit">
@@ -277,7 +347,6 @@
       label: "nomor handphone",
       type: "text",
       col: 3,
-
       validations: {
         required,
         numeric,
@@ -287,7 +356,7 @@
     {
       label: "jenis kelamin",
       type: "radio",
-      col: 6,
+      col: 12,
       data: ["perempuan", "laki-laki"],
       isImportant: "*",
       validations: {
@@ -295,16 +364,16 @@
       }
     },
 
-    {
-      label: "dokter",
-      type: "select",
-      isImportant: "*",
-      col: 6,
-      validations: {
-        required
-      }
-    },
-  
+    // {
+    //   label: "dokter",
+    //   type: "select",
+    //   isImportant: "*",
+    //   col: 6,
+    //   validations: {
+    //     required
+    //   }
+    // },
+
     {
       label: "tinggi badan",
       type: "text",
@@ -350,6 +419,7 @@
       col: 12,
       validations: {}
     }
+
   ];
 
   export default {
@@ -395,7 +465,22 @@
         tanggal_lahir: null,
         jenis_kelamin: null,
         alamat_rumah: null,
+        provinsi: '',
+        kota: '',
+        email: '',
+        nama_penanggung_jawab: '',
+        nomor_hp_penanggung_jawab: '',
+        status_perkawinan: '',
+        golongan_darah: '',
+        jenis_identitas: '',
+        nik: ''
       },
+      provinces: [],
+      cities: [],
+      tempat: {
+        provinsi: null,
+        kota: null,
+      }
     }),
 
     beforeRouteLeave(to, from, next) {
@@ -425,13 +510,17 @@
             obj[item.label.split(" ").join("_")] = item.validations;
             return obj;
           }, {})
+        },
+        formDataRegister: {
+          nik: {}
         }
       };
     },
     mounted() {
       this.formBasicData = this.setFormBasicData();
       this.formData = this.setFormData();
-      Promise.all([this.fetchDokter()]);
+      this.getProvince();
+      // Promise.all([this.fetchDokter()]);
     },
     computed: {
       minimumDatetime() {
@@ -442,6 +531,56 @@
       },
     },
     methods: {
+      checkNIK() {
+        clearTimeout(this.timeVerifyNIK)
+        this.timeVerifyNIK = setTimeout(async () => {
+          const res = await axios.get(
+            `${this.url_api}/identity/verify?jenis_pengenal=${this.formDataRegister['jenis_identitas']}&nik=${this.formDataRegister['nik']}`
+          );
+          console.log(res)
+          if (res.data.status == false) {
+            this.$v.formDataRegister['nik'].error = true;
+          } else {
+            this.$v.formDataRegister['nik'].error = false;
+          }
+        }, 550);
+      },
+      setDataTempat() {
+        this.formDataRegister['provinsi'] = this.tempat.provinsi.id
+        this.formDataRegister['kota'] = this.tempat.kota.id
+      },
+      getProvince() {
+        axios.get(`${this.url_api}/province`)
+          .then((response) => {
+            // handle success
+            this.provinces = response.data.data.provinsi.map(val => ({
+              ...val,
+              label: `${val.provinsi_nama}`,
+            }));
+          })
+          .catch((error) => {
+            // handle error
+            console.log(error);
+          })
+      },
+      async getCity() {
+        try {
+          var val;
+          if (this.tempat.provinsi == '' || this.tempat.provinsi == null) {
+            val = '';
+          } else {
+            val = this.tempat.provinsi.id;
+            const res = await axios.get(`${this.url_api}/getcitybyprovince/${val}`)
+            // handle success
+            this.cities = res.data.data.kota.map(val => ({
+              ...val,
+              label: `${val.nama}`,
+            }));
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      },
       hideModal() {
         this.$refs['modal-pasien'].hide()
       },
@@ -525,6 +664,13 @@
             tanggal_lahir: null,
             jenis_kelamin: null,
             alamat_rumah: null,
+            provinsi: null,
+            kota: null,
+            email: null,
+            nama_penanggung_jawab: null,
+            nomor_hp_penanggung_jawab: null,
+            status_perkawinan: null,
+            golongan_darah: null
           }
           let pasien = {
             id: res.data.data.id,
@@ -656,7 +802,7 @@
           if (pasien) {
             this.autoFill(pasien, "nama_pasien");
           }
-        } 
+        }
       },
       autoFill(pasien, filler) {
         let autoFillForm = {
@@ -684,7 +830,7 @@
         let postData = {
           pasien_id: this.formData.nama_pasien.value || "",
           klinik_id: this.$store.state.user.klinik_id || "",
-          examination_by: this.formData.dokter.value || "",
+          // examination_by: this.formData.dokter.value || "",
           nomor_rekam_medis: this.formData["no._rekam_medis"] || "",
           nama_lengkap: this.formData.nama_pasien.label || "",
           nik: this.formData["no._ktp"] || "123",
@@ -737,21 +883,21 @@
           });
         }
       },
-      async fetchDokter() {
-        try {
-          const res = await axios.get(`${this.url_api}/dokter`);
-          if (res.data.data.dokter.data.map) {
-            this.options.dokter = res.data.data.dokter.data.map(item => {
-              return {
-                label: item.nama,
-                value: item.user_id
-              };
-            });
-          }
-        } catch (err) {
-          // alert(err);
-        }
-      },
+      // async fetchDokter() {
+      //   try {
+      //     const res = await axios.get(`${this.url_api}/dokter`);
+      //     if (res.data.data.dokter.data.map) {
+      //       this.options.dokter = res.data.data.dokter.data.map(item => {
+      //         return {
+      //           label: item.nama,
+      //           value: item.user_id
+      //         };
+      //       });
+      //     }
+      //   } catch (err) {
+      //     // alert(err);
+      //   }
+      // },
       async searchPasien(val) {
         try {
           const res = await axios.get(

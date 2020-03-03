@@ -175,7 +175,7 @@
             ]
           },
           {
-            title: "Manajemen Pasien",
+            title: "Daftar Pasien",
             href: "/pasien",
             icon: {
               element: "font-awesome-icon",

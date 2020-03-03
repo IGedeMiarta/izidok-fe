@@ -66,7 +66,7 @@
                             })
                           " @input="onInputKode($event, index, inputTarif, 'kode_layanan')"
                               :state="errorState({ label: 'kode_layanan', index })"
-                              :placeholder="placeholderInput('kode_layanan')" maxlength="20"></b-form-input>
+                              :placeholder="placeholderInput('kode_layanan')" maxlength="5"></b-form-input>
                             <b-form-invalid-feedback class="text-capitalize">
                               {{
                             inputTarif.error &&
