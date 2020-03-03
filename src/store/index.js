@@ -9,7 +9,7 @@ import SecureLS from 'secure-ls';
 // Load Vuex
 Vue.use(Vuex);
 
-const ls = new SecureLS({ isCompression: false });
+const ls = new SecureLS({ isCompression: true });
 
 const getRoles = state => state && state.user && state.user.roles;
 
