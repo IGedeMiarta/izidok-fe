@@ -356,7 +356,6 @@
               // });
             }
           },
-
           konfirmasi_password: {
             required,
             sameAsPassword: sameAs("password"),
@@ -417,7 +416,7 @@
     },
     mounted() {
       this.setFormData();
-       this.windowHeight = window.innerHeight;
+      this.windowHeight = window.innerHeight;
       this.$nextTick(() => {
         window.addEventListener('resize', (e) => {
           this.windowHeight = window.innerHeight;
@@ -482,7 +481,6 @@
         x;
     },
     methods: {
-
       switchVisibilityPassword() {
         this.formBasicData[3].type == 'password' ? this.formBasicData[3].type = 'text' : this.formBasicData[3].type =
           'password';

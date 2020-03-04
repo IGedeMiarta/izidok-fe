@@ -413,7 +413,7 @@ export default {
           this.$swal({
             type: "error",
             title: startCase("gagal"),
-            text: startCase("pasien gagal di hapus")
+            text: startCase("Anda tidak dapat menghapus pasien yang sudah aktif / memiliki aktivitas")
           });
         }
       } catch (err) {
