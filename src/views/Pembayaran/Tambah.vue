@@ -19,17 +19,12 @@
             <b-row class="mb-1">
               <b-col cols="2">No. RM </b-col>
               <b-col cols="auto">:</b-col>
-              <b-col cols="auto">{{ this.pembayaranList['klinik_id'] }}</b-col>
+              <b-col cols="auto">{{ this.pembayaranList['transklinik'].pasien.nomor_rekam_medis }}</b-col>
             </b-row>
             <b-row class="mb-1">
               <b-col cols="2">Nama Pasien </b-col>
               <b-col cols="auto">:</b-col>
-              <b-col cols="auto">{{ this.pembayaranList['created_by'] }}</b-col>
-            </b-row>
-            <b-row class="mb-1">
-              <b-col cols="2">Jaminan </b-col>
-              <b-col cols="auto">:</b-col>
-              <b-col cols="auto">{{ this.pembayaranList['jaminan'] }}</b-col>
+              <b-col cols="auto">{{ this.pembayaranList['transklinik'].pasien.nama }}</b-col>
             </b-row>
             <b-row class="mb-1">
               <b-col cols="2">Nama Dokter </b-col>
@@ -47,14 +42,14 @@
           v-if="this.pembayaranList.status == 'BELUM LUNAS' || this.pembayaranList.status == 'Belum Lunas' || this.pembayaranList.status == 'belum lunas'">
           <h3>Belum Lunas</h3>
           <div class="card-body">
-            <TablePembayaran @valueChanged="calc" :datanya="this.pembayaranVal" />
+            <TablePembayaran @valueChanged="calc" :items="pembayaranList.detail" />
           </div>
         </template>
         <template
           v-if="this.pembayaranList.status == 'DRAFT' || this.pembayaranList.status == 'Draft' || this.pembayaranList.status == 'draft'">
           <h3>Draft</h3>
           <div class="card-body">
-            <TablePembayaran @valueChanged="calc" :datanya="this.pembayaranVal" />
+            <TablePembayaran @valueChanged="calc" :items="pembayaranList.detail" />
           </div>
         </template>
         <template
@@ -142,33 +137,10 @@
         setStrukVal: "struk/SET_STRUK_VAL"
       }),
       calc(val) {
-        // const tmp = val;
-        // let total_tmp = 0;
-        // tmp.map(item => {
-        //   total_tmp += item.qty * item.nilai;
-        // });
-        let tmp;
         let total_tmp = 0;
-        if (this.pembayaranList) {
-          var dataLayanan = this.pembayaranList.detail;
-          tmp = val;
-          // const arr = dataLayanan[dataLayanan.length - 1];
-          // tmp.push(arr);
-          tmp.map((item, x) => {
-            val[x].nama_layanan = dataLayanan[x].nama_layanan;
-            val[x].quantity = dataLayanan[x].quantity;
-            val[x].tarif = dataLayanan[x].tarif;
-            total_tmp += item.tarif * item.quantity;
-            this.pembayaranVal = val;
-          });
-        } else {
-          tmp = val;
-          tmp.map(item => {
-            total_tmp += item.quantity * item.tarif;
-            this.pembayaranVal = val;
-          });
-        }
-        // this.pembayaranVal = val;
+        val.map(item => {
+          total_tmp += item.quantity * item.tarif;
+        });
         this.total = total_tmp;
       },
       bayarModal() {

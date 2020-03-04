@@ -1,5 +1,5 @@
 <template>
-  <b-table :fields="fields()" :items="datanya" borderless class="table-pembayaran">
+  <b-table :fields="fields()" :items="items" borderless class="table-pembayaran">
     <template v-slot:cell(no)="data">
       {{data.index + 1}}
     </template>
@@ -58,30 +58,44 @@
       FontAwesomeLayers,
       "vue-select": () => import("@/components/VueSelect.vue")
     },
-    props: ['datanya'],
+    props: ['items'],
     data: () => ({
       listLayanan: [],
-      items: [{
-        no: 1,
-        nama_layanan: null,
-        quantity: null,
-        tarif: null,
-        subtotal: null
-      }, ],
+      // items: [
+      //   {
+      //     no: 1,
+      //     nama_layanan: null,
+      //     quantity: null,
+      //     tarif: null,
+      //     subtotal: null
+      //   }, {
+      //     no: 2,
+      //     nama_layanan: null,
+      //     quantity: null,
+      //     tarif: null,
+      //     subtotal: null
+      //   }, 
+      // ],
     }),
     mounted() {
       this.fetchLayanan();
       this.calcValue(this.items);
+      console.log(this.items)
     },
     watch: {
       items: {
         deep: true,
         handler: function (newVal) {
           const tmp = newVal.map(item => {
-            item.subtotal = item.quantity * item.tarif;
-            return item;
+            if(typeof item.nama_layanan === 'object'){
+              item.tarif = parseInt(item.nama_layanan.tarif);
+              item.subtotal = parseInt(item.quantity) * parseInt(item.tarif); 
+              item.nama_layanan = item.nama_layanan.nama_layanan;
+            } else {
+              item.subtotal = item.quantity * item.tarif;
+            }
+              return item;
           });
-          console.log('dari tmp = ',tmp);
           this.calcValue(tmp);
           return tmp;
         }
@@ -89,6 +103,7 @@
     },
     methods: {
       calcValue(val) {
+        console.log('calcValue', val)
         this.$emit("valueChanged", val);
       },
       tambah() {
