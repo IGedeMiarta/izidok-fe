@@ -99,10 +99,10 @@
            <b-button :to="{ name: 'registrasi-rawat-jalan' }" variant="primary" class="text-capitalize ml-2">Tambah Antrean</b-button>
             </template>
             <b-table :items="pasiens" :fields="fieldList" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc"
-              thead-tr-class="kntl" :no-local-sorting="true" class="text-center">
+              thead-tr-class="kntl" :no-local-sorting="true">
               <template v-slot:head()="data" >
                 {{ data.label }}
-                <b-input size="sm" class="mt-2 w-95"  v-if="data.field.searchable"
+                <b-input size="sm" class="mt-2 w-22"  v-if="data.field.searchable"
                   @input="searchValueChanged($event, data.field.key)"  />
               </template>
 
@@ -110,7 +110,7 @@
                 {{ jenisKelamin(data.value) }}
               </template>
 
-              <template  v-slot:cell(status)="data">
+              <template  v-slot:cell(status)="data" >
                  <template v-if="data.value == 'MENUNGGU'">
                      <b-button variant="warning" size="sm" style="font-size:13px;">{{data.value}}</b-button>
                   </template>
@@ -311,7 +311,7 @@ import {
           generateFieldList: g,
           setSearchableAndSortableFieldList: s
         } = this;
-        const r = val => Boolean(/(actions)\b/gi.test(val) ? !1 : 1);
+        const r = val => Boolean(/(waktu_konsultasi|status|actions)\b/gi.test(val) ? !1 : 1);
         return (
           [{
               key: "waktu_konsultasi",
@@ -335,7 +335,7 @@ import {
               key: "actions"
             },
             {
-                key: "status",
+                key: "status"
             }
            ] 
              |> (v => s({ field: v, customFunc: r }))

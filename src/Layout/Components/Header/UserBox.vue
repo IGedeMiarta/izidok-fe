@@ -397,7 +397,7 @@
           } else {
             this.$swal({
               title: "Gagal",
-              text: `Password Gagal di Perbaharui`,
+              text: `Password Gagal diperbaharui`,
               type: "failed",
               confirmButtonText: startCase("ya")
             });
@@ -405,7 +405,12 @@
             this.$router.push('/');
           }
         } catch {
-
+            this.$swal({
+              title: "Gagal",
+              text: `Password Lama Anda Salah`,
+              type: "failed",
+              confirmButtonText: startCase("ya")
+            });
         }
       },
       async logout() {

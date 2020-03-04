@@ -24,11 +24,9 @@
                   <b-input size="sm" class="mt-2 w-95" v-if="data.field.searchable"
                     @input="searchValueChanged($event, data.field.key)" />
                 </template>
-
                 <template v-slot:cell(jenis_kelamin)="data">
                   {{ jenisKelamin(data.value) }}
                 </template>
-                {{data}}
                 <template v-slot:cell(status)="data">
                   <template v-if="data.value == 'BELUM LUNAS'">
                     <strong style="color:red">{{data.value}}</strong> 
@@ -38,7 +36,6 @@
                   </template>
                 </template>
                 <template v-slot:cell(actions)="data">
-                  
                   <span
                     class="d-flex align-items-center justify-content-between"
                   >
@@ -65,6 +62,7 @@
                       variant="success"
                       size="sm"
                       v-b-tooltip.hover title="Halaman Pembayaran"
+                      @click="detailBayar(data.item.id)"
                       ><font-awesome-icon icon="money-bill-wave"
                     /></b-button>
                   </span>
@@ -265,9 +263,8 @@
           }
         ];
       }, 500),
-      detailBayar({
-        id
-      } = {}) {
+      detailBayar(id) {
+        console.log('tess',id)
         if (id) {
           this.$router.push({
             name: "pembayaran-tambah",
