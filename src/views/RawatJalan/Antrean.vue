@@ -133,12 +133,14 @@
                             rekamMedis(data)
                           ">Tulis rekam medis</b-dropdown-item>
                     </template>
+                    <template v-if="data.item.status !== 'KONSULTASI'">
                     <b-dropdown-item @click="
                           pembatalanAntrean({
                             id: data.item.id,
                             namaPasien: data.item.nama
                           })
                         ">hapus antrean</b-dropdown-item>
+                    </template>
                   </b-dropdown>
                 </span>
               </template>
@@ -520,7 +522,7 @@ import {
 
             x["tb"].value = tb + ' (cm)';
             x["bb"].value = bb + ' (kg)';
-            x["suhu"].value = suhu +' (cm)';
+            x["suhu"].value = suhu +' (celcius)';
             x["tensi_sistole"].value = tensi_sistole;
             x["tensi_diastole"].value = tensi_diastole;
             x["nadi"].value = nadi;
