@@ -52,16 +52,15 @@
     library
   } from "@fortawesome/fontawesome-svg-core";
   import {
-    faArrowsAltH,
     faHome,
-    faBriefcaseMedical,
     faUser,
     faUsers,
-    faCashRegister,
-    faSuitcase,
-    faPlusSquare,
-    faCalculator,
-    faChartBar
+    faFileAlt,
+    faFileMedical,
+    faCog,
+    faArchive,
+    faThLarge,
+    faClone
   } from "@fortawesome/free-solid-svg-icons";
 
   import {
@@ -69,16 +68,15 @@
   } from "@fortawesome/vue-fontawesome";
 
   library.add(
-    faArrowsAltH,
     faHome,
-    faBriefcaseMedical,
-    faCashRegister,
     faUser,
     faUsers,
-    faSuitcase,
-    faPlusSquare,
-    faCalculator,
-    faChartBar
+    faFileAlt,
+    faFileMedical,
+    faCog,
+    faArchive,
+    faClone,
+    faThLarge,
   );
 
   export default {
@@ -115,17 +113,15 @@
         const manajemenKlinikChild = () => {
           const signedInAs = "dokter praktek";
           const tmp = [{
-              // href: "/layouts/light-sidebar",
               title: "Manajemen Dokter",
               type: "klinik"
             },
-            // {
-            //   // href: "/layouts/light-sidebar",
-            //   title: "Manajemen Operator",
-            //   type: ["klinik", "dokter praktek"]
-            // },
             {
-              // href: "/layouts/light-sidebar",
+              title: "Manajemen Asisten Dokter",
+              href: "/asisten-dokter",
+              type: ["klinik", "dokter praktek"]
+            },
+            {
               title: "Manajemen Tarif",
               href: "/tarif",
               type: ["klinik", "dokter praktek"]
@@ -145,34 +141,24 @@
             }
           },
           {
-            title: "Rawat Jalan",
+            title: "Registrasi Pasien",
+            href: "/rawat-jalan/registrasi",
             icon: {
               element: "font-awesome-icon",
               attributes: {
-                icon: "briefcase-medical"
+                icon: "file-alt"
               }
-            },
-            child: [{
-                href: "/rawat-jalan/registrasi",
-                title: "Registrasi"
-              },
-              {
-                href: "/rawat-jalan/antrean",
-                title: "Antrean"
-              },
-              // {
-              //   href: "/rekam-medis",
-              //   title: "Rekam Medis"
-              // }
-              // {
-              //   // href: "/layouts/gradient-sidebar-1",
-              //   title: "Resep"
-              // },
-              // {
-              //   // href: "/layouts/gradient-sidebar-2",
-              //   title: "Rujukan Lab"
-              // }
-            ]
+            }
+          },
+          {
+            title: "Antrean",
+            href: "/rawat-jalan/antrean",
+            icon: {
+              element: "font-awesome-icon",
+              attributes: {
+                icon: "clone"
+              }
+            }
           },
           {
             title: "Daftar Pasien",
@@ -185,63 +171,45 @@
             }
           },
           {
-            title: "Manajemen Klinik",
+            title: "Rekam Medis",
+            href: "/rekam-medis",
             icon: {
               element: "font-awesome-icon",
               attributes: {
-                icon: "suitcase"
+                icon: "file-medical"
+              }
+            }
+          },
+          {
+            title: "Manajemen pengguna",
+            icon: {
+              element: "font-awesome-icon",
+              attributes: {
+                icon: "th-large"
               }
             },
             child: manajemenKlinikChild()
           },
           {
-            title: "Manajemen pengguna",
-            href: "/operator",
-            icon: {
-              element: "font-awesome-icon",
-              attributes: {
-                icon: "users"
-              }
-            },
-          },
-            {
             title: "Pembayaran",
             href: "/pembayaran",
             icon: {
               element: "font-awesome-icon",
               attributes: {
-                icon: "cash-register"
+                icon: "archive"
               }
             },
           },
-          // {
-          //   title: "Halaman Farmasi",
-          //   icon: {
-          //     element: "font-awesome-icon",
-          //     attributes: {
-          //       icon: "plus-square"
-          //     }
-          //   }
-          // },
-          // {
-          //   title: "Halaman Pembayaran",
-          //   href: "/pembayaran",
-          //   icon: {
-          //     element: "font-awesome-icon",
-          //     attributes: {
-          //       icon: "calculator"
-          //     }
-          //   }
-          // }
-          // {
-          //   title: "Laporan",
-          //   icon: {
-          //     element: "font-awesome-icon",
-          //     attributes: {
-          //       icon: "chart-bar"
-          //     }
-          //   }
-          // }
+          {
+            title: "Account Setting",
+            href: "/#",
+            icon: {
+              element: "font-awesome-icon",
+              attributes: {
+                icon: "cog"
+              }
+            },
+          },
         ];
 
         return tmp.map(item => ({
