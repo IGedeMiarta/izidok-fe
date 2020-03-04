@@ -197,7 +197,7 @@ const routes = [
     ]
   },
   {
-    path: "/operator",
+    path: "/asisten-dokter",
     name: "operator",
     component: () => import("../views/Operator.vue"),
     children: [
@@ -207,16 +207,11 @@ const routes = [
         component: () => import("../views/Operator/List.vue")
       },
       {
-        path: "/operator/tambah",
+        path: "/tambah",
         name: "operator-tambah",
         component: () => import("../views/Operator/Tambah.vue")
       }
     ]
-  },
-  {
-    path: "/riwayat-rekam-medis",
-    name: "riwayat-rekam-medis",
-    component: () => import("../views/RiwayatRekamMedis.vue")
   },
   {
     path: "/profile",

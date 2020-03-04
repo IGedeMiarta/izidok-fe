@@ -117,8 +117,8 @@
               type: "klinik"
             },
             {
-              title: "Manajemen Operator",
-              href: "/operator",
+              title: "Manajemen Asisten Dokter",
+              href: "/asisten-dokter",
               type: ["klinik", "dokter praktek"]
             },
             {
