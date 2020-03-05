@@ -49,6 +49,11 @@
           <b-button variant="primary" class="text-uppercase" @click="kembali()">kembali</b-button>
           <b-button
             variant="info" class="text-uppercase"
+            @click="
+              rekamMedis({
+               pasien_id: pasien.id,
+               klinik_id: pasien.klinik_id
+               })"
             >tulis rekam medis</b-button>
         </b-col>
       </template>
@@ -71,14 +76,31 @@
 </template>
 
 <script>
-import axios from 'axios';
+
+import axios from "axios";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+    faArrowRight,
+    faArrowUp,
+    faTrashAlt,
+    faSearch,
+    faPencilAlt,
+    faCopy
+} from "@fortawesome/free-solid-svg-icons";
+// import { Datetime } from "vue-datetime";
+import "vue-datetime/dist/vue-datetime.css";
+
+
+library.add(faArrowRight, faArrowUp, faTrashAlt, faSearch, faPencilAlt, faCopy);
 export default {
   props: {
     pasien_id: Number
   },
   data() {
     return {
-      pasien: null
+      pasien: "",
+      klinik_id: ""
+
     }
   },
   components: {
@@ -89,18 +111,19 @@ export default {
     kembali() {
         this.$router.back();
     },
-     async showrightRekamMedis() {
-          let res = await axios.get(`${this.url_api}/rekam_medis/10}`);
-          this.pasien = res.data.data;
-      },
     async fetchPasien() {
       let res = await axios.get(`${this.url_api}/pasien/${this.pasien_id}`);
       this.pasien = res.data.data;
-    }
+
+    },
+        rekamMedis({ pasien_id, klinik_id }) {
+         this.$router.push(`/rekam-medis/${klinik_id}/${pasien_id}`);
+     },
+
   },
   mounted() {
     this.fetchPasien()
-    this.showrightRekamMedis()
+
   }
 };
 </script>
