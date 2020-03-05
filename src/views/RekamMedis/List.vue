@@ -53,7 +53,7 @@
                     <b-button
                       @click="
                           detailRiwayatRekamMedis({
-                            id: data.item.id
+                            pasien_id: data.item.pasien_id
                           })
                         "
                       variant="primary"
@@ -209,12 +209,12 @@ export default {
     rekamMedis({ klinik_id, pasien_id }) {
       this.$router.push(`/rekam-medis/${klinik_id}/${pasien_id}`);
     },
-      detailRiwayatRekamMedis({ id } = {}) {
-      if (id) {
+      detailRiwayatRekamMedis({ pasien_id } = {}) {
+      if (pasien_id) {
         this.$router.push({
           name: "riwayat-rekam-medis",
           params: {
-            pasien_id: id
+            pasien_id: pasien_id
           }
         });
       }

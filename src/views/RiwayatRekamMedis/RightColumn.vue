@@ -15,7 +15,7 @@
           10/12/2019
         </b-col>
         <b-col cols="12" class="ml-3 mt-4">
-          <h5 class="text-uppercase font-weight-bold">tanda-tanda vital</h5>
+          <h5 class="text-uppercase font-weight-bold"><u>tanda-tanda vital</u></h5>
           <b-row v-for="(data, index) in tandaVital()" :key="index">
             <b-col cols="4" class="text-capitalize">{{ data.label }}</b-col>
             <b-col cols="1">:</b-col>
@@ -23,7 +23,7 @@
           </b-row>
         </b-col>
         <b-col cols="12" class="ml-2 mt-4">
-          <h5 class="text-uppercase font-weight-bold">anamnesa</h5>
+          <h5 class="text-uppercase font-weight-bold"><u>anamnesa</u></h5>
           <b-row>
             <b-col cols="12">
               <p>
@@ -34,11 +34,11 @@
           </b-row>
         </b-col>
         <b-col cols="12" class="ml-2 mt-4">
-          <h5 class="text-uppercase font-weight-bold">pemeriksaan fisik</h5>
+          <h5 class="text-uppercase font-weight-bold"><u>pemeriksaan fisik</u></h5>
           <img src="@/assets/img/badan.jpeg" class="img-fluid" alt="img" />
         </b-col>
         <b-col cols="12" class="ml-2 mt-4">
-          <h5 class="text-uppercase font-weight-bold">diagnosa</h5>
+          <h5 class="text-uppercase font-weight-bold"><u>diagnosa</u></h5>
           <b-row>
             <b-col cols="12">
               <p>J010 : Tetanus</p>
@@ -46,8 +46,33 @@
           </b-row>
         </b-col>
         <b-col cols="12" class="ml-2 mt-4">
+          <h5 class="text-uppercase font-weight-bold"><u>tata laksana</u></h5>
+          <b-row>
+            <b-col cols="12">
+              <p>Antibiotik, Debridement Luka</p>
+            </b-col>
+          </b-row>
+        </b-col>
+        <b-col cols="12" class="ml-2 mt-4">
           <h5 class="text-uppercase font-weight-bold">
-            konsultasi selanjutnya
+            <u>pemeriksaan penunjang</u>
+          </h5>
+          <b-row>
+            <b-col cols="12">
+              <p>Pemeriksaan darah rutin</p>
+            </b-col>
+          </b-row>
+        </b-col>
+        <b-col cols="12" class="ml-2 mt-4">
+          <b-row>
+            <b-col cols="12">
+              <p>Uploaded File : </p>
+            </b-col>
+          </b-row>
+        </b-col>
+        <b-col cols="12" class="ml-2 mt-4">
+          <h5 class="text-uppercase font-weight-bold">
+           <u>konsultasi selanjutnya</u>
           </h5>
           <b-row>
             <b-col cols="12">

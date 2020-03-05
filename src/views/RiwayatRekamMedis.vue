@@ -89,6 +89,10 @@ export default {
     kembali() {
         this.$router.back();
     },
+     async showrightRekamMedis() {
+          let res = await axios.get(`${this.url_api}/rekam_medis/10}`);
+          this.pasien = res.data.data;
+      },
     async fetchPasien() {
       let res = await axios.get(`${this.url_api}/pasien/${this.pasien_id}`);
       this.pasien = res.data.data;
@@ -96,6 +100,7 @@ export default {
   },
   mounted() {
     this.fetchPasien()
+    this.showrightRekamMedis()
   }
 };
 </script>
