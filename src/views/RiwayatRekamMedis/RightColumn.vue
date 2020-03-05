@@ -141,10 +141,8 @@ export default {
           if (this.datarekammedis.pemeriksaan_penunjang.files){
               this.datafile = JSON.parse(this.datarekammedis.pemeriksaan_penunjang.files);
           }
-
-
-
       },
+
     tandaVital() {
       const tmp = [
         {
