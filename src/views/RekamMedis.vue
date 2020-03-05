@@ -104,7 +104,7 @@
               </div>
             </div>
             <Footer ref="footer" />
-            <div class="col-xl-12 d-flex justify-content-xl-end">
+            <div class="col-sm-12 d-flex justify-content-xl-end">
               <!-- <button class="btn btn-success m-2">Print</button> -->
               <button @click="exitButton()" class="btn btn-info m-2">Keluar</button>
               <button @click="saveButton()" class="btn btn-primary m-2 btn-spinner">
