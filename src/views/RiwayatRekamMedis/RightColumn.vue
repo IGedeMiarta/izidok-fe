@@ -70,7 +70,8 @@ import randomSentence from "random-sentence";
 
 export default {
   data: () => ({
-    loading: true
+    loading: true,
+    datarekammedis : []
   }),
   mounted() {
     this.$root.$on("rerender", () => {
@@ -79,7 +80,7 @@ export default {
         this.resetLoading();
       }
     });
-
+    this.showrightRekamMedis();
     this.resetLoading();
   },
   methods: {
@@ -88,6 +89,20 @@ export default {
         this.loading = false;
       }, this.randomNumber());
     },
+     async showrightRekamMedis() {
+          try {
+              var isRoute = this.$router.currentRoute.params.id;
+              const res = await axios.get(
+                  `${this.url_api}/rekam_medis/${isRoute}`
+              );
+              const { status, data } = res.data;
+              if (status) {
+                  this.datarekammedis = res.data;
+              }
+          } catch (err) {
+              // alert(err);
+          }
+      },
     tandaVital() {
       const tmp = [
         {

@@ -47,9 +47,9 @@
           class="d-flex align-items-center justify-content-around"
         >
           <b-button variant="primary" class="text-uppercase" @click="kembali()">kembali</b-button>
-          <b-button variant="info" class="text-uppercase"
-            >tulis rekam medis</b-button
-          >
+          <b-button
+            variant="info" class="text-uppercase"
+            >tulis rekam medis</b-button>
         </b-col>
       </template>
     </page-title>
@@ -87,7 +87,7 @@ export default {
   },
   methods: {
     kembali() {
-      window.close()
+        this.$router.back();
     },
     async fetchPasien() {
       let res = await axios.get(`${this.url_api}/pasien/${this.pasien_id}`);

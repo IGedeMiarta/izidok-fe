@@ -51,6 +51,11 @@
                     class="d-flex align-items-center justify-content-between"
                   >
                     <b-button
+                      @click="
+                          detailRiwayatRekamMedis({
+                            id: data.item.id
+                          })
+                        "
                       variant="primary"
                       size="sm"
                       ><font-awesome-icon icon="search"
@@ -204,16 +209,17 @@ export default {
     rekamMedis({ klinik_id, pasien_id }) {
       this.$router.push(`/rekam-medis/${klinik_id}/${pasien_id}`);
     },
-    detailPasien({ id } = {}) {
+      detailRiwayatRekamMedis({ id } = {}) {
       if (id) {
         this.$router.push({
-          name: "pasien-detail",
+          name: "riwayat-rekam-medis",
           params: {
-            idPasien: id
+            pasien_id: id
           }
         });
       }
     },
+
     async deletePasien(id) {
       try {
         const res = await axios.delete(`${this.url_api}/pasien/${id}`);
