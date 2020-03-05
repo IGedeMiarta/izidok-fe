@@ -75,7 +75,7 @@
                     <b-col cols="4">Potongan</b-col>
                     <b-col cols="7">
                       <b-input-group append="%">
-                        <b-form-input v-model.lazy="potongan" />
+                        <b-form-input v-model.lazy="potongan" type="number" />
                       </b-input-group>
                     </b-col>
                   </b-form-row>
@@ -88,7 +88,7 @@
                   <b-form-row class="d-flex align-items-right w-100 py-2">
                     <b-col cols="11">
                       <!-- <b-button variant="danger" class="text-uppercase mr-3" @click="previewStruk">preview struk</b-button> -->
-                      <b-button variant="success" class="text-uppercase mr-3" @click="simpanProsesPembayaran">simpan</b-button>
+                      <b-button variant="success" class="text-uppercase mr-3" @click="simpanPembayaran">simpan</b-button>
                       <b-button variant="primary" class="text-uppercase" @click="bayarModal">bayar</b-button>
                     </b-col>
                     </b-form-row>
@@ -124,19 +124,27 @@
       pembayaranDetails: [],
       postData: {
         pembayaran_id: null,
+        total: 0,
+        potongan: 0,
+        total_nett: 0,
         detail_pembayaran: []
       },
     }),
     computed: {
       nett() {
-        const tmp = (this.potongan / 100) * this.total;
-        return this.total - tmp;
+        return this.total - ((this.potongan / 100) * this.total);
       },
       now() {
         return moment().format('dddd' + ', ' + "Do MMMM YYYY");
       },
       waktuMasuk() {
         return moment(this.pembayaranList.created_at).format("Do MMMM YYYY HH:mm");
+      }
+    },
+    watch: {
+      potongan(newVal) {
+        this.postData.potongan = newVal;
+        this.postData.total_nett = this.nett;
       }
     },
     mounted() {
@@ -161,7 +169,11 @@
         });
 
         this.total = total_tmp;
+
         this.postData.pembayaran_id = this.pembayaranList.id;
+        this.postData.total = this.total;
+        this.postData.potongan = this.potongan;
+        this.postData.total_nett = this.nett;
         this.postData.detail_pembayaran = detail_pembayaran;
       },
       bayarModal() {
@@ -195,7 +207,7 @@
             data
           } = res.data;
           this.pembayaranList = data;
-
+          this.potongan = !data.potongan ? 0 : data.potongan
           data.detail.forEach((item, i) => {
             this.pembayaranDetails.push({
               no: i+1,
@@ -210,12 +222,11 @@
           // console.log(err);
         }
       },
-      async simpanProsesPembayaran() {
+      async simpanPembayaran() {
         try {
           const res = await axios.post(
-            `${this.url_api}/pembayaran/`, {
-              detail_pembayaran: this.pembayaranVal
-            }
+            `${this.url_api}/pembayaran/detail`, 
+            this.postData
           );
           const {
             success,
