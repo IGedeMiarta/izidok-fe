@@ -42,14 +42,14 @@
           v-if="pembayaranList.status == 'BELUM LUNAS' || pembayaranList.status == 'Belum Lunas' || pembayaranList.status == 'belum lunas'">
           <h3>Belum Lunas</h3>
           <div class="card-body">
-            <TablePembayaran @valueChanged="calc" :items="pembayaranList.detail" />
+            <TablePembayaran @valueChanged="calc" :items="pembayaranDetails" />
           </div>
         </template>
         <template
           v-if="pembayaranList.status == 'DRAFT' || pembayaranList.status == 'Draft' || pembayaranList.status == 'draft'">
           <h3>Draft</h3>
           <div class="card-body">
-            <TablePembayaran @valueChanged="calc" :items="pembayaranList.detail" />
+            <TablePembayaran @valueChanged="calc" :items="pembayaranDetails" />
           </div>
         </template>
         <template
@@ -62,33 +62,39 @@
 
         <div class="card-footer">
           <div class="px-4 py-2 d-flex flex-row justify-content-end">
-            <div class="w-50 d-flex flex-column text-capitalize">
-              <b-row class="d-flex align-items-center w-100 py-2">
-                <b-col cols="4">total</b-col>
-                <b-col cols="5">
-                  <b-form-input v-model.lazy="total" disabled />
+            <b-container>
+              <b-row>
+                <b-col cols="6" offset="6">
+                  <b-form-row class="d-flex align-items-center w-100 py-2">
+                    <b-col cols="4">Total</b-col>
+                    <b-col cols="7">
+                      <b-form-input v-model.lazy="total" disabled />
+                    </b-col>
+                  </b-form-row>
+                  <b-form-row class="d-flex align-items-center w-100 py-2">
+                    <b-col cols="4">Potongan</b-col>
+                    <b-col cols="7">
+                      <b-input-group append="%">
+                        <b-form-input v-model.lazy="potongan" />
+                      </b-input-group>
+                    </b-col>
+                  </b-form-row>
+                  <b-form-row class="d-flex align-items-center w-100 py-2">
+                    <b-col cols="4">Total Nett</b-col>
+                    <b-col cols="7">
+                      <b-form-input disabled :value="nett" />
+                    </b-col>
+                  </b-form-row>
+                  <b-form-row class="d-flex align-items-right w-100 py-2">
+                    <b-col cols="11">
+                      <!-- <b-button variant="danger" class="text-uppercase mr-3" @click="previewStruk">preview struk</b-button> -->
+                      <b-button variant="success" class="text-uppercase mr-3" @click="simpanProsesPembayaran">simpan</b-button>
+                      <b-button variant="primary" class="text-uppercase" @click="bayarModal">bayar</b-button>
+                    </b-col>
+                    </b-form-row>
                 </b-col>
               </b-row>
-              <b-row class="d-flex align-items-center w-100 py-2">
-                <b-col cols="4">potongan</b-col>
-                <b-col cols="5">
-                  <b-form-input v-model.lazy="potongan" />
-                </b-col>
-                <b-col cols="auto">%</b-col>
-              </b-row>
-              <b-row class="d-flex align-items-center w-100 py-2">
-                <b-col cols="4">total nett</b-col>
-                <b-col cols="5">
-                  <b-form-input disabled :value="nett" />
-                </b-col>
-              </b-row>
-              <div class="w-100 mt-2 d-flex">
-                <b-button variant="danger" class="text-uppercase mr-3" @click="previewStruk">preview struk</b-button>
-                <b-button variant="success" class="text-uppercase mr-3" @click="simpanProsesPembayaran">simpan
-                </b-button>
-                <b-button variant="primary" class="text-uppercase" @click="bayarModal">bayar</b-button>
-              </div>
-            </div>
+            </b-container>
           </div>
         </div>
       </div>
@@ -112,12 +118,14 @@
     },
     data: () => ({
       pembayaranList: [],
-      simpanPembayaran: [],
-      setPembayaran: [],
       total: null,
-      isidata: [],
       potongan: null,
       pembayaranVal: null,
+      pembayaranDetails: [],
+      postData: {
+        pembayaran_id: null,
+        detail_pembayaran: []
+      },
     }),
     computed: {
       nett() {
@@ -140,10 +148,21 @@
       }),
       calc(val) {
         let total_tmp = 0;
-        val.map(item => {
+        let detail_pembayaran = [];
+
+        val.forEach(item => {
           total_tmp += item.quantity * item.tarif;
+          detail_pembayaran.push({
+            kode_layanan: item.kode_layanan,
+            nama_layanan: item.nama_layanan.nama_layanan,
+            tarif: item.tarif,
+            quantity: item.quantity,
+          })
         });
+
         this.total = total_tmp;
+        this.postData.pembayaran_id = this.pembayaranList.id;
+        this.postData.detail_pembayaran = detail_pembayaran;
       },
       bayarModal() {
         this.$swal({
@@ -155,9 +174,7 @@
           confirmButtonText: startCase("ya")
         }).then(res => {
           if (res.value) {
-            next();
-          } else {
-            next(false);
+            // TODO: tampil popup pilihan metode pembayaran
           }
         });
       },
@@ -178,6 +195,17 @@
             data
           } = res.data;
           this.pembayaranList = data;
+
+          data.detail.forEach((item, i) => {
+            this.pembayaranDetails.push({
+              no: i+1,
+              kode_layanan: item.kode_layanan,
+              nama_layanan: item.nama_layanan,
+              tarif: item.tarif,
+              quantity: item.quantity,
+              subtotal: item.subtotal_tarif
+            })
+          })
         } catch (err) {
           // console.log(err);
         }
