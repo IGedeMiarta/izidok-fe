@@ -15,45 +15,45 @@
       <div class="card card-box border-0">
         <div class="card-header border-0 py-4 px-5">
           <div class="d-flex flex-column w-100">
-            <span class="text-capitalize mb-1">{{this.now}}</span>
+            <span class="text-capitalize mb-1">{{now}}</span>
             <b-row class="mb-1">
               <b-col cols="2">No. RM </b-col>
               <b-col cols="auto">:</b-col>
-              <b-col cols="auto">{{ this.pembayaranList['transklinik'].pasien.nomor_rekam_medis }}</b-col>
+              <b-col cols="auto">{{ pembayaranList['transklinik'].pasien.nomor_rekam_medis }}</b-col>
             </b-row>
             <b-row class="mb-1">
               <b-col cols="2">Nama Pasien </b-col>
               <b-col cols="auto">:</b-col>
-              <b-col cols="auto">{{ this.pembayaranList['transklinik'].pasien.nama }}</b-col>
+              <b-col cols="auto">{{ pembayaranList['transklinik'].pasien.nama }}</b-col>
             </b-row>
             <b-row class="mb-1">
               <b-col cols="2">Nama Dokter </b-col>
               <b-col cols="auto">:</b-col>
-              <b-col cols="auto">{{ this.pembayaranList['created_by'] }}</b-col>
+              <b-col cols="auto">{{ pembayaranList['created_by'].nama }}</b-col>
             </b-row>
             <b-row class="mb-1">
               <b-col cols="2">Waktu Masuk </b-col>
               <b-col cols="auto">:</b-col>
-              <b-col cols="auto">{{ this.isWaktuMasuk  }}</b-col>
+              <b-col cols="auto">{{ waktuMasuk  }}</b-col>
             </b-row>
           </div>
         </div>
         <template
-          v-if="this.pembayaranList.status == 'BELUM LUNAS' || this.pembayaranList.status == 'Belum Lunas' || this.pembayaranList.status == 'belum lunas'">
+          v-if="pembayaranList.status == 'BELUM LUNAS' || pembayaranList.status == 'Belum Lunas' || pembayaranList.status == 'belum lunas'">
           <h3>Belum Lunas</h3>
           <div class="card-body">
             <TablePembayaran @valueChanged="calc" :items="pembayaranList.detail" />
           </div>
         </template>
         <template
-          v-if="this.pembayaranList.status == 'DRAFT' || this.pembayaranList.status == 'Draft' || this.pembayaranList.status == 'draft'">
+          v-if="pembayaranList.status == 'DRAFT' || pembayaranList.status == 'Draft' || pembayaranList.status == 'draft'">
           <h3>Draft</h3>
           <div class="card-body">
             <TablePembayaran @valueChanged="calc" :items="pembayaranList.detail" />
           </div>
         </template>
         <template
-          v-if="this.pembayaranList.status == 'LUNAS' || this.pembayaranList.status == 'lunas' || this.pembayaranList.status == 'Lunas'">
+          v-if="pembayaranList.status == 'LUNAS' || pembayaranList.status == 'lunas' || pembayaranList.status == 'Lunas'">
           <h3>Lunas</h3>
           <div class="card-body">
             <TablePembayaran @valueChanged="calc" />
@@ -112,7 +112,6 @@
     },
     data: () => ({
       pembayaranList: [],
-      isWaktuMasuk: null,
       simpanPembayaran: [],
       setPembayaran: [],
       total: null,
@@ -126,7 +125,10 @@
         return this.total - tmp;
       },
       now() {
-        return moment().format('dddd' + ', ' + "Do-MMMM-YYYY");
+        return moment().format('dddd' + ', ' + "Do MMMM YYYY");
+      },
+      waktuMasuk() {
+        return moment(this.pembayaranList.created_at).format("Do MMMM YYYY HH:mm");
       }
     },
     mounted() {
@@ -176,7 +178,6 @@
             data
           } = res.data;
           this.pembayaranList = data;
-          this.isWaktuMasuk = moment(this.pembayaranList['created_at']).format("DD-MMMM-YYYY,  h:mm:ss a");
         } catch (err) {
           // console.log(err);
         }
