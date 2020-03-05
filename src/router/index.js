@@ -10,6 +10,12 @@ const routes = [
     component: () => import("../views/RekamMedis/List.vue")
   },
   {
+    path: "/rekam-medis/riwayat/:pasien_id",
+    name: "riwayat-rekam-medis",
+    props: true,
+    component: () => import("../views/RiwayatRekamMedis.vue")
+  },
+  {
     path: "/rekam-medis/:transklinik_id/:pasien_id",
     name: "rekam-medis-pasien",
     component: () => import("../views/RekamMedis.vue")

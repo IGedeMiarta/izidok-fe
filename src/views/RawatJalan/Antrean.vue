@@ -100,9 +100,9 @@
             </template>
             <b-table :items="pasiens" :fields="fieldList" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc"
               thead-tr-class="kntl" :no-local-sorting="true">
-              <template v-slot:head()="data" >
+              <template v-slot:head()="data">
                 {{ data.label }}
-                <b-input size="sm" class="mt-2 w-22"  v-if="data.field.searchable"
+                <b-input size="sm" class="mt-2 w-82" v-if="data.field.searchable"
                   @input="searchValueChanged($event, data.field.key)"  />
               </template>
 
@@ -315,27 +315,31 @@ import {
         return (
           [{
               key: "waktu_konsultasi",
-              label: "waktu registrasi"
+              label: "waktu registrasi",
+              thStyle: "width: 13%"
             },
             {
               key: "nomor_antrian",
-              label: "no. urut"
+              label: "no. urut",
+              thStyle: "width: 10%"
             },
             {
               key: "nama",
               label: "nama pasien"
             },
             {
-              key: "jenis_kelamin"
+              key: "jenis_kelamin",
+              thStyle: "width: 14%"
             },
             {
-              key: "nomor_hp"
+              key: "nomor_hp",
+              thStyle: "width: 16%"
             },
             {
               key: "actions"
             },
             {
-                key: "status"
+              key: "status"
             }
            ] 
              |> (v => s({ field: v, customFunc: r }))

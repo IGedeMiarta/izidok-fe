@@ -15,21 +15,35 @@
       rightSlot
     >
       <template v-slot:defaultSlot>
-        <b-col cols="7">
-          <b-row v-for="(data, index) in headerData()" :key="index">
+        <b-col cols="8">
+          <b-row>
+            <b-col cols="12">
+              <h5 class="display-4 mt-1 mb-2 font-weight-bold">Riwayat Rekam Medis</h5>
+            </b-col>
+          </b-row>
+          <b-row>
             <b-col cols="4">
-              <p class="text-uppercase mb-2">{{ data.label }}</p>
+              <p class="text-uppercase mb-2">Nama Pasien</p>
             </b-col>
             <b-col cols="1">:</b-col>
-            <b-col cols="7"
-              ><p class="text-uppercase mb-2">{{ data.value }}</p></b-col
-            >
+            <b-col cols="7">
+              <p class="text-uppercase mb-2">{{ pasien.nama }}</p>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col cols="4">
+              <p class="text-uppercase mb-2">Nomor Rekam Medis</p>
+            </b-col>
+            <b-col cols="1">:</b-col>
+            <b-col cols="7">
+              <p class="text-uppercase mb-2">{{ pasien.nomor_rekam_medis }}</p>
+            </b-col>
           </b-row>
         </b-col>
       </template>
       <template v-slot:rightSlot>
         <b-col
-          cols="5"
+          cols="4"
           class="d-flex align-items-center justify-content-around"
         >
           <b-button variant="primary" class="text-uppercase" @click="kembali()">kembali</b-button>
@@ -57,27 +71,31 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
+  props: {
+    pasien_id: Number
+  },
+  data() {
+    return {
+      pasien: null
+    }
+  },
   components: {
     LeftColumn: () => import("./RiwayatRekamMedis/LeftColumn.vue"),
     RightColumn: () => import("./RiwayatRekamMedis/RightColumn.vue")
   },
   methods: {
-    headerData() {
-      return [
-        {
-          label: "nama pasien",
-          value: "mega ceriawaty"
-        },
-        {
-          label: "no rm",
-          value: "00000001-01"
-        }
-      ];
-    },
     kembali() {
       window.close()
+    },
+    async fetchPasien() {
+      let res = await axios.get(`${this.url_api}/pasien/${this.pasien_id}`);
+      this.pasien = res.data.data;
     }
+  },
+  mounted() {
+    this.fetchPasien()
   }
 };
 </script>
