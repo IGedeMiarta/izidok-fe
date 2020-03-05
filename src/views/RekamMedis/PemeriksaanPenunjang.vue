@@ -219,7 +219,7 @@ export default {
       promises: [],
       fileReaderPromises: [],
       uploadedFiles: [],
-      supportedFiles: ["png", "jpg", "jpeg", "png"]
+      supportedFiles: ["png", "jpg", "jpeg", "pdf"]
     };
   },
   computed: {
