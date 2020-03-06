@@ -121,6 +121,11 @@
             label: 'Tidak perlu konsul lanjutan',
             value: 1
           }
+          
+          this.updateSavingParams({
+              key: 'is_next_konsul',
+              value: true
+          });
         },
         methods: {
             ...mapActions(["updatePostData", "updateSavingParams"]),
