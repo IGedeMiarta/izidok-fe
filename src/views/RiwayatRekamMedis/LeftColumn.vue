@@ -38,20 +38,26 @@
               { label: 'tetanus', value: 'tetanus.jpeg' },
               { label: 'cancer', value: 'cancer.jpeg' }
             ]" -->
-          <b-col cols="6" v-for="(data, index) in dataRiwayat" :key="index" class="mb-4">
+          <b-col sm="6" v-for="data in dataRiwayat" :key="data.id" class="mb-4">
             <div class="my-4 mx-0 p-0 position-relative h-100">
-              <img :src="data.diagnosa_result.draw_path" class="img-fluid" />
+              <img :src="data.pemeriksaan_fisik.draw_path" class="img-fluid" />
               <div class="card card-box position-absolute w-100 rounded-0 border-0"
                 style="bottom: 0; background-color: #214179; color: #fff; cursor: pointer" @click="rerender">
                 <div class="card-body text-capitalize text-center py-1">
                   <b-row>
-                    <b-col cols="12"> 1{{ index }}/12/2019</b-col>
-                    <b-col cols="12">{{ data.diagnosa_result.kode_penyakit.kode }}</b-col>
+                    <b-col sm="12"> {{data.created_at}}</b-col>
+                    <b-col sm="12">{{ data.diagnosa_result.kode_penyakit}}</b-col>
                   </b-row>
                 </div>
               </div>
             </div>
           </b-col>
+          <div class="col-md-12 bg-neutral-second ninja-shadow mt-5" style="border-radius:10px;">
+            <div class="p-3">
+              <b-pagination class="d-flex justify-content-center mt-4" v-model="currentPage" :total-rows="rows"
+                :per-page="perPage"></b-pagination>
+            </div>
+          </div>
         </b-row>
       </b-col>
     </b-row>
@@ -67,7 +73,9 @@
   import {
     faHome,
     faUser,
-    faSearch
+    faSearch,
+    faArrowRight,
+    faArrowUp,
   } from "@fortawesome/free-solid-svg-icons";
 
   import {
@@ -76,6 +84,8 @@
 
   library.add(
     faHome,
+    faArrowRight,
+    faArrowUp,
     faUser,
     faSearch
   );
@@ -86,8 +96,16 @@
     data() {
       return {
         dataRiwayat: [],
-        selectDataRiwayat : [],
-        selected : null
+        selectDataRiwayat: [],
+        selected: null,
+        currentPage: 1,
+        rows: null,
+        perPage: 4,
+      }
+    },
+    watch: {
+      currentPage() {
+        this.showleftRekamMedis();
       }
     },
     mounted() {
@@ -103,16 +121,18 @@
       async showleftRekamMedis() {
         try {
           var isRoute = this.$router.currentRoute.params.pasien_id;
-          const response = await axios.get(`${this.url_api}/rekam_medis/pasien/${isRoute}`);
-          this.dataRiwayat = response.data.data.rekam_medis.data;
-          console.log(this.dataRiwayat);
-           this.selectDataRiwayat = this.dataRiwayat.map(item => {
+          const responsePage = await axios.get(
+            `${this.url_api}/rekam_medis/pasien/${isRoute}?page=${this.currentPage}`);
+         
+          this.dataRiwayat = responsePage.data.data.rekam_medis.data;
+          this.rows = responsePage.data.data.rekam_medis.total;
+
+          this.selectDataRiwayat = this.dataRiwayat.map(item => {
             return {
-              label: `${item.diagnosa_result.kode_penyakit.description}`,
+              label: `${item.diagnosa_result.kode_penyakit}`,
               value: item.id
             };
           });
-          console.log(this.selectDataRiwayat)
           // let eventVal = {
           //     label: this.dataRiwayat.nama,
           //     value: this.dataRiwayat.id
@@ -122,7 +142,7 @@
           console.error(error);
         }
       },
-      searchRiwayat(){
+      searchRiwayat() {
 
       },
       me() {

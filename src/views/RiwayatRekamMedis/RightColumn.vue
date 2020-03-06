@@ -136,7 +136,7 @@ export default {
       }, this.randomNumber());
     },
       async showrightRekamMedis() {
-          let res = await axios.get(`${this.url_api}/rekam_medis/52}`);
+          let res = await axios.get(`${this.url_api}/rekam_medis/52`);
           this.datarekammedis = res.data.data;
           if (this.datarekammedis.pemeriksaan_penunjang.files){
               this.datafile = JSON.parse(this.datarekammedis.pemeriksaan_penunjang.files);

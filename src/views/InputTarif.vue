@@ -28,7 +28,7 @@
                     </b-form-input>
                   </b-col>
                   <b-col cols="3" class="text-capitalize">
-                    <b-form-input value="Rp. 75,000-" disabled />
+                    <b-form-input value="Rp. 75,000" class=" text-right" disabled />
                   </b-col>
                 </b-row>
               </b-col>
