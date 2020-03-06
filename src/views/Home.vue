@@ -213,6 +213,8 @@ $bg-kntl-alternate: #d6d6d6;
 }
 
 .tab-kntl {
+  color: #778fad !important;
+
   ul {
     &[role="tablist"] {
       padding: 0;

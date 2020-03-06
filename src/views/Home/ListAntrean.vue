@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="d-flex align-items-center mb-3">
-      <span class="text-capitalize mx-2" style="width: 150px"
+      <span class="text-capitalize mx-2 text-center" style="width: 150px"
         >antrean hari ini</span
       >
       <b-input-group prepend style="width: 40%" class="home-search-input">
@@ -115,8 +115,8 @@ export default {
   data() {
     return {
       currentPage: 1,
-      rows: 30,
-      perPage: 10,
+      rows: 1,
+      perPage: 5,
       data: [],
       searchValue: null
     };
@@ -255,6 +255,7 @@ export default {
     tr {
       th {
         background-color: $evenColor;
+        color: #778fad !important;
       }
     }
   }
