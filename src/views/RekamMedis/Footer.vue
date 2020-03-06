@@ -121,10 +121,17 @@
             label: 'Tidak perlu konsul lanjutan',
             value: 1
           }
-          
           this.updateSavingParams({
-              key: 'is_next_konsul',
-              value: true
+            key: 'is_next_konsul',
+            value: true
+          });
+          this.updatePostData({
+            key: 'next_konsultasi',
+            value: 1
+          });
+          this.updatePostData({
+            key: 'tgl_next_konsultasi',
+            value: null
           });
         },
         methods: {
@@ -147,7 +154,7 @@
                     },);
                 }
 
-                console.log(this.tgl_next_konsultasi)
+                // console.log(this.tgl_next_konsultasi)
             }
 
         },
@@ -180,7 +187,7 @@
                 if (this.selectedRadio.value == 99)
                     this.selectingWaktu();
 
-                console.log(this.hasil)
+                // console.log(this.hasil)
                 this.updateSavingParams({
                     key: 'is_next_konsul',
                     value: true

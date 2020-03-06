@@ -39,13 +39,13 @@ const getters = {
 const actions = {
     // call at the first time to reset the state
     resetState({ commit }) {
-        console.log('reset state called...');
+        // console.log('reset state called...');
         commit('resetState')
     },
 
     // get initial data from backend
     async fetchData({ commit, dispatch }) {
-        console.log('fetch data called...');
+        // console.log('fetch data called...');
 
         dispatch('resetState');
 
@@ -58,7 +58,7 @@ const actions = {
             status: 'KONSULTASI'
         });
 
-        console.log('Rawat Jalan Status: ', TransStatus.data.data.status);
+        // console.log('Rawat Jalan Status: ', TransStatus.data.data.status);
 
         // get pasien data (Tensi, BB, TB, Respirasi, Sistole, Diastole)
         const res_pasien = await axios.get(store.state.URL_API + "/pasien/" + pasien_id);
@@ -88,7 +88,7 @@ const actions = {
 
     //saving rekam medis
     async saveRekamMedis({ commit, state }) {
-        console.log('save rekam-medis called...');
+        // console.log('save rekam-medis called...');
 
         // get pasien_id and transklinik_id from the route
         const pasien_id = router.currentRoute.params.pasien_id;
@@ -132,7 +132,7 @@ const actions = {
             return;
         }
 
-        console.log(state.postData);
+        // console.log(state.postData);
 
         // process send to backend
         try {
@@ -157,9 +157,11 @@ const actions = {
 
             console.log('Rawat Jalan Status: ', TransStatus.data.data.status);
 
+            return res.data;
+
         } catch (err) {
             commit('setIsSaving', { key: 'is_saving', value: false });
-            console.log(err);
+            // console.log(err);
         }
 
     }

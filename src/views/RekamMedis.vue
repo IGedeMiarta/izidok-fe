@@ -214,7 +214,10 @@ export default {
             )
             .then(res => {
               router.push({
-                path: "/pembayaran"
+                name: "pembayaran-tambah",
+                params: {
+                  bayar_id: saving.data.pembayaran.id
+                }
               });
             });
         }
