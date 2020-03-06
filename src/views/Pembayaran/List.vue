@@ -53,7 +53,7 @@
                       variant="primary"
                       size="sm" 
                       class="mr-1"
-                      v-b-tooltip.hover title="Lihat Struk"
+                      v-tooltip="'Lihat Struk'"
                       ><font-awesome-icon icon="search"
                     /></b-button>
                   </template>
@@ -61,7 +61,7 @@
                     <b-button
                       variant="success"
                       size="sm"
-                      v-b-tooltip.hover title="Halaman Pembayaran"
+                      v-tooltip="'Halaman Pembayaran'"
                       @click="detailBayar(data.item.id)"
                       ><font-awesome-icon icon="money-bill-wave"
                     /></b-button>
