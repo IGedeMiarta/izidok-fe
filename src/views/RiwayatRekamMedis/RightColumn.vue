@@ -86,7 +86,7 @@
           </h5>
           <b-row>
             <b-col cols="12">
-              <p>04/09/2010</p>
+              <p>{{this.datarekammedis.transklinik.tgl_next_konsultasi}}</p>
             </b-col>
           </b-row>
         </b-col>
@@ -124,7 +124,7 @@
         }, this.randomNumber());
       },
       async showrightRekamMedis() {
-        let res = await axios.get(`${this.url_api}/rekam_medis/52`);
+        let res = await axios.get(`${this.url_api}/rekam_medis/76`);
         this.datarekammedis = res.data.data;
         if (this.datarekammedis.pemeriksaan_penunjang.files) {
           this.datafile = JSON.parse(this.datarekammedis.pemeriksaan_penunjang.files);
