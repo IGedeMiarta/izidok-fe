@@ -39,9 +39,6 @@
       <template v-slot:rightSlot>
         <b-col sm="4" class="d-flex align-items-center justify-content-around">
           <b-button variant="primary" class="text-uppercase" @click="kembali()">kembali</b-button>
-<<<<<<< HEAD
-          <b-button variant="info" class="text-uppercase">tulis rekam medis</b-button>
-=======
           <b-button
             variant="info" class="text-uppercase"
             @click="
@@ -50,7 +47,6 @@
                klinik_id: pasien.klinik_id
                })"
             >tulis rekam medis</b-button>
->>>>>>> e5a5d3b198fcdf0d13eb870ca0f7259d8bb8f8db
         </b-col>
       </template>
     </page-title>
@@ -72,7 +68,6 @@
 </template>
 
 <script>
-<<<<<<< HEAD
   import axios from 'axios';
   export default {
     props: {
@@ -102,58 +97,6 @@
       this.showrightRekamMedis()
     }
   };
-=======
-
-import axios from "axios";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-    faArrowRight,
-    faArrowUp,
-    faTrashAlt,
-    faSearch,
-    faPencilAlt,
-    faCopy
-} from "@fortawesome/free-solid-svg-icons";
-// import { Datetime } from "vue-datetime";
-import "vue-datetime/dist/vue-datetime.css";
-
-
-library.add(faArrowRight, faArrowUp, faTrashAlt, faSearch, faPencilAlt, faCopy);
-export default {
-  props: {
-    pasien_id: Number
-  },
-  data() {
-    return {
-      pasien: "",
-      klinik_id: ""
-
-    }
-  },
-  components: {
-    LeftColumn: () => import("./RiwayatRekamMedis/LeftColumn.vue"),
-    RightColumn: () => import("./RiwayatRekamMedis/RightColumn.vue")
-  },
-  methods: {
-    kembali() {
-        this.$router.back();
-    },
-    async fetchPasien() {
-      let res = await axios.get(`${this.url_api}/pasien/${this.pasien_id}`);
-      this.pasien = res.data.data;
-
-    },
-        rekamMedis({ pasien_id, klinik_id }) {
-         this.$router.push(`/rekam-medis/${klinik_id}/${pasien_id}`);
-     },
-
-  },
-  mounted() {
-    this.fetchPasien()
-
-  }
-};
->>>>>>> e5a5d3b198fcdf0d13eb870ca0f7259d8bb8f8db
 </script>
 
 <style lang="scss" scoped>
