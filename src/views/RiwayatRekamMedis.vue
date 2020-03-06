@@ -89,7 +89,7 @@
     data() {
       return {
         pasien: "",
-        klinik_id: ""
+        klinik_id: "",
       }
     },
     components: {

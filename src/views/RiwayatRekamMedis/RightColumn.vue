@@ -80,16 +80,18 @@
             </b-col>
           </b-row>
         </b-col>
+        <template v-if="this.datarekammedis.transklinik.tgl_next_konsultasi !== '1970-01-01'">
         <b-col cols="12" class="ml-2 mt-4">
           <h5 class="text-uppercase font-weight-bold">
             <u>konsultasi selanjutnya</u>
           </h5>
           <b-row>
             <b-col cols="12">
-              <p>04/09/2010</p>
+              <p>{{this.datarekammedis.transklinik.tgl_next_konsultasi}}</p>
             </b-col>
           </b-row>
         </b-col>
+        </template>
       </b-row>
     </template>
   </div>
@@ -98,23 +100,23 @@
 <script>
   import randomSentence from "random-sentence";
   import axios from "axios";
-
   export default {
     props: ["rekam_medis"],
     data: () => ({
       loading: true,
       datafile: null,
-      datarekammedis: []
+      datarekammedis: [],
+      idRekamMedis: null,
     }),
     mounted() {
+      this.idRekamMedis = this.rekam_medis;
       this.$root.$on("rerender", (id) => {
-      console.log(this)
+        this.showrightRekamMedis(id);
         if (!this.loading) {
           this.loading = true;
           this.resetLoading();
         }
       });
-      this.showrightRekamMedis();
       this.resetLoading();
     },
     methods: {
@@ -123,8 +125,9 @@
           this.loading = false;
         }, this.randomNumber());
       },
-      async showrightRekamMedis() {
-        let res = await axios.get(`${this.url_api}/rekam_medis/52`);
+      async showrightRekamMedis(id) {
+        console.log('dd', id)
+        let res = await axios.get(`${this.url_api}/rekam_medis/${id}`);
         this.datarekammedis = res.data.data;
         if (this.datarekammedis.pemeriksaan_penunjang.files) {
           this.datafile = JSON.parse(this.datarekammedis.pemeriksaan_penunjang.files);
@@ -160,7 +163,6 @@
             value: this.datarekammedis.anamnesa.berat_badan
           }
         ];
-
         return tmp;
       },
       randomSentence: randomSentence,
