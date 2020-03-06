@@ -58,6 +58,7 @@
                         "
                       variant="primary"
                       size="sm"
+                       v-b-tooltip.hover title="Riwayat Rekam Medis"
                       ><font-awesome-icon icon="search"
                     /></b-button>
                   </span>

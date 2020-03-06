@@ -204,14 +204,14 @@ export default {
   },
   data() {
     return {
-      isHidden: false,
+      isHidden: true,
       drawing: false,
       mousePos: { x: 0, y: 0 },
       lastPos: { x: 0, y: 0 },
       ctx: null,
       isLoading: false,
-      isPen: true,
-      isActive: "pen",
+      isPen: false,
+      isActive: "keyboard",
       isColorActive: "black",
       penWidth: 2,
       selectedFiles: [],

@@ -48,9 +48,9 @@
       </template>
     </page-title>
     <div class="container">
-      <div class="card card-box">
+      <div class="card card-box ">
         <div class="card-body p-4">
-          <b-row>
+          <b-row style="height:700px;">
             <b-col sm="6">
               <LeftColumn class="rrm-content" />
             </b-col>
@@ -84,7 +84,7 @@
   library.add(faArrowRight, faArrowUp, faTrashAlt, faSearch, faPencilAlt, faCopy);
   export default {
     props: {
-      pasien_id: Number
+      pasien_id: Number,
     },
     data() {
       return {
@@ -103,7 +103,6 @@
       async fetchPasien() {
         let res = await axios.get(`${this.url_api}/pasien/${this.pasien_id}`);
         this.pasien = res.data.data;
-
       },
       rekamMedis({
         pasien_id,
@@ -122,11 +121,13 @@
   .rrm-content {
     overflow-x: hidden;
     overflow-y: auto;
-    max-height: 450px;
+    max-height: 700px;
+    margin-top: 20px;
   }
 
   @media (max-width: 300px) {
     .rrm-content {
+      margin-top: 20px;
       max-height: 200px;
     }
   }
