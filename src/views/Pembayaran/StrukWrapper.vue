@@ -22,21 +22,37 @@
           </div>
         </div>
         <div class="card-body">
-          <div class="d-flex align-items-top">
-            <div class="d-flex flex-column justify-cotent-center w-50">
-              <Struk class="flex-grow-1" />
+          <div class="d-flex flex-column">
+            <div class="d-flex flex-row">
+              <div>
+                <button 
+                  type="button" 
+                  class="btn btn-sm btn-primary text-uppercase"
+                  @click="close"
+                >
+                  tutup
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-success text-uppercase ml-3"
+                  @click="cetakStruk"
+                >
+                  print struk
+                </button>
+                <button 
+                  type="button" 
+                  class="btn btn-sm btn-warning text-uppercase ml-3"
+                  @click="emailStruk"
+                >
+                  email struk
+                </button>
+              </div>
             </div>
-            <div class="flex-shrink-1">
-              <button type="button" class="btn btn-primary text-uppercase">
-                kembali
-              </button>
-              <button
-                type="button"
-                class="btn btn-success text-uppercase ml-4"
-                @click="cetakStruk"
-              >
-                cetak ulang struk
-              </button>
+            <div class="d-flex flex-row">
+              <div class="d-flex flex-column justify-cotent-center">
+                <!-- <Struk class="flex-grow-1" /> -->
+                <iframe ref="iframeStruk" src="" frameborder="0" height="600" width="362"></iframe>
+              </div>
             </div>
           </div>
         </div>
@@ -48,10 +64,17 @@
 <script>
 import startCase from "lodash/startCase";
 import { mapGetters } from "vuex";
+import axios from 'axios';
 
 export default {
   components: {
-    Struk: () => import("./Struk.vue")
+    // Struk: () => import("./Struk.vue")
+  },
+  data() {
+    return {
+      pembayaran_id: null,
+      afterPrintInjected: false
+    }
   },
   computed: {
     ...mapGetters({
@@ -59,16 +82,53 @@ export default {
     })
   },
   mounted() {
-    console.log(this.strukVal);
+    this.pembayaran_id = this.$router.currentRoute.params.pembayaran_id;
+    this.fetchStruk()
   },
   methods: {
-    cetakStruk() {
-      this.$swal({
-        title: startCase("struk berhasil di cetak"),
-        text: `Silahkan ambil struk pembayaran anda`,
-        type: "success",
-        confirmButtonText: startCase("ok")
+    fetchStruk() {
+      axios.get(`${this.url_api}/pembayaran/struk/${this.pembayaran_id}`)
+        .then(res => {
+          let iframeStrukDoc = this.$refs.iframeStruk.contentWindow.document
+          iframeStrukDoc.open('text/html', 'replace');
+          iframeStrukDoc.write(res.data);
+          iframeStrukDoc.close();
+        })
+        .catch(error => {
+          
+        })
+    },
+    close() {
+      this.$router.push({
+        name: 'pembayaran-list'
       });
+    },
+    cetakStruk() {
+
+      let fnAfterPrint = (e) => {
+        this.$swal({
+          title: startCase("struk berhasil di cetak"),
+          text: `Silahkan ambil struk pembayaran anda`,
+          type: "success",
+          confirmButtonText: startCase("ok")
+        });
+      };
+
+      if(this.afterPrintInjected == false) {
+        if(this.$refs.iframeStruk.contentWindow.onafterprint) {
+          this.$refs.iframeStruk.contentWindow.onafterprint = fnAfterPrint
+        }
+        else {
+          this.$refs.iframeStruk.contentWindow.addEventListener('afterprint', fnAfterPrint)
+        }
+
+        this.afterPrintInjected = true
+      }
+
+      this.$refs.iframeStruk.contentWindow.print()
+    },
+    emailStruk() {
+      console.log('email')
     }
   }
 };

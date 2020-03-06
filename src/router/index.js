@@ -196,7 +196,7 @@ const routes = [
         component: () => import("../views/Pembayaran/List.vue")
       },
       {
-        path: "struk",
+        path: "struk/:pembayaran_id",
         name: "pembayaran-struk",
         component: () => import("../views/Pembayaran/StrukWrapper.vue")
       }
