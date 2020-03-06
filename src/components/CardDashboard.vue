@@ -1,9 +1,9 @@
 <template>
   <a
     class="card border-0 card-box card-box-hover-rise card-box-hover text-white align-box-row align-items-start mb-5 w-100 card-dashboard"
-    :class="bgColor"
+    :class="[bgColor, pointerHoverProps]"
   >
-    <div class="px-2 py-3 w-100 d-flex align-items-center flex-row">
+    <div class="px-2 py-3 w-100 d-flex align-items-center flex-row" style="height: 125px">
       <div>
         <div
           class="font-weight-bold text-white my-1 font-size-sm text-capitalize"
@@ -49,6 +49,16 @@ export default {
       required: false,
       type: String,
       default: "bg-midnight-bloom"
+    },
+    pointerHover: {
+      required: false,
+      type: Boolean,
+      default: true
+    }
+  },
+  computed: {
+    pointerHoverProps() {
+      return this.pointerHover ? "card-pointer" : null;
     }
   }
 };
@@ -58,5 +68,9 @@ export default {
 .card-dashboard {
   background-position: bottom center;
   // background-image: url("../assets/img/home-bg1.png") !important;
+}
+
+.card-pointer {
+  cursor: pointer;
 }
 </style>

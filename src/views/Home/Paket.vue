@@ -10,7 +10,7 @@
       <h4 class="text-capitalize tipe-paket font-weight-bold">starter</h4>
       <p class="small mb-0">(1-month-subscription)</p>
       <p
-        class="highlight-text --with-spacing text-red font-weight-bold align-self-center my-0"
+        class="highlight-text text-red font-weight-bold align-self-center my-0"
       >
         10
       </p>

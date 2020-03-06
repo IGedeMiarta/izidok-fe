@@ -35,14 +35,14 @@
           <div class="d-flex align-items-center w-100 mr-2">
             <CardDashboard
               title="total pasien hari ini"
-              :highlight="5"
+              :highlight="totalPasienHariIni"
               bg-color="bg-first"
             />
           </div>
           <div class="d-flex align-items-center w-100 mr-2">
             <CardDashboard
               title="pasien baru hari ini"
-              :highlight="dataRawatJalan"
+              :highlight="pasienBaruHariIni"
               bg-color="bg-success"
             />
           </div>
@@ -54,16 +54,17 @@
           </div>
           <div class="d-flex align-items-center w-100 mr-2">
             <CardDashboard
-              title="total pendapatan hari ini"
-              highlight="1.500.000"
+              title="jumlah pasien batal hari ini"
+              :highlight="pasienBatalHariIni"
               bg-color="bg-warning"
             />
           </div>
           <div class="d-flex align-items-center w-100">
             <CardDashboard
-              title="jumlah pasien batal hari ini"
-              highlight="1.500.000"
+              title="total pendapatan hari ini"
+              :highlight="totalPendapatan"
               bg-color="bg-warning"
+              :pointerHover="false"
             />
           </div>
         </div>
@@ -80,11 +81,7 @@
             <div slot="title">
               list pembayaran
             </div>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Vestibulum sodales ullamcorper vehicula. Duis placerat quam porta
-              lorem lobortis, sit amet sodales mauris finibus.
-            </p>
+            <list-pembayaran />
           </b-tab>
         </b-tabs>
         <!-- <b-row>
@@ -94,7 +91,7 @@
         </b-row> -->
       </b-col>
       <b-col cols="3">
-        <Paket />
+        <!-- <Paket /> -->
       </b-col>
     </b-row>
     <!-- <div class="d-flex">
@@ -111,17 +108,18 @@ export default {
   name: "home",
   components: {
     ListAntrean: () => import("@/views/Home/ListAntrean"),
-    CardDashboard: () => import("@/components/CardDashboard"),
-    Paket: () => import("@/views/Home/Paket")
+    ListPembayaran: () => import("@/views/Home/ListPembayaran"),
+    CardDashboard: () => import("@/components/CardDashboard")
+    // Paket: () => import("@/views/Home/Paket")
     // TableDashboard: () => import("@/components/TableDashboard")
     // TrendPasien: () => import("@/components/TrendPasien")
   },
   mounted() {
-    // Promise.all([
-    //   this.getAntrean(),
-    //   this.getRawatJalan(),
-    //   this.getPasienBaru()
-    // ]);
+    Promise.all([
+      this.getAntrean(),
+      this.getRawatJalan(),
+      this.getPasienBaru()
+    ]);
   },
   computed: {
     now() {
@@ -181,8 +179,10 @@ export default {
   },
   data: () => ({
     nomor_antrean: 0,
-    pasienBaru: 0,
-    dataRawatJalan: 0
+    totalPasienHariIni: 0,
+    pasienBaruHariIni: 0,
+    pasienBatalHariIni: 0,
+    totalPendapatan: 0
     // dataSeries: [
     //   {
     //     name: "Pasien Baru",
@@ -213,6 +213,8 @@ $bg-kntl-alternate: #d6d6d6;
 }
 
 .tab-kntl {
+  color: #778fad !important;
+
   ul {
     &[role="tablist"] {
       padding: 0;
