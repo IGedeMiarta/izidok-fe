@@ -18,7 +18,7 @@
             <DataTableWrapper :perPage="perPage" :currentPage="currentPage" :callbackFunc="fetchListPembayaran"
               @valueChanged="handleValueChanged">
               <b-table :items="pembayaranList" :fields="fieldList" thead-tr-class="kntl" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc"
-                :no-local-sorting="true" class="text-center">
+                :no-local-sorting="true">
                 <template v-slot:head()="data">
                   {{ data.label }}
                   <b-input size="sm" class="mt-2 w-95" v-if="data.field.searchable"

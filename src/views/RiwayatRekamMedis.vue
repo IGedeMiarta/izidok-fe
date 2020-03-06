@@ -81,40 +81,40 @@
     import "vue-datetime/dist/vue-datetime.css";
 
 
-    library.add(faArrowRight, faArrowUp, faTrashAlt, faSearch, faPencilAlt, faCopy);
-    export default {
-        props: {
-            pasien_id: Number,
-        },
-        data() {
-            return {
-                pasien: "",
-                klinik_id: ""
-            }
-        },
-        components: {
-            LeftColumn: () => import("./RiwayatRekamMedis/LeftColumn.vue"),
-            RightColumn: () => import("./RiwayatRekamMedis/RightColumn.vue")
-        },
-        methods: {
-            kembali() {
-                this.$router.back();
-            },
-            async fetchPasien() {
-                let res = await axios.get(`${this.url_api}/pasien/${this.pasien_id}`);
-                this.pasien = res.data.data;
-            },
-            rekamMedis({
-                           pasien_id,
-                           klinik_id
-                       }) {
-                this.$router.push(`/rekam-medis/${klinik_id}/${pasien_id}`);
-            },
-        },
-        mounted() {
-            this.fetchPasien()
-        }
-    };
+  library.add(faArrowRight, faArrowUp, faTrashAlt, faSearch, faPencilAlt, faCopy);
+  export default {
+    props: {
+      pasien_id: Number,
+    },
+    data() {
+      return {
+        pasien: "",
+        klinik_id: "",
+      }
+    },
+    components: {
+      LeftColumn: () => import("./RiwayatRekamMedis/LeftColumn.vue"),
+      RightColumn: () => import("./RiwayatRekamMedis/RightColumn.vue")
+    },
+    methods: {
+      kembali() {
+        this.$router.back();
+      },
+      async fetchPasien() {
+        let res = await axios.get(`${this.url_api}/pasien/${this.pasien_id}`);
+        this.pasien = res.data.data;
+      },
+      rekamMedis({
+        pasien_id,
+        klinik_id
+      }) {
+        this.$router.push(`/rekam-medis/${klinik_id}/${pasien_id}`);
+      },
+    },
+    mounted() {
+      this.fetchPasien()
+    }
+  };
 </script>
 
 <style lang="scss" scoped>
