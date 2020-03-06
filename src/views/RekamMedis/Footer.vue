@@ -7,49 +7,31 @@
             <b-container class="bv-example-row">
               <b-form-group>
               <b-row>
-                <b-col>
-                  <strong>Konsultasi Selanjutnya</strong><br>
-                  <vue-select class="text-capitalize col-md-11"  :options="
+                <b-col class="col-md-4">
+                  <strong>Konsultasi Selanjutnya</strong>
+                  <vue-select class="text-capitalize bg-white"  :options="
                  waktuKonsul
                   " v-model="selectedRadio" @input="selectingWaktu($event)" />
                 </b-col>
-                <b-col>
-<!--                  <input class="text-capitalize mt-2 col-md-4"  type="text" v-model="hasil">-->
+                <b-col class="col-md-3">
                   <template v-if="selectedRadio.label === 'Pilih Tanggal...' ">
-                    <div class="col-md-6">
                     <strong>Tanggal Konsultasi</strong>
                     <Datetime input-class="form-control" class="d-flex input-group" zone="Asia/Jakarta"
                               value-zone="Asia/Jakarta" v-model="hasil" format="d LLL yyyy" />
-                    </div>
                   </template>
                   <template v-if="selectedRadio.label === 'Tidak perlu konsul lanjutan'">
-                    <div class="col-md-6">
 
-                    </div>
                   </template>
                   <template v-if="selectedRadio.label !== 'Tidak perlu konsul lanjutan'
                     && selectedRadio.label !== 'Pilih Tanggal...' && selectedRadio.value !== {} ">
-                    <div class="col-md-6">
                       <strong>Tanggal Konsultasi</strong>
                       <Datetime input-class="form-control" class="d-flex input-group" zone="Asia/Jakarta"
                                 value-zone="Asia/Jakarta" v-model="hasil" format="d LLL yyyy" disabled/>
-                    </div>
                   </template>
-<!--                  <template v-else>-->
-<!--                    <div class="col-md-6">-->
-<!--                      <strong>Tanggal Konsultasi</strong>-->
-<!--                      <Datetime input-class="form-control" class="d-flex input-group" zone="Asia/Jakarta"-->
-<!--                                value-zone="Asia/Jakarta" v-model="hasil" format="d LLL yyyy" disabled />-->
-<!--                    </div>-->
-<!--                  </template>-->
-
                 </b-col>
               </b-row>
               </b-form-group>
             </b-container>
-
-
-
 
             <!-- <b-form-radio class="my-1" v-model="selectedRadio" name="some-radios" value="14">2 Minggu</b-form-radio>
               <b-form-radio class="my-1" v-model="selectedRadio" name="some-radios" value="30">1 Bulan</b-form-radio>
