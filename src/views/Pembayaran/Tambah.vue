@@ -231,9 +231,14 @@
             `${this.url_api}/pembayaran/${isRoute}`
           );
           const {
-            success,
+            status,
             data
           } = res.data;
+
+          if(status == false || data.status == "LUNAS") {
+            this.$router.push({name: "pembayaran-list"})
+          }
+
           this.pembayaranList = data;
           this.potongan = !data.potongan ? 0 : data.potongan
           data.detail.forEach((item, i) => {
