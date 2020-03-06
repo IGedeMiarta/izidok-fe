@@ -1,11 +1,11 @@
 <template>
-  <b-table :fields="fields()" :items="items" borderless class="table-pembayaran">
+  <b-table :fields="fields()" :items="details" borderless class="table-pembayaran">
     <template v-slot:cell(no)="data">
       {{data.index + 1}}
     </template>
 
     <template v-slot:cell(layanan)="data">
-      <vue-select :options="listLayanan" v-model="data.item.nama_layanan" value="nama_layanan"></vue-select>
+      <vue-select :options="listLayanan" v-model="data.item.nama_layanan" @input="inputLayanan($event, data.index)" value="nama_layanan"></vue-select>
     </template>
 
     <template v-slot:cell(qty)="data">
@@ -21,12 +21,12 @@
         <b-form-input class="flex-grow-1" :value="data.item.quantity * data.item.tarif" disabled />
         <div class="d-flex flex-shrink-1 justify-content-around ml-3">
           <font-awesome-layers class="fa-lg mr-1 btn-actions" @click="kurang(data.index)"
-            :class="{ invisible: items.length < 1 }" v-if="items.length > 1">
+            :class="{ invisible: details.length < 1 }" v-if="details.length > 1">
             <font-awesome-icon icon="circle" />
             <font-awesome-icon icon="minus" transform="shrink-6" class="text-white" />
           </font-awesome-layers>
           <font-awesome-layers class="fa-lg ml-1 btn-actions" @click="tambah"
-            :class="{ invisible: data.index !== items.length - 1 }">
+            :class="{ invisible: data.index !== details.length - 1 }">
             <font-awesome-icon icon="circle" />
             <font-awesome-icon icon="plus" transform="shrink-6" class="text-white" />
           </font-awesome-layers>
@@ -60,62 +60,50 @@
     },
     props: ['items'],
     data: () => ({
+      details: [],
       listLayanan: [],
-      // items: [
-      //   {
-      //     no: 1,
-      //     nama_layanan: null,
-      //     quantity: null,
-      //     tarif: null,
-      //     subtotal: null
-      //   }, {
-      //     no: 2,
-      //     nama_layanan: null,
-      //     quantity: null,
-      //     tarif: null,
-      //     subtotal: null
-      //   }, 
-      // ],
     }),
     mounted() {
-      this.fetchLayanan();
-      this.calcValue(this.items);
-      console.log(this.items)
+      this.details = this.items;
+      this.fetchLayanan()
+        .then(() => {
+          this.details.forEach(detail => {
+            this.listLayanan.forEach(layanan => {
+              if(detail.kode_layanan == layanan.kode_layanan) {
+                detail.nama_layanan = layanan;
+              }
+            })
+          })
+        });
+      this.calcValue(this.details);
     },
     watch: {
-      items: {
+      details: {
         deep: true,
         handler: function (newVal) {
-          const tmp = newVal.map(item => {
-            if(typeof item.nama_layanan === 'object'){
-              item.tarif = parseInt(item.nama_layanan.tarif);
-              item.subtotal = parseInt(item.quantity) * parseInt(item.tarif); 
-              item.nama_layanan = item.nama_layanan.nama_layanan;
-            } else {
-              item.subtotal = item.quantity * item.tarif;
-            }
-              return item;
-          });
-          this.calcValue(tmp);
-          return tmp;
+          newVal.forEach(detail => {
+            detail.subtotal = parseInt(detail.quantity) * parseInt(detail.tarif)
+          })
+          this.calcValue(newVal);
         }
       }
     },
     methods: {
       calcValue(val) {
-        console.log('calcValue', val)
         this.$emit("valueChanged", val);
       },
       tambah() {
         const {
-          items
+          details
         } = this;
-        const tmp = items[items.length - 1];
-        this.items = [
-          ...items,
+        const tmp = details[details.length - 1];
+        this.details = [
+          ...details,
           Object.keys(tmp).reduce((obj, val) => {
             if (val === "no") {
               obj[val] = parseInt(tmp[val]) + 1;
+            } else if(val === 'quantity') {
+              obj[val] = 1;
             } else {
               obj[val] = "";
             }
@@ -125,9 +113,9 @@
       },
       kurang(index) {
         const {
-          items
+          details
         } = this;
-        const tmp = items.splice(index, 1);
+        const tmp = details.splice(index, 1);
       },
       fields() {
         const tmp = [{
@@ -160,10 +148,6 @@
           );
 
           const {
-            items
-          } = this;
-
-          const {
             success,
             data
           } = res.data;
@@ -187,6 +171,11 @@
         } catch (err) {
           // console.log(err);
         }
+      },
+      inputLayanan($event, index) {
+        this.details[index].nama_layanan = $event
+        this.details[index].kode_layanan = $event.kode_layanan
+        this.details[index].tarif = $event.tarif
       }
     }
   };
