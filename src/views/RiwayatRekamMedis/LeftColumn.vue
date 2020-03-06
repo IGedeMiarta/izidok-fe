@@ -39,10 +39,10 @@
               { label: 'cancer', value: 'cancer.jpeg' }
             ]" -->
           <b-col sm="6" v-for="data in dataRiwayat" :key="data.id" class="mb-4">
-            <div class="my-4 mx-0 p-0 position-relative h-100">
+            <div class="my-4 mx-0 p-0 position-relative h-100" :rekam_medis="data.id">
               <img :src="data.pemeriksaan_fisik.draw_path" class="img-fluid" />
               <div class="card card-box position-absolute w-100 rounded-0 border-0"
-                style="bottom: 0; background-color: #214179; color: #fff; cursor: pointer" @click="rerender">
+                style="bottom: 0; background-color: #214179; color: #fff; cursor: pointer" @click="rerender(data.id)" >
                 <div class="card-body text-capitalize text-center py-1">
                   <b-row>
                     <b-col sm="12"> {{data.created_at}}</b-col>
@@ -112,11 +112,8 @@
       this.showleftRekamMedis();
     },
     methods: {
-      getImage(data) {
-        return require(`@/assets/img/${data}`);
-      },
-      rerender() {
-        this.$root.$emit("rerender");
+      rerender(id) {
+        this.$root.$emit("rerender",id);
       },
       async showleftRekamMedis() {
         try {
