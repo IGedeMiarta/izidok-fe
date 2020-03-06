@@ -141,7 +141,7 @@
             }
           },
           {
-            title: "Registrasi Pasien",
+            title: "Registrasi Antrean",
             href: "/rawat-jalan/registrasi",
             icon: {
               element: "font-awesome-icon",
