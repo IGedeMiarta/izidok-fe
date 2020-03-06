@@ -133,8 +133,6 @@ export default {
   methods: {
     async getRawatJalan() {
       try {
-        var today = new Date();
-        var dateToday = today.getDate();
         const res = await axios.get(
           `${this.url_api}/dash-rawat-jalan?from=${this.now}&to=${this.now}`
         );
@@ -145,17 +143,8 @@ export default {
     },
     async getPasienBaru() {
       try {
-        var today = new Date();
-        var dateToday = today.getDate();
-        var date =
-          today.getFullYear() +
-          "-" +
-          "0" +
-          (today.getMonth() + 1) +
-          "-" +
-          today.getDate();
         const res = await axios.get(
-          `${this.url_api}/dash-pasien?type=date_range&from=${date}&to=${date}`
+          `${this.url_api}/dash-pasien?type=date_range&from=${this.now}&to=${this.now}`
         );
         const { status, data } = res;
       } catch (err) {
