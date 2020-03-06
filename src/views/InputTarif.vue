@@ -192,13 +192,13 @@
       kodeLayananExistsInDb: [],
       namaLayananExistsInDb: [],
     }),
-    // beforeRouteEnter(to, from, next) {
-    //   if (store.getters.isFirstLogin) {
-    //     next();
-    //   } else {
-    //     next("/");
-    //   }
-    // },
+    beforeRouteEnter(to, from, next) {
+      if (store.getters.isFirstLogin) {
+        next();
+      } else {
+        next("/");
+      }
+    },
     computed: {
       ...mapGetters(["getKlinikId"])
     },
