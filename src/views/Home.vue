@@ -143,10 +143,16 @@ export default {
     },
     async getPasienBaru() {
       try {
-        const res = await axios.get(
-          `${this.url_api}/dash-pasien?type=date_range&from=${this.now}&to=${this.now}`
-        );
-        const { status, data } = res;
+        const res = await axios.get(`${this.url_api}/dash-pasien`);
+        const {
+          status,
+          data: {
+            data: { today_patient }
+          }
+        } = res;
+        if (status) {
+          this.pasienBaruHariIni = today_patient;
+        }
       } catch (err) {
         console.log(err);
       }
