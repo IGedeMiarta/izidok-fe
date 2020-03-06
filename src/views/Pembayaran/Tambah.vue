@@ -75,7 +75,7 @@
                     <b-col cols="4">Potongan</b-col>
                     <b-col cols="7">
                       <b-input-group append="%">
-                        <b-form-input v-model.lazy="potongan" type="number" />
+                        <b-form-input v-model.lazy="potongan" type="number" :disabled="assistantRole" />
                       </b-input-group>
                     </b-col>
                   </b-form-row>
@@ -88,7 +88,8 @@
                   <b-form-row class="d-flex align-items-right w-100 py-2">
                     <b-col cols="11">
                       <!-- <b-button variant="danger" class="text-uppercase mr-3" @click="previewStruk">preview struk</b-button> -->
-                      <b-button variant="success" class="text-uppercase mr-3" @click="simpanPembayaran">simpan</b-button>
+                      <b-button variant="danger" class="text-uppercase mr-3" @click="kembali" v-if="assistantRole">kembali</b-button>
+                      <b-button variant="success" class="text-uppercase mr-3" @click="simpanPembayaran" v-if="!assistantRole">simpan</b-button>
                       <b-button variant="primary" class="text-uppercase" @click="bayarModal">bayar</b-button>
                     </b-col>
                     </b-form-row>
@@ -129,7 +130,8 @@
 
 <script>
   import {
-    mapMutations
+    mapMutations,
+    mapGetters
   } from "vuex";
   import startCase from "lodash/startCase";
   import upperCase from "lodash/upperCase";
@@ -158,6 +160,7 @@
       metodePembayaran: null
     }),
     computed: {
+      ...mapGetters(["assistantRole"]),
       nett() {
         return this.total - ((this.potongan / 100) * this.total);
       },
@@ -306,6 +309,11 @@
           // console.log(err);
         }
       },
+      kembali() {
+        this.$router.push({
+          name: 'pembayaran-list'
+        });
+      }
     }
   };
 </script>

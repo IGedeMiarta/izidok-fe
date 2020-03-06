@@ -5,11 +5,11 @@
     </template>
 
     <template v-slot:cell(layanan)="data">
-      <vue-select :options="listLayanan" v-model="data.item.nama_layanan" @input="inputLayanan($event, data.index)" value="nama_layanan"></vue-select>
+      <vue-select :options="listLayanan" v-model="data.item.nama_layanan" @input="inputLayanan($event, data.index)" value="nama_layanan" :disabled="assistantRole"></vue-select>
     </template>
 
     <template v-slot:cell(qty)="data">
-      <b-form-input type="number" v-model="data.item.quantity" />
+      <b-form-input type="number" v-model="data.item.quantity" :disabled="assistantRole" />
     </template>
 
     <template v-slot:cell(nilai)="data">
@@ -19,7 +19,7 @@
     <template v-slot:cell(subtotal)="data">
       <div class="d-flex align-items-center">
         <b-form-input class="flex-grow-1" :value="data.item.quantity * data.item.tarif" disabled />
-        <div class="d-flex flex-shrink-1 justify-content-around ml-3">
+        <div class="d-flex flex-shrink-1 justify-content-around ml-3" v-if="!assistantRole">
           <font-awesome-layers class="fa-lg mr-1 btn-actions" @click="kurang(data.index)"
             :class="{ invisible: details.length < 1 }" v-if="details.length > 1">
             <font-awesome-icon icon="circle" />
@@ -50,6 +50,7 @@
   import {
     FontAwesomeLayers
   } from "@fortawesome/vue-fontawesome";
+  import { mapGetters } from "vuex";
 
   library.add(faPlus, faMinus, faCircle);
 
@@ -63,6 +64,9 @@
       details: [],
       listLayanan: [],
     }),
+    computed: {
+      ...mapGetters(["assistantRole"])
+    },
     mounted() {
       this.details = this.items;
       this.fetchLayanan()
