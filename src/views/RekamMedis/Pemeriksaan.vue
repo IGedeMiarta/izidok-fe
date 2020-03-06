@@ -135,7 +135,7 @@ export default {
   },
   data() {
     return {
-      isHidden: false,
+      isHidden: true,
       drawing: false,
       mousePos: { x: 0, y: 0 },
       lastPos: { x: 0, y: 0 },
@@ -144,8 +144,8 @@ export default {
       isLoading: false,
       selectedOrgan: [],
       organs: [],
-      isPen: true,
-      isActive: "pen",
+      isPen: false,
+      isActive: "keyboard",
       isColorActive: "black",
       penWidth: 2
     };
@@ -404,7 +404,9 @@ canvas {
   /* display: none; */
 }
 
+/*
 #editor {
-  /* display: none; */
+  display: none;
 }
+*/
 </style>
