@@ -58,8 +58,7 @@
                 <div class="card-header">
                   <b-button
                     class="btn-link btn-lg d-flex align-items-center justify-content-between shadow-none collapsed"
-                    v-b-toggle.accordion-4
-                  >
+                    v-b-toggle.accordion-4 >
                     <span>Diagnosa</span>
                     <font-awesome-icon icon="angle-up" class="font-size-xl" />
                   </b-button>
