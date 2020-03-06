@@ -1,6 +1,8 @@
 <template>
   <div>
-    <page-title heading="Rekam Medis" :breadcrumb="[
+    <page-title
+      heading="Rekam Medis"
+      :breadcrumb="[
         {
           label: 'Rekam Medis'
         },
@@ -8,40 +10,43 @@
           label: 'Riwayat',
           active: true
         }
-      ]" defaultSlotCol="7" rightSlot>
+      ]"
+      defaultSlotCol="7"
+      rightSlot
+    >
       <template v-slot:defaultSlot>
-        <b-col sm="8">
+        <b-col cols="8">
           <b-row>
-            <b-col sm="12">
+            <b-col cols="12">
               <h5 class="display-4 mt-1 mb-2 font-weight-bold">Riwayat Rekam Medis</h5>
             </b-col>
           </b-row>
           <b-row>
-            <b-col sm="4">
+            <b-col cols="4">
               <p class="text-uppercase mb-2">Nama Pasien</p>
             </b-col>
-            <b-col sm="1">:</b-col>
-            <b-col sm="7">
+            <b-col cols="1">:</b-col>
+            <b-col cols="7">
               <p class="text-uppercase mb-2">{{ pasien.nama }}</p>
             </b-col>
           </b-row>
           <b-row>
-            <b-col sm="4">
+            <b-col cols="4">
               <p class="text-uppercase mb-2">Nomor Rekam Medis</p>
             </b-col>
-            <b-col sm="1">:</b-col>
-            <b-col sm="7">
+            <b-col cols="1">:</b-col>
+            <b-col cols="7">
               <p class="text-uppercase mb-2">{{ pasien.nomor_rekam_medis }}</p>
             </b-col>
           </b-row>
         </b-col>
       </template>
       <template v-slot:rightSlot>
-        <b-col sm="4" class="d-flex align-items-center justify-content-around">
+        <b-col
+          cols="4"
+          class="d-flex align-items-center justify-content-around"
+        >
           <b-button variant="primary" class="text-uppercase" @click="kembali()">kembali</b-button>
-<<<<<<< HEAD
-          <b-button variant="info" class="text-uppercase">tulis rekam medis</b-button>
-=======
           <b-button
             variant="info" class="text-uppercase"
             @click="
@@ -50,7 +55,6 @@
                klinik_id: pasien.klinik_id
                })"
             >tulis rekam medis</b-button>
->>>>>>> e5a5d3b198fcdf0d13eb870ca0f7259d8bb8f8db
         </b-col>
       </template>
     </page-title>
@@ -58,10 +62,10 @@
       <div class="card card-box">
         <div class="card-body p-4">
           <b-row>
-            <b-col sm="6">
+            <b-col cols="6">
               <LeftColumn class="rrm-content" />
             </b-col>
-            <b-col sm="6">
+            <b-col cols="6">
               <RightColumn class="rrm-content" />
             </b-col>
           </b-row>
@@ -72,37 +76,6 @@
 </template>
 
 <script>
-<<<<<<< HEAD
-  import axios from 'axios';
-  export default {
-    props: {
-      pasien_id: Number
-    },
-    data() {
-      return {
-        pasien: null,
-      }
-    },
-    components: {
-      LeftColumn: () => import("./RiwayatRekamMedis/LeftColumn.vue"),
-      RightColumn: () => import("./RiwayatRekamMedis/RightColumn.vue")
-    },
-    methods: {
-      kembali() {
-        this.$router.back();
-      },
-      
-      async fetchPasien() {
-        let res = await axios.get(`${this.url_api}/pasien/${this.pasien_id}`);
-        this.pasien = res.data.data;
-      }
-    },
-    mounted() {
-      this.fetchPasien()
-      this.showrightRekamMedis()
-    }
-  };
-=======
 
 import axios from "axios";
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -153,19 +126,18 @@ export default {
 
   }
 };
->>>>>>> e5a5d3b198fcdf0d13eb870ca0f7259d8bb8f8db
 </script>
 
 <style lang="scss" scoped>
-  .rrm-content {
-    overflow-x: hidden;
-    overflow-y: auto;
-    max-height: 450px;
-  }
+.rrm-content {
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 450px;
+}
 
-  @media (max-width: 300px) {
-    .rrm-content {
-      max-height: 200px;
-    }
+@media (max-width: 300px) {
+  .rrm-content {
+    max-height: 200px;
   }
+}
 </style>
