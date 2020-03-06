@@ -65,6 +65,7 @@
               :highlight="totalPendapatan"
               bg-color="bg-warning"
               :pointerHover="false"
+              :showArrow="false"
             />
           </div>
         </div>

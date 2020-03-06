@@ -16,7 +16,7 @@
           </div>
         </div>
       </div>
-      <div class="d-flex flex-grow-1 justify-content-center">
+      <div class="d-flex flex-grow-1 justify-content-center" v-if="showArrow">
         <div class="ml-auto align-self-end">
           <font-awesome-icon icon="chevron-right" class="font-size-xl" />
         </div>
@@ -51,6 +51,11 @@ export default {
       default: "bg-midnight-bloom"
     },
     pointerHover: {
+      required: false,
+      type: Boolean,
+      default: true
+    },
+    showArrow: {
       required: false,
       type: Boolean,
       default: true
