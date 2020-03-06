@@ -23,8 +23,7 @@
         class="col-xl-5 d-flex align-items-center justify-content-start mt-4 mt-xl-0 justify-content-xl-end"
       >
         <div class="mx-auto mx-xl-0">
-           <b-button target="_blank" v-b-tooltip.hover
-            title="Riwayat" variant="primary" @click="goToRiwayat">Lihat Riwayat</b-button>
+           <b-button target="_blank" v-tooltip="'Riwayat'" variant="primary" @click="goToRiwayat">Lihat Riwayat</b-button>
         </div>
       </div>
     </div>
