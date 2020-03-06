@@ -99,6 +99,31 @@
         </div>
       </div>
     </div>
+
+    <b-modal id="modalMetodePembayaran" title="Pilih Metode Pembayaran Anda" ok-only>
+      <vue-select :options="['Cash']" v-model="metodePembayaran"></vue-select>
+      <template v-slot:modal-footer>
+        <div class="w-100">
+          <b-button
+            variant="primary"
+            size="sm"
+            class="float-right ml-2"
+            @click="bayarPembayaran"
+            :disabled="!metodePembayaran"
+          >
+            Lanjutkan Pembayaran
+          </b-button>
+          <b-button
+            variant="danger"
+            size="sm"
+            class="float-right"
+            @click="$bvModal.hide('modalMetodePembayaran')"
+          >
+            Batal
+          </b-button>
+        </div>
+      </template>
+    </b-modal>
   </div>
 </template>
 
@@ -114,7 +139,8 @@
 
   export default {
     components: {
-      TablePembayaran: () => import("./TablePembayaran.vue")
+      TablePembayaran: () => import("./TablePembayaran.vue"),
+      "vue-select": () => import("vue-select"),
     },
     data: () => ({
       pembayaranList: [],
@@ -129,6 +155,7 @@
         total_nett: 0,
         detail_pembayaran: []
       },
+      metodePembayaran: null
     }),
     computed: {
       nett() {
@@ -186,6 +213,7 @@
           confirmButtonText: startCase("ya")
         }).then(res => {
           if (res.value) {
+            this.$bvModal.show('modalMetodePembayaran');
             // TODO: tampil popup pilihan metode pembayaran
           }
         });
@@ -241,6 +269,33 @@
           });
           this.$router.push({
             path: "/pembayaran"
+          });
+        } catch (err) {
+          // console.log(err);
+        }
+      },
+      async bayarPembayaran() {
+        this.$bvModal.hide('modalMetodePembayaran');
+
+        try {
+          await axios.post(
+            `${this.url_api}/pembayaran/detail`, 
+            this.postData
+          );
+          
+          await axios.put(
+            `${this.url_api}/pembayaran/${this.pembayaranList.id}`, 
+            {status:"LUNAS"}
+          );
+
+          this.$swal({
+            title: 'Pembayaran Berhasil',
+            icon: 'success',
+            confirmButtonText: startCase("ya")
+          });
+
+          this.$router.push({
+            name: 'pembayaran-struk'
           });
         } catch (err) {
           // console.log(err);
