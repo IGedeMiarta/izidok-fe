@@ -118,7 +118,7 @@ export default {
       rows: 1,
       perPage: 5,
       data: [],
-      searchValue: null
+      searchValue: ''
     };
   },
   watch: {
@@ -160,7 +160,7 @@ export default {
       try {
         const { searchValue } = this;
         const res = await axios.get(
-          `${this.url_api}/transaksi?limit=${this.perPage}&page=${this.currentPage}&search=${searchValue}`
+          `${this.url_api}/transaksi?limit=${this.perPage}&page=${this.currentPage}&nama_pasien=${searchValue}`
         );
         const { success, data } = res.data;
         if (success) {
