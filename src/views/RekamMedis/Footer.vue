@@ -23,7 +23,7 @@
 
                   </template>
                   <template v-if="selectedRadio.label !== 'Tidak perlu konsul lanjutan'
-                    && selectedRadio.label !== 'Pilih Tanggal...' && selectedRadio.value !== {} ">
+                    && selectedRadio.label !== 'Pilih Tanggal...' && selectedRadio.label !==''  ">
                       <strong>Tanggal Konsultasi</strong>
                       <Datetime input-class="form-control" class="d-flex input-group" zone="Asia/Jakarta"
                                 value-zone="Asia/Jakarta" v-model="hasil" format="d LLL yyyy" disabled/>
@@ -83,7 +83,7 @@
                 waktuKonsul: [
                     {
                          label: 'Tidak perlu konsul lanjutan',
-                        value: null
+                        value: 1
                      },
                     {
                         label: '1 minggu',
@@ -121,10 +121,21 @@
             selectingWaktu($event) {
                 this.hari = $event.value
                 this.tgl_next_konsultasi =  this.hasil
-                this.updatePostData({
-                    key: 'tgl_next_konsultasi',
-                    value: this.hasil
-                },);
+
+                if (this.hari == 1) {
+                    this.updatePostData({
+                        key: 'tgl_next_konsultasi',
+                        value: null
+                    },);
+                }
+
+                if (this.hari != 1) {
+                    this.updatePostData({
+                        key: 'tgl_next_konsultasi',
+                        value: this.hasil
+                    },);
+                }
+
                 console.log(this.tgl_next_konsultasi)
             }
 
@@ -157,10 +168,7 @@
                 });
                 if (this.selectedRadio.value == 99)
                     this.selectingWaktu();
-                this.updatePostData({
-                    key: 'tgl_next_konsultasi',
-                    value: this.hasil
-                },);
+
                 console.log(this.hasil)
                 this.updateSavingParams({
                     key: 'is_next_konsul',

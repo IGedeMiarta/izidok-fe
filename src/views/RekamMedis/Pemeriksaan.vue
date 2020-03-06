@@ -108,10 +108,10 @@
           <b-button @click="clear" variant="warning" size="sm" class="m-1">Clear</b-button>
         </div>
       </div>
-      <div v-show="isHidden" class="col-md-4">
+      <div v-show="isHidden" class="col-md-5">
         <div id="img_organ"></div>
       </div>
-      <div v-show="isHidden" class="col-md-8">
+      <div v-show="isHidden" class="col-md-7">
         <Editor id="editor" v-on:update-content="updateContent" />
       </div>
     </div>
