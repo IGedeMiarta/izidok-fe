@@ -118,6 +118,7 @@ export default {
     Promise.all([
       this.getAntrean(),
       this.getRawatJalan(),
+      this.getPasien(),
       this.getPasienBaru()
     ]);
   },
@@ -141,9 +142,25 @@ export default {
         console.log(err);
       }
     },
-    async getPasienBaru() {
+    async getPasien() {
       try {
         const res = await axios.get(`${this.url_api}/dash-pasien`);
+        const {
+          status,
+          data: {
+            data: { today_patient }
+          }
+        } = res;
+        if (status) {
+          this.pasienBaruHariIni = today_patient;
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async getPasienBaru() {
+      try {
+        const res = await axios.get(`${this.url_api}/dash-pasien-baru`);
         const {
           status,
           data: {
