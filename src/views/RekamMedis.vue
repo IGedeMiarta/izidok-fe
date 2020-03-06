@@ -238,9 +238,16 @@ export default {
         type: "warning"
       }).then(res => {
         if (res.value) {
-          router.push({
-            path: "/rawat-jalan/antrean"
-          });
+          let transklinik_id = this.$router.currentRoute.params.transklinik_id;
+          axios.put(`${this.url_api}/transaksi/${transklinik_id}`, {status: 'MENUNGGU'})
+            .then(() => {
+              router.push({
+                path: "/rawat-jalan/antrean"
+              });
+            })
+            .catch((err) => {
+              // console.log(err);
+            });
         }
       });
     },
