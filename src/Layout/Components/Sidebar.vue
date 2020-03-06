@@ -200,16 +200,16 @@
               }
             },
           },
-          {
-            title: "Account Setting",
-            href: "/#",
-            icon: {
-              element: "font-awesome-icon",
-              attributes: {
-                icon: "cog"
-              }
-            },
-          },
+          // {
+          //   title: "Account Setting",
+          //   href: "/#",
+          //   icon: {
+          //     element: "font-awesome-icon",
+          //     attributes: {
+          //       icon: "cog"
+          //     }
+          //   },
+          // },
         ];
 
         return tmp.map(item => ({
