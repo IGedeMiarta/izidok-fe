@@ -23,15 +23,8 @@
         class="col-xl-5 d-flex align-items-center justify-content-start mt-4 mt-xl-0 justify-content-xl-end"
       >
         <div class="mx-auto mx-xl-0">
-          <a
-            href="/riwayat-rekam-medis"
-            class="btn btn-primary"
-            target="_blank"
-            v-b-tooltip.hover
-            title="Riwayat"
-          >
-            <span>Lihat Riwayat</span>
-          </a>
+           <b-button target="_blank" v-b-tooltip.hover
+            title="Riwayat" variant="primary" @click="goToRiwayat">Lihat Riwayat</b-button>
         </div>
       </div>
     </div>
@@ -75,6 +68,9 @@ export default {
     }
   },
   methods: {
+    goToRiwayat(){
+      this.$router.push(`/rekam-medis/riwayat/${this.pasien.id}`);
+    },
     getAge(DOB) {
       var today = new Date();
       var birthDate = new Date(DOB);
