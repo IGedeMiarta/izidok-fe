@@ -39,30 +39,21 @@
                   <span
                     class="d-flex align-items-center justify-content-between"
                   >
-                  <template v-if="data.item.status == 'BELUM LUNAS'">
-                       <b-button 
-                       style="background-color : #C0C5C8"
-                      variant="gray"
-                      class="mr-1"
-                      size="sm" disabled
-                      ><font-awesome-icon icon="search"
-                    /></b-button>
-                  </template>
-                  <template v-else>
-                         <b-button 
+                    <b-button 
                       variant="primary"
                       size="sm" 
                       class="mr-1"
-                      v-b-tooltip.hover title="Lihat Struk"
+                      v-tooltip="'Lihat Struk'"
+                      :disabled="data.item.status == 'BELUM LUNAS'"
                       ><font-awesome-icon icon="search"
                     /></b-button>
-                  </template>
                  
                     <b-button
                       variant="success"
                       size="sm"
-                      v-b-tooltip.hover title="Halaman Pembayaran"
+                      v-tooltip="'Halaman Pembayaran'"
                       @click="detailBayar(data.item.id)"
+                      v-if="data.item.status == 'BELUM LUNAS'"
                       ><font-awesome-icon icon="money-bill-wave"
                     /></b-button>
                   </span>

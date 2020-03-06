@@ -65,20 +65,20 @@
 </template>
 
 <script>
-  import axios from "axios";
-  import {
-    library
-  } from "@fortawesome/fontawesome-svg-core";
-  import {
-    faArrowRight,
-    faArrowUp,
-    faTrashAlt,
-    faSearch,
-    faPencilAlt,
-    faCopy
-  } from "@fortawesome/free-solid-svg-icons";
-  // import { Datetime } from "vue-datetime";
-  import "vue-datetime/dist/vue-datetime.css";
+    import axios from "axios";
+    import {
+        library
+    } from "@fortawesome/fontawesome-svg-core";
+    import {
+        faArrowRight,
+        faArrowUp,
+        faTrashAlt,
+        faSearch,
+        faPencilAlt,
+        faCopy
+    } from "@fortawesome/free-solid-svg-icons";
+    // import { Datetime } from "vue-datetime";
+    import "vue-datetime/dist/vue-datetime.css";
 
 
   library.add(faArrowRight, faArrowUp, faTrashAlt, faSearch, faPencilAlt, faCopy);

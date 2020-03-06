@@ -141,7 +141,7 @@
             }
           },
           {
-            title: "Registrasi Pasien",
+            title: "Registrasi Antrean",
             href: "/rawat-jalan/registrasi",
             icon: {
               element: "font-awesome-icon",
@@ -200,16 +200,16 @@
               }
             },
           },
-          {
-            title: "Account Setting",
-            href: "/#",
-            icon: {
-              element: "font-awesome-icon",
-              attributes: {
-                icon: "cog"
-              }
-            },
-          },
+          // {
+          //   title: "Account Setting",
+          //   href: "/#",
+          //   icon: {
+          //     element: "font-awesome-icon",
+          //     attributes: {
+          //       icon: "cog"
+          //     }
+          //   },
+          // },
         ];
 
         return tmp.map(item => ({

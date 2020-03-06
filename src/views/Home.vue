@@ -118,6 +118,7 @@ export default {
     Promise.all([
       this.getAntrean(),
       this.getRawatJalan(),
+      this.getPasien(),
       this.getPasienBaru()
     ]);
   },
@@ -133,8 +134,6 @@ export default {
   methods: {
     async getRawatJalan() {
       try {
-        var today = new Date();
-        var dateToday = today.getDate();
         const res = await axios.get(
           `${this.url_api}/dash-rawat-jalan?from=${this.now}&to=${this.now}`
         );
@@ -143,21 +142,34 @@ export default {
         console.log(err);
       }
     },
+    async getPasien() {
+      try {
+        const res = await axios.get(`${this.url_api}/dash-pasien`);
+        const {
+          status,
+          data: {
+            data: { today_patient }
+          }
+        } = res;
+        if (status) {
+          this.pasienBaruHariIni = today_patient;
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
     async getPasienBaru() {
       try {
-        var today = new Date();
-        var dateToday = today.getDate();
-        var date =
-          today.getFullYear() +
-          "-" +
-          "0" +
-          (today.getMonth() + 1) +
-          "-" +
-          today.getDate();
-        const res = await axios.get(
-          `${this.url_api}/dash-pasien?type=date_range&from=${date}&to=${date}`
-        );
-        const { status, data } = res;
+        const res = await axios.get(`${this.url_api}/dash-pasien-baru`);
+        const {
+          status,
+          data: {
+            data: { today_patient }
+          }
+        } = res;
+        if (status) {
+          this.pasienBaruHariIni = today_patient;
+        }
       } catch (err) {
         console.log(err);
       }

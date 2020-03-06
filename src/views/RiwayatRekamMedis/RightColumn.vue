@@ -126,7 +126,6 @@
         }, this.randomNumber());
       },
       async showrightRekamMedis(id) {
-        console.log('dd', id)
         let res = await axios.get(`${this.url_api}/rekam_medis/${id}`);
         this.datarekammedis = res.data.data;
         if (this.datarekammedis.pemeriksaan_penunjang.files) {
