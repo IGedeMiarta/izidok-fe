@@ -83,7 +83,7 @@
                 waktuKonsul: [
                     {
                          label: 'Tidak perlu konsul lanjutan',
-                        value: null
+                        value: 99
                      },
                     {
                         label: '1 minggu',
