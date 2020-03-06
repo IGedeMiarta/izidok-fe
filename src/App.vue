@@ -36,7 +36,7 @@ export default {
       return this.$store.state.autherror
     },
     isBeta() {
-      return process.env.VUE_APP_IS_BETA == 1 && moment().isBetween("2020-03-05", "2020-03-15")
+      return process.env.VUE_APP_IS_BETA == 1 && moment().isBetween("2020-03-09", "2020-03-15")
     }
   },
   methods: {
