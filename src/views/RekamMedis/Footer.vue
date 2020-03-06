@@ -116,6 +116,12 @@
                 // return hari;
             }
         },
+        mounted() {
+          this.selectedRadio = {
+            label: 'Tidak perlu konsul lanjutan',
+            value: 1
+          }
+        },
         methods: {
             ...mapActions(["updatePostData", "updateSavingParams"]),
             selectingWaktu($event) {
