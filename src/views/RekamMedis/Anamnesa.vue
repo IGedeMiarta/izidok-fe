@@ -113,10 +113,10 @@ export default {
   },
   data() {
     return {
-      isHidden: false,
-      isPen: true,
+      isHidden: true,
+      isPen: false,
       isLoading: false,
-      isActive: "pen",
+      isActive: "keyboard",
       isColorActive: "black",
       mousePos: { x: 0, y: 0 },
       lastPos: { x: 0, y: 0 },
