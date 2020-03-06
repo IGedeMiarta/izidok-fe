@@ -45,6 +45,7 @@
                       class="mr-1"
                       v-tooltip="'Lihat Struk'"
                       :disabled="data.item.status == 'BELUM LUNAS'"
+                      @click="viewStruk(data.item.id)"
                       ><font-awesome-icon icon="search"
                     /></b-button>
                  
@@ -255,7 +256,6 @@
         ];
       }, 500),
       detailBayar(id) {
-        console.log('tess',id)
         if (id) {
           this.$router.push({
             name: "pembayaran-tambah",
@@ -265,6 +265,16 @@
           });
         }
       },
+      viewStruk(id) {
+        if (id) {
+          this.$router.push({
+            name: "pembayaran-struk",
+            params: {
+              pembayaran_id: id
+            }
+          });
+        }
+      }
       // async fetchListpembayaran() {
       //   try {
       //     var today = new Date();
