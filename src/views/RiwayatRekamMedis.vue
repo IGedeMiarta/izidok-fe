@@ -39,11 +39,11 @@
       <template v-slot:rightSlot>
         <b-col sm="4" class="d-flex align-items-center justify-content-around">
           <b-button variant="primary" class="text-uppercase" @click="kembali()">kembali</b-button>
-          <b-button variant="info" class="text-uppercase" @click="
+          <!-- <b-button variant="info" class="text-uppercase" @click="
               rekamMedis({
                pasien_id: pasien.id,
                klinik_id: pasien.klinik_id
-               })">tulis rekam medis</b-button>
+               })">tulis rekam medis</b-button> -->
         </b-col>
       </template>
     </page-title>
