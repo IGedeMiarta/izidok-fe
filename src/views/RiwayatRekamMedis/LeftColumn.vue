@@ -52,10 +52,11 @@
               </div>
             </div>
           </b-col>
-          <div class="col-md-12 bg-neutral-second ninja-shadow mt-5" style="border-radius:10px;">
-            <div class="p-3">
-              <b-pagination class="d-flex justify-content-center mt-4" v-model="currentPage" :total-rows="rows"
-                :per-page="perPage"></b-pagination>
+          <div class="col-sm-12 mt-5" v-if="isLoadMore">
+            <div class="d-flex justify-content-center p-2">
+              <button class="btn btn-primary" @click="loadMore">
+                Load More
+              </button>
             </div>
           </div>
         </b-row>
@@ -99,13 +100,19 @@
         selectDataRiwayat: [],
         selected: null,
         currentPage: 1,
-        rows: null,
+        rows: 0,
         perPage: 4,
+        isNewDataExists: false,
       }
     },
     watch: {
       currentPage() {
         this.showleftRekamMedis();
+      }
+    },
+    computed: {
+      isLoadMore() {
+        return this.rows > this.currentPage * this.perPage;
       }
     },
     mounted() {
@@ -115,14 +122,24 @@
       rerender(id) {
         this.$root.$emit("rerender",id);
       },
+      loadMore() {
+        this.currentPage++;
+        showleftRekamMedis();
+      },
       async showleftRekamMedis() {
         try {
           var isRoute = this.$router.currentRoute.params.pasien_id;
           const responsePage = await axios.get(
             `${this.url_api}/rekam_medis/pasien/${isRoute}?page=${this.currentPage}`);
+          
+          responsePage.data.data.rekam_medis.data.forEach(item => {
+            this.$set(this.dataRiwayat, this.dataRiwayat.length, item);
+          })
          
-          this.dataRiwayat = responsePage.data.data.rekam_medis.data;
-          this.rows = responsePage.data.data.rekam_medis.total;
+          if(this.rows == 0) {
+            this.rows = responsePage.data.data.rekam_medis.total;
+          }
+          this.isNewDataExists = this.rows < responsePage.data.data.rekam_medis.total;
 
           this.selectDataRiwayat = this.dataRiwayat.map(item => {
             return {
