@@ -14,9 +14,11 @@
           {{ title }}
         </div>
         <div class="d-flex align-items-center">
-          <div class="display-3 font-weight-bold">
-            {{ highlight }}
-          </div>
+          <slot name="highlight">
+            <div class="display-3 font-weight-bold">
+              {{ highlight }}
+            </div>
+          </slot>
         </div>
       </div>
       <div class="d-flex flex-grow-1 justify-content-center" v-if="showArrow">
@@ -45,7 +47,6 @@ export default {
       type: String
     },
     highlight: {
-      required: true,
       type: [Number, String]
     },
     bgColor: {

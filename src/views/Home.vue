@@ -67,7 +67,15 @@
               bg-color="total-pendapatan-hari-ini"
               :pointerHover="false"
               :showArrow="false"
-            />
+            >
+              <template v-slot:highlight>
+                <p
+                  style="font-size: 1.5rem; font-weight: 700; word-break: break-word"
+                >
+                  {{ totalPendapatan }}
+                </p>
+              </template>
+            </CardDashboard>
           </div>
         </div>
       </b-col>
@@ -160,11 +168,11 @@ export default {
           }
         } = res;
         if (status) {
-          this.totalPasienHariIni = pasien_hari_inix;
-          this.pasienBaruHariIni = pasien_baru_hari_ini;
-          this.nomor_antrean = nomor_antrian_saat_ini;
-          this.pasienBatalHariIni = pasienBatalHariIni;
-          this.totalPendapatan = total_pendapatan_hari_ini;
+          this.totalPasienHariIni = pasien_hari_ini || 0;
+          this.pasienBaruHariIni = pasien_baru_hari_ini || 0;
+          this.nomor_antrean = nomor_antrian_saat_ini || 0;
+          this.pasienBatalHariIni = pasien_batal_hari_ini || 0;
+          this.totalPendapatan = total_pendapatan_hari_ini || 0;
         }
       } catch (err) {
         console.log(err);

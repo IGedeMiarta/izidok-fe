@@ -13,6 +13,7 @@
           size="sm"
           style="border-left-color: transparent"
           v-model="searchValue"
+          debounce="500"
         />
       </b-input-group>
       <div class="d-flex justify-content-between ml-2">

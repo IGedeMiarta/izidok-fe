@@ -12,51 +12,53 @@
           class="mr-2"
           size="sm"
           style="border-left-color: transparent"
+          v-model="searchValue"
+          debounce="500"
         />
       </b-input-group>
     </div>
     <b-table :items="data" class="table-tab-home" :fields="fieldList()">
-      <template v-slot:cell(id)="data">{{ data.index + 1 }}</template>
+      <template v-slot:cell(id)="data">{{ data.item.no }}</template>
       <template v-slot:cell(jenis_kelamin)="data">
         {{ jenisKelamin(data.value) }}
       </template>
       <template v-slot:cell(action)="data">
         <div class="d-flex flex-row justify-content-between">
-          <!-- blm bayar -->
-          <b-button
-            size="sm"
-            class="mx-1"
-            variant="primary"
-            :to="{
-              name: 'pasien-detail',
-              params: {
-                idPasien: data.item.pasien_id
-              }
-            }"
-            v-tooltip="'Lihat Struk'"
-          >
-            <font-awesome-icon icon="search" />
-          </b-button>
-          <!-- sdh bayar -->
-          <b-button
-            size="sm"
-            class="mx-1"
-            style="background-color: #333; border-color: #333; color: #fff"
-            :to="{
-              name: 'pasien-detail',
-              params: {
-                idPasien: data.item.pasien_id
-              }
-            }"
-            v-tooltip="'Lihat Struk'"
-          >
-            <font-awesome-icon icon="search" />
-          </b-button>
+          <template>
+            <b-button
+              size="sm"
+              class="mx-1"
+              variant="primary"
+              :to="`pembayaran/struk/${data.item.id}`"
+              v-tooltip="'Lihat Struk'"
+              v-if="data.item.status.toLowerCase() === 'lunas'"
+            >
+              <font-awesome-icon icon="search" />
+            </b-button>
+            <b-button
+              size="sm"
+              class="mx-1"
+              style="background-color: #333; border-color: #333; color: #fff"
+              :to="{
+                name: 'pasien-detail',
+                params: {
+                  idPasien: data.item.pasien_id
+                }
+              }"
+              disabled
+              v-tooltip="'Lihat Struk'"
+              v-else
+            >
+              <font-awesome-icon icon="search" />
+            </b-button>
+          </template>
           <b-button
             size="sm"
             class="mx-1"
             variant="success"
             v-tooltip="'Bayar'"
+            v-if="/(belum)/gi.test(data.item.status)"
+            :to="`pembayaran/${data.item.id}`"
           >
             <font-awesome-icon icon="money-bill" />
           </b-button>
@@ -113,33 +115,23 @@ export default {
       try {
         const { searchValue } = this;
         const res = await axios.get(
-          `${this.url_api}/transaksi?limit=${this.perPage}&page=${this.currentPage}&search=${searchValue}`
+          `${this.url_api}/pembayaran?limit=${this.perPage}&page=${this.currentPage}&search=${searchValue}`
         );
         const { success, data } = res.data;
         if (success) {
-          const { trans_klinik: dataAntrean, total } = data;
-          const {
-            data: listAntrean,
-            total: totalEntries,
-            to: toPage,
-            from: fromPage
-          } = dataAntrean;
+          const { data: tmpData, total } = data;
+          const { total: totalEntries, to: toPage, from: fromPage } = tmpData;
           this.data = [
-            ...listAntrean.map((item, index) => {
+            ...tmpData.map((item, index) => {
               return {
                 id: item.id,
-                waktu_konsultasi: item.waktu_konsultasi,
-                nomor_antrian: item.nomor_antrian,
                 status: item.status,
-                jenis_kelamin: item.jenis_kelamin,
                 nama: item.nama,
-                nomor_hp: item.nomor_hp,
-                pasien_id: item.pasien_id,
                 no: (this.currentPage - 1) * this.perPage + index + 1
               };
             })
           ];
-          this.rows = dataAntrean.total;
+          this.rows = total;
           return this;
         }
       } catch (err) {
@@ -166,7 +158,7 @@ export default {
             label: "jenis kelamin"
           },
           {
-            key: "status_pembayaran",
+            key: "status",
             label: "status pembayaran"
           },
           {
