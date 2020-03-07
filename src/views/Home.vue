@@ -36,34 +36,35 @@
             <CardDashboard
               title="total pasien hari ini"
               :highlight="totalPasienHariIni"
-              bg-color="bg-first"
+              bg-color="total-pasien-hari-ini"
             />
           </div>
           <div class="d-flex align-items-center w-100 mr-2">
             <CardDashboard
               title="pasien baru hari ini"
               :highlight="pasienBaruHariIni"
-              bg-color="bg-success"
+              bg-color="pasien-baru-hari-ini"
             />
           </div>
           <div class="d-flex align-items-center w-100 mr-2">
             <CardDashboard
               title="no. antrean saat ini"
               :highlight="nomor_antrean"
+              bg-color="no-antrean-saat-ini"
             />
           </div>
           <div class="d-flex align-items-center w-100 mr-2">
             <CardDashboard
               title="jumlah pasien batal hari ini"
               :highlight="pasienBatalHariIni"
-              bg-color="bg-warning"
+              bg-color="jumlah-pasien-batal-hari-ini"
             />
           </div>
           <div class="d-flex align-items-center w-100">
             <CardDashboard
               title="total pendapatan hari ini"
               :highlight="totalPendapatan"
-              bg-color="bg-warning"
+              bg-color="total-pendapatan-hari-ini"
               :pointerHover="false"
               :showArrow="false"
             />
@@ -117,10 +118,10 @@ export default {
   },
   mounted() {
     Promise.all([
-      this.getAntrean(),
-      this.getRawatJalan(),
-      this.getPasien(),
-      this.getPasienBaru()
+      // this.getAntrean(),
+      // this.getRawatJalan(),
+      this.dashboardPasien()
+      // this.getPasienBaru()
     ]);
   },
   computed: {
@@ -143,17 +144,27 @@ export default {
         console.log(err);
       }
     },
-    async getPasien() {
+    async dashboardPasien() {
       try {
         const res = await axios.get(`${this.url_api}/dash-pasien`);
         const {
           status,
           data: {
-            data: { today_patient }
+            data: {
+              pasien_hari_ini = 10,
+              pasien_baru_hari_ini = 0,
+              nomor_antrian_saat_ini = 0,
+              pasien_batal_hari_ini = 0,
+              total_pendapatan_hari_ini = 0
+            }
           }
         } = res;
         if (status) {
-          this.pasienBaruHariIni = today_patient;
+          this.totalPasienHariIni = pasien_hari_inix;
+          this.pasienBaruHariIni = pasien_baru_hari_ini;
+          this.nomor_antrean = nomor_antrian_saat_ini;
+          this.pasienBatalHariIni = pasienBatalHariIni;
+          this.totalPendapatan = total_pendapatan_hari_ini;
         }
       } catch (err) {
         console.log(err);
@@ -264,6 +275,36 @@ $bg-kntl-alternate: #d6d6d6;
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
     border-top-right-radius: 12px;
+  }
+}
+
+.card-dashboard {
+  background-repeat: no-repeat !important;
+  background-size: 185% !important;
+  background-position: center !important;
+
+  @function bgImage($imageName) {
+    @return url("../assets/img/dashboard/"+$imageName+".png");
+  }
+
+  &.total-pasien-hari-ini {
+    background-image: bgImage("total-pasien-hari-ini");
+  }
+
+  &.pasien-baru-hari-ini {
+    background-image: bgImage("pasien-baru-hari-ini");
+  }
+
+  &.no-antrean-saat-ini {
+    background-image: bgImage("no-antrean-saat-ini");
+  }
+
+  &.jumlah-pasien-batal-hari-ini {
+    background-image: bgImage("jumlah-pasien-batal-hari-ini");
+  }
+
+  &.total-pendapatan-hari-ini {
+    background-image: bgImage("total-pendapatan");
   }
 }
 </style>

@@ -3,7 +3,10 @@
     class="card border-0 card-box card-box-hover-rise card-box-hover text-white align-box-row align-items-start mb-5 w-100 card-dashboard"
     :class="[bgColor, pointerHoverProps]"
   >
-    <div class="px-2 py-3 w-100 d-flex align-items-center flex-row" style="height: 125px">
+    <div
+      class="px-2 py-3 w-100 d-flex align-items-center flex-row"
+      style="height: 125px"
+    >
       <div>
         <div
           class="font-weight-bold text-white my-1 font-size-sm text-capitalize"
