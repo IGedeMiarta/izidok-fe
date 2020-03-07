@@ -362,7 +362,7 @@ export default {
       ];
     }, 500),
     rekamMedis({ klinik_id, pasien_id }) {
-      this.$router.push(`/rekam-medis/${klinik_id}/${pasien_id}`);
+      this.$router.push(`/rekam-medis/riwayat/${pasien_id}`);
     },
     removePasien({ id, nama = null } = {}) {
       this.$swal({

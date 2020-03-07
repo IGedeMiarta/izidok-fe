@@ -172,8 +172,8 @@
                 <b-form-group label="No. identitas" class="text-capitalize" style="position: relative">
                   <b-form-input v-if="this.formDataRegister['jenis_identitas'] !== 'Paspor'"
                     v-model.trim="formDataRegister['nik']"
-                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')"
-                    :maxlength="25"   @keyup="checkNIK" />
+                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')" :maxlength="25"
+                    @keyup="checkNIK" />
                   <b-form-input v-else :maxlength="25" type="text" v-model.trim="formDataRegister['nik']"
                     @keyup="checkNIK" />
                   <template v-if="this.$v.formDataRegister['nik'].error == true">
@@ -465,15 +465,15 @@
         tanggal_lahir: null,
         jenis_kelamin: null,
         alamat_rumah: null,
-        provinsi: '',
-        kota: '',
-        email: '',
-        nama_penanggung_jawab: '',
-        nomor_hp_penanggung_jawab: '',
-        status_perkawinan: '',
-        golongan_darah: '',
-        jenis_identitas: '',
-        nik: ''
+        provinsi: null,
+        kota: null,
+        email: null,
+        nama_penanggung_jawab: null,
+        nomor_hp_penanggung_jawab: null,
+        status_perkawinan: null,
+        golongan_darah: null,
+        jenis_identitas: null,
+        nik: null
       },
       provinces: [],
       cities: [],
@@ -534,14 +534,18 @@
       checkNIK() {
         clearTimeout(this.timeVerifyNIK)
         this.timeVerifyNIK = setTimeout(async () => {
-          const res = await axios.get(
-            `${this.url_api}/identity/verify?jenis_pengenal=${this.formDataRegister['jenis_identitas']}&nik=${this.formDataRegister['nik']}`
-          );
-          console.log(res)
-          if (res.data.status == false) {
-            this.$v.formDataRegister['nik'].error = true;
-          } else {
+          if (this.formDataRegister['jenis_identitas'] == null || this.formDataRegister['jenis_identitas'] == "") {
             this.$v.formDataRegister['nik'].error = false;
+          } else {
+            const res = await axios.get(
+              `${this.url_api}/identity/verify?jenis_pengenal=${this.formDataRegister['jenis_identitas']}&nik=${this.formDataRegister['nik']}`
+            );
+            console.log(res)
+            if (res.data.status == false) {
+              this.$v.formDataRegister['nik'].error = true;
+            } else {
+              this.$v.formDataRegister['nik'].error = false;
+            }
           }
         }, 550);
       },
@@ -582,6 +586,22 @@
         }
       },
       hideModal() {
+        this.formDataRegister = {
+            nama: "",
+            nomor_hp: "",
+            tanggal_lahir: "",
+            jenis_kelamin: "",
+            alamat_rumah: "",
+            provinsi: "",
+            kota: "",
+            email: "",
+            nama_penanggung_jawab: "",
+            nomor_hp_penanggung_jawab: "",
+            status_perkawinan: "",
+            golongan_darah: "",
+            jenis_identitas: "",
+            nik: ""
+          }
         this.$refs['modal-pasien'].hide()
       },
       triggerDob() {
@@ -659,18 +679,20 @@
             }
           } = res.data;
           this.formDataRegister = {
-            nama: null,
-            nomor_hp: null,
-            tanggal_lahir: null,
-            jenis_kelamin: null,
-            alamat_rumah: null,
-            provinsi: null,
-            kota: null,
-            email: null,
-            nama_penanggung_jawab: null,
-            nomor_hp_penanggung_jawab: null,
-            status_perkawinan: null,
-            golongan_darah: null
+          nama: "",
+            nomor_hp: "",
+            tanggal_lahir: "",
+            jenis_kelamin: "",
+            alamat_rumah: "",
+            provinsi: "",
+            kota: "",
+            email: "",
+            nama_penanggung_jawab: "",
+            nomor_hp_penanggung_jawab: "",
+            status_perkawinan: "",
+            golongan_darah: "",
+            jenis_identitas: "",
+            nik: ""
           }
           let pasien = {
             id: res.data.data.id,
