@@ -64,7 +64,7 @@ export default {
   methods: {
     simpan() {
       this.$swal({
-        text: `Data Berhasil di simpan`,
+        text: `Data Berhasil disimpan`,
         type: "success"
       });
     },

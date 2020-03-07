@@ -1,6 +1,6 @@
 <template>
   <div class="p-2 text-center paket-wrapper text-white">
-    <p class="mb-2 text-capitalize headline font-weight-bold">paket anda</p>
+    <p class="mb-2 text-capitalize headline font-weight-bold">paket Anda</p>
     <p class="mb-2 smaller letter-spacing--03">
       (7 hari tersisa hingga 14-01-2020, 03:00:00)
     </p>

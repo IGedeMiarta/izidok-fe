@@ -170,7 +170,7 @@ export default {
       let fnAfterPrint = (e) => {
         this.$swal({
           title: startCase("struk berhasil di cetak"),
-          text: `Silahkan ambil struk pembayaran anda`,
+          text: `Silahkan ambil struk pembayaran Anda`,
           type: "success",
           confirmButtonText: startCase("ok")
         });

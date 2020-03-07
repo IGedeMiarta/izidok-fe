@@ -559,7 +559,7 @@ export default {
     }, 600),
     removeTarif({ id, nama_layanan = null } = {}) {
       this.$swal({
-        text: `Apakah anda yakin ingin menghapus data tarif ${nama_layanan}?`,
+        text: `Apakah Anda yakin ingin menghapus data tarif ${nama_layanan}?`,
         type: "question",
         showCancelButton: true,
         cancelButtonText: startCase("batal"),
@@ -610,7 +610,7 @@ export default {
         if (z.length > 0) {
           this.$swal({
             type: "question",
-            html: `<p>Apakah anda yakin untuk mengubah ${z
+            html: `<p>Apakah Anda yakin untuk mengubah ${z
               .map(val => startCase(val))
               .join(", ")}</p> <p>"${startCase(nama_layanan)}"</p>`,
             showCancelButton: true

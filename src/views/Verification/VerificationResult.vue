@@ -63,7 +63,7 @@ export default {
         success:
           "Akun Anda berhasil diaktivasi. Silakan login untuk mengakses izidok.",
         "already-activated":
-          "Akun Anda gagal diaktivasi. Email anda telah teraktivasi sebelumnya.",
+          "Akun Anda gagal diaktivasi. Email Anda telah teraktivasi sebelumnya.",
         failed: "Akun Anda gagal diaktivasi. Lakukan aktivasi ulang.",
         expired : "Link aktivasi telah berakhir, silahkan lakukan registrasi ulang!"
       }

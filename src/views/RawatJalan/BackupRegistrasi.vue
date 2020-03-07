@@ -360,7 +360,7 @@ export default {
     overwriteAntrean() {
       this.$swal({
         title: "Pasien telah berada pada list antrean",
-        text: `Apakah anda yakin untuk melanjutkan registrasi?`,
+        text: `Apakah Anda yakin untuk melanjutkan registrasi?`,
         type: "question",
         showCancelButton: true,
         cancelButtonText: startCase("tidak"),
@@ -510,7 +510,7 @@ export default {
           const { nomor_antrian } = data;
           const { nama_lengkap } = postData;
           this.$swal({
-            title: `Data Berhasil di simpan`,
+            title: `Data Berhasil disimpan`,
             text: `Antrean atas nama ${nama_lengkap} tersimpan pada urutan ${nomor_antrian}`,
             type: "success",
             onOpen: () => {

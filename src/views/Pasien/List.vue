@@ -366,7 +366,7 @@ export default {
     },
     removePasien({ id, nama = null } = {}) {
       this.$swal({
-        text: `Apakah anda yakin ingin menghapus data pasien ${nama}?`,
+        text: `Apakah Anda yakin ingin menghapus data pasien ${nama}?`,
         type: "question",
         showCancelButton: true,
         cancelButtonText: startCase("batal"),

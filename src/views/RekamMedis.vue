@@ -232,7 +232,7 @@ export default {
     },
     exitButton() {
       return this.$swal({
-        text: "Apakah anda yakin untuk keluar?",
+        text: "Apakah Anda yakin untuk keluar?",
         title: "Keluar",
         showCancelButton: true,
         confirmButtonText: "Ya",

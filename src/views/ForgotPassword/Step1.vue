@@ -123,20 +123,20 @@
           if (status) {
             this.$swal({
               title: 'Link reset password telah terkirim',
-              text: `Silakan cek email anda!`,
+              text: `Silakan cek email Anda!`,
               type: "success"
             });
           } else {
             if (message == 'User tidak ditemukan' || message == 'User not found') {
               this.$swal({
                 title: 'Email tidak terdaftar',
-                text: `Silakan cek ulang penulisan email anda!`,
+                text: `Silakan cek ulang penulisan email Anda!`,
                 type: "error"
               });
             } else {
               this.$swal({
                 title: 'Email tidak terdaftar',
-                text: `Silakan cek ulang penulisan email anda!`,
+                text: `Silakan cek ulang penulisan email Anda!`,
                 type: "error"
               });
             }

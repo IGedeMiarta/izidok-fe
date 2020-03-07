@@ -209,7 +209,7 @@
       bayarModal() {
         this.$swal({
           title: startCase("Bayar"),
-          text: `Apakah anda yakin untuk melakukan pembayaran?`,
+          text: `Apakah Anda yakin untuk melakukan pembayaran?`,
           type: "warning",
           showCancelButton: true,
           cancelButtonText: startCase("tidak"),

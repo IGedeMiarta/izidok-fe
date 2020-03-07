@@ -176,7 +176,7 @@
       if (!this.beingSubmit) {
         this.$swal({
           title: startCase("keluar"),
-          text: `Apakah anda yakin untuk keluar dari halaman tarif?`,
+          text: `Apakah Anda yakin untuk keluar dari halaman tarif?`,
           type: "warning",
           showCancelButton: true,
           cancelButtonText: startCase("tidak"),

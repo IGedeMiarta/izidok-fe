@@ -487,7 +487,7 @@
       if (!this.beingSubmit) {
         this.$swal({
           title: startCase("keluar"),
-          text: `Apakah anda yakin untuk keluar dari halaman ini?`,
+          text: `Apakah Anda yakin untuk keluar dari halaman ini?`,
           type: "warning",
           showCancelButton: true,
           cancelButtonText: startCase("tidak"),
@@ -596,7 +596,7 @@
       overwriteAntrean() {
         this.$swal({
           title: "Pasien telah berada pada list antrean",
-          text: `Apakah anda yakin untuk melanjutkan registrasi?`,
+          text: `Apakah Anda yakin untuk melanjutkan registrasi?`,
           type: "question",
           showCancelButton: true,
           cancelButtonText: startCase("tidak"),
@@ -865,7 +865,7 @@
             } = postData;
             this.beingSubmit = true;
             this.$swal({
-              title: `Data Berhasil di simpan`,
+              title: `Data Berhasil disimpan`,
               text: `Antrean atas nama ${nama_lengkap} tersimpan pada urutan ${nomor_antrian}`,
               type: "success",
             });

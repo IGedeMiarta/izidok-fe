@@ -270,7 +270,7 @@
           } else {
             this.$swal({
               title: 'Login gagal',
-              text: `Email/No. Handphone dengan Password yang anda masukkan tidak cocok!`,
+              text: `Email/No. Handphone dengan Password yang Anda masukkan tidak cocok!`,
               type: "error"
             });
 

@@ -50,7 +50,7 @@ export default {
     if (!this.beingSubmit) {
       this.$swal({
         title: startCase("keluar"),
-        text: `Apakah anda yakin untuk keluar dari halaman ini?`,
+        text: `Apakah Anda yakin untuk keluar dari halaman ini?`,
         type: "warning",
         showCancelButton: true,
         cancelButtonText: startCase("tidak"),
