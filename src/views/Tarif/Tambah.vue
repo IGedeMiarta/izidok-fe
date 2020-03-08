@@ -282,20 +282,57 @@
       const { tmpInputTarifData, validateAll } = this;
       this.$nextTick(() => {
         validateAll();
-        const z = tmpInputTarifData.map(item => item.error);
-        const y = z.map(x => {
-          const v = Object.keys(x).slice(1);
-          const o = v.every(z => x[z].error);
-          return o;
-        });
-        const p = y.every(h => h);
-        if (p !== false) {
+        // const z = tmpInputTarifData.map(item => item.error);
+        // const y = z.map(x => {
+        //   const v = Object.keys(x).slice(1);
+        //   const o = v.every(z => x[z].error);
+        //   return o;
+        // });
+        // const p = y.every(h => h);
+        // if (p !== false) {
+        //   this.doSubmitInputTarif();
+        // }
+
+        let isError = false;
+        let isErrorRequired = false;
+        let isErrorDuplicate = false;
+        let isErrorExists = false;
+
+        tmpInputTarifData.forEach(tarifData => {
+          for(let errIndex in tarifData.error) {
+            if(tarifData.error[errIndex].error == false) {
+              isError = true;
+
+              if(/(harus diisi)/i.test(tarifData.error[errIndex].desc)) {
+                isErrorRequired = true;
+              }
+              else if(/(tidak boleh sama)/i.test(tarifData.error[errIndex].desc)) {
+                isErrorDuplicate = true;
+              }
+              else if(/(sudah ada)/i.test(tarifData.error[errIndex].desc)) {
+                isErrorExists = true;
+              }
+            }
+          }
+        })
+        
+        if (isError == false) {
           this.doSubmitInputTarif();
         } else {
+          let errorMessage = {
+            required: "Silakan lengkapi seluruh kolom",
+            duplicate: "Kode/Nama Layanan tidak boleh sama",
+            exists: "Kode/Nama Layanan sudah ada"
+          }
+          let jenisError = '';
+          if(isErrorRequired) jenisError = 'required';
+          else if(isErrorDuplicate) jenisError = 'duplicate';
+          else if(isErrorExists) jenisError = 'exists';
+
           this.$swal({
             type: "error",
             title: startCase("gagal"),
-            text: startCase("Silakan lengkapi seluruh kolom")
+            text: startCase(errorMessage[jenisError])
           });
         }
       });
