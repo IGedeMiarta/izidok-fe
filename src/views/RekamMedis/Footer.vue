@@ -7,13 +7,13 @@
             <b-container class="bv-example-row">
               <b-form-group>
               <b-row>
-                <b-col class="col-md-4">
+                <b-col class="col-md-5">
                   <strong>Konsultasi Selanjutnya</strong>
                   <vue-select class="text-capitalize bg-white"  :options="
                  waktuKonsul
                   " v-model="selectedRadio" @input="selectingWaktu($event)" />
                 </b-col>
-                <b-col class="col-md-3">
+                <b-col class="col-md-6">
                   <template  v-if="selectedRadio.label === 'Pilih Tanggal...' ">
                     <strong>Tanggal Konsultasi</strong>
                     <datepicker input-class="form-control" class="d-flex input-group" v-model="valuetglpilih" @input="onChange($tgl = valuetglpilih)"  :format="customFormatter" :inline="true"/>
