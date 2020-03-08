@@ -14,10 +14,10 @@
                   " v-model="selectedRadio" @input="selectingWaktu($event)" />
                 </b-col>
                 <b-col class="col-md-3">
-                  <template v-if="selectedRadio.label === 'Pilih Tanggal...' ">
+                  <template  v-if="selectedRadio.label === 'Pilih Tanggal...' ">
                     <strong>Tanggal Konsultasi</strong>
-                    <Datetime input-class="form-control" class="d-flex input-group" zone="Asia/Jakarta"
-                              value-zone="Asia/Jakarta" v-model="hasil" format="d LLL yyyy" />
+                    <datepicker input-class="form-control" class="d-flex input-group" v-model="valuetglpilih" @input="onChange($tgl = valuetglpilih)"  :format="customFormatter" :inline="true"/>
+                    <p>Value: {{ valuetglpilih }}</p>
                   </template>
                   <template v-if="selectedRadio.label === 'Tidak perlu konsul lanjutan'">
 
@@ -71,9 +71,11 @@
         Datetime
     } from "vue-datetime";
     import moment from "moment";
+    import Datepicker from 'vuejs-datepicker';
 
     export default {
         components: {
+          Datepicker,
             Datetime,
             "vue-select": () => import("@/components/VueSelect.vue")
         },
@@ -103,6 +105,8 @@
                     }
                 ],
                 hari: 0,
+                valuetglpilih : "",
+                tglpilih: "",
                 test : null,
                 checkbox: false,
             };
@@ -110,6 +114,7 @@
         computed: {
             hasil() {
                 return moment().add(this.hari, 'days').format("YYYY-MM-DD");
+
                 // var today = new Date();
                 // var tomorrow = new Date();
                 // hasil = tomorrow.setDate(today.getDate()+this.selectedRadio.value);
@@ -136,19 +141,31 @@
         },
         methods: {
             ...mapActions(["updatePostData", "updateSavingParams"]),
+          customFormatter(date) {
+            return moment(date).format('dd MMM yyyy');
+
+          },
+
+            onChange($tgl) {
+
+              if (this.hari == 1) {
+                this.tgl_next_konsultasi =  $tgl
+                this.updatePostData({
+                  key: 'tgl_next_konsultasi',
+                  value: this.tgl_next_konsultasi
+                },);
+              }
+              this.tgl_next_konsultasi
+            }
+            ,
             selectingWaktu($event) {
                 this.hari = $event.value
-                this.tgl_next_konsultasi =  this.hasil
 
-                if (this.hari == 1) {
-                    this.updatePostData({
-                        key: 'tgl_next_konsultasi',
-                        value: null
-                    },);
-                }
+
 
                 if (this.hari != 1) {
-                    this.updatePostData({
+                  this.tgl_next_konsultasi =  this.hasil
+                  this.updatePostData({
                         key: 'tgl_next_konsultasi',
                         value: this.hasil
                     },);
@@ -163,6 +180,7 @@
                 // console.log('this', this)
                 if (this.selectedRadio.value != 99)
                     this.selectingWaktu();
+                    this.onChange();
                 this.updatePostData({
                     key: 'next_konsultasi',
                     value: this.selectedRadio.value
@@ -175,7 +193,7 @@
             },
             hari: function () {
                 if (this.selectedRadio.value == 99)
-                    this.selectingWaktu();
+                    this.selectingWaktu(); this.onChange();
                 this.updatePostData({
                     key: 'next_konsultasi',
                     value: this.hari
@@ -185,7 +203,7 @@
                     value: true
                 });
                 if (this.selectedRadio.value == 99)
-                    this.selectingWaktu();
+                    this.selectingWaktu(); this.onChange();
 
                 // console.log(this.hasil)
                 this.updateSavingParams({
