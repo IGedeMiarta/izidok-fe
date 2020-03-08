@@ -82,8 +82,8 @@
                 selectedRadio: {},
                 waktuKonsul: [
                     {
-                         label: 'Tidak perlu konsul lanjutan',
-                        value: 1
+                        label: 'Tidak perlu konsul lanjutan',
+                        value: 99
                      },
                     {
                         label: '1 minggu',
@@ -99,7 +99,7 @@
                     },
                     {
                         label: 'Pilih Tanggal...',
-                        value: 88
+                        value: 1
                     }
                 ],
                 hari: 0,
