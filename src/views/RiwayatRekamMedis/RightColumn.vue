@@ -135,31 +135,31 @@
       tandaVital() {
         const tmp = [{
             label: "tensi sistole",
-            value: this.datarekammedis.anamnesa.tensi_sistole + ' mmHg'
+            value: this.datarekammedis.anamnesa.tensi_sistole ? this.datarekammedis.anamnesa.tensi_sistole+' mmHg' : '0 mmHg'
           },
           {
             label: "tensi diastole",
-            value: this.datarekammedis.anamnesa.tensi_diastole + ' mmHg'
+            value: this.datarekammedis.anamnesa.tensi_diastole ? this.datarekammedis.anamnesa.tensi_diastole+' mmHg' : '0 mmHg'
           },
           {
             label: "nadi",
-            value: this.datarekammedis.anamnesa.nadi + ' Kali/Menit'
+            value: this.datarekammedis.anamnesa.nadi ? this.datarekammedis.anamnesa.nadi+' Kali/Menit' : '0 Kali/Menit'
           },
           {
             label: "suhu",
-            value: this.datarekammedis.anamnesa.suhu + ' C'
+            value: this.datarekammedis.anamnesa.suhu ? this.datarekammedis.anamnesa.suhu+' C' : '0 C'
           },
           {
             label: "respirasi",
-            value: this.datarekammedis.anamnesa.respirasi + ' Kali/Menit'
+            value: this.datarekammedis.anamnesa.respirasi ? this.datarekammedis.anamnesa.respirasi+' Kali/Menit' : '0 Kali/Menit'
           },
           {
             label: "tb".toUpperCase(),
-            value: this.datarekammedis.anamnesa.tinggi_badan
+            value: this.datarekammedis.anamnesa.tinggi_badan ? this.datarekammedis.anamnesa.tinggi_badan : '0'
           },
           {
             label: "bb".toUpperCase(),
-            value: this.datarekammedis.anamnesa.berat_badan
+            value: this.datarekammedis.anamnesa.berat_badan ? this.datarekammedis.anamnesa.berat_badan : '0'
           }
         ];
         return tmp;
