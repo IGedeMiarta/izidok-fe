@@ -37,6 +37,7 @@
               title="total pasien hari ini"
               :highlight="totalPasienHariIni"
               bg-color="total-pasien-hari-ini"
+              :goTo="{ name: 'antrean-rawat-jalan' }"
             />
           </div>
           <div class="d-flex align-items-center w-100 mr-2">
@@ -44,6 +45,7 @@
               title="pasien baru hari ini"
               :highlight="pasienBaruHariIni"
               bg-color="pasien-baru-hari-ini"
+              :goTo="{ name: 'antrean-rawat-jalan' }"
             />
           </div>
           <div class="d-flex align-items-center w-100 mr-2">
@@ -51,6 +53,7 @@
               title="no. antrean saat ini"
               :highlight="nomor_antrean"
               bg-color="no-antrean-saat-ini"
+              :goTo="{ name: 'antrean-rawat-jalan' }"
             />
           </div>
           <div class="d-flex align-items-center w-100 mr-2">
@@ -58,6 +61,7 @@
               title="jumlah pasien batal hari ini"
               :highlight="pasienBatalHariIni"
               bg-color="jumlah-pasien-batal-hari-ini"
+              :goTo="{ name: 'antrean-rawat-jalan' }"
             />
           </div>
           <div class="d-flex align-items-center w-100">

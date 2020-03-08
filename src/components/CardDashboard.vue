@@ -1,7 +1,8 @@
 <template>
-  <a
+  <b-link
     class="card border-0 card-box card-box-hover-rise card-box-hover text-white align-box-row align-items-start mb-5 w-100 card-dashboard"
     :class="[bgColor, pointerHoverProps]"
+    :to="goTo"
   >
     <div
       class="px-2 py-3 w-100 d-flex align-items-center flex-row"
@@ -27,7 +28,7 @@
         </div>
       </div>
     </div>
-  </a>
+  </b-link>
 </template>
 
 <script>
@@ -63,6 +64,11 @@ export default {
       required: false,
       type: Boolean,
       default: true
+    },
+    goTo: {
+      required: false,
+      type: [String, Object],
+      default: '#'
     }
   },
   computed: {
