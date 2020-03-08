@@ -586,23 +586,36 @@
         }
       },
       hideModal() {
-        this.formDataRegister = {
-            nama: "",
-            nomor_hp: "",
-            tanggal_lahir: "",
-            jenis_kelamin: "",
-            alamat_rumah: "",
-            provinsi: "",
-            kota: "",
-            email: "",
-            nama_penanggung_jawab: "",
-            nomor_hp_penanggung_jawab: "",
-            status_perkawinan: "",
-            golongan_darah: "",
-            jenis_identitas: "",
-            nik: ""
+        this.$swal({
+          title: startCase("keluar"),
+          text: `Apakah Anda yakin untuk keluar dari halaman ini?`,
+          type: "warning",
+          showCancelButton: true,
+          cancelButtonText: startCase("tidak"),
+          confirmButtonText: startCase("ya")
+        }).then(res => {
+          if (res.value) {
+            this.formDataRegister = {
+                nama: "",
+                nomor_hp: "",
+                tanggal_lahir: "",
+                jenis_kelamin: "",
+                alamat_rumah: "",
+                provinsi: "",
+                kota: "",
+                email: "",
+                nama_penanggung_jawab: "",
+                nomor_hp_penanggung_jawab: "",
+                status_perkawinan: "",
+                golongan_darah: "",
+                jenis_identitas: "",
+                nik: ""
+              }
+            this.$refs['modal-pasien'].hide()
+          } else {
+            next(false);
           }
-        this.$refs['modal-pasien'].hide()
+        });
       },
       triggerDob() {
         const x = this.$refs.dob
