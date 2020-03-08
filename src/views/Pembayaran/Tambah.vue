@@ -269,27 +269,46 @@
         }
       },
       async simpanPembayaran() {
-        try {
-          const res = await axios.post(
-            `${this.url_api}/pembayaran/detail`, 
-            this.postData
-          );
-          const {
-            success,
-            data
-          } = res.data;
-          this.pembayaranList = data;
-          this.$swal({
-            title: 'Tambah Data Berhasil',
-            text: 'Data berhasil tersimpan',
-            icon: 'success',
-            confirmButtonText: startCase("ya")
-          });
-          this.$router.push({
-            path: "/pembayaran"
-          });
-        } catch (err) {
-          // console.log(err);
+        console.log(this.postData.detail_pembayaran);
+        let detPem = this.postData.detail_pembayaran;
+        let status = [];
+
+        detPem.forEach(item => {
+          if (item.kode_layanan == '') {
+            status.push(false);
+            this.$swal({
+              type: "error",
+              title: startCase("gagal"),
+              text: startCase("Seluruh kolom harus diisi!")
+            });
+          }else{
+            status.push(true);
+          }
+        });
+        
+        if (status.indexOf(false) < 0) {
+          try {
+            const res = await axios.post(
+              `${this.url_api}/pembayaran/detail`, 
+              this.postData
+            );
+            const {
+              success,
+              data
+            } = res.data;
+            this.pembayaranList = data;
+            this.$swal({
+              title: 'Tambah Data Berhasil',
+              text: 'Data berhasil tersimpan',
+              icon: 'success',
+              confirmButtonText: startCase("ya")
+            });
+            this.$router.push({
+              path: "/pembayaran"
+            });
+          } catch (err) {
+            // console.log(err);
+          }
         }
       },
       async bayarPembayaran() {
