@@ -22,7 +22,7 @@
           size="sm"
           class="text-capitalize mr-2 btn-antrean"
           :to="{
-            name: 'antrean-rawat-jalan'
+            name: 'registrasi-rawat-jalan'
           }"
           >tambah antrean</b-button
         >
