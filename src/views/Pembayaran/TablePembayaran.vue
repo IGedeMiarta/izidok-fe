@@ -159,7 +159,7 @@
       async fetchLayanan() {
         try {
           const res = await axios.get(
-            `${this.url_api}/layanan`
+            `${this.url_api}/getalllayanan`
           );
 
           const {
