@@ -68,7 +68,9 @@ export default {
   },
   methods: {
     goToRiwayat(){
-      this.$router.push(`/rekam-medis/riwayat/${this.pasien.id}`);
+      let routeData = this.$router.resolve({name: 'riwayat-rekam-medis'});
+      window.open(routeData.href, '_blank');
+      // this.$router.push(`/rekam-medis/riwayat/${this.pasien.id}`);
     },
     getAge(DOB) {
       var today = new Date();
