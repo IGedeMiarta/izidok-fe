@@ -75,7 +75,7 @@
                     <b-col cols="4">Potongan</b-col>
                     <b-col cols="7">
                       <b-input-group append="%">
-                        <b-form-input v-model.lazy="potongan" min=0 max=100 type="number" :disabled="assistantRole" />
+                        <b-form-input v-model.lazy="potongan" min=0 max=100 @keypress="isNumber($event)" type="number" :disabled="assistantRole" />
                       </b-input-group>
                     </b-col>
                   </b-form-row>
@@ -184,6 +184,16 @@
       ...mapMutations({
         setStrukVal: "struk/SET_STRUK_VAL"
       }),
+      isNumber: function(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        console.log(charCode)
+        if (charCode > 31 && (charCode < 47 || charCode > 57)) {
+          evt.preventDefault();;
+        } else {
+          return true;
+        }
+      },
       calc(val) {
         let total_tmp = 0;
         let detail_pembayaran = [];

@@ -9,7 +9,7 @@
     </template>
 
     <template v-slot:cell(qty)="data">
-      <b-form-input min=1 type="number" v-model="data.item.quantity" :disabled="assistantRole" />
+      <b-form-input min=1 @keypress="isNumber($event)" type="number" v-model="data.item.quantity" :disabled="assistantRole" />
     </template>
 
     <template v-slot:cell(nilai)="data">
@@ -96,6 +96,15 @@
       calcValue(val) {
         this.$emit("valueChanged", val);
       },
+      isNumber: function(evt) {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 47 || charCode > 57)) {
+          evt.preventDefault();;
+        } else {
+          return true;
+        }
+      },
       tambah() {
         const {
           details
@@ -179,9 +188,15 @@
         }
       },
       inputLayanan($event, index) {
-        this.details[index].nama_layanan = $event
-        this.details[index].kode_layanan = $event.kode_layanan
-        this.details[index].tarif = $event.tarif
+        if ($event == null) {
+          this.details[index].nama_layanan = ""
+          this.details[index].kode_layanan = 0
+          this.details[index].tarif = 0
+        }else{
+          this.details[index].nama_layanan = $event
+          this.details[index].kode_layanan = $event.kode_layanan
+          this.details[index].tarif = $event.tarif
+        }
       }
     }
   };
