@@ -35,16 +35,16 @@
               isPen = true;
               updatePostData({key:'pemeriksaan_is_draw', value: true});
               isActive = 'pen';
-              selectedOrgan = []"
+              organChanged()"
             :class="{ active: isActive === 'pen' }"
           />
           <font-awesome-icon
             icon="keyboard"
             class="font-size-xl m-2 grow icon"
             v-on:click="isHidden = true;
-              updatePostData({key:'pemeriksaan_is_draw', value: false});
+              updatePostData({key:'pemeriksaan_is_draw', value: true});
               isActive = 'keyboard';
-              selectedOrgan = []"
+              organChanged()"
             :class="{ active: isActive === 'keyboard' }"
           />
         </div>
