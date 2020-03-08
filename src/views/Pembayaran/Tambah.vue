@@ -75,7 +75,7 @@
                     <b-col cols="4">Potongan</b-col>
                     <b-col cols="7">
                       <b-input-group append="%">
-                        <b-form-input v-model.lazy="potongan" type="number" :disabled="assistantRole" />
+                        <b-form-input v-model.lazy="potongan" min=0 max=100 type="number" :disabled="assistantRole" />
                       </b-input-group>
                     </b-col>
                   </b-form-row>

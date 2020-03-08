@@ -9,7 +9,7 @@
     </template>
 
     <template v-slot:cell(qty)="data">
-      <b-form-input type="number" v-model="data.item.quantity" :disabled="assistantRole" />
+      <b-form-input min=1 type="number" v-model="data.item.quantity" :disabled="assistantRole" />
     </template>
 
     <template v-slot:cell(nilai)="data">
