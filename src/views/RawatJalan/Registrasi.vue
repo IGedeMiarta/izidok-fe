@@ -290,7 +290,7 @@
             simpan
           </b-button>
           <b-button class="ml-3 text-uppercase" variant="danger" style="font-size:17.5px;float:right "
-            @click='hideModal'>
+            @click='closeModal'>
             Batal
           </b-button>
         </b-form>
@@ -585,7 +585,7 @@
           console.error(error);
         }
       },
-      hideModal() {
+      closeModal() {
         this.$swal({
           title: startCase("keluar"),
           text: `Apakah Anda yakin untuk keluar dari halaman ini?`,
@@ -616,6 +616,25 @@
             next(false);
           }
         });
+      },
+      hideModal() {
+        this.formDataRegister = {
+            nama: "",
+            nomor_hp: "",
+            tanggal_lahir: "",
+            jenis_kelamin: "",
+            alamat_rumah: "",
+            provinsi: "",
+            kota: "",
+            email: "",
+            nama_penanggung_jawab: "",
+            nomor_hp_penanggung_jawab: "",
+            status_perkawinan: "",
+            golongan_darah: "",
+            jenis_identitas: "",
+            nik: ""
+          }
+        this.$refs['modal-pasien'].hide()
       },
       triggerDob() {
         const x = this.$refs.dob
