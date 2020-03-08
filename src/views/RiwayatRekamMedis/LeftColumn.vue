@@ -152,6 +152,7 @@
           //     value: this.dataRiwayat.id
           // }
           // this.selectDataRiwayat = [eventVal]
+          this.rerender(this.dataRiwayat[0].id);
         } catch (error) {
           console.error(error);
         }
