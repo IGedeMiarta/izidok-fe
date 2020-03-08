@@ -140,12 +140,6 @@ export default {
   mounted() {
     this.pembayaran_id = this.$router.currentRoute.params.pembayaran_id;
     this.fetchStruk()
-    
-    this.$swal({
-      text: `Struk berhasil dikirimkan ke alamat email 'rian.nugraha@medlinx.co.id'`,
-      type: "success",
-      confirmButtonText: startCase("ok")
-    });
   },
   methods: {
     fetchStruk() {
