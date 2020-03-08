@@ -8,7 +8,7 @@
     <template v-else>
       <b-row>
         <b-col cols="12">
-          <p v-html="this.datarekammedis.updated_at"></p>
+          {{ datetimeFormat(datarekammedis.updated_at) }}
         </b-col>
         <b-col cols="12" class="ml-3 mt-4">
           <h5 class="text-uppercase font-weight-bold"><u>tanda-tanda vital</u></h5>
@@ -87,7 +87,7 @@
           </h5>
           <b-row>
             <b-col cols="12">
-              <p>{{this.datarekammedis.transklinik.tgl_next_konsultasi}}</p>
+              <p>{{ dateFormat(datarekammedis.transklinik.tgl_next_konsultasi) }}</p>
             </b-col>
           </b-row>
         </b-col>
@@ -100,6 +100,7 @@
 <script>
   import randomSentence from "random-sentence";
   import axios from "axios";
+  import moment from "moment";
   export default {
     props: ["rekam_medis"],
     data: () => ({
@@ -167,7 +168,13 @@
       randomSentence: randomSentence,
       randomNumber() {
         return Math.floor(Math.random() * 1000);
-      }
+      },
+      dateFormat(d) {
+        return moment(d).format("DD MMM YYYY")
+      },
+      datetimeFormat(d) {
+        return moment(d).format("DD MMM YYYY HH:mm:ss")
+      },
     }
   };
 </script>

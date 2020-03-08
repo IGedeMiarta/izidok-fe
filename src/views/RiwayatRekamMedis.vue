@@ -86,7 +86,7 @@
   library.add(faArrowRight, faArrowUp, faTrashAlt, faSearch, faPencilAlt, faCopy);
   export default {
     props: {
-      pasien_id: Number,
+      pasien_id: [Number, String],
     },
     data() {
       return {

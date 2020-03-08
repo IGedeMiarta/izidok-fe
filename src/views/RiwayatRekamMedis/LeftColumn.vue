@@ -14,7 +14,7 @@
             </b-card> -->
             <div class="card border">
               <div class="card-body">
-                <vue-select :options="selectDataRiwayat" :filterable="false" v-model="selected" @search="searchRiwayat"
+                <vue-select :options="selectDataRiwayat" :filterable="false" v-model="selected" @input="searchByDiagnosis"
                   style="font-size:13.4px;">
                   <template slot="no-options">
                     Cari berdasarkan diagnosis
@@ -45,8 +45,8 @@
                 style="bottom: 0; background-color: #214179; color: #fff; cursor: pointer" @click="rerender(data.id)" >
                 <div class="card-body text-capitalize text-center py-1">
                   <b-row>
-                    <b-col sm="12"> {{data.created_at}}</b-col>
-                    <b-col sm="12">{{ data.diagnosa_result.kode_penyakit}}</b-col>
+                    <b-col sm="12"> {{ datetimeFormat(data.created_at) }}</b-col>
+                    <b-col sm="12">{{ data.diagnosa_result.kode_penyakit }}</b-col>
                   </b-row>
                 </div>
               </div>
@@ -102,7 +102,6 @@
         currentPage: 1,
         rows: 0,
         perPage: 4,
-        isNewDataExists: false,
       }
     },
     watch: {
@@ -116,6 +115,7 @@
       }
     },
     mounted() {
+      this.fetchKodePenyakit();
       this.showleftRekamMedis();
     },
     methods: {
@@ -126,27 +126,50 @@
         this.currentPage++;
         showleftRekamMedis();
       },
-      async showleftRekamMedis() {
-        try {
-          var isRoute = this.$router.currentRoute.params.pasien_id;
-          const responsePage = await axios.get(
-            `${this.url_api}/rekam_medis/pasien/${isRoute}?page=${this.currentPage}`);
-          
-          responsePage.data.data.rekam_medis.data.forEach(item => {
-            this.$set(this.dataRiwayat, this.dataRiwayat.length, item);
-          })
-         
-          if(this.rows == 0) {
-            this.rows = responsePage.data.data.rekam_medis.total;
-          }
-          this.isNewDataExists = this.rows < responsePage.data.data.rekam_medis.total;
-
-          this.selectDataRiwayat = this.dataRiwayat.map(item => {
-            return {
-              label: `${item.diagnosa_result.kode_penyakit}`,
-              value: item.id
-            };
+      fetchKodePenyakit() {
+        var pasien_id = this.$router.currentRoute.params.pasien_id;
+        axios.get(`${this.url_api}/rekam_medis/pasien/kode_penyakit/${pasien_id}`)
+          .then(res => {
+            res.data.data.forEach(item => {
+              this.selectDataRiwayat.push({
+                label: `${item.kode} - ${item.description}`,
+                value: item.id
+              })
+            })
           });
+      },
+      async showleftRekamMedis(overwriteLeft = false) {
+        try {
+          var pasien_id = this.$router.currentRoute.params.pasien_id;
+
+          let search = '';
+          if(this.selected) {
+            search = `&kode_penyakit_id=${this.selected.value}`
+          }
+
+          const responsePage = await axios.get(
+            `${this.url_api}/rekam_medis/pasien/${pasien_id}?page=${this.currentPage}${search}`);
+          
+          if(overwriteLeft) {
+            this.dataRiwayat = [];
+            responsePage.data.data.rekam_medis.data.forEach(item => {
+              this.dataRiwayat.push(item);
+            })
+          }
+          else {
+            responsePage.data.data.rekam_medis.data.forEach(item => {
+              this.$set(this.dataRiwayat, this.dataRiwayat.length, item);
+            })
+          }
+         
+          this.rows = responsePage.data.data.rekam_medis.total;
+
+          // this.selectDataRiwayat = this.dataRiwayat.map(item => {
+          //   return {
+          //     label: `${item.diagnosa_result.kode_penyakit}`,
+          //     value: item.id
+          //   };
+          // });
           // let eventVal = {
           //     label: this.dataRiwayat.nama,
           //     value: this.dataRiwayat.id
@@ -157,9 +180,6 @@
           console.error(error);
         }
       },
-      searchRiwayat() {
-
-      },
       me() {
         return Array.apply(0, Array(12)).map(function (_, i) {
           return moment()
@@ -167,6 +187,12 @@
             .format("MMMM");
         });
       },
+      datetimeFormat(d) {
+        return moment(d).format("DD MMM YYYY HH:mm:ss")
+      },
+      searchByDiagnosis($event) {
+        this.showleftRekamMedis(true)
+      }
       // yearValues() {
       //   const dateStart = moment("1969-01-01");
       //   const dateEnd = moment("2019-12-31");
