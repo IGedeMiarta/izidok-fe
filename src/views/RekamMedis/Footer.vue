@@ -17,7 +17,6 @@
                   <template  v-if="selectedRadio.label === 'Pilih Tanggal...' ">
                     <strong>Tanggal Konsultasi</strong>
                     <datepicker input-class="form-control" class="d-flex input-group" v-model="valuetglpilih" @input="onChange($tgl = valuetglpilih)"  :format="customFormatter" :inline="true"/>
-                    <p>Value: {{ valuetglpilih }}</p>
                   </template>
                   <template v-if="selectedRadio.label === 'Tidak perlu konsul lanjutan'">
 
