@@ -92,7 +92,11 @@
                       " v-if="
                         form.type === 'select' &&
                           form.rawLabel === 'nama pasien'
-                      " :filterable="false" @search="searchPasien" style="font-size:13.4px;">
+                      " :filterable="false" 
+                      @search="searchPasien" 
+                      style="font-size:13.4px;"
+                      v-model="selectedPasien"
+                    >
                       <template slot="no-options" v-if="form.rawLabel === 'nama pasien'">
                         tulis nama lengkap pasien
                       </template>
@@ -148,7 +152,7 @@
         </div>
       </div>
       <b-modal ref='modal-pasien' id="modal-1" style="color:#d3e8eb;" title="Registrasi Pasien Baru" hide-footer>
-        <b-form row v-on:submit.prevent="beforeAddPasien">
+        <b-form row v-on:submit.prevent="addPasien">
           <div class="col-sm-12">
             <b-form-group id="input-group-1" label-for="input-1">
               <label for="">Nama Lengkap</label>
@@ -456,7 +460,7 @@
         dokter: [],
         nama_pasien: []
       },
-      selected: null,
+      selectedPasien: null,
       pasiens: [],
       beingSubmit: false,
       formDataRegister: {
@@ -686,16 +690,6 @@
           .filter(item => item.validations && !item.validations.required)
           .map(item => item.rawLabel);
       },
-      beforeAddPasien(formDataRegister) {
-        // sementara untuk demo nomor rekam medis di buat urutan dulu
-        this.formDataRegister.klinik_id = this.$store.state.user.klinik_id;
-        axios.get(`${this.url_api}/pasien`).then(res => {
-          let totalCurrentPasien = res.data.data.pasien.total;
-          // sebelumnya 100000 nambah 0 nya dua
-          this.formDataRegister.nomor_rekam_medis = 10000000 + (totalCurrentPasien + 1);
-          this.addPasien(this.formDataRegister);
-        });
-      },
       async addPasien(formDataRegister) {
         try {
           this.formDataRegister.tanggal_lahir = moment(this.formDataRegister.tanggal_lahir).format("YYYY-MM-DD")
@@ -747,7 +741,7 @@
               value: pasien.id
             }
             this.options.nama_pasien = [eventVal]
-            this.selected = [eventVal];
+            this.selectedPasien = eventVal;
             setTimeout(() => {
               this.autoFill(pasien, "nama_pasien");
               this.setValue({
