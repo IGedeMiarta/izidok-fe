@@ -40,21 +40,14 @@
         </div>
         <template
           v-if="pembayaranList.status == 'BELUM LUNAS' || pembayaranList.status == 'Belum Lunas' || pembayaranList.status == 'belum lunas'">
-          <h3>Belum Lunas</h3>
-          <div class="card-body">
-            <TablePembayaran @valueChanged="calc" :items="pembayaranDetails" />
-          </div>
-        </template>
-        <template
-          v-if="pembayaranList.status == 'DRAFT' || pembayaranList.status == 'Draft' || pembayaranList.status == 'draft'">
-          <h3>Draft</h3>
+          <h3 class="m-4" style="margin-bottom:0 !important;">Belum Lunas</h3>
           <div class="card-body">
             <TablePembayaran @valueChanged="calc" :items="pembayaranDetails" />
           </div>
         </template>
         <template
           v-if="pembayaranList.status == 'LUNAS' || pembayaranList.status == 'lunas' || pembayaranList.status == 'Lunas'">
-          <h3>Lunas</h3>
+          <h3 class="m-4" style="margin-bottom:0 !important;">Lunas</h3>
           <div class="card-body">
             <TablePembayaran @valueChanged="calc" />
           </div>
