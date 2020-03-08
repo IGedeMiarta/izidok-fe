@@ -79,6 +79,8 @@
     } from "@fortawesome/free-solid-svg-icons";
     // import { Datetime } from "vue-datetime";
     import "vue-datetime/dist/vue-datetime.css";
+    import startCase from "lodash/startCase";
+    import upperCase from "lodash/upperCase";
 
 
   library.add(faArrowRight, faArrowUp, faTrashAlt, faSearch, faPencilAlt, faCopy);
@@ -102,6 +104,18 @@
       },
       async fetchPasien() {
         let res = await axios.get(`${this.url_api}/pasien/${this.pasien_id}`);
+        console.log(res.data.status);
+        if (res.data.status == false) {
+          this.$swal({
+            type: "error",
+            title: startCase("Gagal"),
+            text: startCase("Data Riwayat Rekam Medis tidak ditemukan!")
+          }).then(res => {
+            if (res.value) {
+              this.$router.push(`/rekam-medis`)
+            }
+          });
+        }
         this.pasien = res.data.data;
       },
       rekamMedis({
