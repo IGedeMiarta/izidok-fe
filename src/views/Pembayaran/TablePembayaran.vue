@@ -21,7 +21,7 @@
         <b-form-input class="flex-grow-1" :value="data.item.quantity * data.item.tarif" disabled />
         <div class="d-flex flex-shrink-1 justify-content-around ml-3" v-if="!assistantRole">
           <font-awesome-layers class="fa-lg mr-1 btn-actions" @click="kurang(data.index)"
-            :class="{ invisible: details.length < 1 }" v-if="details.length > 1">
+            :class="{ invisible: data.index < 1 }" v-if="data.index > 1">
             <font-awesome-icon icon="circle" />
             <font-awesome-icon icon="minus" transform="shrink-6" class="text-white" />
           </font-awesome-layers>
@@ -119,7 +119,9 @@
         const {
           details
         } = this;
-        const tmp = details.splice(index, 1);
+        if (index > 1) {
+          const tmp = details.splice(index, 1);
+        }
       },
       fields() {
         const tmp = [{
