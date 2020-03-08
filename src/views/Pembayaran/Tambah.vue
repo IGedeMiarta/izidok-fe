@@ -68,21 +68,21 @@
                   <b-form-row class="d-flex align-items-center w-100 py-2">
                     <b-col cols="4">Total</b-col>
                     <b-col cols="7">
-                      <b-form-input v-model.lazy="total" disabled />
+                      <money v-model="total" v-bind="money" class="form-control text-right" disabled />
                     </b-col>
                   </b-form-row>
                   <b-form-row class="d-flex align-items-center w-100 py-2">
                     <b-col cols="4">Potongan</b-col>
                     <b-col cols="7">
                       <b-input-group append="%">
-                        <b-form-input v-model.lazy="potongan" min=0 max=100 @keypress="isNumber($event)" type="number" :disabled="assistantRole" />
+                        <b-form-input v-model.lazy="potongan" @keypress="isNumber($event)" :disabled="assistantRole" class="text-right" />
                       </b-input-group>
                     </b-col>
                   </b-form-row>
                   <b-form-row class="d-flex align-items-center w-100 py-2">
                     <b-col cols="4">Total Nett</b-col>
                     <b-col cols="7">
-                      <b-form-input disabled :value="nett" />
+                      <money :value="nett" v-bind="money" class="form-control text-right" disabled />
                     </b-col>
                   </b-form-row>
                   <b-form-row class="d-flex align-items-right w-100 py-2">
@@ -138,13 +138,23 @@
   import axios from "axios";
   import moment from "moment";
   moment.locale('id');
+  import { Money } from 'v-money';
 
   export default {
     components: {
       TablePembayaran: () => import("./TablePembayaran.vue"),
       "vue-select": () => import("vue-select"),
+      Money
     },
     data: () => ({
+      money: {
+        decimal: "",
+        thousands: ",",
+        prefix: "Rp. ",
+        suffix: "",
+        precision: 0,
+        masked: false
+      },
       pembayaranList: [],
       total: null,
       potongan: null,
@@ -187,12 +197,15 @@
       isNumber: function(evt) {
         evt = (evt) ? evt : window.event;
         var charCode = (evt.which) ? evt.which : evt.keyCode;
-        console.log(charCode)
         if (charCode > 31 && (charCode < 47 || charCode > 57)) {
           evt.preventDefault();;
-        } else {
-          return true;
         }
+
+        if(parseInt(this.potongan + evt.key) > 100 || parseInt(this.potongan + evt.key) < 0) {
+          evt.preventDefault();
+        }
+
+        return true;
       },
       calc(val) {
         let total_tmp = 0;
