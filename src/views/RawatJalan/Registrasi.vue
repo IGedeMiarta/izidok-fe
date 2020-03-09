@@ -293,7 +293,7 @@
           <b-button class="ml-3 text-uppercase" variant="success" style="font-size:17.5px;float:right " type="submit">
             simpan
           </b-button>
-          <b-button class="ml-3 text-uppercase" variant="danger" style="font-size:17.5px;float:right "
+          <b-button class="ml-3 text-uppercase" to="{ name: 'antrean-rawat-jalan' }" variant="danger" style="font-size:17.5px;float:right "
             @click='closeModal'>
             Batal
           </b-button>
@@ -622,6 +622,7 @@
         });
       },
       hideModal() {
+        this.beingSubmit = true;
         this.formDataRegister = {
             nama: "",
             nomor_hp: "",
