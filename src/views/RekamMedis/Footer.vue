@@ -17,7 +17,7 @@
                   <template  v-if="selectedRadio.label === 'Pilih Tanggal...' ">
                     <strong>Tanggal Konsultasi</strong>
                     <Datetime  type="date" required input-class="form-control" class="input-group" zone="Asia/Jakarta"
-                              value-zone="Asia/Jakarta" format="d LLL yyyy"  @input="tanggalSelected"
+                              value-zone="Asia/Jakarta" format="d LLL yyyy" @input="tanggalSelected($tgl = valuetglpilih)"
                               :min-datetime="minimumDatetime"  :input-style="
                     getDataError({ rawLabel: 'valuetglpilih' }) === null
                       ? null
@@ -172,17 +172,16 @@
             return moment(date).format('dd MMM yyyy');
 
           },
-          tanggalSelected($event) {
-            if (!$event) return;
-            return moment($event).format("dd MMM yyyy")
+          tanggalSelected($tgl) {
 
             if (this.hari == 1) {
-              this.tgl_next_konsultasi =  this.valuetglpilih
+              this.tgl_next_konsultasi =  $tgl
               this.updatePostData({
                 key: 'tgl_next_konsultasi',
-                value: this.valuetglpilih
+                value: this.tgl_next_konsultasi
               },);
             }
+
 
           },
           triggerDob() {
@@ -214,7 +213,7 @@
                 // console.log('this', this)
                 if (this.selectedRadio.value != 99)
                     this.selectingWaktu();
-                    this.onChange();
+                    this.tanggalSelected();
                 this.updatePostData({
                     key: 'next_konsultasi',
                     value: this.selectedRadio.value
@@ -227,7 +226,7 @@
             },
             hari: function () {
                 if (this.selectedRadio.value == 99)
-                    this.selectingWaktu(); this.onChange();
+                    this.selectingWaktu(); this.tanggalSelected();
                 this.updatePostData({
                     key: 'next_konsultasi',
                     value: this.hari
@@ -237,7 +236,7 @@
                     value: true
                 });
                 if (this.selectedRadio.value == 99)
-                    this.selectingWaktu(); this.onChange();
+                    this.selectingWaktu();  this.tanggalSelected();
 
                 // console.log(this.hasil)
                 this.updateSavingParams({
