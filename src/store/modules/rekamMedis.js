@@ -7,6 +7,7 @@ const getDefaultState = () => {
         asien: {},
         organs: [],
         penyakits: [],
+        pasien: {},
         postData: {},
         canvas_pemeriksaan: null,
         canvas_diagnosa: null,
