@@ -201,6 +201,8 @@ export default {
             type: "success",
             confirmButtonText: startCase("ok")
           });
+
+          this.$bvModal.hide('modalEmailPasien')
         });
     }
   }
