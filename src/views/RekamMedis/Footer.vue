@@ -16,7 +16,7 @@
                 <b-col class="col-md-4">
                   <template  v-if="selectedRadio.label === 'Pilih Tanggal...' ">
                     <strong>Tanggal Konsultasi</strong>
-                    <Datetime  type="datetime" required input-class="form-control" class="input-group" zone="Asia/Jakarta"
+                    <Datetime  type="date" required input-class="form-control" class="input-group" zone="Asia/Jakarta"
                               value-zone="Asia/Jakarta" format="d LLL yyyy"  @input="tanggalSelected"
                               :min-datetime="minimumDatetime"  :input-style="
                     getDataError({ rawLabel: 'valuetglpilih' }) === null
