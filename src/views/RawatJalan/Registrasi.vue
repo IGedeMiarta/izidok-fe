@@ -151,7 +151,7 @@
           </b-form>
         </div>
       </div>
-      <b-modal ref='modal-pasien' id="modal-1" style="color:#d3e8eb;" title="Registrasi Pasien Baru" hide-footer>
+      <b-modal :no-close-on-backdrop="true" @close="closeModall" :no-close-on-esc="true"  :cancel-disabled="true"  ref='modal-pasien' id="modal-1" style="color:#d3e8eb;" title="Registrasi Pasien Baru" hide-footer>
         <b-form row v-on:submit.prevent="addPasien">
           <div class="col-sm-12">
             <b-form-group id="input-group-1" label-for="input-1">
@@ -214,7 +214,7 @@
                 <b-form-group>
                   <label for="">Tanggal Lahir</label>
                   <label for="" style="color:red"> *</label>
-                  <Datetime required input-class="form-control" class="input-group" zone="Asia/Jakarta"
+                  <Datetime required input-class="form-control"  class="input-group" zone="Asia/Jakarta"
                     value-zone="Asia/Jakarta" format="d LLL yyyy" @input="tanggalLahirSelected"
                     :max-datetime="maximumDatetime" :input-style="
                     getDataError({ rawLabel: 'tanggal lahir' }) === null
@@ -621,25 +621,37 @@
           }
         });
       },
-      hideModal() {
-        this.beingSubmit = true;
-        this.formDataRegister = {
-            nama: "",
-            nomor_hp: "",
-            tanggal_lahir: "",
-            jenis_kelamin: "",
-            alamat_rumah: "",
-            provinsi: "",
-            kota: "",
-            email: "",
-            nama_penanggung_jawab: "",
-            nomor_hp_penanggung_jawab: "",
-            status_perkawinan: "",
-            golongan_darah: "",
-            jenis_identitas: "",
-            nik: ""
+      closeModall() {
+        this.$swal({
+          title: startCase("keluar"),
+          text: `Apakah Anda yakin untuk keluar dari halaman ini?`,
+          type: "warning",
+          showCancelButton: true,
+          cancelButtonText: startCase("tidak"),
+          confirmButtonText: startCase("ya")
+        }).then(res => {
+          if (res.value) {
+            this.formDataRegister = {
+              nama: "",
+              nomor_hp: "",
+              tanggal_lahir: "",
+              jenis_kelamin: "",
+              alamat_rumah: "",
+              provinsi: "",
+              kota: "",
+              email: "",
+              nama_penanggung_jawab: "",
+              nomor_hp_penanggung_jawab: "",
+              status_perkawinan: "",
+              golongan_darah: "",
+              jenis_identitas: "",
+              nik: ""
+            }
+            this.$refs['modal-pasien'].hide()
+          } else {
+            this.$refs['modal-pasien'].show()
           }
-        this.$refs['modal-pasien'].hide()
+        });
       },
       triggerDob() {
         const x = this.$refs.dob
@@ -752,7 +764,6 @@
               })
               this.formData['nama_pasien'] = eventVal
             }, 200)
-            this.hideModal();
             // this.$router.push("/rawat-jalan/registrasi");
           }
         } catch (err) {
