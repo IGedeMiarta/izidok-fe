@@ -160,7 +160,7 @@
         total_nett: 0,
         detail_pembayaran: []
       },
-      metodePembayaran: null
+      metodePembayaran: 'Cash'
     }),
     computed: {
       ...mapGetters(["assistantRole"]),
@@ -223,19 +223,37 @@
         this.postData.detail_pembayaran = detail_pembayaran;
       },
       bayarModal() {
-        this.$swal({
-          title: startCase("Bayar"),
-          text: `Apakah Anda yakin untuk melakukan pembayaran?`,
-          type: "warning",
-          showCancelButton: true,
-          cancelButtonText: startCase("tidak"),
-          confirmButtonText: startCase("ya")
-        }).then(res => {
-          if (res.value) {
-            this.$bvModal.show('modalMetodePembayaran');
-            // TODO: tampil popup pilihan metode pembayaran
+        let detPem = this.postData.detail_pembayaran;
+        let status = [];
+
+        detPem.forEach(item => {
+          if (item.kode_layanan == '') {
+            status.push(false);
+            this.$swal({
+              type: "error",
+              title: startCase("gagal"),
+              text: startCase("Seluruh kolom harus diisi!")
+            });
+          }else{
+            status.push(true);
           }
         });
+        
+        if (status.indexOf(false) < 0) {
+          this.$swal({
+            title: startCase("Bayar"),
+            text: `Apakah Anda yakin untuk melakukan pembayaran?`,
+            type: "warning",
+            showCancelButton: true,
+            cancelButtonText: startCase("tidak"),
+            confirmButtonText: startCase("ya")
+          }).then(res => {
+            if (res.value) {
+              this.$bvModal.show('modalMetodePembayaran');
+              // TODO: tampil popup pilihan metode pembayaran
+            }
+          });
+        }
       },
       previewStruk() {
         this.setStrukVal(this.pembayaranVal);
@@ -275,7 +293,6 @@
         }
       },
       async simpanPembayaran() {
-        console.log(this.postData.detail_pembayaran);
         let detPem = this.postData.detail_pembayaran;
         let status = [];
 
