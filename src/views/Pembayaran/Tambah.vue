@@ -355,7 +355,7 @@
           });
 
           this.$router.push({
-            name: 'pembayaran-struk'
+            path: `/pembayaran/struk/${this.pembayaranList.id}`
           });
         } catch (err) {
           // console.log(err);
