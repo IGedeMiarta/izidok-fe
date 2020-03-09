@@ -65,6 +65,7 @@
             class="mx-1"
             variant="primary"
             v-tooltip="'View Detail'"
+            @click="showDetail(data.item.id)"
           >
             <font-awesome-icon icon="search" />
           </b-button>
@@ -96,6 +97,35 @@
       :total-rows="rows"
       :per-page="perPage"
     ></b-pagination>
+
+    <b-modal id="modalDetail" title="Detail Registrasi Antrean">
+      <b-row v-for="(data, index) in dataRegistrasiPasien" :key="index" class="mb-2 pl-3 pr-3">
+        <b-col sm="6">
+          <div class="d-flex">
+            <template v-if="data.label == 'TANDA TANDA VITAL' || data.label == 'DATA PASIEN'">
+              <strong>{{data.label}}</strong>
+            </template>
+            <template v-else>
+              <div class="flex-grow-1 text-capitalize">
+                {{ data.label }}
+            </div>
+            <span>:</span>
+            </template>
+          </div>
+        </b-col>
+        <b-col sm="6">
+          {{ data.value }}
+        </b-col>
+      </b-row>
+
+      <template v-slot:modal-footer>
+        <div class="w-100">
+          <b-button variant="primary" class="float-right" @click="$bvModal.hide('modalDetail')">
+            Tutup
+          </b-button>
+        </div>
+      </template>
+    </b-modal>
   </div>
 </template>
 
@@ -112,6 +142,64 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(faSearch, faSignInAlt, faTrashAlt);
 
+const __dataRegistrasiPasien = {
+  dp: {
+    label: "DATA PASIEN",
+  },
+  nama: {
+    label: "nama pasien",
+    value: null
+  },
+  rekam_medis: {
+    label: "no. rekam medis",
+    value: null
+  },
+  hp: {
+    label: "no. handphone",
+    value: null
+  },
+  kelamin: {
+    label: "jenis kelamin",
+    value: null
+  },
+  dokter: {
+    label: "dokter",
+    value: null
+  },
+  tanda: {
+    label: "TANDA TANDA VITAL",
+  },
+  
+  tb : {
+    label : "tinggi badan ",
+    value : null,
+  },
+  bb : {
+    label : "berat badan ",
+    value : null
+  },
+  suhu : {
+    label : "suhu",
+    value : null,
+  },
+  tensi_diastole : {
+    label : "tekanan diastole",
+    value : null
+  },
+  tensi_sistole : {
+    label : "tekanan sistole",
+    value : null
+  },
+  nadi : {
+    label : "nadi",
+    value : null,
+  },
+  anamnesis : {
+    label : "anamnesis",
+    value : null
+  },
+};
+
 export default {
   data() {
     return {
@@ -119,7 +207,8 @@ export default {
       rows: 1,
       perPage: 5,
       data: [],
-      searchValue: ''
+      searchValue: '',
+      dataRegistrasiPasien: null,
     };
   },
   watch: {
@@ -224,6 +313,43 @@ export default {
           }
         ] |> (z => g({ field: z }))
       );
+    },
+    showDetail(id) {
+      axios.get(`${this.url_api}/transaksi/${id}`)
+        .then(res => {
+          if (res.data.status) {
+            const {
+              waktu_konsultasi,
+              examination_by: dokter,
+              anamnesa,
+              pasien
+            } = res.data.data;
+            
+            const x = __dataRegistrasiPasien;
+            x["nama"].value = pasien.nama;
+            x["rekam_medis"].value = pasien.nomor_rekam_medis;
+            x["hp"].value = pasien.nomor_hp;
+            x["kelamin"].value = this.jenisKelamin(pasien.jenis_kelamin);
+            x["dokter"].value = dokter.nama;
+
+            x["tb"].value = pasien.tinggi_badan + ' (cm)';
+            x["bb"].value = pasien.berat_badan + ' (kg)';
+            x["suhu"].value = pasien.suhu +' (celcius)';
+            x["tensi_sistole"].value = pasien.tensi_sistole;
+            x["tensi_diastole"].value = pasien.tensi_diastole;
+            x["nadi"].value = pasien.nadi;
+            x["anamnesis"].value = anamnesa;
+
+            this.dataRegistrasiPasien = x;
+            this.$bvModal.show('modalDetail');
+
+          } else {
+            this.$swal({
+              text: message,
+              type: "warning"
+            });
+          }
+        })
     }
   }
 };
