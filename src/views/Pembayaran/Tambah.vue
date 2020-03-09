@@ -353,13 +353,7 @@
             icon: 'success',
             confirmButtonText: startCase("ya")
           });
-
-          this.$router.push({
-            name: 'pembayaran-struk',
-            params: {
-              pembayaran_id: this.pembayaranList.id
-            }
-          });
+          this.$router.push(`/pembayaran/struk/${this.pembayaranList.id}`)
         } catch (err) {
           // console.log(err);
         }

@@ -106,7 +106,8 @@
               })
             })
           ">
-              <b-form-input v-if="this.formData['jenis_identitas'] !== 'Paspor'" @keypress="
+              <template v-if="this.formData['jenis_identitas'] !== '' && this.formData['jenis_identitas'] !== null">
+                <b-form-input v-if="this.formData['jenis_identitas'] !== 'Paspor'" @keypress="
               onKeyInputNumber({
                 rawLabel: 'nik',
                 $event
@@ -118,17 +119,70 @@
               },);
               checkNIK()
             " :disabled="disabledForm()" :state="getDataError({ rawLabel: 'nik' })" :value="getValue('nik')"
-                :maxlength="25" />
-              <b-form-input v-else @keyup="
+                  :maxlength="25" required />
+                <b-form-input v-else @keyup="
               setValue({
                 rawLabel: 'nik',
                 $event
               },);
               checkNIK()
             " :disabled="disabledForm()" :state="getDataError({ rawLabel: 'nik' })" :value="getValue('nik')"
-                :maxlength="25" />
-              <template v-if="this.formBasicData[2].error == true && this.formData.nik !== ''">
-                <label style="color:red">No. Identitas telah terdaftar</label>
+                  :maxlength="25" required />
+                <template v-if="this.formBasicData[2].error == true && this.formData.nik !== ''">
+                  <label style="color:red">No. Identitas telah terdaftar</label>
+                </template>
+              </template>
+              <template v-else-if="this.formData['jenis_identitas'] == null">
+                       <b-form-input v-if="this.formData['jenis_identitas'] !== 'Paspor'" @keypress="
+              onKeyInputNumber({
+                rawLabel: 'nik',
+                $event
+              })
+            " @keyup="
+              setValue({
+                rawLabel: 'nik',
+                $event
+              },);
+              checkNIK()
+            " :disabled="disabledForm()" :state="getDataError({ rawLabel: 'nik' })" :value="getValue('nik')"
+                  :maxlength="25" />
+                <b-form-input v-else @keyup="
+              setValue({
+                rawLabel: 'nik',
+                $event
+              },);
+              checkNIK()
+            " :disabled="disabledForm()" :state="getDataError({ rawLabel: 'nik' })" :value="getValue('nik')"
+                  :maxlength="25" />
+                <template v-if="this.formBasicData[2].error == true && this.formData.nik !== ''">
+                  <label style="color:red">No. Identitas telah terdaftar</label>
+                </template>          
+              </template>
+              <template v-else>
+                <b-form-input v-if="this.formData['jenis_identitas'] !== 'Paspor'" @keypress="
+              onKeyInputNumber({
+                rawLabel: 'nik',
+                $event
+              })
+            " @keyup="
+              setValue({
+                rawLabel: 'nik',
+                $event
+              },);
+              checkNIK()
+            " :disabled="disabledForm()" :state="getDataError({ rawLabel: 'nik' })" :value="getValue('nik')"
+                  :maxlength="25" />
+                <b-form-input v-else @keyup="
+              setValue({
+                rawLabel: 'nik',
+                $event
+              },);
+              checkNIK()
+            " :disabled="disabledForm()" :state="getDataError({ rawLabel: 'nik' })" :value="getValue('nik')"
+                  :maxlength="25" />
+                <template v-if="this.formBasicData[2].error == true && this.formData.nik !== ''">
+                  <label style="color:red">No. Identitas telah terdaftar</label>
+                </template>
               </template>
             </b-form-group>
           </b-col>
@@ -531,97 +585,6 @@
     },
   ];
 
-  const jobs = [
-    "Belum/Tidak Bekerja",
-    "Mengurus Rumah Tangga",
-    "Pelajar/Mahasiswa",
-    "Pensiunan",
-    "Pegawai Negeri Sipil",
-    "Tentara Nasional Indonesia",
-    "Kepolisian RI",
-    "Perdagangan",
-    "Petani/Pekebun",
-    "Peternak",
-    "Nelayan/Perikanan",
-    "Industri",
-    "Konstruksi",
-    "Transportasi",
-    "Karyawan Swasta",
-    "Karyawan BUMN",
-    "Karyawan BUMD",
-    "Karyawan Honorer",
-    "Buruh Harian Lepas",
-    "Buruh Tani/Perkebunan",
-    "Buruh Nelayan/Perikanan",
-    "Buruh Peternakan",
-    "Pembantu Rumah Tangga",
-    "Tukang Cukur",
-    "Tukang Listrik",
-    "Tukang Batu",
-    "Tukang Kayu",
-    "Tukang Sol Sepatu",
-    "Tukang Las/Pandai Besi",
-    "Tukang Jahit",
-    "Penata Rambut",
-    "Penata Rias",
-    "Penata Busana",
-    "Mekanik",
-    "Tukang Gigi",
-    "Seniman",
-    "Tabib",
-    "Paraji",
-    "Perancang Busana",
-    "Penterjemah",
-    "Imam Masjid",
-    "Pendeta",
-    "Pastur",
-    "Wartawan",
-    "Ustadz/Mubaligh",
-    "Juru Masak",
-    "Promotor Acara",
-    "Anggota DPR-RI",
-    "Anggota DPD",
-    "Presiden",
-    "Wakil Presiden",
-    "Anggota Mahkamah",
-    "Konstitusi",
-    "Anggota Kabinet/Kementrian",
-    "Duta Besar",
-    "Gubernur",
-    "Wakil Gubernur",
-    "Bupati",
-    "Wakil Bupati",
-    "Walikota",
-    "Wakil Walikota",
-    "Anggota DPRD Propinsi",
-    "Anggota DPRD Kabupten/Kota",
-    "Dosen",
-    "Guru",
-    "Pilot",
-    "Pengacara",
-    "Notaris",
-    "Arsitek",
-    "Akuntan",
-    "Konsultan",
-    "Dokter",
-    "Bidan",
-    "Perawat",
-    "Apoteker",
-    "Psikiater/Psikolog",
-    "Penyiar Televisi",
-    "Penyiar Radio",
-    "Pelaut",
-    "Peneliti",
-    "Sopir",
-    "Pialang",
-    "Paranormal",
-    "Pedagang",
-    "Perangkat Desa",
-    "Kepala Desa",
-    "Biarawati",
-    "Wiraswasta"
-  ];
-
   moment.locale('id');
 
   export default {
@@ -644,7 +607,6 @@
       formData: null,
       options: ["foo", "bar", "baz"],
       selected: null,
-      jobs: jobs,
       hasImage: false,
       heightFoto: "",
       image: null,
@@ -706,18 +668,18 @@
           })
       },
       checkNIK() {
-         clearTimeout(this.timeVerifyNIK)
-          this.timeVerifyNIK = setTimeout(async () => {
-            const res = await axios.get(
-              `${this.url_api}/identity/verify?jenis_pengenal=${this.formData['jenis_identitas']}&nik=${this.formData['nik']}`
-              );
-            console.log(res)
-            if (res.data.status == false) {
-              this.formBasicData[2].error = true;
-            } else {
-              this.formBasicData[2].error = false;
-            }
-          },550);
+        clearTimeout(this.timeVerifyNIK)
+        this.timeVerifyNIK = setTimeout(async () => {
+          const res = await axios.get(
+            `${this.url_api}/identity/verify?jenis_pengenal=${this.formData['jenis_identitas']}&nik=${this.formData['nik']}`
+          );
+          console.log(res)
+          if (res.data.status == false) {
+            this.formBasicData[2].error = true;
+          } else {
+            this.formBasicData[2].error = false;
+          }
+        }, 550);
       },
       async getCity() {
         try {
@@ -981,11 +943,11 @@
           });
         });
         if (formBasicData.every(item => item.error !== null && !item.error)) {
-          if(this.formData.provinsi){
+          if (this.formData.provinsi) {
             this.formData.provinsi = this.tempat.provinsi.id;
             this.formData.kota = this.tempat.kota.id;
           }
-          console.log('prov',this.formData.provinsi)
+          console.log('prov', this.formData.provinsi)
           console.log('kota', this.formData.kota)
           this.$emit("submitForm", this.formData);
         }

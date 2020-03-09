@@ -72,7 +72,7 @@
             size="sm"
             class="mx-1"
             variant="success"
-            :to="`/rekam-medis/${getKlinikId}/${data.item.pasien_id}`"
+            :to="`/rekam-medis/${data.item.id}/${data.item.pasien_id}`"
             v-if="isDoctor"
             v-tooltip="'Halaman Rekam Medis'"
           >
