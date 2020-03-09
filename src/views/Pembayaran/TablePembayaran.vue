@@ -5,7 +5,8 @@
     </template>
 
     <template v-slot:cell(layanan)="data">
-      <vue-select :options="listLayanan" v-model="data.item.nama_layanan" @input="inputLayanan($event, data.index)" value="nama_layanan" :disabled="assistantRole"></vue-select>
+      <vue-select :class="{'is-invalid':layananErrors.includes(data.item.kode_layanan)}" :options="listLayanan" v-model="data.item.nama_layanan" @input="inputLayanan($event, data.index)" value="nama_layanan" :disabled="assistantRole"></vue-select>
+      <div class="invalid-feedback d-block" v-if="layananErrors.includes(data.item.kode_layanan)">Layanan Tidak Boleh Sama</div>
     </template>
 
     <template v-slot:cell(qty)="data">
@@ -73,6 +74,7 @@
       },
       details: [],
       listLayanan: [],
+      layananErrors: []
     }),
     computed: {
       ...mapGetters(["assistantRole"])
@@ -100,6 +102,9 @@
           })
           this.calcValue(newVal);
         }
+      },
+      layananErrors(newVal) {
+        this.$emit('layananDuplicateErrorState', newVal.length > 0)
       }
     },
     methods: {
@@ -146,6 +151,12 @@
         } = this;
         if (index > 1) {
           const tmp = details.splice(index, 1);
+
+          let newLayananErrors = [];
+          this.layananErrors.forEach(item => {
+            if(tmp[0].kode_layanan != item) newLayananErrors.push(item); 
+          })
+          this.layananErrors = newLayananErrors;
         }
       },
       fields() {
@@ -213,6 +224,26 @@
           this.details[index].kode_layanan = $event.kode_layanan
           this.details[index].tarif = $event.tarif
         }
+
+        this.determineDuplicateLayanan()
+      },
+      determineDuplicateLayanan() {
+        let duplicate = [];
+        this.details.forEach((det, detIndex) => {
+          let found = false;
+          this.details.forEach((detail, detailIndex) => {
+            if(detIndex != detailIndex) {
+              if(det.kode_layanan == detail.kode_layanan) {
+                found = true
+              }
+            }
+          })
+
+          if(found && !duplicate.includes(det.kode_layanan)) {
+            duplicate.push(det.kode_layanan);
+          }
+        })
+        this.layananErrors = duplicate;
       }
     }
   };
@@ -234,5 +265,12 @@
   .btn-actions {
     font-size: 26px;
     cursor: pointer;
+  }
+</style>
+<style lang="scss">
+  .v-select.is-invalid {
+    .vs__dropdown-toggle {
+      border-color: red;
+    }
   }
 </style>
