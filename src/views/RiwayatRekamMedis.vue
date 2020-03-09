@@ -105,7 +105,7 @@
       async fetchPasien() {
         let res = await axios.get(`${this.url_api}/pasien/${this.pasien_id}`);
         console.log(res.data.status);
-        if (res.data.status == false) {
+        if (res.data.status == false || res.data.data_rm == false) {
           this.$swal({
             type: "error",
             title: startCase("Gagal"),
