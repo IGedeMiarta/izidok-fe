@@ -321,14 +321,14 @@
         } else {
           let errorMessage = {
             required: "Silakan lengkapi seluruh kolom",
-            duplicate: "Kode/Nama Layanan tidak boleh sama",
-            exists: "Kode/Nama Layanan sudah ada"
+            duplicate: "Kode atau Nama Layanan tidak boleh sama",
+            exists:  "Kode atau Layanan sudah ada"
           }
           let jenisError = '';
           if(isErrorRequired) jenisError = 'required';
           else if(isErrorDuplicate) jenisError = 'duplicate';
           else if(isErrorExists) jenisError = 'exists';
-
+          console.log('ss',errorMessage);
           this.$swal({
             type: "error",
             title: startCase("gagal"),
