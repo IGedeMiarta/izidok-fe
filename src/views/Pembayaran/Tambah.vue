@@ -355,7 +355,10 @@
           });
 
           this.$router.push({
-            name: 'pembayaran-struk'
+            name: 'pembayaran-struk',
+            params: {
+              pembayaran_id: this.pembayaranList.id
+            }
           });
         } catch (err) {
           // console.log(err);
