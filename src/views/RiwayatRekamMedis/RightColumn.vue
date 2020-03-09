@@ -76,7 +76,7 @@
               <p>Uploaded File : </p>
               <template v-if="this.datarekammedis.pemeriksaan_penunjang.files !== 'null'">
                 <div v-for="items in datafile" :key="items.id">
-                  <a :href="items.url+'/'+items.uploaded_name" target="_blank">{{items.name}}</a>
+                  <a :href="items.url" target="_blank">{{items.name}}</a>
                 </div>
               </template>
               <template v-else>
