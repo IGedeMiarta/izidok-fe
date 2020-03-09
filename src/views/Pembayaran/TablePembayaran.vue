@@ -13,12 +13,12 @@
     </template>
 
     <template v-slot:cell(nilai)="data">
-      <money v-model="data.item.tarif" v-bind="money" class="form-control text-right" disabled />
+      <b-form-input v-model="data.item.tarif" disabled />
     </template>
 
     <template v-slot:cell(subtotal)="data">
       <div class="d-flex align-items-center">
-        <money  :value="data.item.quantity * data.item.tarif" v-bind="money" class="form-control flex-grow-1 text-right" disabled />
+        <b-form-input class="flex-grow-1" :value="data.item.quantity * data.item.tarif" disabled />
         <div class="d-flex flex-shrink-1 justify-content-around ml-3" v-if="!assistantRole">
           <font-awesome-layers class="fa-lg mr-1 btn-actions" @click="kurang(data.index)"
             :class="{ invisible: data.index < 1 }" v-if="data.index > 1">
@@ -51,26 +51,16 @@
     FontAwesomeLayers
   } from "@fortawesome/vue-fontawesome";
   import { mapGetters } from "vuex";
-  import { Money } from 'v-money';
 
   library.add(faPlus, faMinus, faCircle);
 
   export default {
     components: {
       FontAwesomeLayers,
-      "vue-select": () => import("@/components/VueSelect.vue"),
-      Money
+      "vue-select": () => import("@/components/VueSelect.vue")
     },
     props: ['items'],
     data: () => ({
-      money: {
-        decimal: "",
-        thousands: ",",
-        prefix: "Rp. ",
-        suffix: "",
-        precision: 0,
-        masked: false
-      },
       details: [],
       listLayanan: [],
     }),
@@ -105,12 +95,6 @@
     methods: {
       calcValue(val) {
         this.$emit("valueChanged", val);
-      },
-      calculateSubtotal(item) {
-        return item.quantity * 12345;
-      },
-      toNumber(v) {
-        return parseInt(v.replace(/\D/g, ""))
       },
       isNumber: function(evt) {
         evt = (evt) ? evt : window.event;
@@ -175,7 +159,7 @@
       async fetchLayanan() {
         try {
           const res = await axios.get(
-            `${this.url_api}/getalllayanan`
+            `${this.url_api}/layanan`
           );
 
           const {
