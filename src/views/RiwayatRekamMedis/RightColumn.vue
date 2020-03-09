@@ -74,9 +74,14 @@
           <b-row>
             <b-col cols="12">
               <p>Uploaded File : </p>
-              <div v-for="items in datafile" :key="items.id">
-                <a :href="items.url+'/'+items.uploaded_name" target="_blank">{{items.name}}</a>
-              </div>
+              <template v-if="this.datarekammedis.pemeriksaan_penunjang.files !== 'null'">
+                <div v-for="items in datafile" :key="items.id">
+                  <a :href="items.url+'/'+items.uploaded_name" target="_blank">{{items.name}}</a>
+                </div>
+              </template>
+              <template v-else>
+                <strong>Data upload file tidak ada</strong> 
+              </template>
             </b-col>
           </b-row>
         </b-col>
