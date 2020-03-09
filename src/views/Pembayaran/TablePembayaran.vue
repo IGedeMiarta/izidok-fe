@@ -171,7 +171,7 @@
           thStyle: item.thStyle && item.thStyle
         }));
       },
-      
+
       async fetchLayanan() {
         try {
           const res = await axios.get(
