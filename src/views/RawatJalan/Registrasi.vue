@@ -92,11 +92,7 @@
                       " v-if="
                         form.type === 'select' &&
                           form.rawLabel === 'nama pasien'
-                      " :filterable="false" 
-                      @search="searchPasien" 
-                      style="font-size:13.4px;"
-                      v-model="selectedPasien"
-                    >
+                      " :filterable="false" @search="searchPasien" style="font-size:13.4px;" v-model="selectedPasien">
                       <template slot="no-options" v-if="form.rawLabel === 'nama pasien'">
                         tulis nama lengkap pasien
                       </template>
@@ -172,18 +168,35 @@
                   " v-model="formDataRegister['jenis_identitas']" />
                 </b-form-group>
               </div>
+
               <div class="col-md-8">
-                <b-form-group label="No. identitas" class="text-capitalize" style="position: relative">
-                  <b-form-input v-if="this.formDataRegister['jenis_identitas'] !== 'Paspor'"
-                    v-model.trim="formDataRegister['nik']"
-                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')" :maxlength="25"
-                    @keyup="checkNIK" />
-                  <b-form-input v-else :maxlength="25" type="text" v-model.trim="formDataRegister['nik']"
-                    @keyup="checkNIK" />
-                  <template v-if="this.$v.formDataRegister['nik'].error == true">
-                    <label style="color:red">No. Identitas telah terdaftar</label>
-                  </template>
-                </b-form-group>
+                <template v-if="this.formDataRegister['jenis_identitas'] !== null">
+                  <b-form-group label="No. identitas" class="text-capitalize" style="position: relative">
+                    <b-form-input v-if="this.formDataRegister['jenis_identitas'] !== 'Paspor'"
+                      v-model.trim="formDataRegister['nik']"
+                      oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')"
+                      :maxlength="25" @keyup="checkNIK" required />
+
+                    <b-form-input v-else :maxlength="25" type="text" v-model.trim="formDataRegister['nik']"
+                      @keyup="checkNIK" required />
+                    <template v-if="this.$v.formDataRegister['nik'].error == true">
+                      <label style="color:red">No. Identitas telah terdaftar</label>
+                    </template>
+                  </b-form-group>
+                </template>
+                 <template v-else>
+                  <b-form-group label="No. identitas" class="text-capitalize" style="position: relative">
+                    <b-form-input v-if="this.formDataRegister['jenis_identitas'] !== 'Paspor'"
+                      v-model.trim="formDataRegister['nik']"
+                      oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')"
+                      :maxlength="25" @keyup="checkNIK"  />
+                    <b-form-input v-else :maxlength="25" type="text" v-model.trim="formDataRegister['nik']"
+                      @keyup="checkNIK" />
+                    <template v-if="this.$v.formDataRegister['nik'].error == true">
+                      <label style="color:red">No. Identitas telah terdaftar</label>
+                    </template>
+                  </b-form-group>
+                </template>
               </div>
             </div>
           </div>
@@ -293,8 +306,8 @@
           <b-button class="ml-3 text-uppercase" variant="success" style="font-size:17.5px;float:right " type="submit">
             simpan
           </b-button>
-          <b-button class="ml-3 text-uppercase" to="{ name: 'antrean-rawat-jalan' }" variant="danger" style="font-size:17.5px;float:right "
-            @click='closeModal'>
+          <b-button class="ml-3 text-uppercase" to="{ name: 'antrean-rawat-jalan' }" variant="danger"
+            style="font-size:17.5px;float:right " @click='closeModal'>
             Batal
           </b-button>
         </b-form>
@@ -456,6 +469,7 @@
     data: () => ({
       formBasicData: null,
       formData: null,
+      isNik: null,
       options: {
         dokter: [],
         nama_pasien: []
@@ -538,7 +552,8 @@
       checkNIK() {
         clearTimeout(this.timeVerifyNIK)
         this.timeVerifyNIK = setTimeout(async () => {
-          if (this.formDataRegister['jenis_identitas'] == null || this.formDataRegister['jenis_identitas'] == "") {
+          if (this.formDataRegister['jenis_identitas'] == null || this.formDataRegister['jenis_identitas'] ==
+            "") {
             this.$v.formDataRegister['nik'].error = false;
           } else {
             const res = await axios.get(
@@ -600,21 +615,21 @@
         }).then(res => {
           if (res.value) {
             this.formDataRegister = {
-                nama: "",
-                nomor_hp: "",
-                tanggal_lahir: "",
-                jenis_kelamin: "",
-                alamat_rumah: "",
-                provinsi: "",
-                kota: "",
-                email: "",
-                nama_penanggung_jawab: "",
-                nomor_hp_penanggung_jawab: "",
-                status_perkawinan: "",
-                golongan_darah: "",
-                jenis_identitas: "",
-                nik: ""
-              }
+              nama: "",
+              nomor_hp: "",
+              tanggal_lahir: "",
+              jenis_kelamin: "",
+              alamat_rumah: "",
+              provinsi: "",
+              kota: "",
+              email: "",
+              nama_penanggung_jawab: "",
+              nomor_hp_penanggung_jawab: "",
+              status_perkawinan: "",
+              golongan_darah: "",
+              jenis_identitas: "",
+              nik: ""
+            }
             this.$refs['modal-pasien'].hide()
           } else {
             next(false);
@@ -624,21 +639,21 @@
       hideModal() {
         this.beingSubmit = true;
         this.formDataRegister = {
-            nama: "",
-            nomor_hp: "",
-            tanggal_lahir: "",
-            jenis_kelamin: "",
-            alamat_rumah: "",
-            provinsi: "",
-            kota: "",
-            email: "",
-            nama_penanggung_jawab: "",
-            nomor_hp_penanggung_jawab: "",
-            status_perkawinan: "",
-            golongan_darah: "",
-            jenis_identitas: "",
-            nik: ""
-          }
+          nama: "",
+          nomor_hp: "",
+          tanggal_lahir: "",
+          jenis_kelamin: "",
+          alamat_rumah: "",
+          provinsi: "",
+          kota: "",
+          email: "",
+          nama_penanggung_jawab: "",
+          nomor_hp_penanggung_jawab: "",
+          status_perkawinan: "",
+          golongan_darah: "",
+          jenis_identitas: "",
+          nik: ""
+        }
         this.$refs['modal-pasien'].hide()
       },
       triggerDob() {
@@ -706,7 +721,7 @@
             }
           } = res.data;
           this.formDataRegister = {
-          nama: "",
+            nama: "",
             nomor_hp: "",
             tanggal_lahir: "",
             jenis_kelamin: "",
