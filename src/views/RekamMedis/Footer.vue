@@ -9,14 +9,31 @@
               <b-row>
                 <b-col class="col-md-5">
                   <strong>Konsultasi Selanjutnya</strong>
-                  <vue-select class="text-capitalize bg-white"  :options="
+                  <vue-select @click="triggerDob" class="text-capitalize bg-white"  :options="
                  waktuKonsul
                   " v-model="selectedRadio" @input="selectingWaktu($event)" />
                 </b-col>
-                <b-col class="col-md-6">
+                <b-col class="col-md-4">
                   <template  v-if="selectedRadio.label === 'Pilih Tanggal...' ">
                     <strong>Tanggal Konsultasi</strong>
-                    <datepicker input-class="form-control" class="d-flex input-group" v-model="valuetglpilih" @input="onChange($tgl = valuetglpilih)"  :format="customFormatter" :inline="true"/>
+                    <Datetime  type="datetime" required input-class="form-control" class="input-group" zone="Asia/Jakarta"
+                              value-zone="Asia/Jakarta" format="d LLL yyyy"  @input="tanggalSelected"
+                              :min-datetime="minimumDatetime"  :input-style="
+                    getDataError({ rawLabel: 'valuetglpilih' }) === null
+                      ? null
+                      : getDataError({ rawLabel: 'valuetglpilih' })
+                      ? null
+                      : 'border-color: red'
+                  " ref="dob" v-model="valuetglpilih">
+                      <template v-slot:after>
+                        <b-input-group-text @click="triggerDob" slot="append" style="
+                    border-top-left-radius:0; border-left-width: 0; border-bottom-left-radius: 0; cursor: pointer
+                    ">
+                          <font-awesome-icon class="mx-auto" icon="calendar" />
+                        </b-input-group-text>
+                      </template>
+                    </Datetime>
+<!--                    <datepicker input-class="form-control" class="d-flex input-group" v-model="valuetglpilih" @input="onChange($tgl = valuetglpilih)"  :format="customFormatter" :inline="true"/>-->
                   </template>
                   <template v-if="selectedRadio.label === 'Tidak perlu konsul lanjutan'">
 
@@ -25,7 +42,15 @@
                     && selectedRadio.label !== 'Pilih Tanggal...' && selectedRadio.label !==''  ">
                       <strong>Tanggal Konsultasi</strong>
                       <Datetime input-class="form-control" class="d-flex input-group" zone="Asia/Jakarta"
-                                value-zone="Asia/Jakarta" v-model="hasil" format="d LLL yyyy" disabled/>
+                                value-zone="Asia/Jakarta" v-model="hasil" format="d LLL yyyy" disabled>
+                        <template v-slot:after>
+                          <b-input-group-text @click="triggerDob" slot="append" style="
+                    border-top-left-radius:0; border-left-width: 0; border-bottom-left-radius: 0; cursor: pointer
+                    ">
+                            <font-awesome-icon class="mx-auto" icon="calendar" />
+                          </b-input-group-text>
+                        </template>
+                      </Datetime>
                   </template>
                 </b-col>
               </b-row>
@@ -74,7 +99,7 @@
 
     export default {
         components: {
-          Datepicker,
+
             Datetime,
             "vue-select": () => import("@/components/VueSelect.vue")
         },
@@ -111,6 +136,9 @@
             };
         },
         computed: {
+          minimumDatetime() {
+            return moment().format("YYYY-MM-DD");
+          },
             hasil() {
                 return moment().add(this.hari, 'days').format("YYYY-MM-DD");
 
@@ -144,23 +172,30 @@
             return moment(date).format('dd MMM yyyy');
 
           },
+          tanggalSelected($event) {
+            if (!$event) return;
+            return moment($event).format("dd MMM yyyy")
 
-            onChange($tgl) {
-
-              if (this.hari == 1) {
-                this.tgl_next_konsultasi =  $tgl
-                this.updatePostData({
-                  key: 'tgl_next_konsultasi',
-                  value: this.tgl_next_konsultasi
-                },);
-              }
-              this.tgl_next_konsultasi
+            if (this.hari == 1) {
+              this.tgl_next_konsultasi =  this.valuetglpilih
+              this.updatePostData({
+                key: 'tgl_next_konsultasi',
+                value: this.valuetglpilih
+              },);
             }
-            ,
+
+          },
+          triggerDob() {
+            const x = this.$refs.dob
+            const {
+              $el: {
+                firstElementChild
+              }
+            } = x
+            firstElementChild && firstElementChild.click()
+          },
             selectingWaktu($event) {
                 this.hari = $event.value
-
-
 
                 if (this.hari != 1) {
                   this.tgl_next_konsultasi =  this.hasil
