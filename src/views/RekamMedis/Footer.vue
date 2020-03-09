@@ -96,7 +96,12 @@
     } from "vue-datetime";
     import moment from "moment";
     import Datepicker from 'vuejs-datepicker';
-
+    import {
+      library
+    } from "@fortawesome/fontawesome-svg-core";
+    import {faCalendar
+    } from "@fortawesome/free-solid-svg-icons";
+    library.add(faCalendar);
     export default {
         components: {
 
