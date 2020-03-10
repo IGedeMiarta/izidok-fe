@@ -43,31 +43,31 @@
         </b-col>
         <b-col cols="12" class="ml-2 mt-4">
           <h5 class="text-uppercase font-weight-bold"><u>diagnosa</u></h5>
-          <template v-if="this.datarekammedis.diagnosa.draw_path !== null">
-            <img :src="this.datarekammedis.diagnosa.draw_path" class="img-fluid" alt="img" />
-          </template>
           <template v-if="this.datarekammedis.diagnosa.notes !== null">
             <p v-html="this.datarekammedis.diagnosa.notes"></p>
+          </template>
+          <template v-if="this.datarekammedis.diagnosa.draw_path !== null">
+            <img :src="this.datarekammedis.diagnosa.draw_path" class="img-fluid" alt="img" />
           </template>
         </b-col>
         <b-col cols="12" class="ml-2 mt-4">
           <h5 class="text-uppercase font-weight-bold"><u>tata laksana</u></h5>
-          <template v-if="this.datarekammedis.tatalaksana.draw_path !== null">
-            <img :src="this.datarekammedis.tatalaksana.draw_path" class="img-fluid" alt="img" />
-          </template>
           <template v-if="this.datarekammedis.tatalaksana.notes !== null">
             <p v-html="this.datarekammedis.tatalaksana.notes"></p>
+          </template>
+          <template v-if="this.datarekammedis.tatalaksana.draw_path !== null">
+            <img :src="this.datarekammedis.tatalaksana.draw_path" class="img-fluid" alt="img" />
           </template>
         </b-col>
         <b-col cols="12" class="ml-2 mt-4">
           <h5 class="text-uppercase font-weight-bold">
             <u>pemeriksaan penunjang</u>
           </h5>
-          <template v-if="this.datarekammedis.pemeriksaan_penunjang.draw_path !== null">
-            <img :src="this.datarekammedis.pemeriksaan_penunjang.draw_path" class="img-fluid" alt="img" />
-          </template>
           <template v-if="this.datarekammedis.pemeriksaan_penunjang.notes !== null">
             <p v-html="this.datarekammedis.pemeriksaan_penunjang.notes"></p>
+          </template>
+          <template v-if="this.datarekammedis.pemeriksaan_penunjang.draw_path !== null">
+            <img :src="this.datarekammedis.pemeriksaan_penunjang.draw_path" class="img-fluid" alt="img" />
           </template>
         </b-col>
         <b-col cols="12" class="ml-2 mt-4">
