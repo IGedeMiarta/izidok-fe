@@ -106,14 +106,15 @@
                           $event,
                           tmpId: form.tmpId
                         })
-                      " :state="renderError({ error: form.error })" />
+                      " :state="renderError({ error: form.error })" :maxlength="form.maxlength" />
               </template>
             </b-form-group>
             <b-button class="ml-3 text-uppercase" variant="primary" style="font-size:17.5px;float:right " type="submit">
               simpan
               <!-- <font-awesome-icon class="mx-auto" icon="caret-down" /> -->
             </b-button>
-              <b-button class="ml-3 text-uppercase" variant="danger" @click="hideModal" style="font-size:17.5px;float:right ">
+            <b-button class="ml-3 text-uppercase" variant="danger" @click="hideModal"
+              style="font-size:17.5px;float:right ">
               batal
               <!-- <font-awesome-icon class="mx-auto" icon="caret-down" /> -->
             </b-button>
@@ -339,12 +340,14 @@
             placeholder: "Masukkan nama operator",
             type: "text",
             name: "nama",
+            maxlength: 50
           },
           {
             label: "email",
             placeholder: "Masukkan email operator",
             type: "email",
             name: "email",
+            maxlength: 50,
           },
           {
             label: "no. handphone",
