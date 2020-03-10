@@ -174,7 +174,7 @@ export default {
       // get the image URL
       let self = this;
       self.image_url = self.selectedOrgan.gambar;
-      // self.clear();
+      self.clear();
       self.drawBackground(self.image_url);
     },
     // draw the image
