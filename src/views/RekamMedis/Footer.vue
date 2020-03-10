@@ -9,14 +9,14 @@
               <b-row>
                 <b-col class="col-md-5">
                   <strong>Konsultasi Selanjutnya</strong>
-                  <vue-select @click="triggerDob" class="text-capitalize bg-white"  :options="
+                  <vue-select @click="triggerDob" class="text-capitalize bg-white mt-2"  :options="
                  waktuKonsul
                   " v-model="selectedRadio" @input="selectingWaktu($event)" />
                 </b-col>
                 <b-col class="col-md-4">
                   <template  v-if="selectedRadio.label === 'Pilih Tanggal...' ">
                     <strong>Tanggal Konsultasi</strong>
-                    <Datetime  type="date" required input-class="form-control" class="input-group" zone="Asia/Jakarta"
+                    <Datetime  type="date" required input-class="form-control" class="input-group mt-2" zone="Asia/Jakarta"
                               value-zone="Asia/Jakarta" format="d LLL yyyy" @input="tanggalSelected($tgl = valuetglpilih)"
                               :min-datetime="minimumDatetime"  :input-style="
                     getDataError({ rawLabel: 'valuetglpilih' }) === null
@@ -41,7 +41,7 @@
                   <template v-if="selectedRadio.label !== 'Tidak perlu konsul lanjutan'
                     && selectedRadio.label !== 'Pilih Tanggal...' && selectedRadio.label !==''  ">
                       <strong>Tanggal Konsultasi</strong>
-                      <Datetime input-class="form-control" class="d-flex input-group" zone="Asia/Jakarta"
+                      <Datetime input-class="form-control" class="d-flex input-group mt-2" zone="Asia/Jakarta"
                                 value-zone="Asia/Jakarta" v-model="hasil" format="d LLL yyyy" disabled>
                         <template v-slot:after>
                           <b-input-group-text @click="triggerDob" slot="append" style="
@@ -73,7 +73,7 @@
           </div>
         </div>
         <div class="form-row">
-          <div class="form-group col-md-10">
+          <div class="form-group col-md-10" style="margin-top : -15px">
             <b-form-checkbox v-model="checkbox" class="my-3">
               Dengan ini, saya menyatakan bahwa saya telah mengisi data rekam medis dengan lengkap dan benar.
               Saya juga memberikan keterangan yang sejujur - jujurnya mengenai riwayat penyakit dan/atau cidera tubuh
