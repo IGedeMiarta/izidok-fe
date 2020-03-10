@@ -22,24 +22,23 @@
           <h5 class="text-uppercase font-weight-bold"><u>anamnesa</u></h5>
           <b-row>
             <b-col cols="12">
-              <template v-if="this.datarekammedis.anamnesa.draw_path !== null">
-                <img :src="this.datarekammedis.anamnesa.draw_path" class="img-fluid" alt="img" />
-              </template>
               <template v-if="this.datarekammedis.anamnesa.notes !== null">
                 <p v-html="this.datarekammedis.anamnesa.notes"></p>
+              </template>
+              <template v-if="this.datarekammedis.anamnesa.draw_path !== null">
+                <img :src="this.datarekammedis.anamnesa.draw_path" class="img-fluid" alt="img" />
               </template>
             </b-col>
           </b-row>
         </b-col>
         <b-col cols="12" class="ml-2 mt-4">
           <h5 class="text-uppercase font-weight-bold"><u>pemeriksaan fisik</u></h5>
-          <template v-if="this.datarekammedis.pemeriksaan_fisik.draw_path !== null">
-            <img :src="this.datarekammedis.pemeriksaan_fisik.draw_path" class="img-fluid" alt="img" />
-          </template>
           <template v-if="this.datarekammedis.pemeriksaan_fisik.notes !== null">
             <p v-html="this.datarekammedis.pemeriksaan_fisik.notes"></p>
           </template>
-
+          <template v-if="this.datarekammedis.pemeriksaan_fisik.draw_path !== null">
+            <img :src="this.datarekammedis.pemeriksaan_fisik.draw_path" class="img-fluid" alt="img" />
+          </template>
         </b-col>
         <b-col cols="12" class="ml-2 mt-4">
           <h5 class="text-uppercase font-weight-bold"><u>diagnosa</u></h5>
