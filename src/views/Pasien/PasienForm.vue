@@ -133,7 +133,7 @@
                 </template>
               </template>
               <template v-else-if="this.formData['jenis_identitas'] == null">
-                       <b-form-input v-if="this.formData['jenis_identitas'] !== 'Paspor'" @keypress="
+                <b-form-input v-if="this.formData['jenis_identitas'] !== 'Paspor'" @keypress="
               onKeyInputNumber({
                 rawLabel: 'nik',
                 $event
@@ -156,7 +156,7 @@
                   :maxlength="25" />
                 <template v-if="this.formBasicData[2].error == true && this.formData.nik !== ''">
                   <label style="color:red">No. Identitas telah terdaftar</label>
-                </template>          
+                </template>
               </template>
               <template v-else>
                 <b-form-input v-if="this.formData['jenis_identitas'] !== 'Paspor'" @keypress="
