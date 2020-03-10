@@ -28,7 +28,7 @@
             v-show="!isHidden"
             :class="{ active: isActive === 'eraser' }"
           />
-          <font-awesome-icon
+          <!-- <font-awesome-icon
             icon="pen-alt"
             class="font-size-xl m-2 grow icon"
             v-on:click="isHidden = false;
@@ -37,16 +37,16 @@
               isActive = 'pen';
               organChanged()"
             :class="{ active: isActive === 'pen' }"
-          />
-          <font-awesome-icon
+          /> -->
+          <!-- <font-awesome-icon
             icon="keyboard"
             class="font-size-xl m-2 grow icon"
-            v-on:click="isHidden = true;
+            v-on:click="isHidden = false;
               updatePostData({key:'pemeriksaan_is_draw', value: true});
               isActive = 'keyboard';
               organChanged()"
             :class="{ active: isActive === 'keyboard' }"
-          />
+          /> -->
         </div>
         <div class="row d-flex justify-content-end mr-2">
           <div>
@@ -91,28 +91,28 @@
     </div>
 
     <div class="row">
-      <div class="col-md-12" v-show="!isHidden">
-        <canvas
-          id="pemeriksaan-canvas"
-          ref="canvas"
-          @mousedown="handleMousedown"
-          @mouseup="handleMouseup"
-          @mousemove="handleMousemove"
-          @touchstart="handleTouchstart"
-          @touchend="handleTouchend"
-          @touchmove="handleTouchmove"
-          width="1000"
-          height="500"
-        >Your browser does not support the HTML 5 Canvas.</canvas>
-        <div class="col-md-4">
-          <b-button @click="clear" variant="warning" size="sm" class="m-1">Clear</b-button>
-        </div>
-      </div>
-      <div v-show="isHidden" class="col-md-5">
-        <div id="img_organ"></div>
-      </div>
-      <div v-show="isHidden" class="col-md-7">
+      <canvas
+        id="pemeriksaan-canvas"
+        ref="canvas"
+        @mousedown="handleMousedown"
+        @mouseup="handleMouseup"
+        @mousemove="handleMousemove"
+        @touchstart="handleTouchstart"
+        @touchend="handleTouchend"
+        @touchmove="handleTouchmove"
+        width="1000"
+        height="500"
+      >Your browser does not support the HTML 5 Canvas.</canvas>
+      <div v-show="isActive == 'keyboard'" class="col-md-12">
         <Editor id="editor" v-on:update-content="updateContent" />
+      </div>
+      <div class="col-md-4">
+        <b-button @click="clear" variant="warning" size="sm" class="m-1">Clear</b-button>
+      </div>
+    </div>
+    <div class="row">
+      <div v-show="isHidden" class="col-md-12">
+        <div id="img_organ"></div>
       </div>
     </div>
   </div>
@@ -144,7 +144,7 @@ export default {
       isLoading: false,
       selectedOrgan: [],
       organs: [],
-      isPen: false,
+      isPen: true,
       isActive: "keyboard",
       isColorActive: "black",
       penWidth: 2
@@ -174,7 +174,7 @@ export default {
       // get the image URL
       let self = this;
       self.image_url = self.selectedOrgan.gambar;
-      self.clear();
+      // self.clear();
       self.drawBackground(self.image_url);
     },
     // draw the image
@@ -200,18 +200,18 @@ export default {
         if (background.width > 700) {
           newSize = self.resizeImage(background);
         }
+        ctx.drawImage(background, 0, 0, newSize.width, newSize.height);
 
-        if (self.isHidden) {
-          let img = document.createElement("img");
-          img.src = backgroundURL;
-          img.style.height = newSize.height + 'px';
-          img.style.width = newSize.width + 'px';
-          img_organ.appendChild(img);
-
-        } else {
-          console.log('draw on canvas pemeriksaan');
-          ctx.drawImage(background, 0, 0, newSize.width, newSize.height);
-        }
+        // if (self.isHidden) {
+        //   let img = document.createElement("img");
+        //   img.src = backgroundURL;
+        //   img.style.height = newSize.height + 'px';
+        //   img.style.width = newSize.width + 'px';
+        //   // img_organ.appendChild(img);
+        // } else {
+        //   console.log('draw on canvas pemeriksaan');
+        //   ctx.drawImage(background, 0, 0, newSize.width, newSize.height);
+        // }
       };
     },
     resizeImage(background) {
