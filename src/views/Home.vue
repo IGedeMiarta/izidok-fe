@@ -108,6 +108,7 @@
         <!-- <Paket /> -->
       </b-col>
     </b-row>
+    <LaporanPendapatan />
     <!-- <div class="d-flex">
       <TrendPasien class="flex-grow-1 my-2" :seriesData="dataSeries" />
     </div> -->
@@ -123,7 +124,8 @@ export default {
   components: {
     ListAntrean: () => import("@/views/Home/ListAntrean"),
     ListPembayaran: () => import("@/views/Home/ListPembayaran"),
-    CardDashboard: () => import("@/components/CardDashboard")
+    CardDashboard: () => import("@/components/CardDashboard"),
+    LaporanPendapatan: () => import("@/views/Home/LaporanPendapatan")
     // Paket: () => import("@/views/Home/Paket")
     // TableDashboard: () => import("@/components/TableDashboard")
     // TrendPasien: () => import("@/components/TrendPasien")

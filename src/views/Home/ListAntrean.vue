@@ -136,8 +136,11 @@ export default {
   computed: {
     ...mapGetters({ getKlinikId: "getKlinikId", isDoctor: "doctorRole" })
   },
-  mounted() {
+  beforeMount() {
     this.fetchData();
+  },
+  beforeDestroy() {
+    console.log('before destroy')
   },
   methods: {
     async updateStatusAntrean(id) {
@@ -256,7 +259,7 @@ export default {
     tr {
       th {
         background-color: $evenColor;
-        color: #778fad !important;
+        color: #4c6e8a !important;
       }
     }
   }

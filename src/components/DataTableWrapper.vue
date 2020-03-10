@@ -9,6 +9,14 @@
               :options="entriesOpt(customEntryOptions)"
               class="w-25 mx-2"
               v-model="perPageProps"
+              v-if="dropdownSizeProps"
+              :size="dropdownSizeProps"
+            ></b-form-select>
+            <b-form-select
+              :options="entriesOpt(customEntryOptions)"
+              class="w-25 mx-2"
+              v-model="perPageProps"
+              v-else
             ></b-form-select>
             <span>entries</span>
           </div>
@@ -21,17 +29,18 @@
       </b-row>
     </b-container>
     <slot></slot>
-    <div class="d-flex align-items-center">
-      <span class="px-2"
+    <div class="d-flex align-items-center justify-content-center">
+      <span class="pl-2"
         >Display {{ fromPage }} to {{ toPage }} of
         {{ totalEntries }} entries</span
       >
       <b-pagination
-        class="mt-4 d-flex justify-content-center"
+        class="mt-4 d-flex justify-content-center flex-grow-1"
+        :class="customPagingClass"
         v-model="currentPageProps"
         :total-rows="rows"
         :per-page="perPage"
-        style="margin-left: 10rem"
+        style="margin-left: -10em"
       ></b-pagination>
     </div>
   </div>
@@ -55,6 +64,13 @@ export default {
     customEntryOptions: {
       type: Object,
       default: Object
+    },
+    customPagingClass: {
+      type: Array
+    },
+    dropdownSizeProps: {
+      type: String,
+      default: () => null
     }
   },
   async mounted() {

@@ -5,7 +5,12 @@
     </template>
     <template v-else>
       <loading :active.sync="isLoading" :is-full-page="true">
-        <b-spinner style="width:5rem;height:5rem;color:#4b80b6 !important;" type="grow" label="Loading..." variant="info"></b-spinner>
+        <b-spinner
+          style="width:5rem;height:5rem;color:#4b80b6 !important;"
+          type="grow"
+          label="Loading..."
+          variant="info"
+        ></b-spinner>
       </loading>
       <component :is="layout">
         <transition name="fade" mode="out-in">
@@ -20,6 +25,7 @@
 import { mapGetters } from "vuex";
 import moment from "moment";
 import "vue-loading-overlay/dist/vue-loading.css";
+import "element-ui/lib/theme-chalk/index.css";
 
 const default_layout = "default";
 
@@ -33,10 +39,13 @@ export default {
       return (this.$route.meta.layout || default_layout) + "-layout";
     },
     auth_error() {
-      return this.$store.state.autherror
+      return this.$store.state.autherror;
     },
     isBeta() {
-      return process.env.VUE_APP_IS_BETA == 1 && moment().isBetween("2020-03-09", "2020-03-15")
+      return (
+        process.env.VUE_APP_IS_BETA == 1 &&
+        moment().isBetween("2020-03-09", "2020-03-15")
+      );
     }
   },
   methods: {
@@ -45,27 +54,27 @@ export default {
         allowOutsideClick: false,
         type: "warning",
         text: this.$store.state.autherror
-      }).then((e) => {
-        this.$store.commit('SET_BEARER_TOKEN', null);
-        this.$store.commit('SET_USER', null);
-        this.$store.commit('SET_AUTHERROR', null);
-        this.$router.push('/login');
+      }).then(e => {
+        this.$store.commit("SET_BEARER_TOKEN", null);
+        this.$store.commit("SET_USER", null);
+        this.$store.commit("SET_AUTHERROR", null);
+        this.$router.push("/login");
       });
     }
   },
   watch: {
     auth_error(newVal, oldVal) {
-      if(newVal) {
-        this.showAuthError()
+      if (newVal) {
+        this.showAuthError();
       }
     }
   },
   mounted() {
-    if(this.$store.state.autherror) {
-      this.showAuthError()
+    if (this.$store.state.autherror) {
+      this.showAuthError();
     }
 
-    console.log('isBeta', this.isBeta)
+    console.log("isBeta", this.isBeta);
   }
 };
 </script>
