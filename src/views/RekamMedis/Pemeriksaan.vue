@@ -91,28 +91,33 @@
     </div>
 
     <div class="row">
-      <canvas
-        id="pemeriksaan-canvas"
-        ref="canvas"
-        @mousedown="handleMousedown"
-        @mouseup="handleMouseup"
-        @mousemove="handleMousemove"
-        @touchstart="handleTouchstart"
-        @touchend="handleTouchend"
-        @touchmove="handleTouchmove"
-        width="1000"
-        height="500"
-      >Your browser does not support the HTML 5 Canvas.</canvas>
-      <div v-show="isActive == 'keyboard'" class="col-md-12">
-        <Editor id="editor" v-on:update-content="updateContent" />
+      <div class="col-md-6">
+        <canvas
+          id="pemeriksaan-canvas"
+          ref="canvas"
+          @mousedown="handleMousedown"
+          @mouseup="handleMouseup"
+          @mousemove="handleMousemove"
+          @touchstart="handleTouchstart"
+          @touchend="handleTouchend"
+          @touchmove="handleTouchmove"
+          width="700"
+          height="370"
+        >Your browser does not support the HTML 5 Canvas.
+        </canvas>
       </div>
-      <div class="col-md-4">
-        <b-button @click="clear" variant="warning" size="sm" class="m-1">Clear</b-button>
+      <div class="col-md-6" style="padding:0 !important;">
+        <div v-show="isActive == 'keyboard'" class="col-md-12">
+          <Editor id="editor" v-on:update-content="updateContent" />
+        </div>
+      </div>
+      <div v-show="isHidden" class="col-md-12">
+        <div id="img_organ"></div>
       </div>
     </div>
     <div class="row">
-      <div v-show="isHidden" class="col-md-12">
-        <div id="img_organ"></div>
+      <div class="col-md-4">
+        <b-button @click="clear" variant="warning" size="sm" class="m-1">Clear</b-button>
       </div>
     </div>
   </div>
