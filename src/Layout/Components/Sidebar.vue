@@ -116,11 +116,11 @@
               title: "Manajemen Dokter",
               type: "klinik"
             },
-            {
-              title: "Manajemen Asisten Dokter",
-              href: "/asisten-dokter",
-              type: ["klinik", "dokter praktek"]
-            },
+            // {
+            //   title: "Manajemen Asisten Dokter",
+            //   href: "/asisten-dokter",
+            //   type: ["klinik", "dokter praktek"]
+            // },
             {
               title: "Manajemen Tarif",
               href: "/tarif",
@@ -181,7 +181,7 @@
             }
           },
           {
-            title: "Manajemen pengguna",
+            title: "Manajemen Pengguna",
             icon: {
               element: "font-awesome-icon",
               attributes: {
