@@ -6,7 +6,7 @@
           <font-awesome-icon
             icon="eraser"
             class="font-size-xl m-2 grow icon"
-            v-on:click="isPen = false; 
+            v-on:click="isPen = false;
                     isActive = 'eraser'"
             v-show="!isHidden"
             :class="{ active: isActive === 'eraser' }"

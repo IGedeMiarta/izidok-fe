@@ -8,9 +8,9 @@
             <div class="flex-grow-1 w-100 d-flex align-items-center">
               <div class="container-fluid">
                 <div class="row">
-                  <div class="col-md-6 pl-0 d-none d-lg-flex align-items-center">
+                  <div class="col-md-6 pl-0 d-none d-sm-flex align-items-center hide-image">
                     <div class="wrap" :style="wrapStyle">
-                      <img src="@/assets/login.jpg" alt="login izidok" :style="wrapImgStyle" />
+                      <img  src="@/assets/login.jpg" alt="login izidok" :style="wrapImgStyle" />
                     </div>
                   </div>
                   <div class="col-md-6 pr-0 d-flex align-items-center">
@@ -409,8 +409,24 @@
 
   @media only screen and (max-width: 600px) {
     .form-login {
-      margin-left: auto;
-      margin-right: auto;
+      margin-left: 25px;
+      margin-right: 40px;
+
+    }
+  }
+
+  @media only screen and (max-width: 767px) and (min-width: 576px) {
+    .hide-image {
+     display: none !important;
+      margin-left: 25px;
+      margin-right: 40px;
+    }
+  }
+
+  @media only screen and (max-width: 1032px) and (min-width:768px) {
+    .form-login {
+
+      margin-right: 30px;
     }
   }
 </style>
