@@ -17,7 +17,7 @@
           <div class="col-md-12 no-padding">
             <DataTableWrapper :perPage="perPage" :currentPage="currentPage" :callbackFunc="fetchListPembayaran"
               @valueChanged="handleValueChanged">
-              <b-table :items="pembayaranList" :fields="fieldList" thead-tr-class="kntl" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc"
+              <b-table :items="pembayaranList" :fields="fieldList" thead-tr-class="izd-datatable" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc"
                 :no-local-sorting="true">
                 <template v-slot:head()="data">
                   {{ data.label }}
