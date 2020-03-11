@@ -9,14 +9,13 @@
                 <b-row>
                   <b-col class="col-md-4">
                     <strong>Konsultasi Selanjutnya</strong>
-                    <vue-select @click="triggerDob" class="text-capitalize bg-white"  :options="
-                 waktuKonsul
-                  " v-model="selectedRadio" @input="selectingWaktu($event)" />
+                    <vue-select @click="triggerDob" class="text-capitalize bg-white mt-2"  :options="
+                      waktuKonsul" v-model="selectedRadio" @input="selectingWaktu($event)" />
                   </b-col>
                   <b-col class="col-md-3">
                     <template  v-if="selectedRadio.label === 'Pilih Tanggal...' ">
                       <strong>Tanggal Konsultasi</strong>
-                      <Datetime  type="date" required input-class="form-control" class="input-group" zone="Asia/Jakarta"
+                      <Datetime  type="date" required input-class="form-control mt-2" class="input-group" zone="Asia/Jakarta"
                                  value-zone="Asia/Jakarta" format="d LLL yyyy" @input="tanggalSelected($tgl = valuetglpilih)"
                                  :min-datetime="minimumDatetime"  :input-style="
                     getDataError({ rawLabel: 'valuetglpilih' }) === null
@@ -26,7 +25,7 @@
                       : 'border-color: red'
                   " ref="dob" v-model="valuetglpilih">
                         <template v-slot:after>
-                          <b-input-group-text @click="triggerDob" slot="append" style="
+                          <b-input-group-text @click="triggerDob" class="mt-2" slot="append" style="
                     border-top-left-radius:0; border-left-width: 0; border-bottom-left-radius: 0; cursor: pointer
                     ">
                             <font-awesome-icon class="mx-auto" icon="calendar" />
@@ -38,13 +37,13 @@
                     <template v-if="selectedRadio.label !== 'Tidak perlu konsul lanjutan'
                     && selectedRadio.label !== 'Pilih Tanggal...' && selectedRadio.label !==''  ">
                       <strong>Tanggal Konsultasi</strong>
-                      <Datetime input-class="form-control" class="d-flex input-group" zone="Asia/Jakarta"
+                      <Datetime input-class="form-control" class="d-flex input-group mt-2" zone="Asia/Jakarta"
                                 value-zone="Asia/Jakarta" v-model="hasil" format="d LLL yyyy" disabled>
                         <template v-slot:after>
                           <b-input-group-text @click="triggerDob" slot="append" style="
                     border-top-left-radius:0; border-left-width: 0; border-bottom-left-radius: 0; cursor: pointer
                     ">
-                            <font-awesome-icon class="mx-auto" icon="calendar" />
+                            <font-awesome-icon class="mx-auto " icon="calendar" />
                           </b-input-group-text>
                         </template>
                       </Datetime>
@@ -57,20 +56,26 @@
                       <label class="text-primary ">
                         <font-awesome-icon v-tooltip.bottom-start="'Pengingat akan dikirimkan kepada pasien 1 hari sebelum waktu kunjungan!'" class="mx-auto" icon="info-circle"/>
                         Aktifkan pengingat melalui Email?
+                        <template v-if="pengingatvalue === true">
+                          <vue-select  class="text-capitalize bg-white mt-2"  :options="PilihanPengingat"
+                                      v-model="selectedPengingat" disabled="disabled"   />
+                          <input type="text" class="form-control mt-1"  :placeholder="[[ phEmailReminder ]]"/>
+                        </template>
                       </label>
-                      <vue-select @click="triggerDob" class="text-capitalize bg-white"  :options="pilihanPengingat"
-                                  v-model="selectedPengingat"  />
+
                     </b-col>
                     <b-col class="col-md-1">
                       <toggle-button
-                        :labels="{ checked: 'Ya', unchecked: 'Tidak' }"
-                        :width="70"
-                        :height="25"
+                        @change="onToggleChange(slider.id, $event)"
+                        :labels="{ checked: ' Ya', unchecked: ' Tidak' }"
+                        :width="60"
+                        :height="20"
                         :color="{
                             checked: '#3c44b1',
                             unchecked: '#f83245',
                             disabled: '#CCCCCC'
                           }"
+
                       />
                     </b-col>
                   </template>
@@ -133,12 +138,16 @@
     },
     data() {
       return {
+        slider: {
+          status: true
+        },
+        phEmailReminder: "Inputkan Email...",
         selectedRadio: {},
-        selectedPengingat: {},
+        selectedPengingat:{},
         PilihanPengingat: [
           {
             label: 'Email',
-            value: '1'
+            value: 1
           },
         ],
         waktuKonsul: [
@@ -166,6 +175,7 @@
         hari: 0,
         valuetglpilih : "",
         tglpilih: "",
+        pengingatvalue:"",
         test : null,
         checkbox: false,
       };
@@ -187,7 +197,11 @@
       this.selectedRadio = {
         label: 'Tidak perlu konsul lanjutan',
         value: 1
-      }
+      },
+      this.selectedPengingat = {
+          label: 'Email',
+          value: 1
+      },
       this.updateSavingParams({
         key: 'is_next_konsul',
         value: true
@@ -206,6 +220,11 @@
       customFormatter(date) {
         return moment(date).format('dd MMM yyyy');
 
+      },
+      onToggleChange(id, event) { // added event as second arg
+        let value = event.value;  // changed from event.target.value to event.value
+        this.pengingatvalue = value
+        console.log(value);
       },
       tanggalSelected($tgl) {
 

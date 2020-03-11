@@ -381,9 +381,9 @@ export default {
     editPasien({ id } = {}) {
       if (id) {
         this.$router.push({
-          name: "pasien-edit",
+          name: "operator-edit",
           params: {
-            idPasien: id
+            operator_id: id
           }
         });
       }

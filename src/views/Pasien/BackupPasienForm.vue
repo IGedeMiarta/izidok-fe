@@ -137,8 +137,8 @@
                     })
                   })
                 ">
-                <label for="">{{ renderLabel({label: 'Jenis kelamin'  }) }}</label>
-                <label for="" style="color:red"> *</label>
+                <label >{{ renderLabel({label: 'Jenis kelamin'  }) }}</label>
+                <label style="color:red"> *</label>
                 <b-form-radio-group stacked @change="
                     setValue({
                       rawLabel: 'jenis kelamin',
