@@ -84,7 +84,7 @@
         </div>
       </b-col>
       <b-col cols="9" class="align-self-start">
-        <b-tabs content-class="pt-3 pb-2" lazy class="tab-kntl">
+        <b-tabs content-class="pt-3 pb-2" lazy class="tab-izd-home">
           <b-tab title="List Antrean" active>
             <div slot="title">
               list antrean
@@ -241,20 +241,20 @@ export default {
 </script>
 
 <style lang="scss">
-$bg-kntl: #f2f2f2;
-$bg-kntl-alternate: #d6d6d6;
+$bg-izd-home: #f2f2f2;
+$bg-izd-home-alternate: #d6d6d6;
 
 .apexcharts-title-text {
   font-weight: 800 !important;
 }
 
-.tab-kntl {
+.tab-izd-home {
   color: #778fad !important;
 
   ul {
     &[role="tablist"] {
       padding: 0;
-      border-color: $bg-kntl;
+      border-color: $bg-izd-home;
 
       li {
         &:first-child {
@@ -266,16 +266,16 @@ $bg-kntl-alternate: #d6d6d6;
         a {
           border-top-left-radius: 10px;
           border-top-right-radius: 10px;
-          border-color: $bg-kntl-alternate !important;
-          background-color: $bg-kntl-alternate;
+          border-color: $bg-izd-home-alternate !important;
+          background-color: $bg-izd-home-alternate;
           text-transform: capitalize !important;
           color: #fff !important;
           font-weight: 600;
 
           &.active {
             color: #778fad !important;
-            border-color: $bg-kntl !important;
-            background-color: $bg-kntl;
+            border-color: $bg-izd-home !important;
+            background-color: $bg-izd-home;
           }
         }
       }
@@ -283,7 +283,7 @@ $bg-kntl-alternate: #d6d6d6;
   }
 
   .tab-content {
-    background-color: $bg-kntl;
+    background-color: $bg-izd-home;
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
     border-top-right-radius: 12px;

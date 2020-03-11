@@ -158,14 +158,14 @@ $bv-escaped-characters: (("<", "%3c"), (">", "%3e"), ("#", "%23"));
 }
 
 // custom datatable
-.kntl {
+.izd-datatable {
   th {
     vertical-align: top !important;
   }
 }
 
 td {
-  &.kntl-kuda-pre-whitespace {
+  &.tarif-pre-whitespace {
     text-align: right !important;
     white-space: pre;
     padding-right: 2rem;
