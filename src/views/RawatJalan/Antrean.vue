@@ -99,7 +99,7 @@
            <b-button :to="{ name: 'registrasi-rawat-jalan' }" variant="primary" class="text-capitalize ml-2">Tambah Antrean</b-button>
             </template>
             <b-table :items="pasiens" :fields="fieldList" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc"
-              thead-tr-class="kntl" :no-local-sorting="true">
+              thead-tr-class="izd-datatable" :no-local-sorting="true">
               <template v-slot:head()="data">
                 {{ data.label }}
                 <b-input size="sm" class="mt-2 w-82" v-if="data.field.searchable"
@@ -311,7 +311,7 @@ import {
           generateFieldList: g,
           setSearchableAndSortableFieldList: s
         } = this;
-        const r = val => Boolean(/(waktu_konsultasi|status|actions)\b/gi.test(val) ? !1 : 1);
+        const r = val => Boolean(/(waktu_konsultasi|status|actions|jenis_kelamin)\b/gi.test(val) ? !1 : 1);
         return (
           [{
               key: "waktu_konsultasi",
@@ -328,12 +328,12 @@ import {
               label: "nama pasien"
             },
             {
-              key: "jenis_kelamin",
-              thStyle: "width: 14%"
-            },
-            {
               key: "nomor_hp",
               thStyle: "width: 16%"
+            },
+            {
+              key: "jenis_kelamin",
+              thStyle: "width: 14%"
             },
             {
               key: "actions"

@@ -27,18 +27,18 @@
                   <th>no. handphone</th>
                   <th>Terakhir Aktif</th>
                   <th class="no-sort text-center">Actions</th>
-                  <th class="no-sort text-center">Status</th>
+                  <!-- <th class="no-sort text-center">Status</th> -->
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="(item) in dataOperator" :key="item.id">
                   <td>{{item.nama}}</td>
-                  <td>{{item.user.email}}</td>
-                  <td>{{item.user.nomor_telp}}</td>
-                  <td>2</td>
+                  <td>{{item.email}}</td>
+                  <td>{{item.nomor_telp}}</td>
+                  <td>{{item.last_active}}</td>
 
                   <td class="text-center">
-                    <b-link class="btn text-light font-size-md pl-2 pr-2 btn-sm ml-1 mr-1" @click="editOperator(item)"
+                    <b-link class="btn text-light font-size-md pl-2 pr-2 btn-sm ml-1 mr-1" @click="editOperator({id : item.id})"
                       style="background-color:yellow;">
                       <font-awesome-icon icon="pencil-alt" style="color:black;" />
                     </b-link>
@@ -49,14 +49,14 @@
                       <font-awesome-icon icon="trash-alt" />
                     </b-link>
                   </td>
-                  <td class="text-center">Aktif
+                  <!-- <td class="text-center">Aktif
                     <toggle-button style="margin-top:8px;margin-left:5px;" v-model="status"
                       :labels="{ checked: 'On', unchecked: 'OFF' }" :width="60" :color="{
                             checked: '#3c44b1',
                             unchecked: '#f83245',
                             disabled: '#CCCCCC'
                           }" />
-                  </td>
+                  </td> -->
                 </tr>
               </tbody>
             </table>
@@ -86,7 +86,6 @@
                     <font-awesome-icon v-if="passwordVisible1 == false" icon="eye" />
                     <font-awesome-icon v-else icon="eye-slash" />
                   </b-input-group-text>
-
                   <b-form-input :type="form.type || 'text'" class="border-right-0" @input="
                                       setValue({
                                         rawLabel: form.rawLabel,
@@ -109,7 +108,7 @@
                       " :state="renderError({ error: form.error })" :maxlength="form.maxlength" />
               </template>
             </b-form-group>
-            <b-button class="ml-3 text-uppercase" variant="primary" style="font-size:17.5px;float:right " type="submit">
+            <b-button class="ml-3 text-uppercase" variant="primary" style="font-size:17.5px;float:right" type="submit">
               simpan
               <!-- <font-awesome-icon class="mx-auto" icon="caret-down" /> -->
             </b-button>
@@ -160,7 +159,7 @@
   export default {
     components: {
       "font-awesome-icon": FontAwesomeIcon,
-      "toggle-button": ToggleButton
+      // "toggle-button": ToggleButton
     },
     data() {
       return {
@@ -299,6 +298,17 @@
       this.getOperator();
     },
     methods: {
+      editOperator({ id } = {}) {
+       console.log('editOperator',id)
+      if (id) {
+        this.$router.push({
+          name: "operator-edit",
+          params: {
+            operator_id: id
+          }
+        });
+      }
+    },
       async getOperator() {
         try {
           const res = await axios.get(
@@ -326,7 +336,16 @@
         }
       },
       showcreateOperator() {
-        this.$refs['modal-operator'].show()
+        var res = axios.get(`${this.url_api}/checkavailop`)
+        if(res.status == true){
+          this.$refs['modal-operator'].show()
+        } else {
+           this.$swal({
+              text: `Klinik sudah memiliki Asisten Dokter`,
+              type: "warning",
+              confirmButtonText: startCase("ya")
+            })
+        }
       },
       setFormData() {
         return this.setFormBasicData().reduce((arr, val) => {
@@ -462,22 +481,22 @@
         }
       },
       async addOperator() {
-        const {
-          formData,
-          formBasicData
-        } = this;
-        const tmpPostData = this.formBasicData.reduce((obj, item) => {
-          const {
-            label,
-            name
-          } = item;
-          obj[name] = formData[label];
-          return obj;
-        }, {});
-        const postData = {
-          ...tmpPostData
-        };
         try {
+          const {
+            formData,
+            formBasicData
+          } = this;
+          const tmpPostData = this.formBasicData.reduce((obj, item) => {
+            const {
+              label,
+              name
+            } = item;
+            obj[name] = formData[label];
+            return obj;
+          }, {});
+          const postData = {
+            ...tmpPostData
+          };
           const res = await axios.post(
             `${this.url_api}/operator`,
             postData
@@ -487,6 +506,12 @@
             data
           } = res.data;
           if (status) {
+            this.hideModal();
+            this.$swal({
+              text: `Asisten ${res.data.data.user.nama} Berhasil ditambahkan`,
+              type: "success",
+              confirmButtonText: startCase("ya")
+            })
             this.$router.push({
               name: "operator-list"
             });
@@ -496,6 +521,13 @@
         }
       },
       hideModal() {
+        this.formData = {
+          nama_operator: "",
+          email: "",
+          'no._handphone': "",
+          password: "",
+          konfirmasi_password: ""
+        }
         this.$refs['modal-operator'].hide()
       },
       removeOperator({

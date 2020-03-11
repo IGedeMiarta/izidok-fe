@@ -78,6 +78,11 @@ const routes = [
     component: () => import("../views/InputDataOperator.vue")
   },
   {
+    path: "/pilih-paket",
+    name: "pilih-paket",
+    component: () => import("../views/PilihPaket.vue"),
+  },
+  {
     path: "/init",
     name: 'initialization',
     component: () => import("../views/Initialization.vue"),
@@ -94,7 +99,7 @@ const routes = [
         component: () =>
           import("../views/Initialization/InputDataAsistenDokter.vue"),
         props: true
-      }
+      },
     ]
   },
   {
@@ -216,6 +221,11 @@ const routes = [
         path: "/tambah",
         name: "operator-tambah",
         component: () => import("../views/Operator/Tambah.vue")
+      },
+      {
+        path: "/asisten-dokter/edit/:operator_id?",
+        name: "operator-edit",
+        component: () => import("../views/Operator/Edit.vue"),
       }
     ]
   },
@@ -223,6 +233,16 @@ const routes = [
     path: "/profile",
     name: "profile",
     component: () => import("../views/Profile/Profile.vue")
+  },
+  {
+    path: "/subscription/detail",
+    name: "subscription-detail",
+    component: () => import("../views/Subscription/DetailPaket.vue")
+  },
+  {
+    path: "/subscription/cara-bayar",
+    name: "subscription-cara-bayar",
+    component: () => import("../views/Subscription/CaraPembayaran.vue")
   },
   {
     path: "/tarif",
@@ -240,7 +260,7 @@ const routes = [
         component: () => import("../views/Tarif/Tambah.vue")
       }
     ]
-  }
+  },
 ];
 
 const router = new VueRouter({

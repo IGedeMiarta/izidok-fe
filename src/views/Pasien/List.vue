@@ -148,7 +148,7 @@
                 :fields="fieldList"
                 :sort-by.sync="sortBy"
                 :sort-desc.sync="sortDesc"
-                thead-tr-class="kntl"
+                thead-tr-class="izd-datatable"
                 :no-local-sorting="true"
               >
                 <template v-slot:head()="data">
@@ -381,9 +381,9 @@ export default {
     editPasien({ id } = {}) {
       if (id) {
         this.$router.push({
-          name: "pasien-edit",
+          name: "operator-edit",
           params: {
-            idPasien: id
+            operator_id: id
           }
         });
       }

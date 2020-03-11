@@ -345,16 +345,8 @@
             data
           } = res.data;
           this.beingSubmit = true;
-          this.$swal({
-            title: "Tambah Data Berhasil",
-            text: "Data berhasil tersimpan",
-            icon: "success",
-            confirmButtonText: startCase("ya")
-          });
-          this.setInitPage(false);
-          this.setUserFirstLogin(0);
           this.$router.push({
-            path: "/"
+            path: "pilih-paket"
           });
         } catch (errror) {
           const x = errror.response.data;
