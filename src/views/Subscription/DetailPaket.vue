@@ -47,6 +47,9 @@
                           </div>
                           <div class="col-md-4 mt-2">
                             <strong>Add-on WhatsApp</strong>
+                            <label class="ml-1">
+                              <font-awesome-icon v-tooltip.bottom-start="'Adds-on Whatsapp dapat digunakan untuk mengirimkan reminder konsultasi selanjutnya pada pasien'" class="mx-auto"  icon="info-circle"/>
+                            </label>
                           </div>
                           <div class="col-md-8 mt-2">
                             <b-form-radio-group class="float-right" :options="[
@@ -65,7 +68,7 @@
                     { text: '200 kuota', value: 200 }
                   ]">
                             </b-form-radio-group>
-                            <small class="float-right" style="font-size:8px;">
+                            <small class="float-right mr-3" style="font-size:8px;">
                               Kuota Whatsapp tidak memiliki masa berlaku, dapat digunakan selama <br> paket berlangganan
                               aktif
                             </small>
@@ -131,6 +134,12 @@
 </template>
 
 <script>
+  import {
+    library
+  } from "@fortawesome/fontawesome-svg-core";
+  import {faCalendar, faInfoCircle
+  } from "@fortawesome/free-solid-svg-icons";
+  library.add(faCalendar,faInfoCircle);
   export default {
     components: {
       "vue-select": () => import("@/components/VueSelect.vue")
