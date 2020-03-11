@@ -216,6 +216,11 @@ const routes = [
         path: "/tambah",
         name: "operator-tambah",
         component: () => import("../views/Operator/Tambah.vue")
+      },
+      {
+        path: "/asisten-dokter/edit/:operator_id?",
+        name: "operator-edit",
+        component: () => import("../views/Operator/Edit.vue"),
       }
     ]
   },

@@ -933,7 +933,6 @@
         const {
           formBasicData
         } = this;
-
         formBasicData.map(item => {
           this.triggerValidation({
             label: item.label,
@@ -947,8 +946,6 @@
             this.formData.provinsi = this.tempat.provinsi.id;
             this.formData.kota = this.tempat.kota.id;
           }
-          console.log('prov', this.formData.provinsi)
-          console.log('kota', this.formData.kota)
           this.$emit("submitForm", this.formData);
         }
       }
