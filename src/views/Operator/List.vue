@@ -33,12 +33,12 @@
               <tbody>
                 <tr v-for="(item) in dataOperator" :key="item.id">
                   <td>{{item.nama}}</td>
-                  <td>{{item.user.email}}</td>
-                  <td>{{item.user.nomor_telp}}</td>
-                  <td>2</td>
+                  <td>{{item.email}}</td>
+                  <td>{{item.nomor_telp}}</td>
+                  <td>{{item.last_active}}</td>
 
                   <td class="text-center">
-                    <b-link class="btn text-light font-size-md pl-2 pr-2 btn-sm ml-1 mr-1" @click="editOperator({id : item.user.id})"
+                    <b-link class="btn text-light font-size-md pl-2 pr-2 btn-sm ml-1 mr-1" @click="editOperator({id : item.id})"
                       style="background-color:yellow;">
                       <font-awesome-icon icon="pencil-alt" style="color:black;" />
                     </b-link>

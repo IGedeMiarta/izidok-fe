@@ -230,6 +230,11 @@ const routes = [
     component: () => import("../views/Profile/Profile.vue")
   },
   {
+    path: "/subscription/detail",
+    name: "subscription-detail",
+    component: () => import("../views/Subscription/DetailPaket.vue")
+  },
+  {
     path: "/tarif",
     name: "tarif",
     component: () => import("../views/Tarif.vue"),
