@@ -250,7 +250,13 @@ const routes = [
         component: () => import("../views/Tarif/Tambah.vue")
       }
     ]
-  }
+  },
+  {
+    path: "/pilih-paket",
+    name: "pilih-paket",
+    component: () => import("../views/PilihPaket.vue"),
+
+  },
 ];
 
 const router = new VueRouter({

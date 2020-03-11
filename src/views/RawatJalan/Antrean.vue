@@ -99,7 +99,7 @@
            <b-button :to="{ name: 'registrasi-rawat-jalan' }" variant="primary" class="text-capitalize ml-2">Tambah Antrean</b-button>
             </template>
             <b-table :items="pasiens" :fields="fieldList" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc"
-              thead-tr-class="kntl" :no-local-sorting="true">
+              thead-tr-class="izd-datatable" :no-local-sorting="true">
               <template v-slot:head()="data">
                 {{ data.label }}
                 <b-input size="sm" class="mt-2 w-82" v-if="data.field.searchable"
