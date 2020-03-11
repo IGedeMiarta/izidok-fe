@@ -78,6 +78,11 @@ const routes = [
     component: () => import("../views/InputDataOperator.vue")
   },
   {
+    path: "/pilih-paket",
+    name: "pilih-paket",
+    component: () => import("../views/PilihPaket.vue"),
+  },
+  {
     path: "/init",
     name: 'initialization',
     component: () => import("../views/Initialization.vue"),
@@ -94,7 +99,7 @@ const routes = [
         component: () =>
           import("../views/Initialization/InputDataAsistenDokter.vue"),
         props: true
-      }
+      },
     ]
   },
   {
@@ -245,12 +250,6 @@ const routes = [
         component: () => import("../views/Tarif/Tambah.vue")
       }
     ]
-  },
-  {
-    path: "/pilih-paket",
-    name: "pilih-paket",
-    component: () => import("../views/PilihPaket.vue"),
-
   },
 ];
 
