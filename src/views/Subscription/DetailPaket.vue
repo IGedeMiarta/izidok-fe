@@ -2,7 +2,7 @@
   <div>
     <div class="app-content--inner p-0 d-flex flex-column">
       <div class="container">
-        <div class="row">
+        <div class="row justify-content-center">
           <div class="col-md-12">
             <div class="card card-box mb-5">
               <div class="card-body">
@@ -17,7 +17,7 @@
                           <div class="col-md-4">
                             <strong>Pilih Pembayaran</strong>
                           </div>
-                          <div class="col-md-8">
+                          <div class="col-md-8" style="font-size:11px;">
                             <vue-select class="col-md-8 float-right" :options="
                     ['BCA Virtual Account', 'Permata Virtual Account']
                   " v-model="selected" />
@@ -86,6 +86,35 @@
                           </div>
                           <div class="col-md-12 text-center mt-2" style="background-color : yellow">
                             <strong>Selamat, Anda mendapatkan potongan Rp. 50.000,-!</strong>
+                          </div>
+                          <div class="col-md-12 mt-2">
+                            <div class="card card-box">
+                              <div class="card-body">
+                                <div class="row">
+                                  <div class="col-md-4">
+                                    <strong>Biaya Admin</strong>
+                                  </div>
+                                  <div class="col-md-8 ">
+                                    <strong class="float-right">Rp. 3.000,-</strong>
+                                  </div>
+                                  <div class="col-md-4">
+                                    <strong>Potongan</strong>
+                                  </div>
+                                  <div class="col-md-8 float-right">
+                                    <strong class="float-right">Rp. 50.000,-</strong>
+                                  </div>
+                                  <div class="col-md-4">
+                                    <strong>Total Pembayaran</strong>
+                                  </div>
+                                  <div class="col-md-8 float-right">
+                                    <strong class="float-right">Rp. 1.0023.000,-</strong> 
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-12 mt-3">
+                            <b-button variant="success" class="float-right">Bayar Sekarang</b-button>
                           </div>
                         </div>
                       </div>
