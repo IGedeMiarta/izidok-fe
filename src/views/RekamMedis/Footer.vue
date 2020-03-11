@@ -6,39 +6,36 @@
           <div class="form-group col-md-12">
             <b-container class="bv-example-row">
               <b-form-group>
-              <b-row>
-                <b-col class="col-md-5">
-                  <strong>Konsultasi Selanjutnya</strong>
-                  <vue-select @click="triggerDob" class="text-capitalize bg-white"  :options="
+                <b-row>
+                  <b-col class="col-md-4">
+                    <strong>Konsultasi Selanjutnya</strong>
+                    <vue-select @click="triggerDob" class="text-capitalize bg-white"  :options="
                  waktuKonsul
                   " v-model="selectedRadio" @input="selectingWaktu($event)" />
-                </b-col>
-                <b-col class="col-md-4">
-                  <template  v-if="selectedRadio.label === 'Pilih Tanggal...' ">
-                    <strong>Tanggal Konsultasi</strong>
-                    <Datetime  type="date" required input-class="form-control" class="input-group" zone="Asia/Jakarta"
-                              value-zone="Asia/Jakarta" format="d LLL yyyy" @input="tanggalSelected($tgl = valuetglpilih)"
-                              :min-datetime="minimumDatetime"  :input-style="
+                  </b-col>
+                  <b-col class="col-md-3">
+                    <template  v-if="selectedRadio.label === 'Pilih Tanggal...' ">
+                      <strong>Tanggal Konsultasi</strong>
+                      <Datetime  type="date" required input-class="form-control" class="input-group" zone="Asia/Jakarta"
+                                 value-zone="Asia/Jakarta" format="d LLL yyyy" @input="tanggalSelected($tgl = valuetglpilih)"
+                                 :min-datetime="minimumDatetime"  :input-style="
                     getDataError({ rawLabel: 'valuetglpilih' }) === null
                       ? null
                       : getDataError({ rawLabel: 'valuetglpilih' })
                       ? null
                       : 'border-color: red'
                   " ref="dob" v-model="valuetglpilih">
-                      <template v-slot:after>
-                        <b-input-group-text @click="triggerDob" slot="append" style="
+                        <template v-slot:after>
+                          <b-input-group-text @click="triggerDob" slot="append" style="
                     border-top-left-radius:0; border-left-width: 0; border-bottom-left-radius: 0; cursor: pointer
                     ">
-                          <font-awesome-icon class="mx-auto" icon="calendar" />
-                        </b-input-group-text>
-                      </template>
-                    </Datetime>
-<!--                    <datepicker input-class="form-control" class="d-flex input-group" v-model="valuetglpilih" @input="onChange($tgl = valuetglpilih)"  :format="customFormatter" :inline="true"/>-->
-                  </template>
-                  <template v-if="selectedRadio.label === 'Tidak perlu konsul lanjutan'">
-
-                  </template>
-                  <template v-if="selectedRadio.label !== 'Tidak perlu konsul lanjutan'
+                            <font-awesome-icon class="mx-auto" icon="calendar" />
+                          </b-input-group-text>
+                        </template>
+                      </Datetime>
+                      <!--                    <datepicker input-class="form-control" class="d-flex input-group" v-model="valuetglpilih" @input="onChange($tgl = valuetglpilih)"  :format="customFormatter" :inline="true"/>-->
+                    </template>
+                    <template v-if="selectedRadio.label !== 'Tidak perlu konsul lanjutan'
                     && selectedRadio.label !== 'Pilih Tanggal...' && selectedRadio.label !==''  ">
                       <strong>Tanggal Konsultasi</strong>
                       <Datetime input-class="form-control" class="d-flex input-group" zone="Asia/Jakarta"
@@ -51,9 +48,34 @@
                           </b-input-group-text>
                         </template>
                       </Datetime>
+                    </template>
+                  </b-col>
+
+                  <template v-if="selectedRadio.label !== 'Tidak perlu konsul lanjutan'
+                   && selectedRadio.label !==''  ">
+                    <b-col class="col-md-4">
+                      <label class="text-primary ">
+                        <font-awesome-icon v-tooltip.bottom-start="'Pengingat akan dikirimkan kepada pasien 1 hari sebelum waktu kunjungan!'" class="mx-auto" icon="info-circle"/>
+                        Aktifkan pengingat melalui Email?
+                      </label>
+                      <vue-select @click="triggerDob" class="text-capitalize bg-white"  :options="pilihanPengingat"
+                                  v-model="selectedPengingat"  />
+                    </b-col>
+                    <b-col class="col-md-1">
+                      <toggle-button
+                        :labels="{ checked: 'Ya', unchecked: 'Tidak' }"
+                        :width="70"
+                        :height="25"
+                        :color="{
+                            checked: '#3c44b1',
+                            unchecked: '#f83245',
+                            disabled: '#CCCCCC'
+                          }"
+                      />
+                    </b-col>
                   </template>
-                </b-col>
-              </b-row>
+
+                </b-row>
               </b-form-group>
             </b-container>
 
@@ -87,183 +109,191 @@
 </template>
 
 <script>
-    import {
-        mapActions
-    } from "vuex";
-    import "vue-datetime/dist/vue-datetime.css";
-    import {
-        Datetime
-    } from "vue-datetime";
-    import moment from "moment";
-    import Datepicker from 'vuejs-datepicker';
-    import {
-      library
-    } from "@fortawesome/fontawesome-svg-core";
-    import {faCalendar
-    } from "@fortawesome/free-solid-svg-icons";
-    library.add(faCalendar);
-    export default {
-        components: {
-
-            Datetime,
-            "vue-select": () => import("@/components/VueSelect.vue")
-        },
-        data() {
-            return {
-                selectedRadio: {},
-                waktuKonsul: [
-                    {
-                        label: 'Tidak perlu konsul lanjutan',
-                        value: 99
-                     },
-                    {
-                        label: '1 minggu',
-                        value: 7
-                    },
-                    {
-                        label: '2 minggu',
-                        value: 14
-                    },
-                    {
-                        label: '1 bulan',
-                        value: 30
-                    },
-                    {
-                        label: 'Pilih Tanggal...',
-                        value: 1
-                    }
-                ],
-                hari: 0,
-                valuetglpilih : "",
-                tglpilih: "",
-                test : null,
-                checkbox: false,
-            };
-        },
-        computed: {
-          minimumDatetime() {
-            return moment().format("YYYY-MM-DD");
+  import {
+    mapActions
+  } from "vuex";
+  import "vue-datetime/dist/vue-datetime.css";
+  import {
+    Datetime
+  } from "vue-datetime";
+  import moment from "moment";
+  import Datepicker from 'vuejs-datepicker';
+  import {
+    library
+  } from "@fortawesome/fontawesome-svg-core";
+  import {faCalendar, faInfoCircle
+  } from "@fortawesome/free-solid-svg-icons";
+  import { ToggleButton } from 'vue-js-toggle-button'
+  library.add(faCalendar,faInfoCircle);
+  export default {
+    components: {
+      "toggle-button": ToggleButton,
+      Datetime,
+      "vue-select": () => import("@/components/VueSelect.vue")
+    },
+    data() {
+      return {
+        selectedRadio: {},
+        selectedPengingat: {},
+        PilihanPengingat: [
+          {
+            label: 'Email',
+            value: '1'
           },
-            hasil() {
-                return moment().add(this.hari, 'days').format("YYYY-MM-DD");
-
-                // var today = new Date();
-                // var tomorrow = new Date();
-                // hasil = tomorrow.setDate(today.getDate()+this.selectedRadio.value);
-                // return hari;
-            }
-        },
-        mounted() {
-          this.selectedRadio = {
+        ],
+        waktuKonsul: [
+          {
             label: 'Tidak perlu konsul lanjutan',
+            value: 99
+          },
+          {
+            label: '1 minggu',
+            value: 7
+          },
+          {
+            label: '2 minggu',
+            value: 14
+          },
+          {
+            label: '1 bulan',
+            value: 30
+          },
+          {
+            label: 'Pilih Tanggal...',
             value: 1
           }
-          this.updateSavingParams({
-            key: 'is_next_konsul',
-            value: true
-          });
-          this.updatePostData({
-            key: 'next_konsultasi',
-            value: 1
-          });
+        ],
+        hari: 0,
+        valuetglpilih : "",
+        tglpilih: "",
+        test : null,
+        checkbox: false,
+      };
+    },
+    computed: {
+      minimumDatetime() {
+        return moment().format("YYYY-MM-DD");
+      },
+      hasil() {
+        return moment().add(this.hari, 'days').format("YYYY-MM-DD");
+
+        // var today = new Date();
+        // var tomorrow = new Date();
+        // hasil = tomorrow.setDate(today.getDate()+this.selectedRadio.value);
+        // return hari;
+      }
+    },
+    mounted() {
+      this.selectedRadio = {
+        label: 'Tidak perlu konsul lanjutan',
+        value: 1
+      }
+      this.updateSavingParams({
+        key: 'is_next_konsul',
+        value: true
+      });
+      this.updatePostData({
+        key: 'next_konsultasi',
+        value: 1
+      });
+      this.updatePostData({
+        key: 'tgl_next_konsultasi',
+        value: null
+      });
+    },
+    methods: {
+      ...mapActions(["updatePostData", "updateSavingParams"]),
+      customFormatter(date) {
+        return moment(date).format('dd MMM yyyy');
+
+      },
+      tanggalSelected($tgl) {
+
+        if (this.hari == 1) {
+          this.tgl_next_konsultasi =  $tgl
           this.updatePostData({
             key: 'tgl_next_konsultasi',
-            value: null
-          });
-        },
-        methods: {
-            ...mapActions(["updatePostData", "updateSavingParams"]),
-          customFormatter(date) {
-            return moment(date).format('dd MMM yyyy');
-
-          },
-          tanggalSelected($tgl) {
-
-            if (this.hari == 1) {
-              this.tgl_next_konsultasi =  $tgl
-              this.updatePostData({
-                key: 'tgl_next_konsultasi',
-                value: this.tgl_next_konsultasi
-              },);
-            }
-
-
-          },
-          triggerDob() {
-            const x = this.$refs.dob
-            const {
-              $el: {
-                firstElementChild
-              }
-            } = x
-            firstElementChild && firstElementChild.click()
-          },
-            selectingWaktu($event) {
-                this.hari = $event.value
-
-                if (this.hari != 1) {
-                  this.tgl_next_konsultasi =  this.hasil
-                  this.updatePostData({
-                        key: 'tgl_next_konsultasi',
-                        value: this.hasil
-                    },);
-                }
-
-                // console.log(this.tgl_next_konsultasi)
-            }
-
-        },
-        watch: {
-            selectedRadio: function () {
-                // console.log('this', this)
-                if (this.selectedRadio.value != 99)
-                    this.selectingWaktu();
-                    this.tanggalSelected();
-                this.updatePostData({
-                    key: 'next_konsultasi',
-                    value: this.selectedRadio.value
-                },
-               );
-                this.updateSavingParams({
-                    key: 'is_next_konsul',
-                    value: true
-                });
-            },
-            hari: function () {
-                if (this.selectedRadio.value == 99)
-                    this.selectingWaktu(); this.tanggalSelected();
-                this.updatePostData({
-                    key: 'next_konsultasi',
-                    value: this.hari
-                },);
-                this.updateSavingParams({
-                    key: 'is_next_konsul',
-                    value: true
-                });
-                if (this.selectedRadio.value == 99)
-                    this.selectingWaktu();  this.tanggalSelected();
-
-                // console.log(this.hasil)
-                this.updateSavingParams({
-                    key: 'is_next_konsul',
-                    value: true
-                });
-            },
-
-
-            checkbox: function () {
-                // this.selectingWaktu();
-                this.updatePostData({
-                    key: 'agreement',
-                    value: this.checkbox
-                });
-                this.updateSavingParams({
-                    key: 'is_agree',
-                    value: true
-                });
-            }
+            value: this.tgl_next_konsultasi
+          },);
         }
-    };
+
+
+      },
+      triggerDob() {
+        const x = this.$refs.dob
+        const {
+          $el: {
+            firstElementChild
+          }
+        } = x
+        firstElementChild && firstElementChild.click()
+      },
+      selectingWaktu($event) {
+        this.hari = $event.value
+
+        if (this.hari != 1) {
+          this.tgl_next_konsultasi =  this.hasil
+          this.updatePostData({
+            key: 'tgl_next_konsultasi',
+            value: this.hasil
+          },);
+        }
+
+        // console.log(this.tgl_next_konsultasi)
+      }
+
+    },
+    watch: {
+      selectedRadio: function () {
+        // console.log('this', this)
+        if (this.selectedRadio.value != 99)
+          this.selectingWaktu();
+        this.tanggalSelected();
+        this.updatePostData({
+            key: 'next_konsultasi',
+            value: this.selectedRadio.value
+          },
+        );
+        this.updateSavingParams({
+          key: 'is_next_konsul',
+          value: true
+        });
+      },
+      hari: function () {
+        if (this.selectedRadio.value == 99)
+          this.selectingWaktu(); this.tanggalSelected();
+        this.updatePostData({
+          key: 'next_konsultasi',
+          value: this.hari
+        },);
+        this.updateSavingParams({
+          key: 'is_next_konsul',
+          value: true
+        });
+        if (this.selectedRadio.value == 99)
+          this.selectingWaktu();  this.tanggalSelected();
+
+        // console.log(this.hasil)
+        this.updateSavingParams({
+          key: 'is_next_konsul',
+          value: true
+        });
+      },
+
+
+      checkbox: function () {
+        // this.selectingWaktu();
+        this.updatePostData({
+          key: 'agreement',
+          value: this.checkbox
+        });
+        this.updateSavingParams({
+          key: 'is_agree',
+          value: true
+        });
+      }
+    }
+  };
 </script>
 
 <style scoped>

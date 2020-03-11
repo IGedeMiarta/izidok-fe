@@ -271,7 +271,10 @@
             required,
             maxLength: maxLength(15),
             minLength: minLength(10),
+
             verifyPhone(val) {
+              if(val.length<10)
+                return
               if(this.timeVerifyPhone) clearTimeout(this.timeVerifyPhone)
 
               return new Promise((resolve, reject) => {
@@ -308,11 +311,11 @@
                         label: x,
                         $v: this.$v,
                         $vm: this,
-                        rawLabel: x
+
                       });
                       resolve(true);
                     });
-                }, 450);
+                },450);
               });
             },
           },

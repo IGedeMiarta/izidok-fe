@@ -6,7 +6,7 @@
           <div class="flex-grow-1 w-100 d-flex align-items-center">
             <div class="container-fluid">
               <div class="row">
-                <div class="col-md-6 pl-0 d-none d-lg-flex align-items-center">
+                <div class="col-sm-6 pl-0 d-none d-sm-flex align-items-center ">
                   <template v-if="this.currentStep == 1">
                     <div class="wrap" :style="wrapStyle">
                       <img src="@/assets/img/forgot1.jpg" :style="wrapImgStyle" alt="lupa password izidok" />
@@ -18,18 +18,18 @@
                     </div>
                   </template>
                 </div>
-                <div class="col-md-6 pr-0 d-flex align-items-center">
+                <div class="col-sm-6 pr-0 d-flex align-items-center">
                   <div>
                     <img src="/img/izidok.baaa69b4.png" alt="izidok"
                       class="img-fluid w-100 d-block float-left logo-forgot" style="width: 39% !important;height:100%;">
-                    <div class="mt-3 col-md-10">
+                    <div class="mt-3 col-sm-10 form-forgot">
                       <template v-if="this.currentStep == 1">
-                        <label class="mb-3 mt-4" style="margin-top:35px; margin-left:20px ;color:gray">
+                        <label class="mb-3 mt-4 label-forgot">
                           Masukkan email yang terintegrasi dengan Akun : 
                         </label>
                       </template>
                       <template v-if="this.currentStep == 2">
-                        <label class="mb-3 mt-4" style="margin-top:35px; margin-left:20px ;color:gray">
+                        <label class="mb-3 mt-4 label-forgot">
                           Masukkan password baru Anda untuk dapat melanjutkan akses ke izidok
                         </label>
                       </template>
@@ -136,10 +136,13 @@
     margin-left: 20px;
   }
 
-  @media only screen and (max-width: 600px) {
-    .form-login {
-      margin-left: auto;
-      margin-right: 20px;
+  .label-forgot {
+    margin-top:35px; margin-left:20px ;color:gray
+  }
+    
+  @media only screen and (max-width: 980px) {
+    .logo-forgot {
+      margin-left: 20px;
     }
   }
 </style>

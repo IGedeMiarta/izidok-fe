@@ -14,6 +14,7 @@
             </b-card> -->
             <div class="card border">
               <div class="card-body">
+                <label for="">Cari Rekam Medis:</label>
                 <vue-select :options="selectDataRiwayat" :filterable="false" v-model="selected" @input="searchByDiagnosis"
                   style="font-size:13.4px;">
                   <template slot="no-options">

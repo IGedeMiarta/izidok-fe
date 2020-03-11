@@ -42,14 +42,14 @@
           v-if="pembayaranList.status == 'BELUM LUNAS' || pembayaranList.status == 'Belum Lunas' || pembayaranList.status == 'belum lunas'">
           <h3 class="m-4" style="margin-bottom:0 !important;">Belum Lunas</h3>
           <div class="card-body">
-            <TablePembayaran @valueChanged="calc" :items="pembayaranDetails" />
+            <TablePembayaran @valueChanged="calc" @layananDuplicateErrorState="layananDuplicateError = $event" :items="pembayaranDetails" />
           </div>
         </template>
         <template
           v-if="pembayaranList.status == 'LUNAS' || pembayaranList.status == 'lunas' || pembayaranList.status == 'Lunas'">
           <h3 class="m-4" style="margin-bottom:0 !important;">Lunas</h3>
           <div class="card-body">
-            <TablePembayaran @valueChanged="calc" />
+            <TablePembayaran @valueChanged="calc" @layananDuplicateErrorState="layananDuplicateError = $event" />
           </div>
         </template>
 
@@ -160,7 +160,8 @@
         total_nett: 0,
         detail_pembayaran: []
       },
-      metodePembayaran: 'Cash'
+      metodePembayaran: 'Cash',
+      layananDuplicateError: false
     }),
     computed: {
       ...mapGetters(["assistantRole"]),
@@ -238,6 +239,15 @@
             status.push(true);
           }
         });
+
+        if(this.layananDuplicateError) {
+          this.$swal({
+            type: "error",
+            title: startCase("gagal"),
+            text: startCase("Layanan Tidak Boleh Sama")
+          });
+          return;
+        }
         
         if (status.indexOf(false) < 0) {
           this.$swal({

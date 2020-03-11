@@ -181,7 +181,7 @@
             }
           },
           {
-            title: "Manajemen pengguna",
+            title: "Manajemen Pengguna",
             icon: {
               element: "font-awesome-icon",
               attributes: {

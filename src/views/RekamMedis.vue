@@ -172,7 +172,7 @@ export default {
     // import the action from VUEX
     ...mapActions(["fetchData", "saveRekamMedis"]),
     async saveButton() {
-      
+
       const swalWithBootstrapButtons = this.$swal.mixin({
         customClass: {
           confirmButton: "btn btn-success",

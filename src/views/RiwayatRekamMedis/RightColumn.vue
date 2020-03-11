@@ -22,52 +22,51 @@
           <h5 class="text-uppercase font-weight-bold"><u>anamnesa</u></h5>
           <b-row>
             <b-col cols="12">
-              <template v-if="this.datarekammedis.anamnesa.draw_path !== null">
-                <img :src="this.datarekammedis.anamnesa.draw_path" class="img-fluid" alt="img" />
-              </template>
               <template v-if="this.datarekammedis.anamnesa.notes !== null">
                 <p v-html="this.datarekammedis.anamnesa.notes"></p>
+              </template>
+              <template v-if="this.datarekammedis.anamnesa.draw_path !== null">
+                <img :src="this.datarekammedis.anamnesa.draw_path" class="img-fluid" alt="img" />
               </template>
             </b-col>
           </b-row>
         </b-col>
         <b-col cols="12" class="ml-2 mt-4">
           <h5 class="text-uppercase font-weight-bold"><u>pemeriksaan fisik</u></h5>
-          <template v-if="this.datarekammedis.pemeriksaan_fisik.draw_path !== null">
-            <img :src="this.datarekammedis.pemeriksaan_fisik.draw_path" class="img-fluid" alt="img" />
-          </template>
           <template v-if="this.datarekammedis.pemeriksaan_fisik.notes !== null">
             <p v-html="this.datarekammedis.pemeriksaan_fisik.notes"></p>
           </template>
-
+          <template v-if="this.datarekammedis.pemeriksaan_fisik.draw_path !== null">
+            <img :src="this.datarekammedis.pemeriksaan_fisik.draw_path" class="img-fluid" alt="img" />
+          </template>
         </b-col>
         <b-col cols="12" class="ml-2 mt-4">
           <h5 class="text-uppercase font-weight-bold"><u>diagnosa</u></h5>
-          <template v-if="this.datarekammedis.diagnosa.draw_path !== null">
-            <img :src="this.datarekammedis.diagnosa.draw_path" class="img-fluid" alt="img" />
-          </template>
           <template v-if="this.datarekammedis.diagnosa.notes !== null">
             <p v-html="this.datarekammedis.diagnosa.notes"></p>
+          </template>
+          <template v-if="this.datarekammedis.diagnosa.draw_path !== null">
+            <img :src="this.datarekammedis.diagnosa.draw_path" class="img-fluid" alt="img" />
           </template>
         </b-col>
         <b-col cols="12" class="ml-2 mt-4">
           <h5 class="text-uppercase font-weight-bold"><u>tata laksana</u></h5>
-          <template v-if="this.datarekammedis.tatalaksana.draw_path !== null">
-            <img :src="this.datarekammedis.tatalaksana.draw_path" class="img-fluid" alt="img" />
-          </template>
           <template v-if="this.datarekammedis.tatalaksana.notes !== null">
             <p v-html="this.datarekammedis.tatalaksana.notes"></p>
+          </template>
+          <template v-if="this.datarekammedis.tatalaksana.draw_path !== null">
+            <img :src="this.datarekammedis.tatalaksana.draw_path" class="img-fluid" alt="img" />
           </template>
         </b-col>
         <b-col cols="12" class="ml-2 mt-4">
           <h5 class="text-uppercase font-weight-bold">
             <u>pemeriksaan penunjang</u>
           </h5>
-          <template v-if="this.datarekammedis.pemeriksaan_penunjang.draw_path !== null">
-            <img :src="this.datarekammedis.pemeriksaan_penunjang.draw_path" class="img-fluid" alt="img" />
-          </template>
           <template v-if="this.datarekammedis.pemeriksaan_penunjang.notes !== null">
             <p v-html="this.datarekammedis.pemeriksaan_penunjang.notes"></p>
+          </template>
+          <template v-if="this.datarekammedis.pemeriksaan_penunjang.draw_path !== null">
+            <img :src="this.datarekammedis.pemeriksaan_penunjang.draw_path" class="img-fluid" alt="img" />
           </template>
         </b-col>
         <b-col cols="12" class="ml-2 mt-4">
@@ -76,7 +75,7 @@
               <p>Uploaded File : </p>
               <template v-if="this.datarekammedis.pemeriksaan_penunjang.files !== 'null'">
                 <div v-for="items in datafile" :key="items.id">
-                  <a :href="items.url+'/'+items.uploaded_name" target="_blank">{{items.name}}</a>
+                  <a :href="items.url" target="_blank">{{items.name}}</a>
                 </div>
               </template>
               <template v-else>

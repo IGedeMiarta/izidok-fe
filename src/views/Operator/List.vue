@@ -14,9 +14,9 @@
       <div class="card card-box mb-3 ninja-shadow">
         <div class="card-body">
           <div class="row no-padding">
-              <div class="form-group col-md-12" style="padding-top: 30px; padding-left: 0px;">
-                <b-button variant="primary" class="float-right" @click="createOperator">TAMBAH ASISTEN DOKTER</b-button>
-              </div>
+            <div class="form-group col-md-12" style="padding-top: 30px; padding-left: 0px;">
+              <b-button variant="primary" class="float-right" @click="showcreateOperator">TAMBAH ASISTEN</b-button>
+            </div>
           </div>
           <div class="col-md-12 no-padding">
             <table class="table table-hover table-hover mb-5">
@@ -36,10 +36,10 @@
                   <td>{{item.user.email}}</td>
                   <td>{{item.user.nomor_telp}}</td>
                   <td>2</td>
-                  
+
                   <td class="text-center">
-                    <b-link class="btn text-light font-size-md pl-2 pr-2 btn-sm ml-1 mr-1"
-                      @click="showModal(item)" style="background-color:yellow;">
+                    <b-link class="btn text-light font-size-md pl-2 pr-2 btn-sm ml-1 mr-1" @click="editOperator(item)"
+                      style="background-color:yellow;">
                       <font-awesome-icon icon="pencil-alt" style="color:black;" />
                     </b-link>
                     <b-link class="btn bg-danger text-light font-size-md pl-2 pr-2 btn-sm ml-1 mr-1" @click="removeOperator({
@@ -50,17 +50,12 @@
                     </b-link>
                   </td>
                   <td class="text-center">Aktif
-                     <toggle-button
-                          style="margin-top:8px;margin-left:5px;"
-                          v-model="status"
-                          :labels="{ checked: 'Ya', unchecked: 'Tidak' }"
-                          :width="60"
-                          :color="{
+                    <toggle-button style="margin-top:8px;margin-left:5px;" v-model="status"
+                      :labels="{ checked: 'On', unchecked: 'OFF' }" :width="60" :color="{
                             checked: '#3c44b1',
                             unchecked: '#f83245',
                             disabled: '#CCCCCC'
-                          }"
-                        />
+                          }" />
                   </td>
                 </tr>
               </tbody>
@@ -68,14 +63,8 @@
           </div>
         </div>
       </div>
-      <div class="col-md-12" style="border-radius:10px;">
-        <div class="p-3">
-          <b-pagination class="d-flex justify-content-center mt-4" v-model="currentPage" :total-rows="rows"
-            :per-page="perPage"></b-pagination>
-        </div>
-      </div>
-      <b-modal ref="modal-operator" hide-footer title="Edit Asisten Dokter">
-        <b-form @submit.prevent="submitForm">
+      <b-modal ref="modal-operator" hide-footer title="Tambah Asisten">
+        <b-form @submit.prevent="submitInputDataOperator">
           <div class="col-sm-12">
             <b-form-group v-for="form in formBasicData" :key="form.tmpId" class="text-capitalize" :invalid-feedback="
                       renderInvalidFeedback({
@@ -84,19 +73,51 @@
                     " :state="renderError({ error: form.error })" style="margin-top:-7px;">
               <label for="" class="text-capitalize">{{form.rawLabel}}</label>
               <label for="" style="color:red"> *</label>
-              <b-form-input @input="
+
+              <template v-if="form.isType === 'password'">
+                <b-input-group>
+                  <b-input-group-text slot="append" class="border-left-0" v-if="form.name == 'password' "
+                    @click="switchVisibilityPassword">
+                    <font-awesome-icon v-if="passwordVisible == false" icon="eye" />
+                    <font-awesome-icon v-else icon="eye-slash" />
+                  </b-input-group-text>
+                  <b-input-group-text slot="append" class="border-left-0" v-if="form.name == 'password_confirmation' "
+                    @click="switchVisibilityPasswordConfirmation">
+                    <font-awesome-icon v-if="passwordVisible1 == false" icon="eye" />
+                    <font-awesome-icon v-else icon="eye-slash" />
+                  </b-input-group-text>
+
+                  <b-form-input :type="form.type || 'text'" class="border-right-0" @input="
+                                      setValue({
+                                        rawLabel: form.rawLabel,
+                                        label: form.label,
+                                        $event,
+                                        tmpId: form.tmpId
+                                      })
+                                    " :state="renderError({ error: form.error })" :maxlength='form.maxlength'
+                    :placeholder="form.placeholder" />
+                </b-input-group>
+              </template>
+              <template v-else>
+                <b-form-input @input="
                         setValue({
                           rawLabel: form.rawLabel,
                           label : form.label,
                           $event,
                           tmpId: form.tmpId
                         })
-                      "  :state="renderError({ error: form.error })"  :value="getValue(form.label)"  />
+                      " :state="renderError({ error: form.error })" :maxlength="form.maxlength" />
+              </template>
             </b-form-group>
-             <b-button class="ml-3 text-uppercase" variant="primary" style="font-size:17.5px;float:right "
-                type="submit">simpan
-                <!-- <font-awesome-icon class="mx-auto" icon="caret-down" /> -->
-              </b-button>
+            <b-button class="ml-3 text-uppercase" variant="primary" style="font-size:17.5px;float:right " type="submit">
+              simpan
+              <!-- <font-awesome-icon class="mx-auto" icon="caret-down" /> -->
+            </b-button>
+            <b-button class="ml-3 text-uppercase" variant="danger" @click="hideModal"
+              style="font-size:17.5px;float:right ">
+              batal
+              <!-- <font-awesome-icon class="mx-auto" icon="caret-down" /> -->
+            </b-button>
           </div>
         </b-form>
       </b-modal>
@@ -130,7 +151,9 @@
   import {
     FontAwesomeIcon
   } from "@fortawesome/vue-fontawesome";
-  import { ToggleButton } from "vue-js-toggle-button";
+  import {
+    ToggleButton
+  } from "vue-js-toggle-button";
   library.add(faArrowRight, faEye,
     faEyeSlash, faArrowUp, faTrashAlt, faSearch, faPencilAlt);
 
@@ -144,18 +167,17 @@
         currentPage: 1,
         rows: 100,
         dataOperator: [],
-        dataEdit : [],
         perPage: 10,
         formBasicData: null,
         formData: null,
-        status : null,
+        status: null,
         passwordVisible: false,
         passwordVisible1: false,
       };
     },
     validations: {
       formData: {
-        nama: {
+        nama_operator: {
           required,
           maxLength: maxLength(50)
         },
@@ -277,48 +299,34 @@
       this.getOperator();
     },
     methods: {
-      submitForm(item){
-        this.updateProses(item);
-      },
-      showModal(item) {
-        this.$refs['modal-operator'].show()
-        this.dataEdit = {
-          id : item.id,
-          nama: item.user.nama,
-          email : item.user.email,
-          password: null,
-          konfirmasi_password: null,
-          'no._handphone' :item.user.nomor_telp,
-        }
-        this.formData = this.dataEdit;
-      },
-      async updateProses(item) {
+      async getOperator() {
         try {
-          console.log(this.formData);
-         
-          const res = await axios.put(
-            `${this.url_api}/operator/${item.user_id}`,
-            {
-                id : item.id,
-                nama: item.user.nama,
-                email : item.user.email,
-                nomor_telp :item.user.nomor_telp,
-            }
-          );
-          const {
-            status,
-            data
-          } = res.data;
-          if (status) {
-            
-          }
-        } catch (err) {
-          alert(err);
-        } finally {
+          const res = await axios.get(
+            `${this.url_api}/operator`);
+          this.dataOperator = res.data.data.operator.data
+          console.log(this.dataOperator)
+        } catch {
+
         }
       },
-      hideModal() {
-        this.$refs['modal-operator'].hide()
+      submitInputDataOperator() {
+        const {
+          formBasicData
+        } = this;
+        if (formBasicData.every(item => item.error !== null && !item.error)) {
+          this.addOperator();
+        } else {
+          formBasicData.map(item => {
+            this.triggerValidation({
+              label: item.label,
+              $v: this.$v,
+              $vm: this
+            });
+          });
+        }
+      },
+      showcreateOperator() {
+        this.$refs['modal-operator'].show()
       },
       setFormData() {
         return this.setFormBasicData().reduce((arr, val) => {
@@ -328,16 +336,18 @@
       },
       setFormBasicData() {
         const tmp = [{
-            label: "nama",
+            label: "nama operator",
             placeholder: "Masukkan nama operator",
             type: "text",
             name: "nama",
+            maxlength: 50
           },
           {
             label: "email",
             placeholder: "Masukkan email operator",
             type: "email",
             name: "email",
+            maxlength: 50,
           },
           {
             label: "no. handphone",
@@ -396,18 +406,97 @@
           });
         }
       },
-      createOperator() {
-        this.$router.push({ name : 'operator-tambah'});
-      },
-      async getOperator() {
-        try {
-          const res = await axios.get(
-            `${this.url_api}/operator`);
-          this.dataOperator = res.data.data.operator.data
-          console.log(this.dataOperator)
-        } catch {
+      emailValidation() {
+        const x = {
+          email,
+          required,
+          maxLength: maxLength(50)
+        };
 
+        const {
+          required: re,
+          email: em,
+          maxLength: ml
+        } = this.$v.formData.email;
+
+        return re && em && ml ? {
+            ...x,
+            verifyEmail
+          } :
+          x;
+      },
+      noTelpValidation() {
+        const x = {
+          email,
+          required,
+          maxLength: maxLength(15)
+        };
+
+        const {
+          required: re,
+          maxLength: ml
+        } = this.$v.formData['no._handphone'];
+
+        return re && ml ? {
+            ...x,
+            verifyPhone
+          } :
+          x;
+      },
+      switchVisibilityPassword() {
+        this.formBasicData[3].type == 'password' ? this.formBasicData[3].type = 'text' : this.formBasicData[3].type =
+          'password';
+        if (this.formBasicData[3].type == 'text') {
+          this.passwordVisible = true;
+        } else if (this.formBasicData[3].type == 'password') {
+          this.passwordVisible = false;
         }
+      },
+      switchVisibilityPasswordConfirmation() {
+        this.formBasicData[4].type == 'password' ? this.formBasicData[4].type = 'text' : this.formBasicData[4].type =
+          'password';
+        if (this.formBasicData[4].type == 'text') {
+          this.passwordVisible1 = true;
+        } else if (this.formBasicData[4].type == 'password') {
+          this.passwordVisible1 = false;
+        }
+      },
+      async addOperator() {
+        const {
+          formData,
+          formBasicData
+        } = this;
+        const tmpPostData = this.formBasicData.reduce((obj, item) => {
+          const {
+            label,
+            name
+          } = item;
+          obj[name] = formData[label];
+          return obj;
+        }, {});
+        const postData = {
+          ...tmpPostData
+        };
+        try {
+          const res = await axios.post(
+            `${this.url_api}/operator`,
+            postData
+          );
+          const {
+            status,
+            data
+          } = res.data;
+          if (status) {
+            this.$router.push({
+              name: "operator-list"
+            });
+          }
+        } catch (err) {
+          // console.log(err);
+        }
+      },
+      hideModal() {
+        this.$refs['modal-operator'].hide()
       },
       removeOperator({
         id,
@@ -423,6 +512,11 @@
           if (res.value) {
             // console.log(res);
             await this.deleteOperator(id);
+            this.$swal({
+              text: `Asisten ${nama} berhasil dihapus`,
+              type: "success",
+              confirmButtonText: startCase("ya")
+            })
           }
         });
       },
