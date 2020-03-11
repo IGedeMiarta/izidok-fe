@@ -764,7 +764,7 @@
               })
               this.formData['nama_pasien'] = eventVal
             }, 200)
-            // this.$router.push("/rawat-jalan/registrasi");
+            this.$refs['modal-pasien'].hide()
           }
         } catch (err) {
           if (err.response) {
