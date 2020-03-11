@@ -7,9 +7,7 @@
             Laporan Pendapatan
           </p>
           <b-row class="align-items-center mb-2">
-            <b-col cols="2"
-              ><p class="text-capitalize m-0">periode</p></b-col
-            >
+            <b-col cols="2"><p class="text-capitalize m-0">periode</p></b-col>
             <b-col cols="4"
               ><b-form-select
                 size="sm"
@@ -39,19 +37,34 @@
             class="d-flex flex-row justify-content-end align-items-center mb-2"
           >
             <span class="text-uppercase mr-3">periode :</span>
-            <b-form-input class="w-auto" size="sm" disabled />
+            <b-form-input
+              class="w-auto text-right"
+              size="sm"
+              disabled
+              :value="periodeValue"
+            />
           </div>
           <div
             class="d-flex flex-row justify-content-end align-items-center mb-2"
           >
             <span class="text-uppercase mr-3">total pasien :</span>
-            <b-form-input class="w-auto" size="sm" disabled />
+            <b-form-input
+              class="w-auto text-right"
+              size="sm"
+              disabled
+              :value="totalPasienValue"
+            />
           </div>
           <div
             class="d-flex flex-row justify-content-end align-items-center mb-2"
           >
             <span class="text-uppercase mr-3">total pendapatan :</span>
-            <b-form-input class="w-auto" size="sm" disabled />
+            <b-form-input
+              class="w-auto text-right"
+              size="sm"
+              disabled
+              :value="totalPendapatanValue"
+            />
           </div>
         </b-col>
       </b-row>
@@ -63,8 +76,10 @@
         :customPagingClass="['custom-pagination']"
         :customEntryOptions="{ f: 100 }"
         dropdownSizeProps="sm"
+        :callbackFunc="fetchData"
+        @valueChanged="handleValueChanged"
       >
-        <b-table
+        <!-- <b-table
           :items="pasienList"
           :fields="fieldList"
           :sort-by.sync="sortBy"
@@ -138,13 +153,15 @@
               </b-dropdown>
             </span>
           </template>
-        </b-table></DataTableWrapper
-      >
+        </b-table> -->
+      </DataTableWrapper>
     </section>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+import moment from "moment";
 import startCase from "lodash/startCase";
 import { DatePicker } from "element-ui";
 import lang from "element-ui/lib/locale/lang/en";
@@ -164,7 +181,10 @@ export default {
       currentPage: 1,
       perPage: 10,
       periodeSelected: "hari ini",
-      dateRange: null
+      dateRange: null,
+      periodeValue: null,
+      totalPasienValue: null,
+      totalPendapatanValue: null
     };
   },
   computed: {
@@ -217,9 +237,91 @@ export default {
     }
   },
   mounted() {
-    console.log(this);
+    // console.log(this);
+    // this.fetchData();
+    this.periodeX()
   },
-  methods: {}
+  watch: {
+    currentPage() {
+      this.fetchData();
+    },
+    perPage() {
+      this.fetchData();
+    },
+    sortBy() {
+      this.fetchData();
+    },
+    sortDesc() {
+      this.fetchData();
+    },
+    searchValue: {
+      handler: "fetchData",
+      deep: true
+    }
+  },
+  methods: {
+    periodeX() {
+      const formatBackendDate = 'YYYY-MM-DD'
+      const now = moment()
+      const today = now.format(formatBackendDate);
+      const startWeek = now.clone().weekday(0).format(formatBackendDate);
+      const endWeek = now.clone().weekday(6).format(formatBackendDate);
+      const startMonth = now.clone().date(1).format(formatBackendDate)
+      const endMonth = now.clone().date(31).format(formatBackendDate)
+      const res = `${startWeek} ${endWeek}`;
+      console.log(res, startMonth)
+    },
+    handleValueChanged({ perPage, currentPage }) {
+      perPage && (perPage |> (_ => (this.perPage = _)));
+      currentPage && (currentPage |> (_ => (this.currentPage = _)));
+    },
+    async fetchData() {
+      try {
+        const { searchValue } = this;
+        const res = await axios.get(
+          `${this.url_api}/pembayaran/pendapatan?limit=${this.perPage}&page=${this.currentPage}`,
+          {
+            from: "2020-12-12",
+            to: "2020-12-15"
+          }
+        );
+        const {
+          success,
+          data: { pendapatan, periode, total_pasien, total_pendapatan }
+        } = res.data;
+        if (success) {
+          const {
+            data: listLaporanPendapatan,
+            total: totalEntries,
+            to: toPage,
+            from: fromPage
+          } = pendapatan;
+          this.totalPasienValue = total_pasien;
+          this.totalPendapatanValue = total_pendapatan;
+          this.periodeValue = periode;
+          // this.data = [
+          //   ...listAntrean.map((item, index) => {
+          //     return {
+          //       id: item.id,
+          //       waktu_konsultasi: item.waktu_konsultasi,
+          //       nomor_antrian: item.nomor_antrian,
+          //       status: item.status,
+          //       jenis_kelamin: item.jenis_kelamin,
+          //       nama: item.nama,
+          //       nomor_hp: item.nomor_hp,
+          //       pasien_id: item.pasien_id,
+          //       no: (this.currentPage - 1) * this.perPage + index + 1
+          //     };
+          //   })
+          // ];
+          this.rows = totalEntries;
+          return this;
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }
 };
 </script>
 
