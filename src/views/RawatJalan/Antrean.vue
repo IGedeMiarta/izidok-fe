@@ -311,7 +311,7 @@ import {
           generateFieldList: g,
           setSearchableAndSortableFieldList: s
         } = this;
-        const r = val => Boolean(/(waktu_konsultasi|status|actions)\b/gi.test(val) ? !1 : 1);
+        const r = val => Boolean(/(waktu_konsultasi|status|actions|jenis_kelamin)\b/gi.test(val) ? !1 : 1);
         return (
           [{
               key: "waktu_konsultasi",
@@ -328,12 +328,12 @@ import {
               label: "nama pasien"
             },
             {
-              key: "jenis_kelamin",
-              thStyle: "width: 14%"
-            },
-            {
               key: "nomor_hp",
               thStyle: "width: 16%"
+            },
+            {
+              key: "jenis_kelamin",
+              thStyle: "width: 14%"
             },
             {
               key: "actions"
