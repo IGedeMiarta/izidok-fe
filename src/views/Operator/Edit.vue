@@ -37,7 +37,7 @@
                                         $event,
                                         tmpId: form.tmpId
                                       })
-                                    " :state="renderError({ error: form.error })" :maxlength='form.maxlength'
+                                    " :state="renderError({ error: form.error })" :value="getValue(form.label)" :maxlength='form.maxlength'
                           :placeholder="form.placeholder" />
                       </b-form-group>
                       <b-button class="ml-3 text-uppercase" variant="primary" style="font-size:17.5px;float:right"
@@ -63,6 +63,7 @@
 </template>
 
 <script>
+  import startCase from "lodash/startCase";
   import axios from "axios";
   export default {
     data: () => {
@@ -70,7 +71,7 @@
         formBasicData: null,
         formData: null,
         operator_id: null,
-        dataa: null
+        data_operator: null
       }
     },
     mounted() {
@@ -86,9 +87,22 @@
         })
       },
       getOperator(id) {
-        let res = axios.get(`${this.url_api}/operator/${id}`);
-        this.dataa = res.data;
-        console.log(this.dataa)
+        return axios.get(`${this.url_api}/operator/${id}`)
+          .then((response) => {
+            // handle success
+             this.data_operator = response.data.data.user;
+             this.formData = {
+               email : this.data_operator.email,
+               nama_operator : this.data_operator.nama,
+               'no._handphone' : this.data_operator.nomor_telp
+             }
+             console.log(this.formData,'dat')
+          })
+          .catch(function (error) {
+            // handle error
+            console.log(error);
+          });
+        // this.data_operator = res.data.user;
       },
       emailValidation() {
         const x = {
@@ -162,7 +176,7 @@
       },
       async updateProses() {
         try {
-          console.log('dat',this.formData);
+          console.log('dat', this.formData);
           const res = await axios.put(
             `${this.url_api}/operator/${this.operator_id}`, {
               nama: this.formData.nama_operator,
@@ -174,8 +188,14 @@
             status,
             data
           } = res.data;
-          if (status) {
-
+          if (res.data.status == true) {
+             this.$swal({
+              text: `Berhasil di rubah`,
+              type: "warning",
+              confirmButtonText: startCase("ya")
+            })
+            console.log('tes')
+            this.$router.push({name : 'operator-list'})
           }
         } catch (err) {
           alert(err);

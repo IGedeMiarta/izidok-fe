@@ -87,6 +87,9 @@ import { mapMutations, mapState, mapGetters } from "vuex";
           case "tarif":
             routeName = "input-tarif";
             break;
+          case "subscribe":
+            routeName = "pilih-paket";
+            break;
           default:
             routeName = "home";
             break;

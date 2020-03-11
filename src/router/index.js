@@ -78,6 +78,11 @@ const routes = [
     component: () => import("../views/InputDataOperator.vue")
   },
   {
+    path: "/pilih-paket",
+    name: "pilih-paket",
+    component: () => import("../views/PilihPaket.vue"),
+  },
+  {
     path: "/init",
     name: 'initialization',
     component: () => import("../views/Initialization.vue"),
@@ -94,7 +99,7 @@ const routes = [
         component: () =>
           import("../views/Initialization/InputDataAsistenDokter.vue"),
         props: true
-      }
+      },
     ]
   },
   {
@@ -230,6 +235,16 @@ const routes = [
     component: () => import("../views/Profile/Profile.vue")
   },
   {
+    path: "/subscription/detail",
+    name: "subscription-detail",
+    component: () => import("../views/Subscription/DetailPaket.vue")
+  },
+  {
+    path: "/subscription/cara-bayar",
+    name: "subscription-cara-bayar",
+    component: () => import("../views/Subscription/CaraPembayaran.vue")
+  },
+  {
     path: "/tarif",
     name: "tarif",
     component: () => import("../views/Tarif.vue"),
@@ -245,12 +260,6 @@ const routes = [
         component: () => import("../views/Tarif/Tambah.vue")
       }
     ]
-  },
-  {
-    path: "/pilih-paket",
-    name: "pilih-paket",
-    component: () => import("../views/PilihPaket.vue"),
-
   },
 ];
 
