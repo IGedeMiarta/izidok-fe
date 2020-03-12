@@ -326,7 +326,7 @@
       detailPaket({ id } = {}) {
         if (id) {
           this.$router.push({
-            name: "subscription-detail",
+            name: "subskripsi-detail",
             params: {
               id: id
             }

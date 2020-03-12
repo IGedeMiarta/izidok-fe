@@ -158,7 +158,7 @@
                               </b-collapse>
                             </div>
                             
-                                <b-button @click="$router.push('/billing')" variant="success" style="width:100%; margin-top:15px;">Kembali ke halaman Billing</b-button>
+                                <b-button @click="$router.push('/subskripsi')" variant="success" style="width:100%; margin-top:15px;">Kembali ke halaman Billing</b-button>
                           </div>
                         </div>
                       </div>

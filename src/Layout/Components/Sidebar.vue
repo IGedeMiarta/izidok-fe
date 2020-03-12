@@ -203,8 +203,8 @@
             },
           },
           {
-            title: "Billing",
-            href: "/billing",
+            title: "Subskripsi",
+            href: "/Subskripsi",
             icon: {
               element: "font-awesome-icon",
               attributes: {

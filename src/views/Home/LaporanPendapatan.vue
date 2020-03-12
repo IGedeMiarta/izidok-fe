@@ -23,6 +23,9 @@
                 start-placeholder="Start date"
                 end-placeholder="End date"
                 size="small"
+                format="dd-MM-yyyy"
+                value-format="dd-MM-yyyy"
+                :disabledDate="disabledDate"
               />
             </b-col>
           </b-row>
@@ -104,8 +107,11 @@
               v-model="selectedDiagnosis"
               label="title"
               class="custom-v-select w-95 mt-2"
-              @input="dropdownValueChanged"
-            />
+            >
+              <template slot="no-options">
+                type to search GitHub repositories..
+              </template>
+            </vue-select>
           </template>
 
           <template v-slot:cell()="data">
@@ -269,7 +275,7 @@ export default {
     this.fetchDiagnosis();
   },
   methods: {
-    dropdownValueChanged(val) {
+    disabledDate(val) {
       console.log(val);
     },
     detailDiagnosis({ pembayaran_id } = {}) {
