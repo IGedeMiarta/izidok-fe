@@ -41,7 +41,7 @@
               class="w-auto text-right"
               size="sm"
               disabled
-              :value="periodeValue"
+              :value="periodeX({ periode: periodeSelected, rawValue: true })"
             />
           </div>
           <div
@@ -79,8 +79,8 @@
         :callbackFunc="fetchData"
         @valueChanged="handleValueChanged"
       >
-        <!-- <b-table
-          :items="pasienList"
+        <b-table
+          :items="dataList"
           :fields="fieldList"
           :sort-by.sync="sortBy"
           :sort-desc.sync="sortDesc"
@@ -96,6 +96,8 @@
               @input="searchValueChanged($event, data.field.key)"
             />
           </template>
+
+          <!-- <template v-slot:head()="data"></template> -->
 
           <template v-slot:cell(jenis_kelamin)="data">
             {{ jenisKelamin(data.value) }}
@@ -153,7 +155,7 @@
               </b-dropdown>
             </span>
           </template>
-        </b-table> -->
+        </b-table>
       </DataTableWrapper>
     </section>
   </div>
@@ -162,6 +164,7 @@
 <script>
 import axios from "axios";
 import moment from "moment";
+import debounce from "lodash/debounce";
 import startCase from "lodash/startCase";
 import { DatePicker } from "element-ui";
 import lang from "element-ui/lib/locale/lang/en";
@@ -184,7 +187,9 @@ export default {
       dateRange: null,
       periodeValue: null,
       totalPasienValue: null,
-      totalPendapatanValue: null
+      totalPendapatanValue: null,
+      searchValue: [],
+      dataList: []
     };
   },
   computed: {
@@ -236,11 +241,6 @@ export default {
       );
     }
   },
-  mounted() {
-    // console.log(this);
-    // this.fetchData();
-    this.periodeX()
-  },
   watch: {
     currentPage() {
       this.fetchData();
@@ -260,35 +260,189 @@ export default {
     }
   },
   methods: {
-    periodeX() {
-      const formatBackendDate = 'YYYY-MM-DD'
-      const now = moment()
-      const today = now.format(formatBackendDate);
-      const startWeek = now.clone().weekday(0).format(formatBackendDate);
-      const endWeek = now.clone().weekday(6).format(formatBackendDate);
-      const startMonth = now.clone().date(1).format(formatBackendDate)
-      const endMonth = now.clone().date(31).format(formatBackendDate)
-      const res = `${startWeek} ${endWeek}`;
-      console.log(res, startMonth)
+    // searchValueChanged: debounce(function(val, key) {
+    //   const { searchValue } = this;
+    //   const z = searchValue.filter(item => item.key !== key);
+    //   this.searchValue = [
+    //     ...z,
+    //     {
+    //       key,
+    //       value: val
+    //     }
+    //   ];
+    // }, 500),
+    periodeX({ periode = null, rawValue = false } = {}) {
+      const formatBackendDate = "YYYY-MM-DD";
+      const rawValueFormat = "DD-MMM-YYYY";
+      const now = moment();
+      const symbol = "!";
+      switch (periode && periode.toLowerCase()) {
+        case "pilih tanggal":
+          break;
+
+        case "hari ini":
+          const today = now.format(formatBackendDate);
+          return rawValue
+            ? now.format(rawValueFormat)
+            : Array(2)
+                .fill(today)
+                .map(
+                  (val, index) =>
+                    `&${(item => (item ? "to" : "from"))(index)}=${val}`
+                )
+                .join("");
+
+        case "minggu ini":
+          const startWeek = now.clone().weekday(0);
+          const endWeek = now.clone().weekday(6);
+          return rawValue
+            ? `${startWeek.format(rawValueFormat)}-${endWeek.format(
+                rawValueFormat
+              )}`
+            : `&from=${startWeek.format(formatBackendDate)}&to=${endWeek.format(
+                formatBackendDate
+              )}`;
+
+        case "bulan ini":
+          const startMonth = now.clone().date(1);
+          const endMonth = now.clone().date(31);
+          return rawValue
+            ? `${startWeek.format(rawValueFormat)}-${endWeek.format(
+                rawValueFormat
+              )}`
+            : `&from${startMonth.format(
+                formatBackendDate
+              )}&to=${endMonth.format(formatBackendDate)}`;
+
+        default:
+          break;
+      }
     },
     handleValueChanged({ perPage, currentPage }) {
       perPage && (perPage |> (_ => (this.perPage = _)));
       currentPage && (currentPage |> (_ => (this.currentPage = _)));
     },
+    determineParameter() {
+      const {
+        periodeX,
+        periodeSelected: periode,
+        sortBy,
+        sortDesc,
+        searchValue
+      } = this;
+      let tmp = "";
+
+      tmp += `${periodeX({ periode })}`;
+
+      searchValue.map(item => {
+        const x = (item.key === "nama" && "nama_pasien") || item.key;
+        tmp += `&${x}=${item.value}`;
+      });
+
+      if (sortBy) {
+        tmp += `&column=${sortBy}&order=${sortDesc ? "desc" : "asc"}`;
+      }
+
+      return tmp;
+    },
     async fetchData() {
       try {
-        const { searchValue } = this;
+        const { searchValue, determineParameter } = this;
         const res = await axios.get(
-          `${this.url_api}/pembayaran/pendapatan?limit=${this.perPage}&page=${this.currentPage}`,
-          {
-            from: "2020-12-12",
-            to: "2020-12-15"
-          }
+          `${this.url_api}/pembayaran/pendapatan?limit=${this.perPage}&page=${
+            this.currentPage
+          }${determineParameter()}`
         );
         const {
           success,
           data: { pendapatan, periode, total_pasien, total_pendapatan }
-        } = res.data;
+        } = {
+          success: true,
+          message: "success",
+          data: {
+            periode: "06-Mar-2020 - 10-Mar-2020",
+            total_pasien: 4,
+            total_pendapatan: "Rp. 940.000,-",
+            pendapatan: {
+              current_page: 1,
+              data: [
+                {
+                  pembayaran_id: 44,
+                  waktu_konsultasi: "2020-03-06 00:00:00",
+                  nama: "Doe",
+                  tanggal_lahir: "05-May-1995",
+                  nomor_rekam_medis: "1020-0000-1140-0000-03",
+                  jumlah_transaksi: "Rp. 270.000,-",
+                  diagnosa_id: 41,
+                  kode_penyakit_id: "[1,4]",
+                  diagnosa: {
+                    id: 41,
+                    kode_penyakit_id: "[1,4]",
+                    deskripisi: "Acquired Deformities of Fingers and Toes"
+                  }
+                },
+                {
+                  pembayaran_id: 44,
+                  waktu_konsultasi: "2020-03-06 00:00:00",
+                  nama: "Doe",
+                  tanggal_lahir: "05-May-1995",
+                  nomor_rekam_medis: "1020-0000-1140-0000-03",
+                  jumlah_transaksi: "Rp. 270.000,-",
+                  diagnosa_id: 40,
+                  kode_penyakit_id: "[2,3]",
+                  diagnosa: {
+                    id: 40,
+                    kode_penyakit_id: "[2,3]",
+                    deskripisi: "Acquired Deformity of Nose"
+                  }
+                },
+                {
+                  pembayaran_id: 40,
+                  waktu_konsultasi: "2020-03-06 00:00:00",
+                  nama: "Ariana",
+                  tanggal_lahir: "01-Feb-1991",
+                  nomor_rekam_medis: "1010-0001-1400-0002",
+                  jumlah_transaksi: "Rp. 200.000,-",
+                  diagnosa_id: 36,
+                  kode_penyakit_id: "[2]",
+                  diagnosa: {
+                    id: 36,
+                    kode_penyakit_id: "[2]",
+                    deskripisi: "Acquired Deformity of Nose"
+                  }
+                },
+                {
+                  pembayaran_id: 40,
+                  waktu_konsultasi: "2020-03-06 00:00:00",
+                  nama: "Ariana",
+                  tanggal_lahir: "01-Feb-1991",
+                  nomor_rekam_medis: "1010-0001-1400-0002",
+                  jumlah_transaksi: "Rp. 200.000,-",
+                  diagnosa_id: 35,
+                  kode_penyakit_id: "[2]",
+                  diagnosa: {
+                    id: 35,
+                    kode_penyakit_id: "[2]",
+                    deskripisi: "Acquired Deformity of Nose"
+                  }
+                }
+              ],
+              first_page_url:
+                "http://localhost:9001/api/v1/pembayaran/pendapatan?page=1",
+              from: 1,
+              last_page: 1,
+              last_page_url:
+                "http://localhost:9001/api/v1/pembayaran/pendapatan?page=1",
+              next_page_url: null,
+              path: "http://localhost:9001/api/v1/pembayaran/pendapatan",
+              per_page: 15,
+              prev_page_url: null,
+              to: 4,
+              total: 4
+            }
+          }
+        };
+        // } = res.data;
         if (success) {
           const {
             data: listLaporanPendapatan,
@@ -314,6 +468,7 @@ export default {
           //     };
           //   })
           // ];
+          this.dataList = listLaporanPendapatan;
           this.rows = totalEntries;
           return this;
         }
