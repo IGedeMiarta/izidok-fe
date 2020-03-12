@@ -75,15 +75,15 @@
 <!--                          </div>-->
                           <div class="col-md-4 mt-2">
                             <strong>Kode Promo</strong>
-                            <medium class="ml-2">( jika ada )</medium>
+                            <small class="ml-2">( jika ada )</small>
                           </div>
                           <div class="col-md-8 mt-2">
-                            <b-button variant="primary" class="float-right" size="md">Gunakan</b-button>
+                            <b-button variant="primary" @click="checkKodePromo" class="float-right" size="md">Gunakan</b-button>
                             <b-form-input v-model="kode_promo" class="col-md-4 float-right mr-2"></b-form-input>
                           </div>
-<!--                          <div class="col-md-12 text-center mt-2" style="background-color : yellow">-->
-<!--                            <strong>Selamat, Anda mendapatkan potongan Rp. 50.000,-!</strong>-->
-<!--                          </div>-->
+                         <div class="col-md-12 text-center mt-2" style="background-color : yellow" v-if="this.statusPromo">
+                           <strong>{{this.statusPromo}}</strong>
+                         </div>
                           <div class="col-md-12 mt-2">
                             <div class="card card-box">
                               <div class="card-body">
@@ -104,14 +104,14 @@
                                       <strong class="float-right">Rp. {{potongan}}</strong>
                                     </div>
                                   </template>
-
-
                                   <template v-if="dataPaygetDetail.biaya_admin > 0">
                                     <div class="col-md-4">
                                       <strong>Total Pembayaran</strong>
                                     </div>
                                     <div class="col-md-8 float-right">
-                                      <strong class="float-right">Rp. {{( dataDetail.harga*lama_langganan)+dataPaygetDetail.biaya_admin-potongan}}</strong>
+                                      <strong class="float-right">Rp. 
+                                        {{( dataDetail.harga*lama_langganan)+dataPaygetDetail.biaya_admin-potongan}}
+                                      </strong>
                                     </div>
                                   </template>
                                  <template v-else>
@@ -119,7 +119,14 @@
                                      <strong>Total Pembayaran</strong>
                                    </div>
                                    <div class="col-md-8 float-right">
-                                     <strong class="float-right">Rp. {{( dataDetail.harga*lama_langganan)}}</strong>
+                                     <strong class="float-right">Rp. 
+                                        <template v-if="this.statusPotongan === 'rupiah'">
+                                        {{( dataDetail.harga * lama_langganan)+(dataPaygetDetail.biaya_admin-potongan)}}
+                                        </template>
+                                        <template v-else>
+                                          {{( dataDetail.harga * lama_langganan)+(dataPaygetDetail.biaya_admin/potongan)}}
+                                        </template>
+                                     </strong>
                                    </div>
                                  </template>
                                 </div>
@@ -183,6 +190,8 @@
         lama_langganan : 1,
         total_harga:0,
         kode_promo:null,
+        statusPromo :null,
+        statusPotongan : null,
         potongan:0,
         total_bayar:0,
         dataDetail: [],
@@ -221,6 +230,32 @@
     methods: {
       rerender(id) {
         this.$root.$emit("rerender",id);
+      },
+      async checkKodePromo(){
+        try {
+          const res = await axios.post(`${this.url_api}/promo?kode=${this.kode_promo}`
+          );
+          this.statusPromo = res.data.message;
+          this.potongan = res.data.data.value;
+          this.statusPotongan = res.data.data.satuan;
+        } catch {
+
+        }
+      },
+      async prosesBayar(){
+        try {
+          this.total_bayar = ( this.dataDetail.harga*lama_langganan)+this.dataPaygetDetail.biaya_admin-potongan
+          const res = await axios.post(`${this.url_api}/subscribe`,
+            {
+              pg_id : this.dataPaygetDetail.id,
+              promo_id : this.promo,
+              paket_id : this.dataDetail.id,
+              // amount_disc : ,
+            }
+          )
+        } catch {
+
+        }
       },
       getPaygetDetail($event) {
        var getdet = $event.value
