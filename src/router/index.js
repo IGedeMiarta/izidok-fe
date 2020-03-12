@@ -234,28 +234,28 @@ const routes = [
     component: () => import("../views/Profile/Profile.vue")
   },
   {
-    path: "/Billing/pilih-paket",
-    name: "billing-pilih-paket",
+    path: "/subskripsi/pilih-paket",
+    name: "subskripsi-pilih-paket",
     component: () => import("../views/Billing/BillingPilihPaket.vue")
   },
   {
-    path: "/Billing",
-    name: "billing",
+    path: "/subskripsi",
+    name: "subskripsi",
     component: () => import("../views/Billing/List.vue")
   },
   {
-    path: "/subscription/detail/:id",
-    name: "subscription-detail",
+    path: "/subskripsi/detail/:id",
+    name: "subskripsi-detail",
     component: () => import("../views/Subscription/DetailPaket.vue")
   },
   {
-    path: "/subscription/addons",
-    name: "subscription-addons",
+    path: "/subskripsi/addons",
+    name: "subskripsi-addons",
     component: () => import("../views/Subscription/DetailAddons.vue")
   },
   {
-    path: "/subscription/cara-bayar",
-    name: "subscription-cara-bayar",
+    path: "/subskripsi/cara-bayar",
+    name: "subskripsi-cara-bayar",
     component: () => import("../views/Subscription/CaraPembayaran.vue")
   },
   {

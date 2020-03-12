@@ -2,9 +2,13 @@
   <div>
     <page-title heading="Subskripsi" :breadcrumb="[
         {
-          label: 'Billing',
-          link: '/Billing',
+          label: 'Subskripsi',
+          link: '/subskripsi',
         },
+        {
+          label: 'List Subskripsi',
+          active: true
+        }
       ]" />
     <div class="app-content--inner p-0 d-flex flex-column">
       <div class="container">
@@ -89,10 +93,10 @@
                     </div>
                   </div>
                   <div class="col-md-12">
-                       <button @click="$router.push('/Billing/pilih-paket')" class="btn btn-primary float-right mt-3">Beli Paket Berlangganan</button>
+                       <button @click="$router.push('/subskripsi/pilih-paket')" class="btn btn-primary float-right mt-3">Beli Paket Berlangganan</button>
                   </div>
 <!--                    <div class="col-md-6">-->
-<!--                       <button @click="$router.push('/subscription/addons')" class="btn btn-danger float-left mt-3">Beli Kuota ADD-ON</button>-->
+<!--                       <button @click="$router.push('/subskripsi/addons')" class="btn btn-danger float-left mt-3">Beli Kuota ADD-ON</button>-->
 <!--                  </div>-->
                 </div>
               </div>

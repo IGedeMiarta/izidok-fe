@@ -79,7 +79,7 @@
                           </div>
                           <div class="col-md-8 mt-2">
                             <b-button variant="primary" class="float-right" size="md">Gunakan</b-button>
-                            <b-form-input class="col-md-4 float-right mr-2"></b-form-input>
+                            <b-form-input v-model="kode_promo" class="col-md-4 float-right mr-2"></b-form-input>
                           </div>
 <!--                          <div class="col-md-12 text-center mt-2" style="background-color : yellow">-->
 <!--                            <strong>Selamat, Anda mendapatkan potongan Rp. 50.000,-!</strong>-->
@@ -88,31 +88,46 @@
                             <div class="card card-box">
                               <div class="card-body">
                                 <div class="row">
+                                  <template v-if="dataPaygetDetail.biaya_admin > 0">
                                   <div class="col-md-4">
                                     <strong>Biaya Admin</strong>
                                   </div>
-                                  <div class="col-md-8 ">
-                                    <strong class="float-right">Rp. {{dataPaygetDetail.biaya_admin}}</strong>
-                                  </div>
-                                  <div class="col-md-4">
-                                    <strong>Potongan</strong>
-                                  </div>
-                                  <div class="col-md-8 float-right">
-                                    <strong class="float-right">Rp. {{potongan}}</strong>
-                                  </div>
-                                  <div class="col-md-4">
-                                    <strong>Total Pembayaran</strong>
-                                  </div>
+                                    <div class="col-md-8 ">
+                                      <strong class="float-right">Rp. {{dataPaygetDetail.biaya_admin}}</strong>
+                                    </div>
+                                  </template>
+                                  <template v-if="potongan > 0">
+                                    <div class="col-md-4">
+                                      <strong>Potongan</strong>
+                                    </div>
+                                    <div class="col-md-8 float-right">
+                                      <strong class="float-right">Rp. {{potongan}}</strong>
+                                    </div>
+                                  </template>
 
-                                  <div class="col-md-8 float-right">
-                                    <strong class="float-right">Rp. {{( dataDetail.harga*lama_langganan)+dataPaygetDetail.biaya_admin-potongan}}</strong>
-                                  </div>
+
+                                  <template v-if="dataPaygetDetail.biaya_admin > 0">
+                                    <div class="col-md-4">
+                                      <strong>Total Pembayaran</strong>
+                                    </div>
+                                    <div class="col-md-8 float-right">
+                                      <strong class="float-right">Rp. {{( dataDetail.harga*lama_langganan)+dataPaygetDetail.biaya_admin-potongan}}</strong>
+                                    </div>
+                                  </template>
+                                 <template v-else>
+                                   <div class="col-md-4">
+                                     <strong>Total Pembayaran</strong>
+                                   </div>
+                                   <div class="col-md-8 float-right">
+                                     <strong class="float-right">Rp. {{( dataDetail.harga*lama_langganan)}}</strong>
+                                   </div>
+                                 </template>
                                 </div>
                               </div>
                             </div>
                           </div>
                           <div class="col-md-12 mt-3">
-                            <b-button  @click="$router.push('/subscription/cara-bayar')" variant="success" class="float-right">Bayar Sekarang</b-button>
+                            <b-button  @click="$router.push('/subskripsi/cara-bayar')" variant="success" class="float-right">Bayar Sekarang</b-button>
                           </div>
                         </div>
                       </div>
@@ -136,6 +151,7 @@
   library.add(faCalendar,faInfoCircle);
   import moment from "moment";
   import axios from 'axios';
+  import { Money } from 'v-money';
   import {
     faHome,
     faUser,
@@ -156,9 +172,17 @@
     },
     data() {
       return {
+        money: {
+          decimal: "",
+          thousands: ",",
+          prefix: "Rp. ",
+          suffix: "",
+          precision: 0,
+          masked: false
+        },
         lama_langganan : 1,
         total_harga:0,
-        kode_promo:0,
+        kode_promo:null,
         potongan:0,
         total_bayar:0,
         dataDetail: [],
@@ -186,6 +210,13 @@
     },
     mounted() {
       this.fetchDetailPaket();
+
+      let ss = {
+        label: 'BCA Virtual Account',
+        value: 2
+      };
+      this.selectedPaygate = ss;
+      this.getPaygetDetail(ss);
     },
     methods: {
       rerender(id) {
