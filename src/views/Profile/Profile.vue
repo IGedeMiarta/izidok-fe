@@ -17,7 +17,8 @@
                 <picture-input ref="pictureInput" @change="onChangeImage" width="180" height="180"
                   accept="image/jpeg,image/png" size="10" buttonClass="btn btn-primary button primary"
                   removeButtonClass="btn btn-secondary button secondary" radius="50" z-index="0"
-                  :disabled="btnDisable == true" :removable="true">
+                  :disabled="btnDisable == true" :removable="true"
+                  :prefill="dataProfile.foto_profile">
                 </picture-input>
                 <label>Maks. 1 MB, File: jpeg, jpg, png</label>
               </template>
@@ -173,17 +174,14 @@
         }
       },
       onChangeImage(image) {
-        console.log('New picture selected!')
         if (image) {
-          console.log('Picture loaded.')
-          this.image = image;
-          var profile = this.$store.state.user.id;
-          const res = axios.post(`${this.url_api}/user/upload-foto/${profile}`,{
-            foto_profile : this.image
+          let profile = this.$store.state.user.id;
+          let formData = new FormData();
+          formData.set('foto_profile', this.$refs.pictureInput.file);
+
+          axios.post(`${this.url_api}/user/upload-foto/${profile}`, formData, {
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
           });
-          console.log(res);
-        } else {
-          console.log('FileReader API not supported: use the <form>, Luke!')
         }
       },
       disabledForm() {
@@ -249,6 +247,18 @@
           console.error(error);
         }
       },
+      dataURLtoFile(dataurl, filename) {
+        const arr = dataurl.split(',')
+        const mime = arr[0].match(/:(.*?);/)[1]
+        const bstr = atob(arr[1])
+        let n = bstr.length
+        const u8arr = new Uint8Array(n)
+        while (n) {
+          u8arr[n] = bstr.charCodeAt(n)
+          n -= 1 // to make eslint happy
+        }
+        return new File([u8arr], filename, { type: mime })
+      }
     }
   }
 </script>
