@@ -171,10 +171,9 @@ const routes = [
         component: () => import("../views/Pasien/Tambah.vue")
       },
       {
-        path: "edit/:id?",
+        path: "edit/:idPasien",
         name: "pasien-edit",
-        component: () => import("../views/Pasien/Edit.vue"),
-        props: true
+        component: () => import("../views/Pasien/Edit.vue")
       },
       {
         path: "detail/:id?",
@@ -235,12 +234,17 @@ const routes = [
     component: () => import("../views/Profile/Profile.vue")
   },
   {
+    path: "/billing/pilih-paket",
+    name: "billing-pilih-paket",
+    component: () => import("../views/Billing/BillingPilihPaket.vue")
+  },
+  {
     path: "/billing",
     name: "billing",
     component: () => import("../views/Billing/List.vue")
   },
   {
-    path: "/subscription/detail",
+    path: "/subscription/detail/:id",
     name: "subscription-detail",
     component: () => import("../views/Subscription/DetailPaket.vue")
   },

@@ -180,9 +180,15 @@
       async updateProses() {
         try {
           var profile = this.$store.state.user.id;
-          console.log(this.dataProfile);
-          const res = await axios.put(`${this.url_api}/user/${profile}`, this.dataProfile)
-          console.log('ress', res);
+          const res = await axios.put(`${this.url_api}/user/${profile}`, {
+            nama: this.dataProfile.nama,
+            nomor_telp: this.dataProfile.nomor_telp,
+            jenis_kelamin: this.dataProfile.jenis_kelamin,
+            nomor_ijin: this.dataProfile.klinik.nomor_ijin,
+            provinsi: this.dataProfile.klinik.provinsi,
+            kota: this.dataProfile.klinik.kota,
+            alamat: this.dataProfile.klinik.alamat,
+          })
         } catch {
 
         }
