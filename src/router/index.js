@@ -171,10 +171,9 @@ const routes = [
         component: () => import("../views/Pasien/Tambah.vue")
       },
       {
-        path: "edit/:id?",
+        path: "edit/:idPasien",
         name: "pasien-edit",
-        component: () => import("../views/Pasien/Edit.vue"),
-        props: true
+        component: () => import("../views/Pasien/Edit.vue")
       },
       {
         path: "detail/:id?",

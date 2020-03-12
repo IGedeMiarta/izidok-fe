@@ -38,9 +38,6 @@ import startCase from "lodash/startCase";
 import pasienMixin from "./mixins";
 
 export default {
-  props: {
-    idPasien: [String, Number]
-  },
   mixins: [pasienMixin],
   components: {
     // vueDropzone: () => import("vue2-dropzone"),
@@ -53,7 +50,8 @@ export default {
       maxFilesize: 0.5,
       headers: { "My-Awesome-Header": "header value" }
     },
-    beingSubmit: false
+    beingSubmit: false,
+    idPasien: null
   }),
   beforeRouteLeave(to, from, next) {
     if (!this.beingSubmit) {
@@ -85,6 +83,9 @@ export default {
     } else {
       next();
     }
+  },
+  mounted() {
+    this.idPasien = this.$router.currentRoute.params.idPasien;
   },
   methods: {
     simpan() {
