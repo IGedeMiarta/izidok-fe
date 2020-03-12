@@ -140,14 +140,14 @@
         provinces: [],
         image : null,
         tempat: {
-          provinsi: null,
-          kota: null,
+          provinsi: {id:null},
+          kota: {id:null},
         }
       }
     },
     async mounted() {
-      this.getProvince();
-      this.getProfile();
+      await this.getProvince();
+      await this.getProfile();
     },
     methods: {
       async getProfile() {
@@ -155,7 +155,19 @@
           var profile = this.$store.state.user.id
           const res = await axios.get(`${this.url_api}/user/${profile}`)
           this.dataProfile = res.data.data;
-          console.log(this.dataProfile)
+          
+          this.provinces.forEach(prov => {
+            if(prov.id == this.dataProfile.klinik.provinsi) {
+              this.tempat.provinsi = {
+                ...prov,
+                label: prov.provinsi_nama
+              }
+            }
+          });
+
+          if(this.tempat.provinsi.id) {
+            this.getCity();
+          }
         } catch (e) {
 
         }
@@ -185,8 +197,8 @@
             nomor_telp: this.dataProfile.nomor_telp,
             jenis_kelamin: this.dataProfile.jenis_kelamin,
             nomor_ijin: this.dataProfile.klinik.nomor_ijin,
-            provinsi: this.dataProfile.klinik.provinsi,
-            kota: this.dataProfile.klinik.kota,
+            provinsi: this.tempat.provinsi.id,
+            kota: this.tempat.kota.id,
             alamat: this.dataProfile.klinik.alamat,
           })
         } catch {
@@ -224,6 +236,14 @@
               ...val,
               label: `${val.nama}`,
             }));
+
+            if(this.dataProfile.klinik.kota) {
+              this.cities.forEach(city => {
+                if(city.id == this.dataProfile.klinik.kota) {
+                  this.tempat.kota = city;
+                }
+              });
+            }
           }
         } catch (error) {
           console.error(error);
