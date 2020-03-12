@@ -97,63 +97,50 @@
             />
           </template>
 
-          <!-- <template v-slot:head()="data"></template> -->
+          <template v-slot:head(diagnosis_icd_x)="data">
+            {{ data.label }}
+            <vue-select
+              :options="diagnosisList"
+              v-model="selectedDiagnosis"
+              label="title"
+              class="custom-v-select w-95 mt-2"
+              @input="dropdownValueChanged"
+            />
+          </template>
+
+          <template v-slot:cell()="data">
+            <div class="text-wrap text-break">
+              {{ data.value }}
+            </div>
+          </template>
 
           <template v-slot:cell(jenis_kelamin)="data">
             {{ jenisKelamin(data.value) }}
           </template>
 
+          <template v-slot:cell(diagnosis_icd_x)="data">
+            <div
+              style="max-width: 140px"
+              v-tooltip="
+                detailDiagnosis({ pembayaran_id: data.item.pembayaran_id })
+              "
+            >
+              <p class="text-truncate d-inline-block w-100 pr-2 m-0">
+                {{ data.value }}
+              </p>
+            </div>
+          </template>
+
           <template v-slot:cell(actions)="data">
-            <span>
-              <b-dropdown
-                id="dropdown-1"
-                class="m-md-2 text-capitalize"
+            <div>
+              <b-button
                 variant="primary"
                 size="sm"
-                right
+                class="text-capitalize"
+                :to="`/struk/${data.item.pembayaran_id}`"
+                >lihat struk</b-button
               >
-                <template v-slot:button-content>
-                  <font-awesome-icon icon="copy" />
-                </template>
-                <b-dropdown-item
-                  @click="
-                    editPasien({
-                      id: data.item.id
-                    })
-                  "
-                  >edit data pasien</b-dropdown-item
-                >
-
-                <b-dropdown-item
-                  @click="
-                    detailPasien({
-                      id: data.item.id
-                    })
-                  "
-                  >view detail pasien</b-dropdown-item
-                >
-                <template v-if="isOperator == false">
-                  <b-dropdown-item
-                    @click="
-                      rekamMedis({
-                        pasien_id: data.item.id,
-                        klinik_id: data.item.klinik_id
-                      })
-                    "
-                    >lihat riwayat rekam medis</b-dropdown-item
-                  >
-                </template>
-                <b-dropdown-item
-                  @click="
-                    removePasien({
-                      id: data.item.id,
-                      nama: data.item.nama
-                    })
-                  "
-                  >hapus data pasien</b-dropdown-item
-                >
-              </b-dropdown>
-            </span>
+            </div>
           </template>
         </b-table>
       </DataTableWrapper>
@@ -175,7 +162,8 @@ locale.use(lang);
 export default {
   components: {
     DatePicker,
-    DataTableWrapper: () => import("../../components/DataTableWrapper")
+    DataTableWrapper: () => import("../../components/DataTableWrapper"),
+    "vue-select": () => import("@/components/VueSelect.vue")
   },
   data() {
     return {
@@ -189,7 +177,9 @@ export default {
       totalPasienValue: null,
       totalPendapatanValue: null,
       searchValue: [],
-      dataList: []
+      dataList: [],
+      diagnosisList: [],
+      selectedDiagnosis: null
     };
   },
   computed: {
@@ -222,22 +212,34 @@ export default {
             label: "nama pasien"
           },
           {
-            key: "tanggal_lahir"
+            key: "tanggal_lahir",
+            thStyle: "width: 150px"
           },
           {
-            key: "no.rekam_medis",
+            key: "nomor_rekam_medis",
             label: "no. rekam medis"
           },
           {
-            key: "diagnosis_icd_x"
+            key: "diagnosis_icd_x",
+            thStyle: "width: 160px"
           },
           {
             key: "jumlah_transaksi"
           },
           {
-            key: "actions"
+            key: "actions",
+            thStyle: "width: 140px"
           }
-        ] |> (z => g({ field: z }))
+        ]
+        |> (v =>
+          s({
+            field: v,
+            customFunc: val =>
+              val.toLowerCase() === "no" || /(jumlah|actions)/gi.test(val)
+                ? 0
+                : 1
+          }))
+        |> (z => g({ field: z }))
       );
     }
   },
@@ -257,20 +259,39 @@ export default {
     searchValue: {
       handler: "fetchData",
       deep: true
+    },
+    selectedDiagnosis: {
+      handler: "fetchData",
+      deep: true
     }
   },
+  mounted() {
+    this.fetchDiagnosis();
+  },
   methods: {
-    // searchValueChanged: debounce(function(val, key) {
-    //   const { searchValue } = this;
-    //   const z = searchValue.filter(item => item.key !== key);
-    //   this.searchValue = [
-    //     ...z,
-    //     {
-    //       key,
-    //       value: val
-    //     }
-    //   ];
-    // }, 500),
+    dropdownValueChanged(val) {
+      console.log(val);
+    },
+    detailDiagnosis({ pembayaran_id } = {}) {
+      if (pembayaran_id) {
+        const { dataList } = this;
+        const { diagnosis_icd_x } = dataList.find(
+          item => item.pembayaran_id === pembayaran_id
+        );
+        return diagnosis_icd_x;
+      }
+    },
+    searchValueChanged: debounce(function(val, key) {
+      const { searchValue } = this;
+      const z = searchValue.filter(item => item.key !== key);
+      this.searchValue = [
+        ...z,
+        {
+          key,
+          value: val
+        }
+      ];
+    }, 500),
     periodeX({ periode = null, rawValue = false } = {}) {
       const formatBackendDate = "YYYY-MM-DD";
       const rawValueFormat = "DD-MMM-YYYY";
@@ -328,19 +349,32 @@ export default {
         periodeSelected: periode,
         sortBy,
         sortDesc,
-        searchValue
+        searchValue,
+        selectedDiagnosis
       } = this;
+      const r = new RegExp("diagnosis", "gi");
+      const v = "kode_penyakit_id";
       let tmp = "";
 
       tmp += `${periodeX({ periode })}`;
 
       searchValue.map(item => {
-        const x = (item.key === "nama" && "nama_pasien") || item.key;
+        const x =
+          (item.key === "nama" && "nama_pasien") ||
+          (r.test(item.key) && v) ||
+          item.key;
         tmp += `&${x}=${item.value}`;
       });
 
+      if (selectedDiagnosis) {
+        const { code, label } = selectedDiagnosis;
+        tmp = `&${v}=${code}`;
+      }
+
       if (sortBy) {
-        tmp += `&column=${sortBy}&order=${sortDesc ? "desc" : "asc"}`;
+        tmp += `&column=${r.test(sortBy) ? v : val}&order=${
+          sortDesc ? "desc" : "asc"
+        }`;
       }
 
       return tmp;
@@ -378,7 +412,7 @@ export default {
                   diagnosa: {
                     id: 41,
                     kode_penyakit_id: "[1,4]",
-                    deskripisi: "Acquired Deformities of Fingers and Toes"
+                    deskripsi: "Acquired Deformities of Fingers and Toes"
                   }
                 },
                 {
@@ -393,7 +427,7 @@ export default {
                   diagnosa: {
                     id: 40,
                     kode_penyakit_id: "[2,3]",
-                    deskripisi: "Acquired Deformity of Nose"
+                    deskripsi: "Acquired Deformity of Nose"
                   }
                 },
                 {
@@ -408,7 +442,7 @@ export default {
                   diagnosa: {
                     id: 36,
                     kode_penyakit_id: "[2]",
-                    deskripisi: "Acquired Deformity of Nose"
+                    deskripsi: "Acquired Deformity of Nose"
                   }
                 },
                 {
@@ -423,7 +457,7 @@ export default {
                   diagnosa: {
                     id: 35,
                     kode_penyakit_id: "[2]",
-                    deskripisi: "Acquired Deformity of Nose"
+                    deskripsi: "Acquired Deformity of Nose"
                   }
                 }
               ],
@@ -453,25 +487,41 @@ export default {
           this.totalPasienValue = total_pasien;
           this.totalPendapatanValue = total_pendapatan;
           this.periodeValue = periode;
-          // this.data = [
-          //   ...listAntrean.map((item, index) => {
-          //     return {
-          //       id: item.id,
-          //       waktu_konsultasi: item.waktu_konsultasi,
-          //       nomor_antrian: item.nomor_antrian,
-          //       status: item.status,
-          //       jenis_kelamin: item.jenis_kelamin,
-          //       nama: item.nama,
-          //       nomor_hp: item.nomor_hp,
-          //       pasien_id: item.pasien_id,
-          //       no: (this.currentPage - 1) * this.perPage + index + 1
-          //     };
-          //   })
-          // ];
-          this.dataList = listLaporanPendapatan;
+          this.dataList = [
+            ...listLaporanPendapatan.map((item, index) => ({
+              ...item,
+              waktu_konsultasi: (e =>
+                moment(e, "YYYY-MM-DD HH:mm:ss").format("DD-MM-YYYY HH:mm:ss"))(
+                item.waktu_konsultasi
+              ),
+              diagnosis_icd_x: item.diagnosa.deskripsi,
+              no: (this.currentPage - 1) * this.perPage + index + 1
+            }))
+          ];
           this.rows = totalEntries;
           return this;
         }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async fetchDiagnosis() {
+      try {
+        const res = await axios.get(
+          `${this.url_api}/rekam_medis/kode_penyakit`
+        );
+        const { status, data, message } = res.data;
+        this.diagnosisList = data.map(item => ({
+          label: item.description,
+          code: item.kode
+        }));
+        // if (!status) {
+        //   this.$swal({
+        //     text: `${message || "something went wrong"}`,
+        //     type: "error"
+        //   });
+        //   return false;
+        // }
       } catch (err) {
         console.log(err);
       }
@@ -515,6 +565,14 @@ $evenBgColor: #f9f9f9;
 
   .el-range-separator {
     width: 35px;
+  }
+}
+
+.custom-v-select {
+  .vs__dropdown-toggle {
+    max-height: 29.94px;
+    background-color: #fff;
+    overflow: hidden;
   }
 }
 </style>

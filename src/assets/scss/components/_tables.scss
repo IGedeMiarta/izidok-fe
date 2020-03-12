@@ -158,7 +158,8 @@ $bv-escaped-characters: (("<", "%3c"), (">", "%3e"), ("#", "%23"));
 }
 
 // custom datatable
-.izd-datatable {
+.izd-datatable,
+.kntl {
   th {
     vertical-align: top !important;
   }
