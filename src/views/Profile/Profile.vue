@@ -17,7 +17,8 @@
                 <picture-input ref="pictureInput" @change="onChangeImage" width="180" height="180"
                   accept="image/jpeg,image/png" size="10" buttonClass="btn btn-primary button primary"
                   removeButtonClass="btn btn-secondary button secondary" radius="50" z-index="0"
-                  :disabled="btnDisable == true" :removable="true">
+                  :disabled="btnDisable == true" :removable="true"
+                  :prefill="dataProfile.foto_profile">
                 </picture-input>
                 <label>Maks. 1 MB, File: jpeg, jpg, png</label>
               </template>
@@ -140,14 +141,14 @@
         provinces: [],
         image : null,
         tempat: {
-          provinsi: null,
-          kota: null,
+          provinsi: {id:null},
+          kota: {id:null},
         }
       }
     },
     async mounted() {
-      this.getProvince();
-      this.getProfile();
+      await this.getProvince();
+      await this.getProfile();
     },
     methods: {
       async getProfile() {
@@ -155,23 +156,32 @@
           var profile = this.$store.state.user.id
           const res = await axios.get(`${this.url_api}/user/${profile}`)
           this.dataProfile = res.data.data;
-          console.log(this.dataProfile)
+          
+          this.provinces.forEach(prov => {
+            if(prov.id == this.dataProfile.klinik.provinsi) {
+              this.tempat.provinsi = {
+                ...prov,
+                label: prov.provinsi_nama
+              }
+            }
+          });
+
+          if(this.tempat.provinsi.id) {
+            this.getCity();
+          }
         } catch (e) {
 
         }
       },
       onChangeImage(image) {
-        console.log('New picture selected!')
         if (image) {
-          console.log('Picture loaded.')
-          this.image = image;
-          var profile = this.$store.state.user.id;
-          const res = axios.post(`${this.url_api}/user/upload-foto/${profile}`,{
-            foto_profile : this.image
+          let profile = this.$store.state.user.id;
+          let formData = new FormData();
+          formData.set('foto_profile', this.$refs.pictureInput.file);
+
+          axios.post(`${this.url_api}/user/upload-foto/${profile}`, formData, {
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
           });
-          console.log(res);
-        } else {
-          console.log('FileReader API not supported: use the <form>, Luke!')
         }
       },
       disabledForm() {
@@ -185,8 +195,8 @@
             nomor_telp: this.dataProfile.nomor_telp,
             jenis_kelamin: this.dataProfile.jenis_kelamin,
             nomor_ijin: this.dataProfile.klinik.nomor_ijin,
-            provinsi: this.dataProfile.klinik.provinsi,
-            kota: this.dataProfile.klinik.kota,
+            provinsi: this.tempat.provinsi.id,
+            kota: this.tempat.kota.id,
             alamat: this.dataProfile.klinik.alamat,
           })
         } catch {
@@ -224,11 +234,31 @@
               ...val,
               label: `${val.nama}`,
             }));
+
+            if(this.dataProfile.klinik.kota) {
+              this.cities.forEach(city => {
+                if(city.id == this.dataProfile.klinik.kota) {
+                  this.tempat.kota = city;
+                }
+              });
+            }
           }
         } catch (error) {
           console.error(error);
         }
       },
+      dataURLtoFile(dataurl, filename) {
+        const arr = dataurl.split(',')
+        const mime = arr[0].match(/:(.*?);/)[1]
+        const bstr = atob(arr[1])
+        let n = bstr.length
+        const u8arr = new Uint8Array(n)
+        while (n) {
+          u8arr[n] = bstr.charCodeAt(n)
+          n -= 1 // to make eslint happy
+        }
+        return new File([u8arr], filename, { type: mime })
+      }
     }
   }
 </script>

@@ -722,6 +722,12 @@ import {
             message
           } = res.data;
           if (status) {
+            console.log('asdasdasd');
+            this.$swal({
+              type: "success",
+              title: startCase("sukses hapus antrean"),
+              text: `Antrean pasien sudah dibatalkan.`,
+            });
             this.fetchListAntrean();
           } else {
             this.$swal({
