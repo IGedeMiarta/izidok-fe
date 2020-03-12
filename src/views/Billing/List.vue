@@ -89,10 +89,10 @@
                     </div>
                   </div>
                   <div class="col-md-6">
-                       <button class="btn btn-primary float-right mt-3">Beli Paket Berlangganan</button>
+                       <button @click="$router.push('/billing/pilih-paket')" class="btn btn-primary float-right mt-3">Beli Paket Berlangganan</button>
                   </div>
                     <div class="col-md-6">
-                       <button class="btn btn-danger float-left mt-3">Beli Kouta ADD-ON</button>
+                       <button @click="$router.push('/subscription/addons')" class="btn btn-danger float-left mt-3">Beli Kuota ADD-ON</button>
                   </div>
                 </div>
               </div>

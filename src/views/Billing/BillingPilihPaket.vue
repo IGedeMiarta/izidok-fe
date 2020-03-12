@@ -33,6 +33,11 @@
                                 </font-awesome-layers>{{datadesc}}<br>
                               </p>
                               <b-button
+                                @click="
+                                  detailPaket({
+                                    id: data.id
+                                  })
+                                  "
                                 variant="primary"
                                 size="sm"
                                 class="text-capitalize mr-2 btn-antrean btn-block "
@@ -60,6 +65,11 @@
                                 </font-awesome-layers>{{datadesc}}<br>
                               </p>
                               <b-button
+                                @click="
+                                  detailPaket({
+                                    id: data.id
+                                  })
+                                  "
                                 variant="primary"
                                 size="sm"
                                 class="text-capitalize mr-2 btn-antrean btn-block "
@@ -88,6 +98,11 @@
 
                               </p>
                               <b-button
+                                @click="
+                                  detailPaket({
+                                    id: data.id
+                                  })
+                                  "
                                 variant="primary"
                                 size="sm"
                                 class="text-capitalize mr-2 btn-antrean btn-block "
@@ -114,6 +129,11 @@
                                 </font-awesome-layers>{{datadesc}}<br>
                               </p>
                               <b-button
+                                @click="
+                                  detailPaket({
+                                    id: data.id
+                                  })
+                                  "
                                 variant="primary"
                                 size="sm"
                                 class="text-capitalize mr-2 btn-antrean btn-block "
@@ -129,33 +149,6 @@
               <template v-if="dataPaket.length === 3">
                 <b-col sm="4" v-for="data in dataPaket" :key="data.id" >
                   <div class="card">
-                    <template v-if="data.id === 1">
-                      <div class="card-body card-box mb-6 card-box-border-bottom border-primary " style="background: #EEFFF7;
-                               border-radius:10px;">
-                        <div class="align-box-row ">
-                          <div class="align-content-center ">
-                            <div class="font-weight-bold ">
-                              <div class="font-size-md  text-primary text-center ">Free Trial</div>
-                              <p class="font-size-sm text-primary text-center">(Paket 1 Bulan)</p>
-                              <p class="font-size-xxl text-primary text-center ">FREE</p>
-                              <p class="font-size-sm text-primary border-2 text-center">
-                                {{data.limit}} Visit Pasien/bulan</p>
-                              <br>
-                              <p class="font-size-sm"  v-for="datadesc in data.desc" :key="datadesc" >
-                                <font-awesome-layers class="fa-lg mr-1 btn-actions">
-                                  <font-awesome-icon icon="check" transform="shrink-3" class="text-primary" />
-                                </font-awesome-layers>{{datadesc}}<br>
-                              </p>
-                              <b-button
-                                variant="primary"
-                                size="sm"
-                                class="text-capitalize mr-2 btn-antrean btn-block "
-                              >Coba gratis 30 hari</b-button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </template>
                     <template v-if="data.id === 2">
                       <div class="card-body card-box mb-6 card-box-border-bottom border-primary" style="background: #FEE9FF;
                               border-radius:10px;">
@@ -174,6 +167,11 @@
                                 </font-awesome-layers>{{datadesc}}<br>
                               </p>
                               <b-button
+                                @click="
+                                  detailPaket({
+                                    id: data.id
+                                  })
+                                  "
                                 variant="primary"
                                 size="sm"
                                 class="text-capitalize mr-2 btn-antrean btn-block "
@@ -202,6 +200,11 @@
 
                               </p>
                               <b-button
+                                @click="
+                                  detailPaket({
+                                    id: data.id
+                                  })
+                                  "
                                 variant="primary"
                                 size="sm"
                                 class="text-capitalize mr-2 btn-antrean btn-block "
@@ -228,10 +231,14 @@
                                 </font-awesome-layers>{{datadesc}}<br>
                               </p>
                               <b-button
+                                @click="
+                                  detailPaket({
+                                    id: data.id
+                                  })
+                                  "
                                 variant="primary"
                                 size="sm"
                                 class="text-capitalize mr-2 btn-antrean btn-block "
-
                               >Beli Paket</b-button>
                             </div>
                           </div>
@@ -316,6 +323,16 @@
         setInitPage: "sidebar/SET_INITIALIZATION_PAGE",
         setUserFirstLogin: "SET_USER_FIRST_LOGIN"
       }),
+      detailPaket({ id } = {}) {
+        if (id) {
+          this.$router.push({
+            name: "subscription-detail",
+            params: {
+              id: id
+            }
+          });
+        }
+      },
       rerender(id) {
         this.$root.$emit("rerender",id);
       },

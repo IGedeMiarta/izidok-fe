@@ -60,7 +60,8 @@
     faCog,
     faArchive,
     faThLarge,
-    faClone
+    faClone,
+    faMoneyBill
   } from "@fortawesome/free-solid-svg-icons";
 
   import {
@@ -77,6 +78,7 @@
     faArchive,
     faClone,
     faThLarge,
+    faMoneyBill
   );
 
   export default {
@@ -197,6 +199,16 @@
               element: "font-awesome-icon",
               attributes: {
                 icon: "archive"
+              }
+            },
+          },
+          {
+            title: "Billing",
+            href: "/billing",
+            icon: {
+              element: "font-awesome-icon",
+              attributes: {
+                icon: "money-bill"
               }
             },
           },
