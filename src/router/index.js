@@ -80,7 +80,7 @@ const routes = [
   {
     path: "/pilih-paket",
     name: "pilih-paket",
-    component: () => import("../views/PilihPaket.vue"),
+    component: () => import("../views/Subscription/PilihPaket.vue"),
   },
   {
     path: "/init",
