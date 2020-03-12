@@ -235,12 +235,12 @@ const routes = [
     component: () => import("../views/Profile/Profile.vue")
   },
   {
-    path: "/billing/pilih-paket",
+    path: "/Billing/pilih-paket",
     name: "billing-pilih-paket",
     component: () => import("../views/Billing/BillingPilihPaket.vue")
   },
   {
-    path: "/billing",
+    path: "/Billing",
     name: "billing",
     component: () => import("../views/Billing/List.vue")
   },
