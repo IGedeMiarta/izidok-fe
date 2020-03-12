@@ -1,19 +1,6 @@
 <template>
   <div>
     <div class="app-content--inner p-0 d-flex flex-column">
-       <page-title
-      heading="Billing"
-      :breadcrumb="[
-        {
-          label: 'Billing',
-          link: '/billing'
-        },
-        {
-          label: 'List Pasien',
-          active: true
-        }
-      ]"
-    />
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-md-12">
@@ -23,7 +10,7 @@
                   <div class="col-md-8 ">
                     <div class="card card-box">
                       <div class="card-header text-uppercase justify-content-center">
-                        <h3 class="text-center">Detail pembelian paket</h3>
+                        <h3 class="text-center">Detail pembelian add-on</h3>
                       </div>
                       <div class="card-body">
                         <div class="row">
@@ -37,20 +24,16 @@
 
                           </div>
                           <div class="col-md-4 mt-2">
-                            <strong>Jenis Paket</strong>
+                            <strong>Jenis Add-on</strong>
                           </div>
                           <div class="col-md-8 mt-2">
-                            <label class="float-right mr-3">Starter</label>
+                            <label class="float-right mr-3">WhatsApp</label>
                           </div>
                           <div class="col-md-4 mt-2">
-                            <strong>Lama Berlangganan</strong>
+                            <strong>Masa Aktif</strong>
                           </div>
                           <div class="col-md-8 mt-2">
-                            <b-form-radio-group class="float-right" :options="[
-                    { text: '1 bulan', value: 1 },
-                    { text: '12 bulan', value: 12 }
-                  ]">
-                            </b-form-radio-group>
+                            <label class="float-right mr-3">Selama Paket Berlangganan Aktif</label>
                           </div>
                           <div class="col-md-4 mt-2">
                             <strong>Harga</strong>
@@ -59,20 +42,7 @@
                             <strong class="float-right mr-3">Rp. 900.000,-</strong>
                           </div>
                           <div class="col-md-4 mt-2">
-                            <strong>Add-on WhatsApp</strong>
-                            <label class="ml-1">
-                              <font-awesome-icon v-tooltip.bottom-start="'Adds-on Whatsapp dapat digunakan untuk mengirimkan reminder konsultasi selanjutnya pada pasien'" class="mx-auto"  icon="info-circle"/>
-                            </label>
-                          </div>
-                          <div class="col-md-8 mt-2">
-                            <b-form-radio-group class="float-right" :options="[
-                    { text: 'Ya', value: 1 },
-                    { text: 'Tidak', value: 12 }
-                  ]">
-                            </b-form-radio-group>
-                          </div>
-                          <div class="col-md-4 mt-2">
-                            <strong>Pilih Kouta Add-on</strong>
+                            <strong>Pilih Kouta</strong>
                           </div>
                           <div class="col-md-8 mt-2">
                             <b-form-radio-group class="float-right" :options="[
@@ -92,17 +62,6 @@
                           <div class="col-md-8 mt-2">
                             <strong class="float-right mr-3">Rp. 22.000,-</strong>
                           </div>
-                          <div class="col-md-4 mt-2">
-                            <strong>Kode Promo</strong>
-                            <small class="ml-2">(jika ada)</small>
-                          </div>
-                          <div class="col-md-8 mt-2">
-                            <b-button variant="primary" class="float-right" size="md">Gunakan</b-button>
-                            <b-form-input class="col-md-4 float-right mr-2"></b-form-input>
-                          </div>
-                          <div class="col-md-12 text-center mt-2" style="background-color : yellow">
-                            <strong>Selamat, Anda mendapatkan potongan Rp. 50.000,-!</strong>
-                          </div>
                           <div class="col-md-12 mt-2">
                             <div class="card card-box">
                               <div class="card-body">
@@ -112,12 +71,6 @@
                                   </div>
                                   <div class="col-md-8 ">
                                     <strong class="float-right">Rp. 3.000,-</strong>
-                                  </div>
-                                  <div class="col-md-4">
-                                    <strong>Potongan</strong>
-                                  </div>
-                                  <div class="col-md-8 float-right">
-                                    <strong class="float-right">Rp. 50.000,-</strong>
                                   </div>
                                   <div class="col-md-4">
                                     <strong>Total Pembayaran</strong>
