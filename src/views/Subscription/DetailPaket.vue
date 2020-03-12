@@ -1,19 +1,5 @@
 <template>
   <div>
-    <div class="app-content--inner p-0 d-flex flex-column">
-       <page-title
-      heading="Billing"
-      :breadcrumb="[
-        {
-          label: 'Billing',
-          link: '/billing'
-        },
-        {
-          label: 'List Pasien',
-          active: true
-        }
-      ]"
-    />
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-md-12">
@@ -143,7 +129,6 @@
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>

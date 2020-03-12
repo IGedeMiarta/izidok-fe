@@ -85,6 +85,7 @@
                           <div class="col-md-12 mt-3">
                             <b-button variant="success" class="float-right">Bayar Sekarang</b-button>
                           </div>
+                      
                         </div>
                       </div>
                     </div>
