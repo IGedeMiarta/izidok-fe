@@ -85,6 +85,7 @@
                           <div class="col-md-12 mt-3">
                             <b-button @click="$router.push('/subscription/cara-bayar')" variant="success" class="float-right">Bayar Sekarang</b-button>
                           </div>
+                      
                         </div>
                       </div>
                     </div>
