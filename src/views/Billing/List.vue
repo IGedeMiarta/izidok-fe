@@ -20,25 +20,43 @@
                     <div class="card card-box borders-0" style="background-color:#d5f5d6;border-radius:0px;">
                       <div class="card-body">
                         <div class="row">
-                          <div class="col-md-4">
-                            <label for="">Paket</label> <label style="float:right">: STARTER-1 (1 BULAN)</label>
+                          <div class="col-md-2">
+                            <label class>Paket</label>
                           </div>
-                          <div class="col-md-4">
-                            <label for="">Status</label> :<label
-                              style="background-color:#12e85a;padding:3px;float:right"> Aktif</label>
+                          <div class="col-md-2">
+                          <label>: STARTER-1 (1 BULAN)</label>
                           </div>
-                          <div class="col-md-4">
-                            <label for="">Sisa Kuota :</label> <label
-                              style="background-color:#12e85a;padding:3px;float:right">50</label>
+                          <div class="col-md-2">
+                            <label >Status</label>
                           </div>
-                          <div class="col-md-4">
-                            <label for="">Pembelian</label> <label style="float:right">: 15 JAN 2020 10:09</label>
+                          <div class="col-md-2">
+                            <label
+                              >: <label class="btn-success" style="padding-left: 5px; padding-right: 5px;">Aktif</label></label>
                           </div>
-                              <div class="col-md-4">
-                            <label for="">Mulai Berlaku</label> <label style="float:right">: 15 JAN 2020 10:09</label>
+                          <div class="col-md-2">
+                            <label >Sisa Kuota</label>
                           </div>
-                             <div class="col-md-4">
-                            <label for="">Habis Berlaku</label> <label style="float:right">: 15 JAN 2020 10:09</label>
+                          <div class="col-md-2">
+                            <label
+                            >: <label class="btn-success" style="padding-left: 5px; padding-right: 5px;">50</label></label>
+                          </div>
+                          <div class="col-md-2">
+                            <label class>Pembelian</label>
+                          </div>
+                          <div class="col-md-2">
+                            <label >: 15 JAN 2020 10:09</label>
+                          </div>
+                          <div class="col-md-2">
+                            <label class>Mulai Berlaku</label>
+                          </div>
+                          <div class="col-md-2">
+                            <label >: 15 JAN 2020 10:09</label>
+                          </div>
+                          <div class="col-md-2">
+                            <label class>Habis Berlaku</label>
+                          </div>
+                          <div class="col-md-2">
+                            <label >: 15 JAN 2020 10:09</label>
                           </div>
                         </div>
                       </div>
@@ -46,26 +64,35 @@
                     <div class="card card-box borders-0" style="background-color:#cef2f5;border-radius:0px;">
                       <div class="card-body">
                         <div class="row">
-                          <div class="col-md-4">
-                            <label for="">Add-ON</label> <label style="float:right">: STARTER-1 (1 BULAN)</label>
+                          <div class="col-md-2">
+                            <label >Add-ON</label>
                           </div>
-                          <div class="col-md-4">
-                            <label for="">Status</label> :<label
-                              style="background-color:#12e85a;padding:3px;float:right"> Aktif</label>
+                          <div class="col-md-2">
+                            <label >: STARTER-1 (1 BULAN)</label>
                           </div>
-                          <div class="col-md-4">
-                            <label for="">Sisa Kuota :</label> <label
-                              style="background-color:#12e85a;padding:3px;float:right">50</label>
+                          <div class="col-md-2">
+                            <label >Status</label>
+                          </div>
+                          <div class="col-md-2">
+                            <label
+                            >: <label class="btn-success" style="padding-left: 5px; padding-right: 5px;">Aktif</label></label>
+                          </div>
+                          <div class="col-md-2">
+                            <label >Sisa Kuota</label>
+                          </div>
+                          <div class="col-md-2">
+                            <label
+                            >: <label class="btn-success" style="padding-left: 5px; padding-right: 5px;">50</label></label>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
                   <div class="col-md-6">
-                       <b-button variant="primary" style="width:50%" class="float-right mt-3">Beli Paket Berlangganan</b-button>
+                       <button class="btn btn-primary float-right mt-3">Beli Paket Berlangganan</button>
                   </div>
                     <div class="col-md-6">
-                       <b-button style="width:50%;background-color:#de51d9;color:white" class="mt-3">Beli Kouta ADD-ON</b-button>
+                       <button class="btn btn-danger float-left mt-3">Beli Kouta ADD-ON</button>
                   </div>
                 </div>
               </div>
