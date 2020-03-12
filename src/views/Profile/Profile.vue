@@ -13,21 +13,22 @@
           <div class="col-md-12 no-padding">
             <div class="col-md-12 text-center">
               <template>
-                <div class="hello">
                   <picture-input
                     ref="pictureInput"
                     @change="onChangeImage"
-                    width="150"
-                    height="150"
+                    width="180"
+                    height="180"
                     accept="image/jpeg,image/png"
                     size="10"
-                    buttonClass="btn"
-                    plain
+                    buttonClass="btn btn-primary button primary"
+                    removeButtonClass="btn btn-secondary button secondary"
                     radius="50"
+                    z-index="0"
+                    :disabled="btnDisable == true"
+                    :removable="true"
                    >
                   </picture-input>
                   <label>Maks. 1 MB, File: jpeg, jpg, png</label>
-                </div>
               </template>
 
 
@@ -37,7 +38,7 @@
                 <b-form-group label-for="input-1">
                   <label >Nama Dokter</label>
                   <label  style="color:red"> *</label>
-                  <b-form-input id="input-1" type="text" required>
+                  <b-form-input  v-model="dataProfile.nama"    :disabled="btnDisable == true"  id="input-1" type="text" required>
                   </b-form-input>
                 </b-form-group>
                 <b-form-group :state="getDataError({ rawLabel: 'jenis kelamin' })" :invalid-feedback="
@@ -49,41 +50,44 @@
                 ">
                   <label >{{ renderLabel({label: 'Jenis kelamin'  }) }}</label>
                   <label style="color:red"> *</label>
-                  <b-form-radio-group stacked @change="
+                  <b-form-radio-group
+                    v-model="dataProfile.jenis_kelamin"
+                    stacked @change="
                     setValue({
                       rawLabel: 'jenis kelamin',
                       $event
                     })
+
                   " class="text-capitalize" :options="[
                     { text: 'laki-laki', value: 1 },
                     { text: 'perempuan', value: 0 }
-                  ]" :disabled="disabledForm()" :checked="getValue('jenis kelamin')">
+                  ]"  :disabled="btnDisable == true" :checked="getValue('jenis kelamin')">
                   </b-form-radio-group>
                 </b-form-group>
                 <b-form-group label-for="input-1">
                   <label >No. Handphone</label>
                   <label  style="color:red"> *</label>
-                  <b-form-input id="input-1" type="text" required>
+                  <b-form-input v-model="dataProfile.nomor_telp"     :disabled="btnDisable == true" id="input-1" type="text" required>
                   </b-form-input>
                 </b-form-group>
                 <b-form-group label="Email" label-for="input-1">
-                  <b-form-input type="email" disabled required />
+                  <b-form-input  v-model="dataProfile.email"   :disabled="btnDisable == true" type="email"  required />
                 </b-form-group>
               </div>
               <div class="col-md-6">
                 <b-form-group label="Spesialisasi" label-for="input-1">
-                  <b-form-input id="input-1" type="text" disabled>
+                  <b-form-input  v-model="dataProfile.klinik.spesialisasi.nama"   :disabled="btnDisable == true" id="input-1" type="text" >
                   </b-form-input>
                 </b-form-group>
                 <b-form-group label="No. SIP" label-for="input-1">
-                  <b-form-input id="input-1" type="text">
+                  <b-form-input v-model="dataProfile.klinik.nomor_ijin"  :disabled="btnDisable == true" id="input-1" type="text">
                   </b-form-input>
                 </b-form-group>
                 <b-form-group label="Alamat Praktek" label-for="input-1">
-                  <b-form-textarea id="input-1" rows="3" max-rows="6">
+                  <b-form-textarea v-model="dataProfile.klinik.alamat"  :disabled="btnDisable == true" id="input-1" rows="3" max-rows="6">
                   </b-form-textarea>
                 </b-form-group>
-                <b-form-group label="provinsi" class="text-capitalize" style="position: relative"
+                <b-form-group   label="provinsi" class="text-capitalize" style="position: relative"
                   :state="getDataError({ rawLabel: 'provinsi' })" :invalid-feedback="
               renderInvalidFeedback({
                 validationDesc: blindlyGetData({
@@ -91,8 +95,8 @@
                 })
               })
             ">
-                  <vue-select :options="provinces" @input="getCity"
-                    v-model="tempat.provinsi" />
+                  <vue-select v-model="dataProfile.klinik.provinsi"   :disabled="btnDisable == true" :options="provinces" @input="getCity"
+                     />
                 </b-form-group>
                 <b-form-group label="kota" class="text-capitalize" style="position: relative"
                   :state="getDataError({ rawLabel: 'kota' })" :invalid-feedback="
@@ -102,9 +106,17 @@
                 })
               })
             ">
-                  <vue-select :options="cities" v-model="tempat.kota" @input="setDataTempat"
+                  <vue-select  :disabled="btnDisable == true" :options="cities" v-model="dataProfile.klinik.kota"  @input="setDataTempat"
                     />
                 </b-form-group>
+
+                <template v-if="btnDisable == true">
+                  <b-button @click="btnDisable = false" type="submit" variant="primary" class="text-capitalize my-2 float-right">EDIT PROFIL</b-button>
+                </template>
+                <template v-else>
+                  <b-button @click="btnDisable = true" type="submit" variant="primary" class="text-capitalize my-2 float-right">SIMPAN PROFIL</b-button>
+                </template>
+
               </div>
             </div>
           </div>
@@ -116,6 +128,7 @@
 
 <script>
   import PictureInput from 'vue-picture-input'
+  import axios from 'axios'
   export default {
        components: {
          PictureInput,
@@ -123,6 +136,8 @@
     },
     data: () => {
       return {
+        dataProfile: [],
+        btnDisable : true,
         imageProps: { width: 75, height: 75 },
         provinces: [],
         checkValueNik: null,
@@ -135,8 +150,20 @@
     },
     async mounted() {
       this.getProvince();
+      this.getProfile();
     },
     methods: {
+         async getProfile() {
+           try {
+             var profile = this.$store.state.user.id
+             const res = await axios.get(`${this.url_api}/user/${profile}`)
+             this.dataProfile = res.data.data;
+             console.log(this.dataProfile)
+           }
+           catch (e) {
+
+           }
+         },
       onChangeImage (image) {
         console.log('New picture selected!')
         if (image) {
