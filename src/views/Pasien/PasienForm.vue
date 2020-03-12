@@ -428,7 +428,8 @@
   import "vue2-dropzone/dist/vue2Dropzone.min.css";
   import moment from "moment";
   moment.locale('id');
-  import {
+  import
+  {
     library
   } from "@fortawesome/fontawesome-svg-core";
   import {

@@ -80,7 +80,7 @@ const routes = [
   {
     path: "/pilih-paket",
     name: "pilih-paket",
-    component: () => import("../views/PilihPaket.vue"),
+    component: () => import("../views/Subscription/PilihPaket.vue"),
   },
   {
     path: "/init",
@@ -235,9 +235,19 @@ const routes = [
     component: () => import("../views/Profile/Profile.vue")
   },
   {
+    path: "/billing",
+    name: "billing",
+    component: () => import("../views/Billing/List.vue")
+  },
+  {
     path: "/subscription/detail",
     name: "subscription-detail",
     component: () => import("../views/Subscription/DetailPaket.vue")
+  },
+  {
+    path: "/subscription/addons",
+    name: "subscription-addons",
+    component: () => import("../views/Subscription/DetailAddons.vue")
   },
   {
     path: "/subscription/cara-bayar",

@@ -30,7 +30,7 @@
                                   style="color:blue"></b-form-input>
                               </div>
                               <div class="col-md-3">
-                                <b-button style="margin-top: 19px;">salin</b-button>
+                                <label style="margin-top: 31px;"><u>salin</u> </label>
                               </div>
                             </div>
                           </div>
@@ -42,61 +42,123 @@
                           </div>
                           <div class="col-md-12">
                             <div role="tablist">
-                                <b-card-header header-tag="header" class="p-1" role="tab">
-                                  <b-button block href="#" v-b-toggle.accordion-1>ATM BCA</b-button>
-                                </b-card-header>
-                                <b-collapse id="accordion-1" accordion="my-accordion" role="tabpanel">
-                                  <b-card-body>
-                                    <b-card-text>
-                                       1. Masukkan Kartu ATM BCA & PIN
-                                       <br>
+                              <b-card-header header-tag="header" class="p-1" role="tab">
+                                <b-button block href="#" v-b-toggle.accordion-1 class="text-left"><strong>ATM
+                                    BCA</strong> </b-button>
+                              </b-card-header>
+                              <b-collapse id="accordion-1" accordion="my-accordion" role="tabpanel">
+                                <b-card-body>
+                                  <b-card-text>
+                                    1. Masukkan Kartu ATM BCA & PIN
+                                    <br>
 
-2. Pilih menu "Transaksi Lainnya" <br>
+                                    2. Pilih menu "Transaksi Lainnya" <br>
 
-3. Pilih "Transfer" <br>
+                                    3. Pilih "Transfer" <br>
 
-4. Pilih "ke Rekening BCA Virtual Account" <br>
+                                    4. Pilih "ke Rekening BCA Virtual Account" <br>
 
-5. Masukkan 5 angka kode perusahaan untuk izidok (xxxxx) dan Nomor Virtual Account Anda, kemudian pilih "BENAR" <br>
+                                    5. Masukkan 5 angka kode perusahaan untuk izidok (xxxxx) dan Nomor Virtual Account
+                                    Anda, kemudian pilih "BENAR" <br>
 
-6. Pastikan detil tagihan Anda sudah benar, kemudian pilih “BENAR” <br>
+                                    6. Pastikan detil tagihan Anda sudah benar, kemudian pilih “BENAR” <br>
 
-7. Perhatikan Konfirmasi Pembayaran Anda, jika sudah benar pilih “YA”, atau pilih “TIDAK” jika data di layar masih salah <br>
+                                    7. Perhatikan Konfirmasi Pembayaran Anda, jika sudah benar pilih “YA”, atau pilih
+                                    “TIDAK” jika data di layar masih salah <br>
 
-8. Transaksi Anda sudah selesai, simpan struk transaksi sebagai bukti pembayaran 
-                                    </b-card-text>
-                                    <b-card-text>{{ text }}</b-card-text>
-                                  </b-card-body>
-                                </b-collapse>
+                                    8. Transaksi Anda sudah selesai, simpan struk transaksi sebagai bukti pembayaran
+                                  </b-card-text>
+                                  <b-card-text>{{ text }}</b-card-text>
+                                </b-card-body>
+                              </b-collapse>
                             </div>
-                               <div role="tablist">
-                                <b-card-header header-tag="header" class="p-1" role="tab">
-                                  <b-button block href="#" v-b-toggle.accordion-2>m-BCA (BCA Mobile)</b-button>
-                                </b-card-header>
-                                <b-collapse id="accordion-2" accordion="my-accordion" role="tabpanel">
-                                  <b-card-body>
-                                    <b-card-text>
+                            <div role="tablist">
+                              <b-card-header header-tag="header" class="p-1" role="tab">
+                                <b-button block href="#" v-b-toggle.accordion-2 class=" text-left"><strong>m-BCA (BCA
+                                    Mobile)</strong>
+                                </b-button>
+                              </b-card-header>
+                              <b-collapse id="accordion-2" accordion="my-accordion" role="tabpanel">
+                                <b-card-body>
+                                  <b-card-text>
                                     1. Lakukan log in pada aplikasi BCA Mobile
-                                       <br>
+                                    <br>
 
-2. Pilih menu "m-BCA", kemudian masukkan kode akses m-BCA <br>
+                                    2. Pilih menu "m-BCA", kemudian masukkan kode akses m-BCA <br>
 
-3. Pilih "m-Transfer" <br>
+                                    3. Pilih "m-Transfer" <br>
 
-4. Pilih “BCA Virtual Account” <br>
+                                    4. Pilih “BCA Virtual Account” <br>
 
-5. Pilih dari Daftar Transfer, atau masukkan 5 angka kode perusahaan untuk izidok (xxxxx) dan Nomor Virtual Account Anda (Contoh: (company code)-123456789000) <br>
+                                    5. Pilih dari Daftar Transfer, atau masukkan 5 angka kode perusahaan untuk izidok
+                                    (xxxxx) dan Nomor Virtual Account Anda (Contoh: (company code)-123456789000) <br>
 
-6. Pastikan detil tagihan Anda sudah benar, kemudian pilih “OK” <br>
+                                    6. Pastikan detil tagihan Anda sudah benar, kemudian pilih “OK” <br>
 
-7. Masukkan pin m-BCA <br>
+                                    7. Masukkan pin m-BCA <br>
 
-8. Pembayaran selesai. Simpan notifikasi yang muncul sebagai bukti pembayaran 
-                                    </b-card-text>
-                                    <b-card-text>{{ text }}</b-card-text>
-                                  </b-card-body>
-                                </b-collapse>
+                                    8. Pembayaran selesai. Simpan notifikasi yang muncul sebagai bukti pembayaran
+                                  </b-card-text>
+                                  <b-card-text>{{ text }}</b-card-text>
+                                </b-card-body>
+                              </b-collapse>
                             </div>
+                            <div role="tablist">
+                              <b-card-header header-tag="header" class="p-1" role="tab">
+                                <b-button block href="#" v-b-toggle.accordion-3 class=" text-left"><strong>Internet
+                                    Banking BCA</strong>
+                                </b-button>
+                              </b-card-header>
+                              <b-collapse id="accordion-3" accordion="my-accordion" role="tabpanel">
+                                <b-card-body>
+                                  <b-card-text>
+                                    1. Login pada alamat Internet Banking BCA <a
+                                      href="https://klikbca.com">(https://klikbca.com)</a>
+                                    <br>
+
+                                    2. Masukkan user ID dan PIN <br>
+
+                                    3. Pilih “Transfer Dana” <br>
+
+                                    4. Pilih “Transfer ke BCA Virtual Account” <br>
+
+                                    5. Masukkan 5 angka kode perusahaan untuk izidok (xxxxx) dan Nomor Virtual Account
+                                    Anda (Contoh: (company code)-123456789000) <br>
+
+                                    6. Validasi detil tagihan Anda, kemudian pilih “Lanjutkan”<br>
+
+                                    7. Masukkan mtoken Anda <br>
+
+                                    8. Cetak atau simpan bukti pembayaran Anda
+                                  </b-card-text>
+                                  <b-card-text>{{ text }}</b-card-text>
+                                </b-card-body>
+                              </b-collapse>
+                            </div>
+                            <div role="tablist">
+                              <b-card-header header-tag="header" class="p-1" role="tab">
+                                <b-button block href="#" v-b-toggle.accordion-4 class=" text-left"><strong>Kantor Bank
+                                    BCA</strong>
+                                </b-button>
+                              </b-card-header>
+                              <b-collapse id="accordion-4" accordion="my-accordion" role="tabpanel">
+                                <b-card-body>
+                                  <b-card-text>
+                                    1. Ambil nomor antrian transaksi Teller dan isi slip setoran
+                                    <br>
+
+                                    2. Serahkan slip dan jumlah setoran kepada Teller BCA <br>
+
+                                    3. Teller BCA akan melakukan validasi transaksi<br>
+
+                                    4. Simpan slip setoran hasil validasi sebagai bukti pembayaran <br>
+                                  </b-card-text>
+                                  <b-card-text>{{ text }}</b-card-text>
+                                </b-card-body>
+                              </b-collapse>
+                            </div>
+                            
+                                <b-button variant="success" style="width:100%; margin-top:15px;">Kembali ke halaman Billing</b-button>
                           </div>
                         </div>
                       </div>
