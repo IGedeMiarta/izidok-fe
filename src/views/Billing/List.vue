@@ -24,69 +24,100 @@
                             <label class>Paket</label>
                           </div>
                           <div class="col-md-2">
-                            <label>: STARTER-1 (1 BULAN)</label>
+                            <template v-if="dataActive.message === 'package not found'">
+                              <label>: - </label>
+                            </template>
+                            <template v-if="dataActive.message !== 'package not found'">
+                              <label>: STARTER-1 dam</label>
+                            </template>
                           </div>
                           <div class="col-md-2">
                             <label>Status</label>
                           </div>
                           <div class="col-md-2">
-                            <label>: <label class="btn-success"
-                                style="padding-left: 5px; padding-right: 5px;">Aktif</label></label>
+                            <template v-if="dataActive.message === 'package not found'">
+                              <label>: -</label>
+                            </template>
+                            <template v-if="dataActive.message !== 'package not found'">
+                              <label>: <label class="btn-success"
+                                              style="padding-left: 5px; padding-right: 5px;">Aktif</label></label>
+                            </template>
+
                           </div>
                           <div class="col-md-2">
                             <label>Sisa Kuota</label>
                           </div>
                           <div class="col-md-2">
-                            <label>: <label class="btn-success"
-                                style="padding-left: 5px; padding-right: 5px;">50</label></label>
+                            <template v-if="dataActive.message === 'package not found'">
+                              <label>: -</label>
+                            </template>
+                            <template v-if="dataActive.message !== 'package not found'">
+                              <label>: <label class="btn-success"
+                                              style="padding-left: 5px; padding-right: 5px;">50</label></label>
+                            </template>
                           </div>
                           <div class="col-md-2">
                             <label class>Pembelian</label>
                           </div>
                           <div class="col-md-2">
-                            <label>: 15 JAN 2020 10:09</label>
+                            <template v-if="dataActive.message === 'package not found'">
+                              <label>: -</label>
+                            </template>
+                            <template v-if="dataActive.message !== 'package not found'">
+                              <label>: 15 JAN 2020 10:09</label>
+                            </template>
                           </div>
                           <div class="col-md-2">
                             <label class>Mulai Berlaku</label>
                           </div>
                           <div class="col-md-2">
-                            <label>: 15 JAN 2020 10:09</label>
+                            <template v-if="dataActive.message === 'package not found'">
+                              <label>: -</label>
+                            </template>
+                            <template v-if="dataActive.message !== 'package not found'">
+                              <label>: 15 JAN 2020 10:09</label>
+                            </template>
                           </div>
                           <div class="col-md-2">
                             <label class>Habis Berlaku</label>
                           </div>
                           <div class="col-md-2">
-                            <label>: 15 JAN 2020 10:09</label>
+                            <template v-if="dataActive.message === 'package not found'">
+                              <label>: -</label>
+                            </template>
+                            <template v-if="dataActive.message !== 'package not found'">
+                              <label>: 15 JAN 2020 10:09</label>
+                            </template>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div class="card card-box borders-0" style="background-color:#cef2f5;border-radius:0px;">
-                      <div class="card-body">
-                        <div class="row">
-                          <div class="col-md-2">
-                            <label>Add-ON</label>
-                          </div>
-                          <div class="col-md-2">
-                            <label>: STARTER-1 (1 BULAN)</label>
-                          </div>
-                          <div class="col-md-2">
-                            <label>Status</label>
-                          </div>
-                          <div class="col-md-2">
-                            <label>: <label
-                                style="padding-left: 5px; padding-right: 5px;">Aktif</label></label>
-                          </div>
-                          <div class="col-md-2">
-                            <label>Sisa Kuota</label>
-                          </div>
-                          <div class="col-md-2">
-                            <label>: <label
-                                style="background-color:#18d8f6;padding-left: 5px; padding-right: 5px;">20</label></label>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+<!--                    <div class="card card-box borders-0" style="background-color:#cef2f5;border-radius:0px;">-->
+<!--                      <div class="card-body">-->
+<!--                        <div class="row">-->
+<!--                          <div class="col-md-2">-->
+<!--                            <label>Add-ON</label>-->
+<!--                          </div>-->
+<!--                          <div class="col-md-2">-->
+<!--                            <label>: STARTER-1 (1 BULAN)</label>-->
+<!--                          </div>-->
+<!--                          <div class="col-md-2">-->
+<!--                            <label>Status</label>-->
+<!--                          </div>-->
+<!--                          <div class="col-md-2">-->
+<!--                            <label>: <label-->
+<!--                                style="padding-left: 5px; padding-right: 5px;">Aktif</label></label>-->
+<!--                          </div>-->
+<!--                          <div class="col-md-2">-->
+<!--                            <label>Sisa Kuota</label>-->
+<!--                          </div>-->
+<!--                          <div class="col-md-2">-->
+<!--                            <label>: <label-->
+<!--                                style="background-color:#18d8f6;padding-left: 5px; padding-right: 5px;">20</label></label>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
                   </div>
                   <div class="col-md-9">
                     <button  @click="$router.push('/subskripsi/pilih-paket')" class="btn btn-primary float-right mt-3" style="width:60%">Beli Paket Berlangganan</button>
@@ -108,10 +139,40 @@
                 <div class="col-md-12">
                   <b-tabs card>
                     <b-tab title="BELUM AKTIF" active>
-                      <b-table striped hover :items="items" :fields="fields" ></b-table>
+                        <b-table
+                          :callbackFunc="fetchListNotActive"
+                          id="my-table"
+                          :fields="fields"
+                          :items="items"
+                          :per-page="perPageNotActiveExpired"
+                          :current-page="currentPageExpired"
+                          striped hover
+                        ></b-table>
+                      <b-pagination
+                        align="center"
+                        v-model="currentPageExpired"
+                        :total-rows="rows"
+                        :per-page="perPageNotActiveExpired"
+                        aria-controls="my-table"
+                      ></b-pagination>
                     </b-tab>
                     <b-tab title="BERAKHIR">
-                      <b-table striped hover :items="items" :fields="fields"></b-table>
+                      <b-table
+                        :callbackFunc="fetchListExpired"
+                        id="my-table"
+                        :fields="fields"
+                        :items="items"
+                        :per-page="perPageActiveExpired"
+                        :current-page="currentPageExpired"
+                        striped hover
+                      ></b-table>
+                      <b-pagination
+                        align="center"
+                        v-model="currentPageExpired"
+                        :total-rows="rows"
+                        :per-page="perPageActiveExpired"
+                        aria-controls="my-table"
+                      ></b-pagination>
                     </b-tab>
                   </b-tabs>
                 </div>
@@ -124,9 +185,9 @@
                 <div class="col-md-12 text-center">
                   <strong>RIWAYAT PEMBELIAN</strong>
                 </div>
-                <DataTableWrapper :perPage="perPage" :currentPage="currentPage" :callbackFunc="fetchListTagihan"
+                <DataTableWrapper :perPage="perPage" :currentPage="currentPage" :callbackFunc="fetchRiwayatPembelian"
                   @valueChanged="handleValueChanged">
-                  <b-table :items="dataTagihan" :fields="fieldList" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc"
+                  <b-table :items="dataRiwayatPembelian" :fields="fieldList" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc"
                     thead-tr-class="izd-datatable" :no-local-sorting="true">
                     <template v-slot:head()="data">
                       {{ data.label }}
@@ -143,7 +204,7 @@
                     </template>
                     <template v-slot:cell(actions)="data">
                       <span>
-                           <b-link class="btn text-light font-size-md pl-2 pr-2 btn-sm " @click="detailTagihan(data.item)"
+                           <b-link class="btn text-light font-size-md pl-2 pr-2 btn-sm " v-tooltip="'Lihat Struk'"  @click="detailBayar(data.item)"
                       style="background-color:#37afe8;">
                       <font-awesome-icon icon="search" style="color:black;" />
                     </b-link>
@@ -153,7 +214,7 @@
                       variant="success"
                       size="sm"
                       v-tooltip="'Halaman Pembayaran'"
-                      @click="detailBayar(data.item)"
+                      @click="detailTagihan(data.item)"
                       class="btn text-light font-size-md ml-1 pl-2 pr-2 btn-sm"
                       v-if="data.item.status == 'MENUNGGU PEMBAYARAN'"
                       ><font-awesome-icon icon="money-bill-wave"
@@ -318,6 +379,12 @@
           }
         ],
         dataTagihan : [],
+        dataRiwayatPembelian : [],
+        dataNotActive : [],
+        dataActive : [],
+        dataExpired : [{
+          nama: null,
+        }],
         detailStruk : null,
         searchValue: [],
         detail : null,
@@ -329,23 +396,31 @@
         fromPage: 0,
         toPage: 0,
         perPage: 10,
+        perPageNotActiveExpired: 5,
+        currentPageNotActive: 1,
+        currentPageExpired: 1,
       }
+    },
+    mounted() {
+      this.fetchListNotActive();
+      this.fetchListExpired();
+      this.fetchActive();
     },
     watch: {
       currentPage() {
-        this.fetchListTagihan();
+        this.fetchRiwayatPembelian();
       },
       perPage() {
-        this.fetchListTagihan();
+        this.fetchRiwayatPembelian();
       },
       sortBy() {
-        this.fetchListTagihan();
+        this.fetchRiwayatPembelian();
       },
       sortDesc() {
-        this.fetchListTagihan();
+        this.fetchRiwayatPembelian();
       },
       searchValue: {
-        handler: "fetchListTagihan",
+        handler: "fetchRiwayatPembelian",
         deep: true
       }
     },
@@ -417,6 +492,133 @@
           }
         });
       },
+      async fetchListNotActive() {
+        try {
+          const res = await axios.get(
+            `${this.url_api}/billing/package?limit=${this.perPageNotActiveExpired}&page=${
+              this.currentPageNotActive
+            }${this.determineParameter()}`
+          );
+          const { success, data } = res.data;
+          if (success) {
+            const { total } = data;
+            const {
+              data: listDataNotActive,
+              total: totalEntries,
+              to: toPage,
+              from: fromPage
+            } = data;
+            this.totalEntries = totalEntries;
+            this.toPage = toPage;
+            this.fromPage = fromPage;
+            this.dataNotActive = [
+              ...listDataNotActive.map((item, index) => {
+                return {
+                  ...item,
+                  no: (this.currentPage - 1) * this.perPage + index + 1
+                };
+              })
+            ];
+            this.rows = data.total;
+            return this;
+          }
+        } catch (err) {
+          // console.log(err);
+        }
+      },
+      fetchActive() {
+        axios.get(`${this.url_api}/billing/package-active`)
+          .then(res => {
+            this.dataActive = res.data
+            console.log(this.dataActive)
+          });
+      },
+      async fetchListExpired() {
+        try {
+          const res = await axios.get(
+            `${this.url_api}/billing/package-expired?limit=${this.perPageActiveExpired}&page=${
+              this.currentPageExpired
+            }${this.determineParameter()}`
+          );
+          const { success, data } = res.data;
+          if (success) {
+            const { total } = data;
+            const {
+              data: listDataExpired,
+              total: totalEntries,
+              to: toPage,
+              from: fromPage
+            } = data;
+            this.totalEntries = totalEntries;
+            this.toPage = toPage;
+            this.fromPage = fromPage;
+            this.dataExpired = [
+              ...listDataExpired.map((item, index) => {
+                return {
+                  ...item,
+                  no: (this.currentPage - 1) * this.perPage + index + 1
+                };
+              })
+            ];
+            this.rows = data.total;
+            return this;
+          }
+        } catch (err) {
+          // console.log(err);
+        }
+      },
+      determineParameter() {
+        const {
+          searchValue,
+          sortBy,
+          sortDesc
+        } = this;
+        let v = "";
+        searchValue.map(item => {
+          const x =
+            (item.key === "produk" && "produk") || item.key;
+          v += `&${x}=${item.value}`;
+        });
+
+        if (sortBy) {
+          v += `&column=${sortBy}&order=${sortDesc ? "desc" : "asc"}`;
+        }
+        return v;
+      },
+      async fetchRiwayatPembelian() {
+        try {
+          const res = await axios.get(
+            `${this.url_api}/billing?limit=${this.perPage}&page=${
+              this.currentPage
+            }${this.determineParameter()}`
+          );
+          const { success, data } = res.data;
+          if (success) {
+            const { total } = data;
+            const {
+              data: listRiwayatPembelian,
+              total: totalEntries,
+              to: toPage,
+              from: fromPage
+            } = data;
+            this.totalEntries = totalEntries;
+            this.toPage = toPage;
+            this.fromPage = fromPage;
+            this.dataRiwayatPembelian = [
+              ...listRiwayatPembelian.map((item, index) => {
+                return {
+                  ...item,
+                  no: (this.currentPage - 1) * this.perPage + index + 1
+                };
+              })
+            ];
+            this.rows = data.total;
+            return this;
+          }
+        } catch (err) {
+          // console.log(err);
+        }
+      },
       changePage(page) {
         this.fetchListTagihan(page);
       },
@@ -460,24 +662,6 @@
           }
         ];
       }, 500),
-      determineParameter() {
-        const {
-          searchValue,
-          sortBy,
-          sortDesc
-        } = this;
-        let v = "";
-        searchValue.map(item => {
-          const x =
-            (item.key === "produk" && "produk") || item.key;
-          v += `&${x}=${item.value}`;
-        });
-
-        if (sortBy) {
-          v += `&column=${sortBy}&order=${sortDesc ? "desc" : "asc"}`;
-        }
-        return v;
-      },
       fetchListTagihan () {
         this.totalEntries = 1;
         this.toPage = 1;
