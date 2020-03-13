@@ -254,8 +254,8 @@ const routes = [
     component: () => import("../views/Subscription/DetailAddons.vue")
   },
   {
-    path: "/subskripsi/cara-bayar",
-    name: "subskripsi-cara-bayar",
+    path: "/subskripsi/payment/:bill_id",
+    name: "subskripsi-bayar",
     component: () => import("../views/Subscription/CaraPembayaran.vue")
   },
   {
