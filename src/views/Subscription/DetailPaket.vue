@@ -214,7 +214,7 @@
           },
           {
             text: '12 Bulan',
-            value: '12'
+            value: '10'
           },
         ]
       }

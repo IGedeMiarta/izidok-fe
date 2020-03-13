@@ -531,7 +531,9 @@
             {
               key: "tanggal_bayar",
               label: "Tanggal Bayar",
-              thStyle: "width: 15%"
+              thStyle: "width: 15%",
+              class: ""
+
             },
             {
               key: "status_text",
