@@ -40,7 +40,7 @@
                             </template>
                             <template v-if="dataActive.message !== 'package not found'">
                               <label>: <label class="btn-success"
-                                              style="padding-left: 5px; padding-right: 5px;">Aktif</label></label>
+                                  style="padding-left: 5px; padding-right: 5px;">Aktif</label></label>
                             </template>
 
                           </div>
@@ -53,7 +53,7 @@
                             </template>
                             <template v-if="dataActive.message !== 'package not found'">
                               <label>: <label class="btn-success"
-                                              style="padding-left: 5px; padding-right: 5px;">50</label></label>
+                                  style="padding-left: 5px; padding-right: 5px;">50</label></label>
                             </template>
                           </div>
                           <div class="col-md-2">
@@ -92,40 +92,41 @@
                         </div>
                       </div>
                     </div>
-<!--                    <div class="card card-box borders-0" style="background-color:#cef2f5;border-radius:0px;">-->
-<!--                      <div class="card-body">-->
-<!--                        <div class="row">-->
-<!--                          <div class="col-md-2">-->
-<!--                            <label>Add-ON</label>-->
-<!--                          </div>-->
-<!--                          <div class="col-md-2">-->
-<!--                            <label>: STARTER-1 (1 BULAN)</label>-->
-<!--                          </div>-->
-<!--                          <div class="col-md-2">-->
-<!--                            <label>Status</label>-->
-<!--                          </div>-->
-<!--                          <div class="col-md-2">-->
-<!--                            <label>: <label-->
-<!--                                style="padding-left: 5px; padding-right: 5px;">Aktif</label></label>-->
-<!--                          </div>-->
-<!--                          <div class="col-md-2">-->
-<!--                            <label>Sisa Kuota</label>-->
-<!--                          </div>-->
-<!--                          <div class="col-md-2">-->
-<!--                            <label>: <label-->
-<!--                                style="background-color:#18d8f6;padding-left: 5px; padding-right: 5px;">20</label></label>-->
-<!--                          </div>-->
-<!--                        </div>-->
-<!--                      </div>-->
-<!--                    </div>-->
+                    <!--                    <div class="card card-box borders-0" style="background-color:#cef2f5;border-radius:0px;">-->
+                    <!--                      <div class="card-body">-->
+                    <!--                        <div class="row">-->
+                    <!--                          <div class="col-md-2">-->
+                    <!--                            <label>Add-ON</label>-->
+                    <!--                          </div>-->
+                    <!--                          <div class="col-md-2">-->
+                    <!--                            <label>: STARTER-1 (1 BULAN)</label>-->
+                    <!--                          </div>-->
+                    <!--                          <div class="col-md-2">-->
+                    <!--                            <label>Status</label>-->
+                    <!--                          </div>-->
+                    <!--                          <div class="col-md-2">-->
+                    <!--                            <label>: <label-->
+                    <!--                                style="padding-left: 5px; padding-right: 5px;">Aktif</label></label>-->
+                    <!--                          </div>-->
+                    <!--                          <div class="col-md-2">-->
+                    <!--                            <label>Sisa Kuota</label>-->
+                    <!--                          </div>-->
+                    <!--                          <div class="col-md-2">-->
+                    <!--                            <label>: <label-->
+                    <!--                                style="background-color:#18d8f6;padding-left: 5px; padding-right: 5px;">20</label></label>-->
+                    <!--                          </div>-->
+                    <!--                        </div>-->
+                    <!--                      </div>-->
+                    <!--                    </div>-->
                   </div>
                   <div class="col-md-9">
-                    <button  @click="$router.push('/subskripsi/pilih-paket')" class="btn btn-primary float-right mt-3" style="width:60%">Beli Paket Berlangganan</button>
+                    <button @click="$router.push('/subskripsi/pilih-paket')" class="btn btn-primary float-right mt-3"
+                      style="width:60%">Beli Paket Berlangganan</button>
                   </div>
-<!--                  <div class="col-md-6">-->
-<!--                    <button class="btn float-left mt-3" style="background-color:#de51d9;color:white;width:60%">Beli-->
-<!--                      Kouta ADD-ON</button>-->
-<!--                  </div>-->
+                  <!--                  <div class="col-md-6">-->
+                  <!--                    <button class="btn float-left mt-3" style="background-color:#de51d9;color:white;width:60%">Beli-->
+                  <!--                      Kouta ADD-ON</button>-->
+                  <!--                  </div>-->
                 </div>
               </div>
             </div>
@@ -141,114 +142,110 @@
                     <b-tab title="BELUM AKTIF" active>
                       <table class="table table-striped table-hover mb-0">
                         <thead class="thead-light">
-                        <tr class="text-capitalize">
-                          <th scope="col">Waktu Pembelian</th>
-                          <th scope="col" class="text-center">
-                            Paket
-                          </th>
-                          <th scope="col" class="text-center">
-                            Mulai Berlaku
-                          </th>
-                          <th scope="col" class="text-center">
-                            Habis Berlaku
-                          </th>
-                          <th scope="col" class="text-center">
-                            Action
-                          </th>
-
-                        </tr>
+                          <tr class="text-capitalize">
+                            <th scope="col">Waktu Pembelian</th>
+                            <th scope="col" >
+                              Paket
+                            </th>
+                            <th scope="col" >
+                              jumlah Kouta
+                            </th>
+                            <th scope="col">
+                              Action
+                            </th>
+                          </tr>
                         </thead>
                         <tbody class="list">
-                        <tr v-for="(data, index) in dataRawatJalan" :key="data.id">
-                          <td class="text-wrap">
-                            <div class="align-box-row">
-                              <div class="d-flex align-items-center">
-                                <span>{{ (currentPage - 1) * perPage + index + 1 }} </span>
+                          <tr v-for="(data) in dataNotActive" :key="data.id">
+                            <td class="text-wrap">
+                              <div class="align-box-row">
+                                <div class="d-flex align-items-center">
+                                  <span> {{ data.waktu_pembelian == null ? "-" : data.waktu_pembelian  }}</span>
+                                </div>
                               </div>
-                            </div>
-                          </td>
-                          <td class="text-wrap">
-                            <div class="align-box-row">
-                    <span class="d-block">
-                      {{ data.pasien.nama }}
-                    </span>
-                            </div>
-                          </td>
-                          <td>
-                            <div class="text-center d-flex align-items-center justify-content-between">
-                              <span class="flex-grow-1">{{data.pasien['nomor_rekam_medis']}}</span>
-                              <span>
-                      <b-button variant="dark" size="sm" @click="rekamMedis(data)">
-                        <span class="btn-wrapper--icon">
-                          <font-awesome-icon icon="sign-in-alt" /> </span></b-button>
-                    </span>
-                            </div>
-                          </td>
-                        </tr>
+                            </td>
+                            <td class="text-wrap">
+                              <div class="align-box-row">
+                                <span class="d-block">
+                                  {{ data.paket }}
+                                </span>
+                              </div>
+                            </td>
+                            <td class="text-wrap">
+                              <div class="align-box-row">
+                                <span class="d-block">
+                                  {{ data.jumlah_kouta }}
+                                </span>
+                              </div>
+                            </td>
+                             <td class="text-wrap">
+                              <div class="align-box-row">
+                                <span class="d-block">
+                                   <b-button
+                                      variant="primary"
+                                      size="sm"
+                                      v-tooltip="'Detail Paket'"
+                                      ><font-awesome-icon icon="search"
+                                    /></b-button>
+                                </span>
+                              </div>
+                            </td>
+                          </tr>
                         </tbody>
                       </table>
-                      <b-pagination
-                        class="d-flex justify-content-center mt-4"
-                        v-model="currentPage"
-                        :total-rows="rows"
-                        :per-page="perPage"
-                      ></b-pagination>
+                      <b-pagination class="d-flex justify-content-center mt-4" v-model="currentPage" :total-rows="rows"
+                        :per-page="perPage"></b-pagination>
                     </b-tab>
                     <b-tab title="BERAKHIR">
                       <table class="table table-striped table-hover mb-0">
                         <thead class="thead-light">
-                        <tr class="text-capitalize">
-                          <th scope="col">Waktu Pembelian</th>
-                          <th scope="col" class="text-center">
-                            Paket
-                          </th>
-                          <th scope="col" class="text-center">
-                            Mulai Berlaku
-                          </th>
-                          <th scope="col" class="text-center">
-                            Habis Berlaku
-                          </th>
-                          <th scope="col" class="text-center">
-                            Action
-                          </th>
-
-                        </tr>
+                          <tr class="text-capitalize">
+                            <th scope="col">Waktu Pembelian</th>
+                            <th scope="col" class="text-center">
+                              Paket
+                            </th>
+                            <th scope="col" class="text-center">
+                              Mulai Berlaku
+                            </th>
+                            <th scope="col" class="text-center">
+                              Habis Berlaku
+                            </th>
+                            <th scope="col" class="text-center">
+                              Action
+                            </th>
+                          </tr>
                         </thead>
                         <tbody class="list">
-                        <tr v-for="(data, index) in dataRawatJalan" :key="data.id">
-                          <td class="text-wrap">
-                            <div class="align-box-row">
-                              <div class="d-flex align-items-center">
-                                <span>{{ (currentPage - 1) * perPage + index + 1 }} </span>
+                          <tr v-for="(data, index) in dataRawatJalan" :key="data.id">
+                            <td class="text-wrap">
+                              <div class="align-box-row">
+                                <div class="d-flex align-items-center">
+                                  <span>{{ (currentPage - 1) * perPage + index + 1 }} </span>
+                                </div>
                               </div>
-                            </div>
-                          </td>
-                          <td class="text-wrap">
-                            <div class="align-box-row">
-                    <span class="d-block">
-                      {{ data.pasien.nama }}
-                    </span>
-                            </div>
-                          </td>
-                          <td>
-                            <div class="text-center d-flex align-items-center justify-content-between">
-                              <span class="flex-grow-1">{{data.pasien['nomor_rekam_medis']}}</span>
-                              <span>
-                      <b-button variant="dark" size="sm" @click="rekamMedis(data)">
-                        <span class="btn-wrapper--icon">
-                          <font-awesome-icon icon="sign-in-alt" /> </span></b-button>
-                    </span>
-                            </div>
-                          </td>
-                        </tr>
+                            </td>
+                            <td class="text-wrap">
+                              <div class="align-box-row">
+                                <span class="d-block">
+                                  {{ data.pasien.nama }}
+                                </span>
+                              </div>
+                            </td>
+                            <td>
+                              <div class="text-center d-flex align-items-center justify-content-between">
+                                <span class="flex-grow-1">{{data.pasien['nomor_rekam_medis']}}</span>
+                                <span>
+                                  <b-button variant="dark" size="sm" @click="rekamMedis(data)">
+                                    <span class="btn-wrapper--icon">
+                                      <font-awesome-icon icon="sign-in-alt" /> </span></b-button>
+                                </span>
+                              </div>
+                            </td>
+                          </tr>
                         </tbody>
                       </table>
-                      <b-pagination
-                        class="d-flex justify-content-center mt-4"
-                        v-model="currentPage"
-                        :total-rows="rows"
-                        :per-page="perPage"
-                      ></b-pagination>
+                      <b-pagination class="d-flex justify-content-center mt-4" v-model="currentPage" :total-rows="rows"
+                        :per-page="perPage"></b-pagination>
                     </b-tab>
                   </b-tabs>
                 </div>
@@ -263,8 +260,8 @@
                 </div>
                 <DataTableWrapper :perPage="perPage" :currentPage="currentPage" :callbackFunc="fetchRiwayatPembelian"
                   @valueChanged="handleValueChanged">
-                  <b-table :items="dataRiwayatPembelian" :fields="fieldList" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc"
-                    thead-tr-class="izd-datatable" :no-local-sorting="true">
+                  <b-table :items="dataRiwayatPembelian" :fields="fieldList" :sort-by.sync="sortBy"
+                    :sort-desc.sync="sortDesc" thead-tr-class="izd-datatable" :no-local-sorting="true">
                     <template v-slot:head()="data">
                       {{ data.label }}
                       <b-input size="sm" class="mt-2 w-70" v-if="data.field.searchable"
@@ -280,35 +277,30 @@
                     </template>
                     <template v-slot:cell(actions)="data">
                       <span>
-                           <b-link class="btn text-light font-size-md pl-2 pr-2 btn-sm " v-tooltip="'Lihat Struk'"  @click="detailBayar(data.item)"
-                      style="background-color:#37afe8;">
-                      <font-awesome-icon icon="search" style="color:black;" />
-                    </b-link>
+                        <b-link class="btn text-light font-size-md pl-2 pr-2 btn-sm " v-tooltip="'Lihat Struk'"
+                          @click="detailBayar(data.item)" style="background-color:#37afe8;">
+                          <font-awesome-icon icon="search" style="color:black;" />
+                        </b-link>
                       </span>
-                      <span >
-                          <b-button
-                      variant="success"
-                      size="sm"
-                      v-tooltip="'Halaman Pembayaran'"
-                      @click="detailTagihan(data.item)"
-                      class="btn text-light font-size-md ml-1 pl-2 pr-2 btn-sm"
-                      ><font-awesome-icon icon="money-bill-wave"
-                    /></b-button>
+                      <span>
+                        <b-button variant="success" size="sm" v-tooltip="'Halaman Pembayaran'"
+                          @click="detailTagihan(data.item)" class="btn text-light font-size-md ml-1 pl-2 pr-2 btn-sm">
+                          <font-awesome-icon icon="money-bill-wave" />
+                        </b-button>
                       </span>
-
                     </template>
                   </b-table>
                 </DataTableWrapper>
               </div>
             </div>
           </div>
-           <b-modal ref="my-modal" title="Detail Paket">
-             <div class="row" v-if="this.detail !== null ">
+          <b-modal ref="my-modal" title="Detail Paket">
+            <div class="row" v-if="this.detail !== null ">
               <div class="col-md-4">
                 <strong>Nama Paket</strong>
               </div>
               <div class="col-md-8">
-                :  <label class=" ml-3">{{this.detail.produk}}</label>
+                : <label class=" ml-3">{{this.detail.produk}}</label>
               </div>
 
               <div class="col-md-4">
@@ -320,16 +312,16 @@
               <div class="col-md-4">
                 <strong>Fitur</strong>
               </div>
-               <div class="col-md-8">
+              <div class="col-md-8">
                 : <label class=" ml-3">asdasd</label>
               </div>
               <div class="col-md-4">
                 <strong>User</strong>
               </div>
-               <div class="col-md-8">
+              <div class="col-md-8">
                 : <label class=" ml-3">asdasd</label>
               </div>
-             </div>
+            </div>
             <template v-slot:modal-footer>
               <div class="w-100">
                 <b-button variant="primary" class="float-right" @click="hideModal">
@@ -338,45 +330,48 @@
               </div>
             </template>
           </b-modal>
-             <b-modal ref="lihat-struk">
-             <div class="row" v-if="this.detailStruk !== null " style="font-size:14px;">
+          <b-modal ref="lihat-struk">
+            <div class="row" v-if="this.detailStruk !== null " style="font-size:14px;">
 
               <div class="col-md-7">
                 <label class="float-left"><strong>Total Pembelian :</strong> Rp. 300.000</label>
               </div>
               <div class="col-md-5">
-                 <b-button variant="success" size="sm" class="float-right text-uppercase" @click="hideModal">
+                <b-button variant="success" size="sm" class="float-right text-uppercase" @click="hideModal">
                   Lihat Invoice
                 </b-button>
               </div>
               <div class="col-md-12">
-                <label class="float-left"><strong>Tanggal Pembelian :</strong>   23 Februari 2019</label>
+                <label class="float-left"><strong>Tanggal Pembelian :</strong> 23 Februari 2019</label>
               </div>
               <div class="col-md-12">
-                <div class="col-sm- text-center" >
-                  <label style="background-color:#ded5d5;padding-left:50px; padding-right:50px; " class="text-danger mt-3 mb-3">Bayar Sebelum 24 Februari 2020 16:30:20</label>
+                <div class="col-sm- text-center">
+                  <label style="background-color:#ded5d5;padding-left:50px; padding-right:50px; "
+                    class="text-danger mt-3 mb-3">Bayar Sebelum 24 Februari 2020 16:30:20</label>
                 </div>
               </div>
-               <div class="col-md-5">
-                 <label class="float-left"><strong>Metode Pembayaran</strong></label>
-               </div>
-               <div class="col-md-6">
-                 <label class="float-left"><strong>:</strong> BCA Virtual Account</label>
-               </div>
-               <div class="col-md-5">
-                 <label class="float-left"><strong>No. Virtual Account</strong></label>
-               </div>
-               <div class="col-md-6">
-                 <label class="float-left"><strong>:</strong> 2081659279107</label>
-               </div>
+              <div class="col-md-5">
+                <label class="float-left"><strong>Metode Pembayaran</strong></label>
+              </div>
+              <div class="col-md-6">
+                <label class="float-left"><strong>:</strong> BCA Virtual Account</label>
+              </div>
+              <div class="col-md-5">
+                <label class="float-left"><strong>No. Virtual Account</strong></label>
+              </div>
+              <div class="col-md-6">
+                <label class="float-left"><strong>:</strong> 2081659279107</label>
+              </div>
 
-             </div>
-             <div slot="modal-footer">
-               <div class="align-content-center">
-                 <b-button variant="primary mr-2" @click="$router.push('/subskripsi/cara-bayar')">Lihat Cara Pembayaran</b-button>
-                 <b-button variant="danger" ref='modal-bataltransaksi' class="btn-link-dark mr-4" @click='closeModalBatalTransaksi'>Batalkan Transaksi</b-button>
-               </div>
-             </div>
+            </div>
+            <div slot="modal-footer">
+              <div class="align-content-center">
+                <b-button variant="primary mr-2" @click="$router.push('/subskripsi/cara-bayar')">Lihat Cara Pembayaran
+                </b-button>
+                <b-button variant="danger" ref='modal-bataltransaksi' class="btn-link-dark mr-4"
+                  @click='closeModalBatalTransaksi'>Batalkan Transaksi</b-button>
+              </div>
+            </div>
           </b-modal>
         </div>
       </div>
@@ -386,7 +381,7 @@
 
 <script>
   import debounce from "lodash/debounce";
-   import axios from "axios";
+  import axios from "axios";
   import {
     library
   } from "@fortawesome/fontawesome-svg-core";
@@ -401,7 +396,7 @@
     faMoneyBillWave
   } from "@fortawesome/free-solid-svg-icons";
   import startCase from "lodash/startCase";
-   library.add(faArrowRight, faEye,   faMoneyBillWave,
+  library.add(faArrowRight, faEye, faMoneyBillWave,
     faEyeSlash, faArrowUp, faTrashAlt, faSearch, faPencilAlt);
 
   export default {
@@ -412,7 +407,7 @@
       return {
         fields: [{
             label: 'WAKTU PEMBELIAN',
-            key: "WAKTU_PEMBELIAN",
+            key: "waktu_pembelian",
             thStyle: "width: 25%"
           },
           {
@@ -422,47 +417,25 @@
           },
           {
             label: 'JUMLAH KOUTA',
-            key: 'JUMLAH_KOUTA',
+            key: 'jumlah_kouta',
             thStyle: "width: 25%"
           },
           {
             label: 'ACTION',
-            key: 'ACTION',
+            key: 'action',
             thStyle: "width: 25%"
           },
         ],
-        items: [{
-            WAKTU_PEMBELIAN: '2019-10-10',
-            PAKET: 'Dickerson',
-            JUMLAH_KOUTA: 'Macdonald',
-            ACTION: '',
-          },
-          {
-            WAKTU_PEMBELIAN: '2019-10-10',
-            PAKET: 'Larsen',
-            JUMLAH_KOUTA: 'Shaw'
-          },
-          {
-            WAKTU_PEMBELIAN: '2019-10-10',
-            PAKET: 'Geneva',
-            JUMLAH_KOUTA: 'Wilson'
-          },
-          {
-            WAKTU_PEMBELIAN: '2019-10-10',
-            PAKET: 'Jami',
-            JUMLAH_KOUTA: 'Carney'
-          }
-        ],
-        dataTagihan : [],
-        dataRiwayatPembelian : [],
-        dataNotActive : [],
-        dataActive : [],
-        dataExpired : [{
+        dataTagihan: [],
+        dataRiwayatPembelian: [],
+        dataNotActive: [],
+        dataActive: [],
+        dataExpired: [{
           nama: null,
         }],
-        detailStruk : null,
+        detailStruk: null,
         searchValue: [],
-        detail : null,
+        detail: null,
         totalEntries: 0,
         sortBy: "",
         sortDesc: false,
@@ -500,7 +473,6 @@
       }
     },
     computed: {
-
       fieldList() {
         const {
           generateFieldList: g,
@@ -511,7 +483,7 @@
           [{
               key: "nomor_tagihan",
               label: "No. Tagihan",
-               thStyle: "width: 12%"
+              thStyle: "width: 12%"
             },
             {
               key: "produk",
@@ -571,33 +543,9 @@
       async fetchListNotActive() {
         try {
           const res = await axios.get(
-            `${this.url_api}/billing/package?limit=${this.perPageNotActiveExpired}&page=${
-              this.currentPageNotActive
-            }${this.determineParameter()}`
+            `${this.url_api}/billing/package`
           );
-          const { success, data } = res.data;
-          if (success) {
-            const { total } = data;
-            const {
-              data: listDataNotActive,
-              total: totalEntries,
-              to: toPage,
-              from: fromPage
-            } = data;
-            this.totalEntries = totalEntries;
-            this.toPage = toPage;
-            this.fromPage = fromPage;
-            this.dataNotActive = [
-              ...listDataNotActive.map((item, index) => {
-                return {
-                  ...item,
-                  no: (this.currentPage - 1) * this.perPage + index + 1
-                };
-              })
-            ];
-            this.rows = data.total;
-            return this;
-          }
+          this.dataNotActive = res.data.data.data;
         } catch (err) {
           // console.log(err);
         }
@@ -605,20 +553,22 @@
       fetchActive() {
         axios.get(`${this.url_api}/billing/package-active`)
           .then(res => {
-            this.dataActive = res.data
-            console.log(this.dataActive)
+            this.dataActive = res.data.data
           });
       },
       async fetchListExpired() {
         try {
           const res = await axios.get(
-            `${this.url_api}/billing/package-expired?limit=${this.perPageActiveExpired}&page=${
-              this.currentPageExpired
-            }${this.determineParameter()}`
+            `${this.url_api}/billing/package-expired`
           );
-          const { success, data } = res.data;
+          const {
+            success,
+            data
+          } = res.data;
           if (success) {
-            const { total } = data;
+            const {
+              total
+            } = data;
             const {
               data: listDataExpired,
               total: totalEntries,
@@ -668,9 +618,14 @@
               this.currentPage
             }${this.determineParameter()}`
           );
-          const { success, data } = res.data;
+          const {
+            success,
+            data
+          } = res.data;
           if (success) {
-            const { total } = data;
+            const {
+              total
+            } = data;
             const {
               data: listRiwayatPembelian,
               total: totalEntries,
@@ -680,18 +635,18 @@
             this.totalEntries = totalEntries;
             this.toPage = toPage;
             this.fromPage = fromPage;
-            let statusText = ["Menunggu Pembayaran","Lunas","Gagal","Batal"]
+            let statusText = ["Menunggu Pembayaran", "Lunas", "Gagal", "Batal"]
             let tglBayar = "-"
             this.dataRiwayatPembelian = [
               ...listRiwayatPembelian.map((item, index) => {
-                console.log("ddd",item)
-                if(item.tanggal_bayar === null){
+                console.log("ddd", item)
+                if (item.tanggal_bayar === null) {
                   item.tanggal_bayar = tglBayar
                 }
                 return {
                   ...item,
                   no: (this.currentPage - 1) * this.perPage + index + 1,
-                  status_text : statusText[item.status],
+                  status_text: statusText[item.status],
                 };
               })
             ];
@@ -705,7 +660,7 @@
       changePage(page) {
         this.fetchListTagihan(page);
       },
-       showModalTagihan() {
+      showModalTagihan() {
         this.$refs['lihat-struk'].show()
       },
       showModal() {
@@ -714,14 +669,14 @@
       hideModal() {
         this.$refs['my-modal'].hide()
       },
-      hideModalTagihan(){
+      hideModalTagihan() {
         this.$refs['lihat-struk'].hide()
       },
-      detailTagihan(item){
+      detailTagihan(item) {
         this.showModalTagihan()
         this.detailStruk = item;
       },
-      detailBayar(item){
+      detailBayar(item) {
         this.showModal();
         this.detail = item;
       },
@@ -745,32 +700,31 @@
           }
         ];
       }, 500),
-      fetchListTagihan () {
+      fetchListTagihan() {
         this.totalEntries = 1;
         this.toPage = 1;
         this.fromPage = 1;
         this.rows = 1;
-        this.dataTagihan =
-         [{
-              id : 1,
-              no_tagihan: "IZID1123",
-              produk: "STARTER 1",
-              periode_berlaku: "1 BULAN",
-              total_pembayaran: "RP. 121.000",
-              tanggal_pembayaran: "27/02/2020",
-              status: "LUNAS",
-            },
-            {
-              id : 2,
-              no_tagihan: "IZID1124",
-              produk: "STARTER 2",
-              periode_berlaku: "12 BULAN",
-              total_pembayaran: "RP. 121.000",
-              tanggal_pembayaran: "27/02/2020",
-              status: "MENUNGGU PEMBAYARAN",
-            },
-          ];
-          return this;
+        this.dataTagihan = [{
+            id: 1,
+            no_tagihan: "IZID1123",
+            produk: "STARTER 1",
+            periode_berlaku: "1 BULAN",
+            total_pembayaran: "RP. 121.000",
+            tanggal_pembayaran: "27/02/2020",
+            status: "LUNAS",
+          },
+          {
+            id: 2,
+            no_tagihan: "IZID1124",
+            produk: "STARTER 2",
+            periode_berlaku: "12 BULAN",
+            total_pembayaran: "RP. 121.000",
+            tanggal_pembayaran: "27/02/2020",
+            status: "MENUNGGU PEMBAYARAN",
+          },
+        ];
+        return this;
       }
     }
   }
