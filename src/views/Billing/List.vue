@@ -139,39 +139,115 @@
                 <div class="col-md-12">
                   <b-tabs card>
                     <b-tab title="BELUM AKTIF" active>
-                        <b-table
-                          :callbackFunc="fetchListNotActive"
-                          id="my-table"
-                          :fields="fields"
-                          :items="items"
-                          :per-page="perPageNotActiveExpired"
-                          :current-page="currentPageExpired"
-                          striped hover
-                        ></b-table>
+                      <table class="table table-striped table-hover mb-0">
+                        <thead class="thead-light">
+                        <tr class="text-capitalize">
+                          <th scope="col">Waktu Pembelian</th>
+                          <th scope="col" class="text-center">
+                            Paket
+                          </th>
+                          <th scope="col" class="text-center">
+                            Mulai Berlaku
+                          </th>
+                          <th scope="col" class="text-center">
+                            Habis Berlaku
+                          </th>
+                          <th scope="col" class="text-center">
+                            Action
+                          </th>
+
+                        </tr>
+                        </thead>
+                        <tbody class="list">
+                        <tr v-for="(data, index) in dataRawatJalan" :key="data.id">
+                          <td class="text-wrap">
+                            <div class="align-box-row">
+                              <div class="d-flex align-items-center">
+                                <span>{{ (currentPage - 1) * perPage + index + 1 }} </span>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="text-wrap">
+                            <div class="align-box-row">
+                    <span class="d-block">
+                      {{ data.pasien.nama }}
+                    </span>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="text-center d-flex align-items-center justify-content-between">
+                              <span class="flex-grow-1">{{data.pasien['nomor_rekam_medis']}}</span>
+                              <span>
+                      <b-button variant="dark" size="sm" @click="rekamMedis(data)">
+                        <span class="btn-wrapper--icon">
+                          <font-awesome-icon icon="sign-in-alt" /> </span></b-button>
+                    </span>
+                            </div>
+                          </td>
+                        </tr>
+                        </tbody>
+                      </table>
                       <b-pagination
-                        align="center"
-                        v-model="currentPageExpired"
+                        class="d-flex justify-content-center mt-4"
+                        v-model="currentPage"
                         :total-rows="rows"
-                        :per-page="perPageNotActiveExpired"
-                        aria-controls="my-table"
+                        :per-page="perPage"
                       ></b-pagination>
                     </b-tab>
                     <b-tab title="BERAKHIR">
-                      <b-table
-                        :callbackFunc="fetchListExpired"
-                        id="my-table"
-                        :fields="fields"
-                        :items="items"
-                        :per-page="perPageActiveExpired"
-                        :current-page="currentPageExpired"
-                        striped hover
-                      ></b-table>
+                      <table class="table table-striped table-hover mb-0">
+                        <thead class="thead-light">
+                        <tr class="text-capitalize">
+                          <th scope="col">Waktu Pembelian</th>
+                          <th scope="col" class="text-center">
+                            Paket
+                          </th>
+                          <th scope="col" class="text-center">
+                            Mulai Berlaku
+                          </th>
+                          <th scope="col" class="text-center">
+                            Habis Berlaku
+                          </th>
+                          <th scope="col" class="text-center">
+                            Action
+                          </th>
+
+                        </tr>
+                        </thead>
+                        <tbody class="list">
+                        <tr v-for="(data, index) in dataRawatJalan" :key="data.id">
+                          <td class="text-wrap">
+                            <div class="align-box-row">
+                              <div class="d-flex align-items-center">
+                                <span>{{ (currentPage - 1) * perPage + index + 1 }} </span>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="text-wrap">
+                            <div class="align-box-row">
+                    <span class="d-block">
+                      {{ data.pasien.nama }}
+                    </span>
+                            </div>
+                          </td>
+                          <td>
+                            <div class="text-center d-flex align-items-center justify-content-between">
+                              <span class="flex-grow-1">{{data.pasien['nomor_rekam_medis']}}</span>
+                              <span>
+                      <b-button variant="dark" size="sm" @click="rekamMedis(data)">
+                        <span class="btn-wrapper--icon">
+                          <font-awesome-icon icon="sign-in-alt" /> </span></b-button>
+                    </span>
+                            </div>
+                          </td>
+                        </tr>
+                        </tbody>
+                      </table>
                       <b-pagination
-                        align="center"
-                        v-model="currentPageExpired"
+                        class="d-flex justify-content-center mt-4"
+                        v-model="currentPage"
                         :total-rows="rows"
-                        :per-page="perPageActiveExpired"
-                        aria-controls="my-table"
+                        :per-page="perPage"
                       ></b-pagination>
                     </b-tab>
                   </b-tabs>
@@ -216,7 +292,6 @@
                       v-tooltip="'Halaman Pembayaran'"
                       @click="detailTagihan(data.item)"
                       class="btn text-light font-size-md ml-1 pl-2 pr-2 btn-sm"
-                      v-if="data.item.status == 'MENUNGGU PEMBAYARAN'"
                       ><font-awesome-icon icon="money-bill-wave"
                     /></b-button>
                       </span>
@@ -434,7 +509,7 @@
         const r = val => Boolean(/(actions)\b/gi.test(val) ? !1 : 1);
         return (
           [{
-              key: "no_tagihan",
+              key: "nomor_tagihan",
               label: "No. Tagihan",
                thStyle: "width: 12%"
             },
@@ -454,12 +529,13 @@
               thStyle: "width: 13%"
             },
             {
-              key: "tanggal_pembayaran",
+              key: "tanggal_bayar",
               label: "Tanggal Bayar",
               thStyle: "width: 15%"
             },
             {
-              key: "status",
+              key: "status_text",
+              label: "status",
               thStyle: "width: 15%"
             },
             {
@@ -604,11 +680,18 @@
             this.totalEntries = totalEntries;
             this.toPage = toPage;
             this.fromPage = fromPage;
+            let statusText = ["Menunggu Pembayaran","Lunas","Gagal","Batal"]
+            let tglBayar = "-"
             this.dataRiwayatPembelian = [
               ...listRiwayatPembelian.map((item, index) => {
+                console.log("ddd",item)
+                if(item.tanggal_bayar === null){
+                  item.tanggal_bayar = tglBayar
+                }
                 return {
                   ...item,
-                  no: (this.currentPage - 1) * this.perPage + index + 1
+                  no: (this.currentPage - 1) * this.perPage + index + 1,
+                  status_text : statusText[item.status],
                 };
               })
             ];
