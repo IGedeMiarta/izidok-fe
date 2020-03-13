@@ -208,7 +208,6 @@ export default {
       dataList: [],
       diagnosisList: [],
       selectedDiagnosis: null,
-      rows: 0,
       fromPage: 0,
       toPage: 0,
       totalEntries: 0
@@ -462,93 +461,7 @@ export default {
         const {
           success,
           data: { pendapatan, periode, total_pasien, total_pendapatan }
-        } = {
-          success: true,
-          message: "success",
-          data: {
-            periode: "06-Mar-2020 - 10-Mar-2020",
-            total_pasien: 4,
-            total_pendapatan: "Rp. 940.000,-",
-            pendapatan: {
-              current_page: 1,
-              data: [
-                {
-                  pembayaran_id: 44,
-                  waktu_konsultasi: "2020-03-06 00:00:00",
-                  nama: "Doe",
-                  tanggal_lahir: "05-May-1995",
-                  nomor_rekam_medis: "1020-0000-1140-0000-03",
-                  jumlah_transaksi: "Rp. 270.000,-",
-                  diagnosa_id: 41,
-                  kode_penyakit_id: "[1,4]",
-                  diagnosa: {
-                    id: 41,
-                    kode_penyakit_id: "[1,4]",
-                    deskripsi: "Acquired Deformities of Fingers and Toes"
-                  }
-                },
-                {
-                  pembayaran_id: 44,
-                  waktu_konsultasi: "2020-03-06 00:00:00",
-                  nama: "Doe",
-                  tanggal_lahir: "05-May-1995",
-                  nomor_rekam_medis: "1020-0000-1140-0000-03",
-                  jumlah_transaksi: "Rp. 270.000,-",
-                  diagnosa_id: 40,
-                  kode_penyakit_id: "[2,3]",
-                  diagnosa: {
-                    id: 40,
-                    kode_penyakit_id: "[2,3]",
-                    deskripsi: "Acquired Deformity of Nose"
-                  }
-                },
-                {
-                  pembayaran_id: 40,
-                  waktu_konsultasi: "2020-03-06 00:00:00",
-                  nama: "Ariana",
-                  tanggal_lahir: "01-Feb-1991",
-                  nomor_rekam_medis: "1010-0001-1400-0002",
-                  jumlah_transaksi: "Rp. 200.000,-",
-                  diagnosa_id: 36,
-                  kode_penyakit_id: "[2]",
-                  diagnosa: {
-                    id: 36,
-                    kode_penyakit_id: "[2]",
-                    deskripsi: "Acquired Deformity of Nose"
-                  }
-                },
-                {
-                  pembayaran_id: 40,
-                  waktu_konsultasi: "2020-03-06 00:00:00",
-                  nama: "Ariana",
-                  tanggal_lahir: "01-Feb-1991",
-                  nomor_rekam_medis: "1010-0001-1400-0002",
-                  jumlah_transaksi: "Rp. 200.000,-",
-                  diagnosa_id: 35,
-                  kode_penyakit_id: "[2]",
-                  diagnosa: {
-                    id: 35,
-                    kode_penyakit_id: "[2]",
-                    deskripsi: "Acquired Deformity of Nose"
-                  }
-                }
-              ],
-              first_page_url:
-                "http://localhost:9001/api/v1/pembayaran/pendapatan?page=1",
-              from: 1,
-              last_page: 1,
-              last_page_url:
-                "http://localhost:9001/api/v1/pembayaran/pendapatan?page=1",
-              next_page_url: null,
-              path: "http://localhost:9001/api/v1/pembayaran/pendapatan",
-              per_page: 15,
-              prev_page_url: null,
-              to: 4,
-              total: 4
-            }
-          }
-        };
-        // } = res.data;
+        } = res.data;
         if (success) {
           const {
             data: listLaporanPendapatan,
@@ -580,6 +493,9 @@ export default {
           this.totalPendapatanValue = total_pendapatan;
           this.periodeValue = periode;
           this.rows = totalEntries;
+          this.totalEntries = totalEntries;
+          this.toPage = toPage;
+          this.fromPage = fromPage;
           return this;
         }
       } catch (err) {

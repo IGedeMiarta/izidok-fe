@@ -83,7 +83,6 @@ export default {
   methods: {
     processData(res) {
       const { rows = 0, fromPage = 0, toPage = 0, totalEntries = 0 } = res;
-      console.log(res);
 
       this.rows = rows;
       this.fromPage = fromPage;
