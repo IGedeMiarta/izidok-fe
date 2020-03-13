@@ -18,7 +18,7 @@
                         </div>
                         <div class="col-md-8">
                           <vue-select class="align-content-right" :options="dataPaygate" v-model="selectedPaygate"
-                            @input="getPaygetDetail" />
+                                      @input="getPaygetDetail" />
 
                         </div>
                         <div class="col-md-4 mt-2">
@@ -38,14 +38,18 @@
                           <strong>Harga</strong>
                         </div>
                         <div class="col-md-8 mt-2">
-                          <template v-if="lama_langganan === '10' ">
-                            <strong class="float-right mr-3 ml-2">Rp.{{dataDetail.harga*lama_langganan}} </strong><label style="text-decoration: line-through;" class="float-right text-danger">Rp.{{dataDetail.harga*12}}</label>
+                          <template v-if="lama_langganan === '12' ">
+                            <strong class="float-right mr-3 ml-2">Rp.{{dataDetail.harga*(lama_langganan-2)}} </strong><label style="text-decoration: line-through;" class="float-right text-danger">Rp.{{dataDetail.harga*12}}</label>
                           </template>
-                          <template v-if="lama_langganan === '1' ">
+                          <template v-else >
                             <strong class="float-right mr-3">Rp. {{dataDetail.harga*lama_langganan}}</strong>
                           </template>
-
                         </div>
+                        <template v-if="lama_langganan === '12' ">
+                          <div class="col-md-12">
+                            <label  class="float-right text-success small mr-3"><strong>Hemat 16,6%</strong></label>
+                          </div>
+                        </template>
                         <!--                          <div class="col-md-4 mt-2">-->
                         <!--                            <strong>Add-on Email</strong>-->
                         <!--                            <label class="ml-1">-->
@@ -90,7 +94,7 @@
                           <b-form-input v-model="kode_promo" class="col-md-4 float-right mr-2"></b-form-input>
                         </div>
                         <div class="col-md-12 text-center mt-2" style="background-color : yellow"
-                          v-if="this.statusPromo">
+                             v-if="this.statusPromo">
                           <strong>{{this.statusPromo}}</strong>
                         </div>
                         <div class="col-md-12 mt-2">
@@ -124,17 +128,32 @@
                                   <strong>Total Pembayaran</strong>
                                 </div>
                                 <div class="col-md-8 float-right">
-                                  <strong class="float-right">Rp.
-                                    <template v-if="this.statusPotongan === 'rupiah'">
-                                      {{( dataDetail.harga * lama_langganan) + (dataPaygetDetail.biaya_admin-potongan)}}
-                                    </template>
-                                    <template v-else-if="this.statusPotongan === 'percent' ">
-                                      {{(dataDetail.harga * lama_langganan + dataPaygetDetail.biaya_admin)*(potongan/100)}}
-                                    </template>
-                                    <template v-else>
-                                      {{(dataDetail.harga * lama_langganan + dataPaygetDetail.biaya_admin)}}
-                                    </template>
-                                  </strong>
+                                  <template v-if="lama_langganan === '12' ">
+                                    <strong class="float-right">Rp.
+                                      <template v-if="this.statusPotongan === 'rupiah'">
+                                        {{( dataDetail.harga * (lama_langganan-2)) + (dataPaygetDetail.biaya_admin-potongan)}}
+                                      </template>
+                                      <template v-else-if="this.statusPotongan === 'percent' ">
+                                        {{(dataDetail.harga * (lama_langganan-2)) + (dataPaygetDetail.biaya_admin)*(potongan/100)}}
+                                      </template>
+                                      <template v-else>
+                                        {{(dataDetail.harga * (lama_langganan-2)) + (dataPaygetDetail.biaya_admin)}}
+                                      </template>
+                                    </strong>
+                                  </template>
+                                  <template v-else >
+                                    <strong class="float-right">Rp.
+                                      <template v-if="this.statusPotongan === 'rupiah'">
+                                        {{( dataDetail.harga * lama_langganan) + (dataPaygetDetail.biaya_admin-potongan)}}
+                                      </template>
+                                      <template v-else-if="this.statusPotongan === 'percent' ">
+                                        {{(dataDetail.harga * lama_langganan + dataPaygetDetail.biaya_admin)*(potongan/100)}}
+                                      </template>
+                                      <template v-else>
+                                        {{(dataDetail.harga * lama_langganan + dataPaygetDetail.biaya_admin)}}
+                                      </template>
+                                    </strong>
+                                  </template>
                                 </div>
                               </div>
                             </div>
@@ -215,12 +234,12 @@
         rows: 0,
         perPage: 4,
         optionLangganan: [{
-            text: '1 Bulan',
-            value: '1'
-          },
+          text: '1 Bulan',
+          value: '1'
+        },
           {
             text: '12 Bulan',
-            value: '10'
+            value: '12'
           },
         ]
       }
@@ -261,16 +280,32 @@
       },
       async prosesBayar() {
         try {
-          if (this.statusPotongan === 'rupiah') {
-            this.total_bayar = (this.dataDetail.harga * this.lama_langganan) + (this.dataPaygetDetail.biaya_admin -
-              this.potongan);
-            // this.hasilPromo = 
-          } else if (this.statusPotongan === 'percent') {
-            this.total_bayar = (this.dataDetail.harga * this.lama_langganan + this.dataPaygetDetail.biaya_admin) * (
-              this.potongan / 100)
-          } else {
-            this.total_bayar = (this.dataDetail.harga * this.lama_langganan + this.dataPaygetDetail.biaya_admin)
+
+          if(this.lama_langganan === "12") {
+            if (this.statusPotongan === 'rupiah') {
+              this.total_bayar = (this.dataDetail.harga * (this.lama_langganan-2)) + (this.dataPaygetDetail.biaya_admin -
+                this.potongan);
+              // this.hasilPromo =
+            } else if (this.statusPotongan === 'percent') {
+              this.total_bayar = (this.dataDetail.harga * (this.lama_langganan-2) + this.dataPaygetDetail.biaya_admin) * (
+                this.potongan / 100)
+            } else {
+              this.total_bayar = (this.dataDetail.harga * (this.lama_langganan-2) + this.dataPaygetDetail.biaya_admin)
+            }
+          }else{
+            if (this.statusPotongan === 'rupiah') {
+              this.total_bayar = (this.dataDetail.harga * this.lama_langganan) + (this.dataPaygetDetail.biaya_admin -
+                this.potongan);
+              // this.hasilPromo =
+            } else if (this.statusPotongan === 'percent') {
+              this.total_bayar = (this.dataDetail.harga * this.lama_langganan + this.dataPaygetDetail.biaya_admin) * (
+                this.potongan / 100)
+            } else {
+              this.total_bayar = (this.dataDetail.harga * this.lama_langganan + this.dataPaygetDetail.biaya_admin)
+            }
           }
+
+
           const res = await axios.post(`${this.url_api}/subscribe`, {
             pg_id: this.dataPaygetDetail.id,
             promo_id: this.promo,
@@ -285,9 +320,9 @@
             console.log('bill', this.billing_id);
             this.$router.push({
               name: 'subskripsi-bayar',
-               params: { 
-                 bill_id : this.billing_id
-               }
+              params: {
+                bill_id : this.billing_id
+              }
             });
           } else {
             this.$swal({
