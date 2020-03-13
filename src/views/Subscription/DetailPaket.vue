@@ -38,7 +38,13 @@
                           <strong>Harga</strong>
                         </div>
                         <div class="col-md-8 mt-2">
-                          <strong class="float-right mr-3">Rp. {{dataDetail.harga*lama_langganan}}</strong>
+                          <template v-if="lama_langganan === '10' ">
+                            <strong class="float-right mr-3 ml-2">Rp.{{dataDetail.harga*lama_langganan}} </strong><label style="text-decoration: line-through;" class="float-right text-danger">Rp.{{dataDetail.harga*12}}</label>
+                          </template>
+                          <template v-if="lama_langganan === '1' ">
+                            <strong class="float-right mr-3">Rp. {{dataDetail.harga*lama_langganan}}</strong>
+                          </template>
+
                         </div>
                         <!--                          <div class="col-md-4 mt-2">-->
                         <!--                            <strong>Add-on Email</strong>-->

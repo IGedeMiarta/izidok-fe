@@ -1,10 +1,14 @@
 <template>
   <div>
-    <page-title heading="Billing" :breadcrumb="[
+    <page-title heading="Subskripsi" :breadcrumb="[
         {
-          label: 'Billing',
-          link: '/billing',
+          label: 'Subskripsi',
+          link: '/subskripsi',
         },
+          {
+          label: 'List Subskripsi',
+          active: true
+        }
       ]" />
     <div class="app-content--inner p-0 d-flex flex-column">
       <div class="container-fluid">
@@ -279,12 +283,15 @@
                       {{data.value}}
                     </template>
                     <template v-slot:cell(actions)="data">
-                      <span>
+                      <template v-if=" data.item.status_text ==='Menunggu Pembayaran' || data.item.status_text ==='Lunas' ">
+                        <span>
                            <b-link class="btn text-light font-size-md pl-2 pr-2 btn-sm " v-tooltip="'Lihat Struk'"  @click="detailBayar(data.item)"
-                      style="background-color:#37afe8;">
+                                   style="background-color:#37afe8;">
                       <font-awesome-icon icon="search" style="color:black;" />
                     </b-link>
                       </span>
+                      </template>
+
                       <span >
                           <b-button
                       variant="success"

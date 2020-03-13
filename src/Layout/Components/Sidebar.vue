@@ -204,7 +204,7 @@
           },
           {
             title: "Subskripsi",
-            href: "/Subskripsi",
+            href: "/subskripsi",
             icon: {
               element: "font-awesome-icon",
               attributes: {
