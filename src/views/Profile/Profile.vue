@@ -1,8 +1,8 @@
 <template>
   <div>
-    <page-title heading="Manajemen Dokter Praktik Mandiri" :breadcrumb="[
+    <page-title heading="Profil Dokter Praktik" :breadcrumb="[
         {
-          label: 'Manajemen Dokter Praktik Mandiri',
+          label: 'Profil Dokter Praktik',
           link: '/profile',
           active: true
         },
@@ -121,6 +121,7 @@
 
 <script>
   import PictureInput from 'vue-picture-input'
+  import startCase from "lodash/startCase";
   import axios from 'axios'
   export default {
     components: {
@@ -199,6 +200,14 @@
             kota: this.tempat.kota.id,
             alamat: this.dataProfile.klinik.alamat,
           })
+          if (res.data.status) {
+            this.$swal({
+              type: "success",
+              title: startCase("Simpan Profil"),
+              text: startCase("Simpan Profil berhasil.")
+            });
+          }
+          this.btnDisable = true;
         } catch {
 
         }

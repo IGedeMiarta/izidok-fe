@@ -42,6 +42,9 @@
         </b-col>
         <b-col cols="12" class="ml-2 mt-4">
           <h5 class="text-uppercase font-weight-bold"><u>diagnosa</u></h5>
+          <div v-for="items in kodediagnosa" :key="items.id">
+            <p v-html="items.kode+' - '+items.description"></p>
+          </div>
           <template v-if="this.datarekammedis.diagnosa.notes !== null">
             <p v-html="this.datarekammedis.diagnosa.notes"></p>
           </template>
@@ -112,6 +115,7 @@
       datafile: null,
       datarekammedis: [],
       idRekamMedis: null,
+      kodediagnosa: [],
     }),
     mounted() {
       this.idRekamMedis = this.rekam_medis;
@@ -136,6 +140,7 @@
         if (this.datarekammedis.pemeriksaan_penunjang.files) {
           this.datafile = JSON.parse(this.datarekammedis.pemeriksaan_penunjang.files);
         }
+        this.kodediagnosa = res.data.data.kode_diagnosa;
       },
       tandaVital() {
         const tmp = [{
