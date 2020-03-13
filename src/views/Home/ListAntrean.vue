@@ -99,17 +99,25 @@
     ></b-pagination>
 
     <b-modal id="modalDetail" title="Detail Registrasi Antrean">
-      <b-row v-for="(data, index) in dataRegistrasiPasien" :key="index" class="mb-2 pl-3 pr-3">
+      <b-row
+        v-for="(data, index) in dataRegistrasiPasien"
+        :key="index"
+        class="mb-2 pl-3 pr-3"
+      >
         <b-col sm="6">
           <div class="d-flex">
-            <template v-if="data.label == 'TANDA TANDA VITAL' || data.label == 'DATA PASIEN'">
-              <strong>{{data.label}}</strong>
+            <template
+              v-if="
+                data.label == 'TANDA TANDA VITAL' || data.label == 'DATA PASIEN'
+              "
+            >
+              <strong>{{ data.label }}</strong>
             </template>
             <template v-else>
               <div class="flex-grow-1 text-capitalize">
                 {{ data.label }}
-            </div>
-            <span>:</span>
+              </div>
+              <span>:</span>
             </template>
           </div>
         </b-col>
@@ -120,7 +128,11 @@
 
       <template v-slot:modal-footer>
         <div class="w-100">
-          <b-button variant="primary" class="float-right" @click="$bvModal.hide('modalDetail')">
+          <b-button
+            variant="primary"
+            class="float-right"
+            @click="$bvModal.hide('modalDetail')"
+          >
             Tutup
           </b-button>
         </div>
@@ -144,7 +156,7 @@ library.add(faSearch, faSignInAlt, faTrashAlt);
 
 const __dataRegistrasiPasien = {
   dp: {
-    label: "DATA PASIEN",
+    label: "DATA PASIEN"
   },
   nama: {
     label: "nama pasien",
@@ -167,37 +179,37 @@ const __dataRegistrasiPasien = {
     value: null
   },
   tanda: {
-    label: "TANDA TANDA VITAL",
+    label: "TANDA TANDA VITAL"
   },
-  
-  tb : {
-    label : "tinggi badan ",
-    value : null,
+
+  tb: {
+    label: "tinggi badan ",
+    value: null
   },
-  bb : {
-    label : "berat badan ",
-    value : null
+  bb: {
+    label: "berat badan ",
+    value: null
   },
-  suhu : {
-    label : "suhu",
-    value : null,
+  suhu: {
+    label: "suhu",
+    value: null
   },
-  tensi_diastole : {
-    label : "tekanan diastole",
-    value : null
+  tensi_diastole: {
+    label: "tekanan diastole",
+    value: null
   },
-  tensi_sistole : {
-    label : "tekanan sistole",
-    value : null
+  tensi_sistole: {
+    label: "tekanan sistole",
+    value: null
   },
-  nadi : {
-    label : "nadi",
-    value : null,
+  nadi: {
+    label: "nadi",
+    value: null
   },
-  anamnesis : {
-    label : "anamnesis",
-    value : null
-  },
+  anamnesis: {
+    label: "anamnesis",
+    value: null
+  }
 };
 
 export default {
@@ -207,8 +219,10 @@ export default {
       rows: 1,
       perPage: 5,
       data: [],
-      searchValue: '',
+      searchValue: "",
       dataRegistrasiPasien: null,
+      counter: 60,
+      intervalCounter: null
     };
   },
   watch: {
@@ -226,12 +240,25 @@ export default {
     ...mapGetters({ getKlinikId: "getKlinikId", isDoctor: "doctorRole" })
   },
   beforeMount() {
+    this.counterFunc();
     this.fetchData();
   },
   beforeDestroy() {
-    console.log('before destroy')
+    if (this.intervalCounter) clearInterval(this.intervalCounter);
   },
   methods: {
+    counterFunc() {
+      if (this.intervalCounter) clearInterval(this.intervalCounter);
+
+      this.intervalCounter = setInterval(() => {
+        if (this.counter > 0) {
+          this.counter--;
+        } else {
+          clearInterval(this.intervalCounter);
+          this.intervalCounter = null;
+        }
+      }, 1000);
+    },
     async updateStatusAntrean(id) {
       try {
         const antreanStatus = "batal";
@@ -318,41 +345,39 @@ export default {
       );
     },
     showDetail(id) {
-      axios.get(`${this.url_api}/transaksi/${id}`)
-        .then(res => {
-          if (res.data.status) {
-            const {
-              waktu_konsultasi,
-              examination_by: dokter,
-              anamnesa,
-              pasien
-            } = res.data.data;
-            
-            const x = __dataRegistrasiPasien;
-            x["nama"].value = pasien.nama;
-            x["rekam_medis"].value = pasien.nomor_rekam_medis;
-            x["hp"].value = pasien.nomor_hp;
-            x["kelamin"].value = this.jenisKelamin(pasien.jenis_kelamin);
-            x["dokter"].value = dokter.nama;
+      axios.get(`${this.url_api}/transaksi/${id}`).then(res => {
+        if (res.data.status) {
+          const {
+            waktu_konsultasi,
+            examination_by: dokter,
+            anamnesa,
+            pasien
+          } = res.data.data;
 
-            x["tb"].value = pasien.tinggi_badan + ' (cm)';
-            x["bb"].value = pasien.berat_badan + ' (kg)';
-            x["suhu"].value = pasien.suhu +' (celcius)';
-            x["tensi_sistole"].value = pasien.tensi_sistole;
-            x["tensi_diastole"].value = pasien.tensi_diastole;
-            x["nadi"].value = pasien.nadi;
-            x["anamnesis"].value = anamnesa;
+          const x = __dataRegistrasiPasien;
+          x["nama"].value = pasien.nama;
+          x["rekam_medis"].value = pasien.nomor_rekam_medis;
+          x["hp"].value = pasien.nomor_hp;
+          x["kelamin"].value = this.jenisKelamin(pasien.jenis_kelamin);
+          x["dokter"].value = dokter.nama;
 
-            this.dataRegistrasiPasien = x;
-            this.$bvModal.show('modalDetail');
+          x["tb"].value = pasien.tinggi_badan + " (cm)";
+          x["bb"].value = pasien.berat_badan + " (kg)";
+          x["suhu"].value = pasien.suhu + " (celcius)";
+          x["tensi_sistole"].value = pasien.tensi_sistole;
+          x["tensi_diastole"].value = pasien.tensi_diastole;
+          x["nadi"].value = pasien.nadi;
+          x["anamnesis"].value = anamnesa;
 
-          } else {
-            this.$swal({
-              text: message,
-              type: "warning"
-            });
-          }
-        })
+          this.dataRegistrasiPasien = x;
+          this.$bvModal.show("modalDetail");
+        } else {
+          this.$swal({
+            text: message,
+            type: "warning"
+          });
+        }
+      });
     }
   }
 };
