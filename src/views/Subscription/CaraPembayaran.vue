@@ -47,7 +47,7 @@
                                   <b-button block href="#" v-b-toggle.accordion-1 class="text-left"><strong>
                                       {{tuts.tipe }}</strong> </b-button>
                                 </b-card-header>
-                                <b-collapse id="accordion-1" accordion="my-accordion" role="tabpanel">
+                                <b-collapse id='accordion-1' accordion="my-accordion" role="tabpanel">
                                   <b-card-body>
                                     <b-card-text>
                                       <ol v-for="(item,index) in tuts.desc" :key="index">

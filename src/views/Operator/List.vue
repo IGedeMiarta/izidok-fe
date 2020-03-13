@@ -341,7 +341,7 @@
           this.$refs['modal-operator'].show()
         } else {
            this.$swal({
-              text: `Klinik sudah memiliki Asisten Dokter`,
+              text: `Kouta User Asisten untuk Paket ini sudah terpakai!`,
               type: "warning",
               confirmButtonText: startCase("ya")
             })
@@ -508,7 +508,7 @@
           if (status) {
             this.hideModal();
             this.$swal({
-              text: `Asisten ${res.data.data.user.nama} Berhasil ditambahkan`,
+              text: `Asisten ${res.data.data.user.nama} berhasil ditambahkan!`,
               type: "success",
               confirmButtonText: startCase("ya")
             })
@@ -535,7 +535,7 @@
         nama = null
       } = {}) {
         this.$swal({
-          text: `Apakah Anda yakin ingin menghapus data pasien ${nama}?`,
+          text: `Apakah Anda yakin ingin menghapus Asisten Dokter ${nama}?`,
           type: "question",
           showCancelButton: true,
           cancelButtonText: startCase("batal"),

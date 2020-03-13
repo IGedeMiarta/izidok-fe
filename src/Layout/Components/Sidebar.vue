@@ -127,6 +127,11 @@
               title: "Manajemen Tarif",
               href: "/tarif",
               type: ["klinik", "dokter praktek"]
+            },
+            {
+              title: "Account Setting",
+              href: "/profile",
+              type: ["klinik", "dokter praktek"]
             }
           ];
           const v = tmp.filter(item => item.type.includes(signedInAs));
@@ -203,7 +208,7 @@
             },
           },
           {
-            title: "Subskripsi",
+            title: "subskripsi",
             href: "/subskripsi",
             icon: {
               element: "font-awesome-icon",
@@ -212,16 +217,17 @@
               }
             },
           },
-          // {
-          //   title: "Account Setting",
-          //   href: "/#",
-          //   icon: {
-          //     element: "font-awesome-icon",
-          //     attributes: {
-          //       icon: "cog"
-          //     }
-          //   },
-          // },
+          {
+            title: "Account Setting",
+            href: "/profile",
+            icon: {
+              element: "font-awesome-icon",
+              attributes: {
+                icon: "cog"
+              }
+            },
+            child: manajemenKlinikChild()
+          },
         ];
 
         return tmp.map(item => ({
