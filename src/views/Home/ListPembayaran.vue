@@ -90,7 +90,9 @@ export default {
       rows: 1,
       perPage: 5,
       data: [],
-      searchValue: null
+      searchValue: null,
+      counter: 60,
+      intervalCounter: null
     };
   },
   watch: {
@@ -107,10 +109,26 @@ export default {
   computed: {
     ...mapGetters({ getKlinikId: "getKlinikId", isDoctor: "doctorRole" })
   },
-  mounted() {
+  beforeMount() {
+    this.counterFunc();
     this.fetchData();
   },
+  beforeDestroy() {
+    if (this.intervalCounter) clearInterval(this.intervalCounter);
+  },
   methods: {
+    counterFunc() {
+      if (this.intervalCounter) clearInterval(this.intervalCounter);
+
+      this.intervalCounter = setInterval(() => {
+        if (this.counter > 0) {
+          this.counter--;
+        } else {
+          clearInterval(this.intervalCounter);
+          this.intervalCounter = null;
+        }
+      }, 1000);
+    },
     async fetchData() {
       try {
         const { searchValue } = this;
