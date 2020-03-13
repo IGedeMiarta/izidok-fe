@@ -81,20 +81,20 @@
                             <label>Sisa Kuota</label>
                           </div>
                           <div class="col-md-2">
-                            <label>: <label 
+                            <label>: <label
                                 style="background-color:#18d8f6;padding-left: 5px; padding-right: 5px;">20</label></label>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-9">
                     <button  @click="$router.push('/subskripsi/pilih-paket')" class="btn btn-primary float-right mt-3" style="width:60%">Beli Paket Berlangganan</button>
                   </div>
-                  <div class="col-md-6">
-                    <button class="btn float-left mt-3" style="background-color:#de51d9;color:white;width:60%">Beli
-                      Kouta ADD-ON</button>
-                  </div>
+<!--                  <div class="col-md-6">-->
+<!--                    <button class="btn float-left mt-3" style="background-color:#de51d9;color:white;width:60%">Beli-->
+<!--                      Kouta ADD-ON</button>-->
+<!--                  </div>-->
                 </div>
               </div>
             </div>
@@ -143,23 +143,23 @@
                     </template>
                     <template v-slot:cell(actions)="data">
                       <span>
-                           <b-link class="btn text-light font-size-md pl-2 pr-2 btn-sm ml-1 mr-1" @click="detailTagihan(data.item)"
+                           <b-link class="btn text-light font-size-md pl-2 pr-2 btn-sm " @click="detailTagihan(data.item)"
                       style="background-color:#37afe8;">
                       <font-awesome-icon icon="search" style="color:black;" />
                     </b-link>
                       </span>
-                      <span class="float-right">
+                      <span >
                           <b-button
                       variant="success"
                       size="sm"
                       v-tooltip="'Halaman Pembayaran'"
                       @click="detailBayar(data.item)"
-                      class="btn text-light font-size-md pl-2 pr-1 btn-sm"
+                      class="btn text-light font-size-md ml-1 pl-2 pr-2 btn-sm"
                       v-if="data.item.status == 'MENUNGGU PEMBAYARAN'"
                       ><font-awesome-icon icon="money-bill-wave"
                     /></b-button>
                       </span>
-                     
+
                     </template>
                   </b-table>
                 </DataTableWrapper>
@@ -169,40 +169,29 @@
            <b-modal ref="my-modal" title="Detail Paket">
              <div class="row" v-if="this.detail !== null ">
               <div class="col-md-4">
-                Nama Paket  
+                <strong>Nama Paket</strong>
               </div>
-              <div class="col-md-1">
-                :
+              <div class="col-md-8">
+                :  <label class=" ml-3">{{this.detail.produk}}</label>
               </div>
-              <div class="col-md-7">
-                <label class="float-left ml-3">{{this.detail.produk}}</label>
+
+              <div class="col-md-4">
+                <strong>Durasi</strong>
+              </div>
+              <div class="col-md-8">
+                : <label class=" ml-3">{{this.detail.periode_berlaku}}</label>
               </div>
               <div class="col-md-4">
-                 Durasi
+                <strong>Fitur</strong>
               </div>
-              <div class="col-md-1">
-                :
-              </div>
-              <div class="col-md-7">
-                <label class="float-left ml-3">{{this.detail.periode_berlaku}}</label> 
+               <div class="col-md-8">
+                : <label class=" ml-3">asdasd</label>
               </div>
               <div class="col-md-4">
-                Fitur
+                <strong>User</strong>
               </div>
-               <div class="col-md-1">
-                :
-              </div>
-              <div class="col-md-7">
-                <label class="float-left ml-3">asdasd</label> 
-              </div>
-              <div class="col-md-4">
-                User
-              </div>
-               <div class="col-md-1">
-                :
-              </div>
-              <div class="col-md-7">
-                <label class="float-left ml-3">asdasd</label> 
+               <div class="col-md-8">
+                : <label class=" ml-3">asdasd</label>
               </div>
              </div>
             <template v-slot:modal-footer>
@@ -215,36 +204,43 @@
           </b-modal>
              <b-modal ref="lihat-struk">
              <div class="row" v-if="this.detailStruk !== null " style="font-size:14px;">
-              <div class="col-md-4">  
-                Total Pembelian
-              </div>
-              <div class="col-md-3">
-                Rp. 300.000
+
+              <div class="col-md-7">
+                <label class="float-left"><strong>Total Pembelian :</strong> Rp. 300.000</label>
               </div>
               <div class="col-md-5">
-                 <b-button variant="primary" size="sm" class="float-right text-uppercase" @click="hideModal">
+                 <b-button variant="success" size="sm" class="float-right text-uppercase" @click="hideModal">
                   Lihat Invoice
                 </b-button>
               </div>
-              <div class="col-md-4">
-                Tanggal Pembelian
+              <div class="col-md-12">
+                <label class="float-left"><strong>Tanggal Pembelian :</strong>   23 Februari 2019</label>
               </div>
-              <div class="col-md-5">
-                <label class="float-right mt-3">23 Februari 2019</label> 
+              <div class="col-md-12">
+                <div class="col-sm- text-center" >
+                  <label style="background-color:#ded5d5;padding-left:50px; padding-right:50px; " class="text-danger mt-3 mb-3">Bayar Sebelum 24 Februari 2020 16:30:20</label>
+                </div>
               </div>
-              <div class="col-md-3">
-              </div>
-              <div class="col-sm-12 text-center" style="background-color:#ded5d5;padding-left:10px!important;padding-right:10px!important">
-                <label>Bayar Sebelum 24 Februari 2020 16:30:20</label> 
-              </div>
+               <div class="col-md-5">
+                 <label class="float-left"><strong>Metode Pembayaran</strong></label>
+               </div>
+               <div class="col-md-6">
+                 <label class="float-left"><strong>:</strong> BCA Virtual Account</label>
+               </div>
+               <div class="col-md-5">
+                 <label class="float-left"><strong>No. Virtual Account</strong></label>
+               </div>
+               <div class="col-md-6">
+                 <label class="float-left"><strong>:</strong> 2081659279107</label>
+               </div>
+
              </div>
-            <template v-slot:modal-footer>
-              <div class="w-100">
-                <b-button variant="primary" class="float-right" @click="hideModalTagihan">
-                  Tutup
-                </b-button>
-              </div>
-            </template>
+             <div slot="modal-footer">
+               <div class="align-content-center">
+                 <b-button variant="primary mr-2" @click="$router.push('/subskripsi/cara-bayar')">Lihat Cara Pembayaran</b-button>
+                 <b-button variant="danger" ref='modal-bataltransaksi' class="btn-link-dark mr-4" @click='closeModalBatalTransaksi'>Batalkan Transaksi</b-button>
+               </div>
+             </div>
           </b-modal>
         </div>
       </div>
@@ -268,6 +264,7 @@
     faPencilAlt,
     faMoneyBillWave
   } from "@fortawesome/free-solid-svg-icons";
+  import startCase from "lodash/startCase";
    library.add(faArrowRight, faEye,   faMoneyBillWave,
     faEyeSlash, faArrowUp, faTrashAlt, faSearch, faPencilAlt);
 
@@ -280,12 +277,12 @@
         fields: [{
             label: 'WAKTU PEMBELIAN',
             key: "WAKTU_PEMBELIAN",
-            thStyle: "width: 13%"
+            thStyle: "width: 25%"
           },
           {
             label: 'PAKET',
             key: 'PAKET',
-            thStyle: "width: 20%"
+            thStyle: "width: 25%"
           },
           {
             label: 'JUMLAH KOUTA',
@@ -299,23 +296,23 @@
           },
         ],
         items: [{
-            WAKTU_PEMBELIAN: 40,
+            WAKTU_PEMBELIAN: '2019-10-10',
             PAKET: 'Dickerson',
             JUMLAH_KOUTA: 'Macdonald',
             ACTION: '',
           },
           {
-            WAKTU_PEMBELIAN: 21,
+            WAKTU_PEMBELIAN: '2019-10-10',
             PAKET: 'Larsen',
             JUMLAH_KOUTA: 'Shaw'
           },
           {
-            WAKTU_PEMBELIAN: 89,
+            WAKTU_PEMBELIAN: '2019-10-10',
             PAKET: 'Geneva',
             JUMLAH_KOUTA: 'Wilson'
           },
           {
-            WAKTU_PEMBELIAN: 38,
+            WAKTU_PEMBELIAN: '2019-10-10',
             PAKET: 'Jami',
             JUMLAH_KOUTA: 'Carney'
           }
@@ -353,7 +350,7 @@
       }
     },
     computed: {
-    
+
       fieldList() {
         const {
           generateFieldList: g,
@@ -364,21 +361,22 @@
           [{
               key: "no_tagihan",
               label: "No. Tagihan",
-               thStyle: "width: 13%"
+               thStyle: "width: 12%"
             },
             {
               key: "produk",
               label: "Produk",
-              thStyle: "width: 12%"
+              thStyle: "width: 15%"
             },
             {
               key: "periode_berlaku",
               label: "Periode Berlaku",
-              thStyle: "width: 16%"
+              thStyle: "width: 15%"
             },
             {
               key: "total_pembayaran",
               label: "Total Bayar",
+              thStyle: "width: 13%"
             },
             {
               key: "tanggal_pembayaran",
@@ -387,10 +385,11 @@
             },
             {
               key: "status",
-              thStyle: "width: 10%"
+              thStyle: "width: 15%"
             },
             {
-              key: "actions"
+              key: "actions",
+              thStyle: "width: 12%"
             },
           ] |> (v => s({
             field: v,
@@ -402,6 +401,22 @@
       }
     },
     methods: {
+      closeModalBatalTransaksi() {
+        this.$swal({
+          title: startCase("Batalkan Transaksi"),
+          text: `Apakah Anda yakin untuk membatalkan transaksi ini?`,
+          type: "warning",
+          showCancelButton: true,
+          cancelButtonText: startCase("tidak"),
+          confirmButtonText: startCase("ya")
+        }).then(res => {
+          if (res.value) {
+            this.$refs['modal-bataltransaksi'].show()
+          } else {
+            next(false);
+          }
+        });
+      },
       changePage(page) {
         this.fetchListTagihan(page);
       },
@@ -468,7 +483,7 @@
         this.toPage = 1;
         this.fromPage = 1;
         this.rows = 1;
-        this.dataTagihan = 
+        this.dataTagihan =
          [{
               id : 1,
               no_tagihan: "IZID1123",
