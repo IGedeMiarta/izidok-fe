@@ -336,6 +336,17 @@
             </b-form-group>
           </b-col>
           <b-col sm="6">
+            <b-form-group :label="renderLabel({ label: 'hubungan pasien' })" class="text-capitalize"
+              style="position: relative">
+              <vue-select :options="
+                ['Suami/Istri', 'Orangtua', 'Kakak/Adik', 'Anak', 'Lainnya']
+              " @input="
+                setValue({
+                  rawLabel: 'hubungan pasien',
+                  $event
+                })
+              " :disabled="disabledForm()" :value="getValue('hubungan pasien')" />
+            </b-form-group>
           </b-col>
           <b-col sm="6">
             <b-form-group label="provinsi" class="text-capitalize" style="position: relative"
@@ -521,6 +532,12 @@
         // numeric,
         // minLength: minLength(10)
       }
+    },
+    {
+      label: "hubungan pasien",
+      alias: "hubungan_pasien",
+      error: false,
+      validations: {}
     },
     {
       label: "alamat rumah",
