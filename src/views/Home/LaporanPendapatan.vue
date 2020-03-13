@@ -26,6 +26,9 @@
                 format="dd-MM-yyyy"
                 value-format="dd-MM-yyyy"
                 :disabledDate="disabledDate"
+                :picker-options="{
+                  disabledDate
+                }"
               />
             </b-col>
           </b-row>
@@ -100,22 +103,21 @@
             />
           </template>
 
-          <template v-slot:head(diagnosis_icd_x)="data">
-            {{ data.label }}
-            <vue-select
-              :options="diagnosisList"
-              v-model="selectedDiagnosis"
-              label="title"
-              class="custom-v-select w-95 mt-2"
-            >
-              <template slot="no-options">
-                type to search GitHub repositories..
-              </template>
-            </vue-select>
-          </template>
-
           <template v-slot:cell()="data">
-            <div class="text-wrap text-break">
+            <template
+              v-if="
+                data.item.leaveBlank &&
+                  data.field.key &&
+                  data.field.key.toLowerCase() !== 'no'
+              "
+            >
+              <b-input
+                size="sm"
+                class="mt-2 w-95"
+                @input="searchValueChanged($event, data.field.key)"
+              />
+            </template>
+            <div class="text-wrap text-break" v-else>
               {{ data.value }}
             </div>
           </template>
@@ -125,7 +127,22 @@
           </template>
 
           <template v-slot:cell(diagnosis_icd_x)="data">
+            <template v-if="data.item.leaveBlank">
+              <vue-select
+                :options="diagnosisList"
+                v-model="selectedDiagnosis"
+                class="custom-v-select w-95 mt-2"
+                :filterable="false"
+                @search="searchDiagnosis"
+                @input="searchDiagnosis"
+              >
+                <template slot="no-options">
+                  Tulis untuk mencari diagnosis
+                </template>
+              </vue-select>
+            </template>
             <div
+              v-else
               style="max-width: 140px"
               v-tooltip="
                 detailDiagnosis({ pembayaran_id: data.item.pembayaran_id })
@@ -138,7 +155,7 @@
           </template>
 
           <template v-slot:cell(actions)="data">
-            <div>
+            <div v-if="!data.item.leaveBlank">
               <b-button
                 variant="primary"
                 size="sm"
@@ -211,41 +228,47 @@ export default {
           },
           {
             key: "waktu_konsultasi",
-            label: "waktu konsultasi"
+            label: "waktu konsultasi",
+            sortable: true
           },
           {
             key: "nama",
-            label: "nama pasien"
+            label: "nama pasien",
+            sortable: true
           },
           {
             key: "tanggal_lahir",
-            thStyle: "width: 150px"
+            thStyle: "width: 150px",
+            sortable: true
           },
           {
             key: "nomor_rekam_medis",
-            label: "no. rekam medis"
+            label: "no. rekam medis",
+            sortable: true
           },
           {
             key: "diagnosis_icd_x",
-            thStyle: "width: 160px"
+            thStyle: "width: 160px",
+            sortable: true
           },
           {
-            key: "jumlah_transaksi"
+            key: "jumlah_transaksi",
+            sortable: true
           },
           {
             key: "actions",
             thStyle: "width: 140px"
           }
-        ]
-        |> (v =>
-          s({
-            field: v,
-            customFunc: val =>
-              val.toLowerCase() === "no" || /(jumlah|actions)/gi.test(val)
-                ? 0
-                : 1
-          }))
-        |> (z => g({ field: z }))
+        ] |>
+        // |> (v =>
+        //   s({
+        //     field: v,
+        //     customFunc: val =>
+        //       val.toLowerCase() === "no" || /(jumlah|actions)/gi.test(val)
+        //         ? 0
+        //         : 1
+        //   }))
+        (z => g({ field: z }))
       );
     }
   },
@@ -269,14 +292,31 @@ export default {
     selectedDiagnosis: {
       handler: "fetchData",
       deep: true
+    },
+    periodeSelected(val) {
+      if (val !== "pilih tanggal") {
+        this.fetchData();
+      }
+    },
+    dateRange: {
+      handler: function() {
+        if (this.periodeSelected === "pilih tanggal") {
+          this.fetchData();
+        }
+      },
+      deep: true
     }
   },
   mounted() {
-    this.fetchDiagnosis();
+    // this.fetchDiagnosis();
   },
   methods: {
     disabledDate(val) {
-      console.log(val);
+      const monthsBefore = moment(val).diff(moment(), "months", true);
+      return !(
+        moment(val).diff(moment(), "months", true)
+        |> (x => x < 1 && x >= -3.0 && moment(val).isSameOrBefore(moment()))
+      );
     },
     detailDiagnosis({ pembayaran_id } = {}) {
       if (pembayaran_id) {
@@ -301,16 +341,29 @@ export default {
     periodeX({ periode = null, rawValue = false } = {}) {
       const formatBackendDate = "YYYY-MM-DD";
       const rawValueFormat = "DD-MMM-YYYY";
-      const now = moment();
-      const symbol = "!";
       switch (periode && periode.toLowerCase()) {
         case "pilih tanggal":
-          break;
+          const { dateRange } = this;
+          if (dateRange) {
+            const [startDate, endDate] = dateRange;
+            const formatDate = "DD-MM-YYYY";
+            if (rawValue) {
+              return `${moment(startDate, formatDate).format(
+                rawValueFormat
+              )}-${moment(endDate, formatDate).format(rawValueFormat)}`;
+            } else {
+              return `&from=${moment(startDate, formatDate).format(
+                formatBackendDate
+              )}&to=${moment(endDate, formatDate).format(formatBackendDate)}`;
+            }
+          } else {
+            return null;
+          }
 
         case "hari ini":
-          const today = now.format(formatBackendDate);
+          const today = moment().format(formatBackendDate);
           return rawValue
-            ? now.format(rawValueFormat)
+            ? moment().format(rawValueFormat)
             : Array(2)
                 .fill(today)
                 .map(
@@ -320,8 +373,8 @@ export default {
                 .join("");
 
         case "minggu ini":
-          const startWeek = now.clone().weekday(0);
-          const endWeek = now.clone().weekday(6);
+          const startWeek = moment().weekday(0);
+          const endWeek = moment().weekday(6);
           return rawValue
             ? `${startWeek.format(rawValueFormat)}-${endWeek.format(
                 rawValueFormat
@@ -331,10 +384,10 @@ export default {
               )}`;
 
         case "bulan ini":
-          const startMonth = now.clone().date(1);
-          const endMonth = now.clone().date(31);
+          const startMonth = moment().date(1);
+          const endMonth = moment().date(31);
           return rawValue
-            ? `${startWeek.format(rawValueFormat)}-${endWeek.format(
+            ? `${startMonth.format(rawValueFormat)}-${endMonth.format(
                 rawValueFormat
               )}`
             : `&from${startMonth.format(
@@ -349,6 +402,15 @@ export default {
       perPage && (perPage |> (_ => (this.perPage = _)));
       currentPage && (currentPage |> (_ => (this.currentPage = _)));
     },
+    onSearch(val) {
+      console.log(val);
+      this.search(val, this);
+    },
+    searchDiagnosis(val) {
+      console.log(val);
+      console.log("triggered");
+    },
+    search: debounce((val, vm) => vm.fetchDiagnosis(val), 500),
     determineParameter() {
       const {
         periodeX,
@@ -490,10 +552,15 @@ export default {
             to: toPage,
             from: fromPage
           } = pendapatan;
+          const copyObj = Object.assign({}, listLaporanPendapatan[0]);
+          const tmp = Object.keys(copyObj).map(item => {
+            copyObj[item] = null;
+          });
           this.totalPasienValue = total_pasien;
           this.totalPendapatanValue = total_pendapatan;
           this.periodeValue = periode;
           this.dataList = [
+            Object.assign(copyObj, { leaveBlank: true }),
             ...listLaporanPendapatan.map((item, index) => ({
               ...item,
               waktu_konsultasi: (e =>
@@ -511,7 +578,7 @@ export default {
         console.log(err);
       }
     },
-    async fetchDiagnosis() {
+    async fetchDiagnosis(search) {
       try {
         const res = await axios.get(
           `${this.url_api}/rekam_medis/kode_penyakit`
@@ -579,6 +646,10 @@ $evenBgColor: #f9f9f9;
     max-height: 29.94px;
     background-color: #fff;
     overflow: hidden;
+  }
+
+  .vs__dropdown-menu {
+    width: auto !important;
   }
 }
 </style>
