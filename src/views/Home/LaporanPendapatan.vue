@@ -133,11 +133,16 @@
                 v-model="selectedDiagnosis"
                 class="custom-v-select w-95 mt-2"
                 :filterable="false"
-                @search="searchDiagnosis"
-                @input="searchDiagnosis"
+                @search="onSearch"
               >
                 <template slot="no-options">
                   Tulis untuk mencari diagnosis
+                </template>
+                <template slot="option" slot-scope="option">
+                  {{ option.label }}
+                </template>
+                <template slot="selected-option" slot-scope="option">
+                  {{ option.label }}
                 </template>
               </vue-select>
             </template>
@@ -186,7 +191,7 @@ export default {
   components: {
     DatePicker,
     DataTableWrapper: () => import("../../components/DataTableWrapper"),
-    "vue-select": () => import("@/components/VueSelect.vue")
+    "vue-select": () => import("vue-select")
   },
   data() {
     return {
@@ -202,7 +207,11 @@ export default {
       searchValue: [],
       dataList: [],
       diagnosisList: [],
-      selectedDiagnosis: null
+      selectedDiagnosis: null,
+      rows: 0,
+      fromPage: 0,
+      toPage: 0,
+      totalEntries: 0
     };
   },
   computed: {
@@ -308,7 +317,7 @@ export default {
     }
   },
   mounted() {
-    // this.fetchDiagnosis();
+    this.fetchDiagnosis();
   },
   methods: {
     disabledDate(val) {
@@ -403,12 +412,7 @@ export default {
       currentPage && (currentPage |> (_ => (this.currentPage = _)));
     },
     onSearch(val) {
-      console.log(val);
       this.search(val, this);
-    },
-    searchDiagnosis(val) {
-      console.log(val);
-      console.log("triggered");
     },
     search: debounce((val, vm) => vm.fetchDiagnosis(val), 500),
     determineParameter() {
@@ -556,11 +560,7 @@ export default {
           const tmp = Object.keys(copyObj).map(item => {
             copyObj[item] = null;
           });
-          this.totalPasienValue = total_pasien;
-          this.totalPendapatanValue = total_pendapatan;
-          this.periodeValue = periode;
-          this.dataList = [
-            Object.assign(copyObj, { leaveBlank: true }),
+          const tmpList = [
             ...listLaporanPendapatan.map((item, index) => ({
               ...item,
               waktu_konsultasi: (e =>
@@ -571,6 +571,14 @@ export default {
               no: (this.currentPage - 1) * this.perPage + index + 1
             }))
           ];
+          this.dataList = (tmpList &&
+            tmpList.length > 0 && [
+              Object.assign(copyObj, { leaveBlank: true }),
+              ...tmpList
+            ]) || [...tmpList];
+          this.totalPasienValue = total_pasien;
+          this.totalPendapatanValue = total_pendapatan;
+          this.periodeValue = periode;
           this.rows = totalEntries;
           return this;
         }
@@ -581,20 +589,15 @@ export default {
     async fetchDiagnosis(search) {
       try {
         const res = await axios.get(
-          `${this.url_api}/rekam_medis/kode_penyakit`
+          `${this.url_api}/rekam_medis/kode_penyakit?search=${search}`
         );
-        const { status, data, message } = res.data;
-        this.diagnosisList = data.map(item => ({
-          label: item.description,
-          code: item.kode
-        }));
-        // if (!status) {
-        //   this.$swal({
-        //     text: `${message || "something went wrong"}`,
-        //     type: "error"
-        //   });
-        //   return false;
-        // }
+        const { success, data, message } = res.data;
+        if (success) {
+          this.diagnosisList = data.map(item => ({
+            label: item.description,
+            code: item.kode
+          }));
+        }
       } catch (err) {
         console.log(err);
       }
