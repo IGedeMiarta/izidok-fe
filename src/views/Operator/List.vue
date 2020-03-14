@@ -335,9 +335,9 @@
           });
         }
       },
-      showcreateOperator() {
-        var res = axios.get(`${this.url_api}/checkavailop`)
-        if(res.status == true){
+      async showcreateOperator() {
+        var res = await axios.get(`${this.url_api}/checkavailop`)
+        if(res.data.status == true){
           this.$refs['modal-operator'].show()
         } else {
            this.$swal({
