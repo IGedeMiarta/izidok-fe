@@ -176,7 +176,7 @@ export default {
       const swalWithBootstrapButtons = this.$swal.mixin({
         customClass: {
           confirmButton: "btn btn-success",
-          cancelButton: "btn btn-danger"
+          cancelButton: "btn btn-danger",
         },
         buttonsStyling: false
       });
@@ -197,9 +197,9 @@ export default {
             return this.handleError("Anda belum memilih durasi konsultasi!");
           }
 
-          if (!this.saving_params.is_agree) {
-            return this.handleError("Anda belum menyetujui pernyataan!");
-          }
+          // if (!this.saving_params.is_agree) {
+          //   return this.handleError("Anda belum menyetujui pernyataan!");
+          // }
 
           if (!this.saving_params.is_saved) {
             this.validate();

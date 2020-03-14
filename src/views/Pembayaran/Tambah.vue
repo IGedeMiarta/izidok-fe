@@ -65,7 +65,7 @@
                     </b-col>
                   </b-form-row>
                   <b-form-row class="d-flex align-items-center w-100 py-2">
-                    <b-col cols="4">Potongan</b-col>
+                    <b-col cols="4">Diskon</b-col>
                     <b-col cols="7">
                       <b-input-group append="%">
                         <b-form-input v-model.lazy="potongan" @keypress="isNumber($event)" :disabled="assistantRole" class="text-right" />

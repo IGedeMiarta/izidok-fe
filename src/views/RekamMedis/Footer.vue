@@ -99,7 +99,7 @@
 
           </div>
         </div>
-        <div class="form-row">
+        <!-- <div class="form-row">
           <div class="form-group col-md-10">
             <b-form-checkbox v-model="checkbox" class="my-3">
               Dengan ini, saya menyatakan bahwa saya telah mengisi data rekam medis dengan lengkap dan benar.
@@ -107,7 +107,7 @@
               lain yang dialami oleh pasien. Salinan deklarasi ini berlaku sama kuatnya dan sah seperti aslinya.
             </b-form-checkbox>
           </div>
-        </div>
+        </div> -->
       </form>
     </div>
   </div>

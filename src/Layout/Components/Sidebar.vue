@@ -127,9 +127,19 @@
               title: "Manajemen Tarif",
               href: "/tarif",
               type: ["klinik", "dokter praktek"]
+            }
+          ];
+          const v = tmp.filter(item => item.type.includes(signedInAs));
+          return v;
+        };
+        const accountSettingChild = () => {
+          const signedInAs = "dokter praktek";
+          const tmp = [{
+              title: "Manajemen Dokter",
+              type: "klinik"
             },
             {
-              title: "Account Setting",
+              title: "Profil Dokter",
               href: "/profile",
               type: ["klinik", "dokter praktek"]
             }
@@ -208,7 +218,7 @@
             },
           },
           {
-            title: "subskripsi",
+            title: "Subskripsi",
             href: "/subskripsi",
             icon: {
               element: "font-awesome-icon",
@@ -219,14 +229,13 @@
           },
           {
             title: "Account Setting",
-            href: "/profile",
             icon: {
               element: "font-awesome-icon",
               attributes: {
                 icon: "cog"
               }
             },
-            child: manajemenKlinikChild()
+            child: accountSettingChild()
           },
         ];
 
