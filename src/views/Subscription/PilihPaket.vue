@@ -1,11 +1,10 @@
-
 <template>
   <div>
     <PageTitle class="text-left" heading="Pilih Paket Berlangganan Anda"/>
     <div class="">
       <b-row>
-        <b-col sm="12">
-          <div class="col-md-12">
+        <b-col md="12">
+          <div class="col-md-12 ">
 
             <b-row class="pl-1 pr-4">
               <!-- [
@@ -33,6 +32,11 @@
                                 </font-awesome-layers>{{datadesc}}<br>
                               </p>
                               <b-button
+                                @click="
+                                  detailPaket({
+                                    id: data.id
+                                  })
+                                  "
                                 variant="primary"
                                 size="sm"
                                 class="text-capitalize mr-2 btn-antrean btn-block "
@@ -60,6 +64,11 @@
                                 </font-awesome-layers>{{datadesc}}<br>
                               </p>
                               <b-button
+                                @click="
+                                  detailPaket({
+                                    id: data.id
+                                  })
+                                  "
                                 variant="primary"
                                 size="sm"
                                 class="text-capitalize mr-2 btn-antrean btn-block "
@@ -88,6 +97,11 @@
 
                               </p>
                               <b-button
+                                @click="
+                                  detailPaket({
+                                    id: data.id
+                                  })
+                                  "
                                 variant="primary"
                                 size="sm"
                                 class="text-capitalize mr-2 btn-antrean btn-block "
@@ -114,6 +128,11 @@
                                 </font-awesome-layers>{{datadesc}}<br>
                               </p>
                               <b-button
+                                @click="
+                                  detailPaket({
+                                    id: data.id
+                                  })
+                                  "
                                 variant="primary"
                                 size="sm"
                                 class="text-capitalize mr-2 btn-antrean btn-block "
@@ -129,37 +148,10 @@
               <template v-if="dataPaket.length === 3">
                 <b-col sm="4" v-for="data in dataPaket" :key="data.id" >
                   <div class="card">
-                    <template v-if="data.id === 1">
-                      <div class="card-body card-box mb-6 card-box-border-bottom border-primary " style="background: #EEFFF7;
-                               border-radius:10px;">
-                        <div class="align-box-row ">
-                          <div class="align-content-center ">
-                            <div class="font-weight-bold ">
-                              <div class="font-size-md  text-primary text-center ">Free Trial</div>
-                              <p class="font-size-sm text-primary text-center">(Paket 1 Bulan)</p>
-                              <p class="font-size-xxl text-primary text-center ">FREE</p>
-                              <p class="font-size-sm text-primary border-2 text-center">
-                                {{data.limit}} Visit Pasien/bulan</p>
-                              <br>
-                              <p class="font-size-sm"  v-for="datadesc in data.desc" :key="datadesc" >
-                                <font-awesome-layers class="fa-lg mr-1 btn-actions">
-                                  <font-awesome-icon icon="check" transform="shrink-3" class="text-primary" />
-                                </font-awesome-layers>{{datadesc}}<br>
-                              </p>
-                              <b-button
-                                variant="primary"
-                                size="sm"
-                                class="text-capitalize mr-2 btn-antrean btn-block "
-                              >Coba gratis 30 hari</b-button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </template>
                     <template v-if="data.id === 2">
                       <div class="card-body card-box mb-6 card-box-border-bottom border-primary" style="background: #FEE9FF;
                               border-radius:10px;">
-                        <div class="align-box-row ">
+                        <div class="align-content-center ">
                           <div class="align-content-center ">
                             <div class="font-weight-bold ">
                               <div class="font-size-xl  text-primary text-center ">{{data.nama}}</div>
@@ -174,6 +166,11 @@
                                 </font-awesome-layers>{{datadesc}}<br>
                               </p>
                               <b-button
+                                @click="
+                                  detailPaket({
+                                    id: data.id
+                                  })
+                                  "
                                 variant="primary"
                                 size="sm"
                                 class="text-capitalize mr-2 btn-antrean btn-block "
@@ -186,7 +183,7 @@
                     <template v-if="data.id === 3">
                       <div class="card-body card-box mb-6 card-box-border-bottom border-primary" style="background: #F9FFD1;
                                border-radius:10px;">
-                        <div class="align-box-row ">
+                        <div class="align-content-center ">
                           <div class="align-content-center ">
                             <div class="font-weight-bold ">
                               <div class="font-size-xl  text-primary text-center">{{data.nama}}</div>
@@ -202,6 +199,11 @@
 
                               </p>
                               <b-button
+                                @click="
+                                  detailPaket({
+                                    id: data.id
+                                  })
+                                  "
                                 variant="primary"
                                 size="sm"
                                 class="text-capitalize mr-2 btn-antrean btn-block "
@@ -214,7 +216,7 @@
                     <template v-if="data.id === 4">
                       <div class="card-body card-box mb-6 card-box-border-bottom border-primary" style="background: #F0ECFF;
                                border-radius:10px;">
-                        <div class="align-box-row ">
+                        <div class="align-content-center ">
                           <div class="align-content-center ">
                             <div class="font-weight-bold ">
                               <div class="font-size-xl  text-primary text-center">{{data.nama}}</div>
@@ -222,23 +224,37 @@
                               <p class="font-size-xxl text-primary text-center">{{data.harga/1000}}rb</p>
                               <p class="font-size-sm text-primary border-2 text-center">
                                 {{data.limit}} Visit Pasien/bulan</p>
+                              <br>
                               <p class="font-size-sm"  v-for="datadesc in data.desc" :key="datadesc" >
                                 <font-awesome-layers class="fa-lg mr-1 btn-actions">
                                   <font-awesome-icon icon="check" transform="shrink-3" class="text-primary" />
                                 </font-awesome-layers>{{datadesc}}<br>
                               </p>
                               <b-button
+                                @click="
+                                  detailPaket({
+                                    id: data.id
+                                  })
+                                  "
                                 variant="primary"
                                 size="sm"
                                 class="text-capitalize mr-2 btn-antrean btn-block "
-
                               >Beli Paket</b-button>
                             </div>
                           </div>
                         </div>
                       </div>
                     </template>
+
                   </div>
+
+                </b-col>
+                <b-col md="12" class="mt-4 " style="text-align: center;">
+                  <span><strong>METODE PEMBAYARAN</strong></span>
+                </b-col>
+                <b-col sm="12" style="text-align: center; align-items: center; " v-for="data in dataPaygate" :key="data.id" >
+                  <img fluid :src="data.logo" height="40" width="120"
+                       class="mt-2 align-content-center" :alt="data.nama">
                 </b-col>
               </template>
 
@@ -316,6 +332,28 @@
         setInitPage: "sidebar/SET_INITIALIZATION_PAGE",
         setUserFirstLogin: "SET_USER_FIRST_LOGIN"
       }),
+      detailPaket({ id } = {}) {
+        if (id !== 1) {
+          this.$router.push({
+            name: "subskripsi-detail",
+            params: {
+              id: id
+            }
+          });
+        }else {
+          axios.get(`${this.url_api}/user/finish`)
+            .then(res => {
+              axios.get(`${this.url_api}/paket/${id}`)
+                .then(res => {
+                  this.setInitPage(false);
+                  this.setUserFirstLogin(0);
+                  this.$router.push({
+                    name: "home",
+                  });
+                });
+            });
+        }
+      },
       rerender(id) {
         this.$root.$emit("rerender",id);
       },
@@ -323,6 +361,7 @@
         axios.get(`${this.url_api}/paket`)
           .then(res => {
             this.dataPaket = res.data.data.paket
+            this.dataPaygate = res.data.data.paygate
           });
       },
     }

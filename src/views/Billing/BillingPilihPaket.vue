@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <PageTitle class="text-left" heading="Pilih Paket Berlangganan Anda"/>
@@ -345,7 +344,7 @@
           axios.get(`${this.url_api}/paket/${id}`)
             .then(res => {
               this.$router.push({
-                name: "Subskripsi",
+                name: "home",
               });
             });
         }
