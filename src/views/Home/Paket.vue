@@ -2,26 +2,35 @@
   <div class="p-2 text-center paket-wrapper text-white">
     <p class="mb-2 text-capitalize headline font-weight-bold">paket Anda</p>
     <p class="mb-2 smaller letter-spacing--03">
-      (7 hari tersisa hingga 14-01-2020, 03:00:00)
+      ({{ sisa_hari }} hari tersisa hingga {{ habis_berlaku }})
     </p>
     <div
       class="d-flex px-2 pb-3 pt-1 align-items-center justify-content-center flex-column bg-white text-black paket-inner"
     >
-      <h4 class="text-capitalize tipe-paket font-weight-bold">starter</h4>
-      <p class="small mb-0">(1-month-subscription)</p>
+      <h4 class="text-capitalize tipe-paket font-weight-bold">
+        {{ nama_paket }}
+      </h4>
+      <p class="small mb-0">{{ paket }}</p>
       <p
         class="highlight-text text-red font-weight-bold align-self-center my-0"
       >
-        10
+        {{ sisa_kuota }}
       </p>
       <p class="small text-capitalize">visite pasien tersisa</p>
-      <b-button class="text-capitalize">lebih lanjut</b-button>
+      <b-button
+        class="text-capitalize"
+        variant="primary"
+        :to="{ name: 'subskripsi' }"
+        >lebih lanjut</b-button
+      >
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  props: ["habis_berlaku", "paket", "sisa_hari", "sisa_kuota", "nama_paket"]
+};
 </script>
 
 <style lang="scss" scoped>

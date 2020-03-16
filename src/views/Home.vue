@@ -105,7 +105,13 @@
         </b-row> -->
       </b-col>
       <b-col cols="3">
-        <!-- <Paket /> -->
+        <Paket
+          :sisa_hari="sisa_hari"
+          :habis_berlaku="habis_berlaku"
+          :nama_paket="nama_paket"
+          :paket="paket"
+          :sisa_kuota="sisa_kuota"
+        />
       </b-col>
     </b-row>
     <LaporanPendapatan />
@@ -125,8 +131,8 @@ export default {
     ListAntrean: () => import("@/views/Home/ListAntrean"),
     ListPembayaran: () => import("@/views/Home/ListPembayaran"),
     CardDashboard: () => import("@/components/CardDashboard"),
-    LaporanPendapatan: () => import("@/views/Home/LaporanPendapatan")
-    // Paket: () => import("@/views/Home/Paket")
+    LaporanPendapatan: () => import("@/views/Home/LaporanPendapatan"),
+    Paket: () => import("@/views/Home/Paket")
     // TableDashboard: () => import("@/components/TableDashboard")
     // TrendPasien: () => import("@/components/TrendPasien")
   },
@@ -169,7 +175,14 @@ export default {
               pasien_baru_hari_ini = 0,
               nomor_antrian_saat_ini = 0,
               pasien_batal_hari_ini = 0,
-              total_pendapatan_hari_ini = 0
+              total_pendapatan_hari_ini = 0,
+              paket_berlangganan: {
+                paket,
+                habis_berlaku,
+                sisa_hari,
+                sisa_kuota,
+                nama_paket
+              }
             }
           }
         } = res;

@@ -16,7 +16,7 @@
                     <template  v-if="selectedRadio.label === 'Pilih Tanggal...' ">
                       <strong>Tanggal Konsultasi</strong>
                       <Datetime  type="date" required input-class="form-control mt-2" class="input-group" zone="Asia/Jakarta"
-                                 value-zone="Asia/Jakarta" format="d LLL yyyy" @input="tanggalSelected"
+                                 value-zone="Asia/Jakarta" format="d LLL yyyy" @input="tanggalSelected($tgl = valuetglpilih)"
                                  :min-datetime="minimumDatetime"  :input-style="
                     getDataError({ rawLabel: 'valuetglpilih' }) === null
                       ? null
@@ -38,7 +38,7 @@
                     && selectedRadio.label !== 'Pilih Tanggal...' && selectedRadio.label !==''  ">
                       <strong>Tanggal Konsultasi</strong>
                       <Datetime input-class="form-control" class="d-flex input-group mt-2" zone="Asia/Jakarta"
-                                value-zone="Asia/Jakarta" :value="hasil" format="d LLL yyyy" disabled>
+                                value-zone="Asia/Jakarta" v-model="hasil" format="d LLL yyyy" disabled>
                         <template v-slot:after>
                           <b-input-group-text @click="triggerDob" slot="append" style="
                     border-top-left-radius:0; border-left-width: 0; border-bottom-left-radius: 0; cursor: pointer
@@ -59,8 +59,8 @@
                         <template v-if="pengingatvalue === true">
                           <vue-select  class="text-capitalize bg-white mt-2"  :options="PilihanPengingat"
                                       v-model="selectedPengingat" disabled="disabled"   />
-                          <b-input type="text" class="form-control mt-1" :state="pasienEmailError.state" :placeholder="phEmailReminder" v-model="pasienEmail" @input="pasienEmailInput" />
-                          <div class="invalid-feedback d-block" v-if="pasienEmailError.state == false">{{ pasienEmailError.message }}</div>
+                          <input type="text" class="form-control mt-1"  :placeholder="[[ phEmailReminder ]]" v-model="pasien.email"
+                                 @input="emailReminder($email = pasien.email)" />
 
                         </template>
                       </label>
@@ -68,7 +68,7 @@
                     </b-col>
                     <b-col class="col-md-1">
                       <toggle-button
-                        v-model="pengingatvalue"
+                        @change="onToggleChange(slider.id, $event)"
                         :labels="{ checked: ' Ya', unchecked: ' Tidak' }"
                         :width="60"
                         :height="20"
@@ -178,14 +178,9 @@
         hari: 0,
         valuetglpilih : "",
         tglpilih: "",
-        pengingatvalue:false,
+        pengingatvalue:"",
         test : null,
         checkbox: false,
-        pasienEmail: null,
-        pasienEmailError: {
-          state: null,
-          message: ""
-        }
       };
     },
     computed: {
@@ -195,19 +190,22 @@
       },
       hasil() {
         return moment().add(this.hari, 'days').format("YYYY-MM-DD");
+
+        // var today = new Date();
+        // var tomorrow = new Date();
+        // hasil = tomorrow.setDate(today.getDate()+this.selectedRadio.value);
+        // return hari;
       }
     },
     mounted() {
-      this.pasienEmail = this.pasien.email;
-
       this.selectedRadio = {
         label: 'Tidak perlu konsul lanjutan',
-        value: 99
-      };
+        value: 1
+      },
       this.selectedPengingat = {
           label: 'Email',
           value: 1
-      };
+      },
       this.updateSavingParams({
         key: 'is_next_konsul',
         value: true
@@ -227,24 +225,35 @@
         return moment(date).format('dd MMM yyyy');
 
       },
-      tanggalSelected($event) {
-        if (this.hari == 1 && $event) {
-          this.tgl_next_konsultasi = $event
+      onToggleChange(id, event) { // added event as second arg
+        let value = event.value;  // changed from event.target.value to event.value
+        this.pengingatvalue = value
+        if(this.pengingatvalue === false) {
+          this.updateSavingParams({
+            key: 'is_email',
+            value: true
+          });
+        }else if(this.pasien.email !== ""){
+          this.updateSavingParams({
+            key: 'is_email',
+            value: true
+          });
+        }else {
+          this.updateSavingParams({
+            key: 'is_email',
+            value: false
+          });
+        }
+        console.log(value);
+      },
+      tanggalSelected($tgl) {
+
+        if (this.hari == 1) {
+          this.tgl_next_konsultasi =  $tgl
           this.updatePostData({
             key: 'tgl_next_konsultasi',
             value: this.tgl_next_konsultasi
-          });
-          
-          this.updateSavingParams({
-            key: 'is_next_konsul',
-            value: true
-          });
-        }
-        else {
-          this.updateSavingParams({
-            key: 'is_next_konsul',
-            value: false
-          });
+          },);
         }
       },
       handleError(message) {
@@ -253,6 +262,24 @@
           title: "Oops...",
           text: message
         });
+      },
+      emailReminder($email) {
+
+
+          this.valueEmail =  $email
+        console.log(this.valueEmail)
+
+        if(this.valueEmail !== null) {
+          this.updatePostData({
+            key: 'email_konsultasi',
+            value: this.valueEmail
+          },);
+          this.updateSavingParams({
+            key: 'is_email',
+            value: true
+          });
+        }
+
       },
       triggerDob() {
         const x = this.$refs.dob
@@ -265,91 +292,57 @@
       },
       selectingWaktu($event) {
         this.hari = $event.value
+
         if (this.hari != 1) {
           this.tgl_next_konsultasi =  this.hasil
           this.updatePostData({
             key: 'tgl_next_konsultasi',
             value: this.hasil
-          });
+          },);
         }
-      },
-      pasienEmailInput($event) {
-        this.validateEmail($event);
 
-        this.updatePostData({
-          key: 'email_konsultasi',
-          value: $event
-        });
-      },
-      validateEmail(email) {
-        if(email == '' || email == null || email == undefined) {
-          this.pasienEmailError.state = false;
-          this.pasienEmailError.message = 'Email Tidak Boleh Kosong';
-
-          this.updateSavingParams({
-            key: 'is_email',
-            value: false
-          });
-
-          this.updateSavingParams({
-            key: 'is_email_format',
-            value: true
-          });
-        }
-        else if(email, /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
-          this.pasienEmailError.state = null;
-          this.pasienEmailError.message = '';
-          
-          this.updateSavingParams({
-            key: 'is_email',
-            value: true
-          });
-
-          this.updateSavingParams({
-            key: 'is_email_format',
-            value: true
-          });
-        }
-        else {
-          this.pasienEmailError.state = false;
-          this.pasienEmailError.message = 'Format Email Tidak Sesuai';
-          
-          this.updateSavingParams({
-            key: 'is_email',
-            value: true
-          });
-
-          this.updateSavingParams({
-            key: 'is_email_format',
-            value: false
-          });
-        }
+        // console.log(this.tgl_next_konsultasi)
       }
+
     },
     watch: {
-      selectedRadio: function(newVal) {
-        if(newVal.value == 1) {
-          this.updateSavingParams({
-            key: 'is_next_konsul',
-            value: false
-          });
-        }
-        else {
-          this.updateSavingParams({
-            key: 'is_next_konsul',
-            value: true
-          });
-        }
-        
+      selectedRadio: function () {
+        // console.log('this', this)
+        if (this.selectedRadio.value != 99)
+          this.selectingWaktu();
+        this.tanggalSelected();
+        this.updatePostData({
+            key: 'next_konsultasi',
+            value: this.selectedRadio.value
+          },
+        );
+        this.updateSavingParams({
+          key: 'is_next_konsul',
+          value: true
+        });
+      },
+      hari: function () {
+        if (this.selectedRadio.value == 99)
+          this.selectingWaktu(); this.tanggalSelected();
         this.updatePostData({
           key: 'next_konsultasi',
-          value: newVal.value
+          value: this.hari
+        },);
+        this.updateSavingParams({
+          key: 'is_next_konsul',
+          value: true
         });
+        if (this.selectedRadio.value == 99)
+          this.selectingWaktu();  this.tanggalSelected();
 
-        if(newVal.value == 99) {
-          this.pengingatvalue = false;
-        } 
+        // console.log(this.hasil)
+        this.updateSavingParams({
+          key: 'is_next_konsul',
+          value: true
+        });
       },
+
+
       checkbox: function () {
         // this.selectingWaktu();
         this.updatePostData({
@@ -360,30 +353,6 @@
           key: 'is_agree',
           value: true
         });
-      },
-      pengingatvalue(newVal) {
-        if(newVal === false) {
-          this.updateSavingParams({
-            key: 'is_email',
-            value: true
-          });
-        }
-        else {
-          this.validateEmail(this.pasienEmail)
-
-          // if(this.pasienEmail != '') {
-          //   this.updateSavingParams({
-          //     key: 'is_email',
-          //     value: true
-          //   });
-          // }
-          // if(this.pasienEmail == '') {
-          //   this.updateSavingParams({
-          //     key: 'is_email',
-          //     value: false
-          //   });
-          // }
-        }
       }
     }
   };
