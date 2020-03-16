@@ -21,7 +21,7 @@
                     <h3>PAKET ANDA SAAT INI</h3>
                   </div>
                   <div class="col-md-12">
-                    <div class="card card-box borders-0" style="background-color:#d5f5d6;border-radius:0px;">
+                    <div class="card card-box borders-0 mt-2" style="background-color:#f2f2f2;border-radius:10px;">
                       <div class="card-body">
                         <div class="row">
                           <div class="col-md-2">
@@ -32,7 +32,7 @@
                               <label>: - </label>
                             </template>
                             <template v-if="dataActive.message !== 'package not found'">
-                              <label>: STARTER-1 dam</label>
+                              <label>: {{dataActive.data.paket}}</label>
                             </template>
                           </div>
                           <div class="col-md-2">
@@ -43,8 +43,8 @@
                               <label>: -</label>
                             </template>
                             <template v-if="dataActive.message !== 'package not found'">
-                              <label>: <label class="btn-success"
-                                              style="padding-left: 5px; padding-right: 5px;">Aktif</label></label>
+                              <label>: <label class="btn-primary"
+                                              style="padding-left: 5px; padding-right: 5px; border-radius: 4px;">Aktif</label></label>
                             </template>
 
                           </div>
@@ -56,8 +56,8 @@
                               <label>: -</label>
                             </template>
                             <template v-if="dataActive.message !== 'package not found'">
-                              <label>: <label class="btn-success"
-                                              style="padding-left: 5px; padding-right: 5px;">50</label></label>
+                              <label>: <label class="btn-primary"
+                                              style="padding-left: 6px; padding-right: 5px;  border-radius: 4px;">{{dataActive.data.sisa_kouta}}</label> dari {{dataActive.data.paket_kouta}}</label>
                             </template>
                           </div>
                           <div class="col-md-2">
@@ -68,7 +68,9 @@
                               <label>: -</label>
                             </template>
                             <template v-if="dataActive.message !== 'package not found'">
-                              <label>: 15 JAN 2020 10:09</label>
+                              <template v-if="dataActive.data.pembelian === null">: -</template>
+                              <template v-else><label>: {{dataActive.data.pembelian}}</label></template>
+
                             </template>
                           </div>
                           <div class="col-md-2">
@@ -79,7 +81,7 @@
                               <label>: -</label>
                             </template>
                             <template v-if="dataActive.message !== 'package not found'">
-                              <label>: 15 JAN 2020 10:09</label>
+                              <label>: {{dataActive.data.mulai_berlaku}}</label>
                             </template>
                           </div>
                           <div class="col-md-2">
@@ -90,7 +92,7 @@
                               <label>: -</label>
                             </template>
                             <template v-if="dataActive.message !== 'package not found'">
-                              <label>: 15 JAN 2020 10:09</label>
+                              <label>: {{dataActive.data.habis_berlaku}}</label>
                             </template>
                           </div>
                         </div>
@@ -123,7 +125,7 @@
                     <!--                      </div>-->
                     <!--                    </div>-->
                   </div>
-                  <div class="col-md-9">
+                  <div class="col-md-9 mt-2">
                     <button  @click="$router.push('/subskripsi/pilih-paket')" class="btn btn-primary float-right mt-3" style="width:60%">Beli Paket Berlangganan</button>
                   </div>
                   <!--                  <div class="col-md-6">-->
@@ -565,7 +567,7 @@
                 }).then(res => {
                   if (res.value) {
                         this.$refs['modal-bataltransaksi'].hide()
-
+                         this.$router.go(`/subskripsi`);
                   } else {
 
                   }
@@ -778,3 +780,4 @@
     }
   }
 </script>
+
