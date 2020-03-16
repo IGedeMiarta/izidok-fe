@@ -105,7 +105,13 @@
         </b-row> -->
       </b-col>
       <b-col cols="3">
-        <Paket />
+        <Paket
+          :sisa_hari="sisa_hari"
+          :habis_berlaku="habis_berlaku"
+          :nama_paket="nama_paket"
+          :paket="paket"
+          :sisa_kuota="sisa_kuota"
+        />
       </b-col>
     </b-row>
     <LaporanPendapatan />
