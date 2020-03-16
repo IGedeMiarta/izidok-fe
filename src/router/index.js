@@ -83,6 +83,11 @@ const routes = [
     component: () => import("../views/Subscription/PilihPaket.vue"),
   },
   {
+    path: "/struk-subskripsi/:bill_id",
+    name: "struk-subskripsi",
+    component: () => import("../views/Subscription/StrukSubscription.vue"),
+  },
+  {
     path: "/init",
     name: 'initialization',
     component: () => import("../views/Initialization.vue"),

@@ -187,6 +187,7 @@
                             <div class="align-box-row">
                                 <span class="d-block">
                                    <b-button
+                                     @click="detailNotActive(data.id)"
                                      variant="primary"
                                      size="sm"
                                      v-tooltip="'Detail Paket'"
@@ -316,20 +317,20 @@
               </div>
             </div>
           </div>
-          <b-modal ref="my-modal" title="Detail Paket">
-            <div class="row" v-if="this.detail !== null ">
+          <b-modal ref="modalNotActive" title="Detail Paket">
+            <div class="row" >
               <div class="col-md-4">
                 <strong>Nama Paket</strong>
               </div>
               <div class="col-md-8">
-                :  <label class=" ml-3">{{this.detail.produk}}</label>
+                :  <label class=" ml-3"></label>
               </div>
 
               <div class="col-md-4">
                 <strong>Durasi</strong>
               </div>
               <div class="col-md-8">
-                : <label class=" ml-3">{{this.detail.periode_berlaku}}</label>
+                : <label class=" ml-3"></label>
               </div>
               <div class="col-md-4">
                 <strong>Fitur</strong>
@@ -346,7 +347,7 @@
             </div>
             <template v-slot:modal-footer>
               <div class="w-100">
-                <b-button variant="primary" class="float-right" @click="hideModal">
+                <b-button variant="primary" class="float-right" @click="hideModalNotActive">
                   Tutup
                 </b-button>
               </div>
@@ -359,7 +360,7 @@
                 <label class="float-left"><strong>Total Pembelian :</strong> Rp. {{dataDetailRiwayatPembelian.detail.transactionAmount}}</label>
               </div>
               <div class="col-md-5">
-                <b-button variant="success" size="sm" class="float-right text-uppercase" @click="hideModal">
+                <b-button variant="success" size="sm" class="float-right text-uppercase" @click="ToInvoice(dataDetailRiwayatPembelian.detail.billing_id)">
                   Lihat Invoice
                 </b-button>
               </div>
@@ -454,6 +455,7 @@
           nama: null,
         }],
         detailStruk : null,
+        NotActive : [],
         searchValue: [],
         detail : null,
         totalEntries: 0,
@@ -706,14 +708,27 @@
       showModalTagihan() {
         this.$refs['modal-bataltransaksi'].show()
       },
+      showModalNotActive() {
+        this.$refs['modalNotActive'].show()
+      },
+      hideModalNotActive() {
+        this.$refs['modalNotActive'].hide()
+      },
       showModal() {
         this.$refs['my-modal'].show()
       },
       hideModal() {
         this.$refs['my-modal'].hide()
       },
-      hideModalTagihan(){
-        this.$refs['lihat-struk'].hide()
+      ToInvoice(item) {
+        this.detailStruk = item;
+        console.log(item)
+        this.$router.push({
+          name: "struk-subskripsi",
+          params: {
+            bill_id: this.detailStruk
+          }
+        });
       },
       detailTagihan(item){
         this.showModalTagihan()
@@ -726,10 +741,25 @@
           });
 
       },
+      detailNotActive(item){
+        this.showModalNotActive()
+        var i = item;
+
+        axios.get(`${this.url_api}/billing/package/${i}`)
+          .then(res => {
+            this.notActive = res.data
+            console.log(this.notActive.data.paket)
+          });
+
+      },
       detailBayar(item){
-        this.showModal();
-        this.detail = item;
-        console.log(this.detail)
+        this.detailStruk = item;
+        this.$router.push({
+          name: "struk-subskripsi",
+          params: {
+            bill_id: this.detailStruk.id
+          }
+        });
       },
       handleValueChanged({
                            perPage,
