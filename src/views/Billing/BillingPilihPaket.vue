@@ -4,8 +4,8 @@
     <PageTitle class="text-left" heading="Pilih Paket Berlangganan Anda"/>
     <div class="">
       <b-row>
-        <b-col sm="12">
-          <div class="col-md-12">
+        <b-col md="12">
+          <div class="col-md-12 ">
 
             <b-row class="pl-1 pr-4">
               <!-- [
@@ -147,12 +147,12 @@
                 </b-col>
               </template>
               <template v-if="dataPaket.length === 3">
-                <b-col sm="3" v-for="data in dataPaket" :key="data.id" class="align-content-center" >
+                <b-col sm="4" v-for="data in dataPaket" :key="data.id" >
                   <div class="card">
                     <template v-if="data.id === 2">
                       <div class="card-body card-box mb-6 card-box-border-bottom border-primary" style="background: #FEE9FF;
                               border-radius:10px;">
-                        <div class="align-box-row ">
+                        <div class="align-content-center ">
                           <div class="align-content-center ">
                             <div class="font-weight-bold ">
                               <div class="font-size-xl  text-primary text-center ">{{data.nama}}</div>
@@ -184,7 +184,7 @@
                     <template v-if="data.id === 3">
                       <div class="card-body card-box mb-6 card-box-border-bottom border-primary" style="background: #F9FFD1;
                                border-radius:10px;">
-                        <div class="align-box-row ">
+                        <div class="align-content-center ">
                           <div class="align-content-center ">
                             <div class="font-weight-bold ">
                               <div class="font-size-xl  text-primary text-center">{{data.nama}}</div>
@@ -217,7 +217,7 @@
                     <template v-if="data.id === 4">
                       <div class="card-body card-box mb-6 card-box-border-bottom border-primary" style="background: #F0ECFF;
                                border-radius:10px;">
-                        <div class="align-box-row ">
+                        <div class="align-content-center ">
                           <div class="align-content-center ">
                             <div class="font-weight-bold ">
                               <div class="font-size-xl  text-primary text-center">{{data.nama}}</div>
@@ -225,6 +225,7 @@
                               <p class="font-size-xxl text-primary text-center">{{data.harga/1000}}rb</p>
                               <p class="font-size-sm text-primary border-2 text-center">
                                 {{data.limit}} Visit Pasien/bulan</p>
+                              <br>
                               <p class="font-size-sm"  v-for="datadesc in data.desc" :key="datadesc" >
                                 <font-awesome-layers class="fa-lg mr-1 btn-actions">
                                   <font-awesome-icon icon="check" transform="shrink-3" class="text-primary" />
@@ -245,7 +246,16 @@
                         </div>
                       </div>
                     </template>
+
                   </div>
+
+                </b-col>
+                <b-col md="12" class="mt-4 " style="text-align: center;">
+                  <span><strong>METODE PEMBAYARAN</strong></span>
+                </b-col>
+                <b-col sm="12" style="text-align: center; align-items: center; " v-for="data in dataPaygate" :key="data.id" >
+                  <img fluid :src="data.logo" height="40" width="120"
+                       class="mt-2 align-content-center" :alt="data.nama">
                 </b-col>
               </template>
 
@@ -347,6 +357,7 @@
         axios.get(`${this.url_api}/paket`)
           .then(res => {
             this.dataPaket = res.data.data.paket
+            this.dataPaygate = res.data.data.paygate
           });
       },
     }
