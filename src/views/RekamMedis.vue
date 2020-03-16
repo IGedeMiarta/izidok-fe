@@ -201,6 +201,10 @@ export default {
             return this.handleError("Anda belum mengisi email konsultasi!");
           }
 
+          if (!this.saving_params.is_email_format) {
+            return this.handleError("Format email konsultasi tidak sesuai!");
+          }
+
           // if (!this.saving_params.is_agree) {
           //   return this.handleError("Anda belum menyetujui pernyataan!");
           // }
