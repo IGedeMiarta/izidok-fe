@@ -279,15 +279,23 @@
                       {{data.value}}
                     </template>
                     <template v-slot:cell(actions)="data">
-                      <template v-if=" data.item.status_text ==='Menunggu Pembayaran' || data.item.status_text ==='Lunas' ">
+                      <template v-if=" data.item.status_text ==='Batal' || data.item.status_text ==='Gagal'  ">
+                        <span>
+                           <b-link class="btn text-light font-size-md pl-2 pr-2 btn-sm " v-tooltip="'Lihat Struk'"  disabled @click="detailBayar(data.item)"
+                                   style="background-color:#37afe8;">
+                                    <font-awesome-icon icon="search" style="color:black;" />
+                           </b-link>
+                         </span>
+                      </template>
+                      <template v-else>
                         <span>
                            <b-link class="btn text-light font-size-md pl-2 pr-2 btn-sm " v-tooltip="'Lihat Struk'"  @click="detailBayar(data.item)"
                                    style="background-color:#37afe8;">
-                      <font-awesome-icon icon="search" style="color:black;" />
-                    </b-link>
-                      </span>
+                                    <font-awesome-icon icon="search" style="color:black;" />
+                           </b-link>
+                         </span>
                       </template>
-
+                      <template v-if=" data.item.status_text ==='Menunggu Pembayaran'  ">
                       <span >
                           <b-button
                             variant="success"
@@ -298,6 +306,7 @@
                           ><font-awesome-icon icon="money-bill-wave"
                           /></b-button>
                       </span>
+                      </template>
 
                     </template>
                   </b-table>
@@ -341,7 +350,7 @@
               </div>
             </template>
           </b-modal>
-          <b-modal ref="lihat-struk">
+          <b-modal  ref="modal-bataltransaksi">
             <div class="row" v-if="this.detailStruk !== null " style="font-size:14px;">
 
               <div class="col-md-7">
@@ -377,7 +386,7 @@
             <div slot="modal-footer">
               <div class="align-content-center">
                 <b-button variant="primary mr-2" @click="caraBayar(dataDetailRiwayatPembelian.detail.billing_id)">Lihat Cara Pembayaran</b-button>
-                <b-button variant="danger" ref='modal-bataltransaksi' class="btn-link-dark mr-4" @click='closeModalBatalTransaksi'>Batalkan Transaksi</b-button>
+                <b-button variant="danger" rclass="btn-link-dark mr-4" @click='closeModalBatalTransaksi(dataDetailRiwayatPembelian.detail.billing_id)'>Batalkan Transaksi</b-button>
               </div>
             </div>
           </b-modal>
@@ -535,7 +544,7 @@
       }
     },
     methods: {
-      closeModalBatalTransaksi() {
+      closeModalBatalTransaksi($id) {
         this.$swal({
           title: startCase("Batalkan Transaksi"),
           text: `Apakah Anda yakin untuk membatalkan transaksi ini?`,
@@ -544,10 +553,26 @@
           cancelButtonText: startCase("tidak"),
           confirmButtonText: startCase("ya")
         }).then(res => {
+          console.log(res.value)
           if (res.value) {
-            this.$refs['modal-bataltransaksi'].show()
+            var id_billing = $id
+            axios.delete(`${this.url_api}/cancelsubscribe/${id_billing}`)
+              .then(res => {
+                this.$swal({
+                  title: startCase("Transaksi Anda Berhasil dibatalkan!"),
+                  type: "success",
+                  confirmButtonText: startCase("OK")
+                }).then(res => {
+                  if (res.value) {
+                        this.$refs['modal-bataltransaksi'].hide()
+
+                  } else {
+
+                  }
+                });
+              });
           } else {
-            next(false);
+
           }
         });
       },
@@ -677,7 +702,7 @@
         this.fetchListTagihan(page);
       },
       showModalTagihan() {
-        this.$refs['lihat-struk'].show()
+        this.$refs['modal-bataltransaksi'].show()
       },
       showModal() {
         this.$refs['my-modal'].show()

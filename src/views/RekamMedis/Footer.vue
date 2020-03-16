@@ -59,7 +59,9 @@
                         <template v-if="pengingatvalue === true">
                           <vue-select  class="text-capitalize bg-white mt-2"  :options="PilihanPengingat"
                                       v-model="selectedPengingat" disabled="disabled"   />
-                          <input type="text" class="form-control mt-1"  :placeholder="[[ phEmailReminder ]]"/>
+                          <input type="text" class="form-control mt-1"  :placeholder="[[ phEmailReminder ]]" v-model="pasien.email"
+                                 @input="emailReminder($email = pasien.email)" />
+
                         </template>
                       </label>
 
@@ -115,7 +117,7 @@
 
 <script>
   import {
-    mapActions
+    mapActions, mapGetters
   } from "vuex";
   import "vue-datetime/dist/vue-datetime.css";
   import {
@@ -143,6 +145,7 @@
         },
         phEmailReminder: "Inputkan Email...",
         selectedRadio: {},
+        valueEmail:"",
         selectedPengingat:{},
         PilihanPengingat: [
           {
@@ -181,6 +184,7 @@
       };
     },
     computed: {
+      ...mapGetters(["pasien"]),
       minimumDatetime() {
         return moment().format("YYYY-MM-DD");
       },
@@ -224,6 +228,22 @@
       onToggleChange(id, event) { // added event as second arg
         let value = event.value;  // changed from event.target.value to event.value
         this.pengingatvalue = value
+        if(this.pengingatvalue === false) {
+          this.updateSavingParams({
+            key: 'is_email',
+            value: true
+          });
+        }else if(this.pasien.email !== ""){
+          this.updateSavingParams({
+            key: 'is_email',
+            value: true
+          });
+        }else {
+          this.updateSavingParams({
+            key: 'is_email',
+            value: false
+          });
+        }
         console.log(value);
       },
       tanggalSelected($tgl) {
@@ -235,7 +255,30 @@
             value: this.tgl_next_konsultasi
           },);
         }
+      },
+      handleError(message) {
+        return this.$swal({
+          type: "error",
+          title: "Oops...",
+          text: message
+        });
+      },
+      emailReminder($email) {
 
+
+          this.valueEmail =  $email
+        console.log(this.valueEmail)
+
+        if(this.valueEmail !== null) {
+          this.updatePostData({
+            key: 'email_konsultasi',
+            value: this.valueEmail
+          },);
+          this.updateSavingParams({
+            key: 'is_email',
+            value: true
+          });
+        }
 
       },
       triggerDob() {

@@ -33,7 +33,7 @@
           <b-img center fluid-grow :src="require('@/assets/izidok.png')" alt="izidok" class="py-0 px-4" />
         </router-link>
       </div>
-      <VuePerfectScrollbar class="app-sidebar--content">
+      <VuePerfectScrollbar class="scroll-area">
         <sidebar-menu :disableHover="initPage" showOneChild :menu="dataMenu()" />
       </VuePerfectScrollbar>
     </div>
@@ -47,6 +47,7 @@
   import {
     SidebarMenu
   } from "vue-sidebar-menu";
+  import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 
   import {
     library

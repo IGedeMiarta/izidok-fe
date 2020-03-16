@@ -348,7 +348,6 @@
         axios.get(`${this.url_api}/paket/${id}`)
           .then(res => {
             this.dataDetail = res.data.data
-            console.log(this.dataDetail)
           });
 
         axios.get(`${this.url_api}/paygate`)

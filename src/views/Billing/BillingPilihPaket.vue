@@ -147,7 +147,7 @@
                 </b-col>
               </template>
               <template v-if="dataPaket.length === 3">
-                <b-col sm="4" v-for="data in dataPaket" :key="data.id" >
+                <b-col sm="3" v-for="data in dataPaket" :key="data.id" class="align-content-center" >
                   <div class="card">
                     <template v-if="data.id === 2">
                       <div class="card-body card-box mb-6 card-box-border-bottom border-primary" style="background: #FEE9FF;
@@ -324,13 +324,20 @@
         setUserFirstLogin: "SET_USER_FIRST_LOGIN"
       }),
       detailPaket({ id } = {}) {
-        if (id) {
+        if (id !== 1) {
           this.$router.push({
             name: "subskripsi-detail",
             params: {
               id: id
             }
           });
+        }else {
+          axios.get(`${this.url_api}/paket/${id}`)
+            .then(res => {
+              this.$router.push({
+                name: "Subskripsi",
+              });
+            });
         }
       },
       rerender(id) {

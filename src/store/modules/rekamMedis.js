@@ -15,6 +15,7 @@ const getDefaultState = () => {
         canvas_tatalaksana: null,
         canvas_pemeriksaan_penunjang: null,
         saving_params: {
+            is_email: false,
             is_saving: false,
             is_saved: false,
             is_agree: false,
@@ -132,6 +133,12 @@ const actions = {
             commit('setIsSaving', { key: 'is_next_konsul', value: false });
             return;
         }
+
+      // email
+      if (!state.postData['email_konsultasi']) {
+        commit('setIsSaving', { key: 'is_email', value: false });
+        return;
+      }
 
         // console.log(state.postData);
 

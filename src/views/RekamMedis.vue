@@ -197,6 +197,10 @@ export default {
             return this.handleError("Anda belum memilih durasi konsultasi!");
           }
 
+          if (!this.saving_params.is_email) {
+            return this.handleError("Anda belum mengisi email konsultasi!");
+          }
+
           // if (!this.saving_params.is_agree) {
           //   return this.handleError("Anda belum menyetujui pernyataan!");
           // }
