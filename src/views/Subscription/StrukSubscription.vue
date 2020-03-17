@@ -10,7 +10,6 @@
               variant="success"
               size="sm"
               class="text-capitalize mr-2 btn-antrean btn-block mt-3"
-              style="width: auto; align-items: center; align-items: center;"
             >DOWNLOAD INVOICE</b-button>
           </div>
         </b-col>
@@ -19,13 +18,13 @@
 
       <div class="card-body">
         <b-row>
-        <b-col sm="5"  style="text-align: left;" class="mt-2">
+        <b-col sm="7"  style="text-align: left;" class="mt-1">
            <img fluid :src="require('@/assets/izidok.png')" height="40" width="120">
           <p class="ml-2 mt-5"><strong>Dr. {{ dataPaygetDetail.dokter.nama}}</strong></p>
           <p class="ml-2 "><strong>No. Handphone : {{ dataPaygetDetail.dokter.nomor_telp}}</strong></p>
           <p class="ml-2 "><strong>{{ dataPaygetDetail.dokter.email}}</strong></p>
         </b-col>
-        <b-col sm="7"  style="text-align: left; text-align:left; " class="mt-xl-2">
+        <b-col sm="5"  style="text-align: left; text-align:left; " class="mt-xl-2">
           <span class="h4"><strong>INVOICE</strong></span>
           <p class=" mt-5"><strong>No. Invoice : {{ dataPaygetDetail.detail.transactionNo}}</strong></p>
           <p class=" "><strong>Tanggal Pembelian : {{ dataPaygetDetail.detail.transactionDate}}</strong></p>
@@ -88,6 +87,9 @@
 
 
         </b-row>
+        <b-col sm="12"   style="text-align: right; text-align:right; margin-top: 200px; " >
+           <label><strong>customercare@medlinx.co.id, contact center : 021-723-7982</strong></label>
+        </b-col>
 
 
     </div>

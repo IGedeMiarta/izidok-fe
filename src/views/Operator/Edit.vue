@@ -28,8 +28,9 @@
                         validationDesc: form['validation-desc']
                       })
                     " :state="renderError({ error: form.error })" style="margin-top:-7px;">
-                        <label for="" class="text-capitalize">{{form.rawLabel}}</label>
-                        <label for="" style="color:red"> *</label>
+                        <label class="text-capitalize">{{form.rawLabel}}</label>
+                        <template v-if="form.rawLabel == 'nama asisten'"> <label style="color:red"> *</label></template>
+
                         <b-form-input :type="form.type || 'text'"  @input="
                                       setValue({
                                         rawLabel: form.rawLabel,
@@ -93,7 +94,7 @@
              this.data_operator = response.data.data.user;
              this.formData = {
                email : this.data_operator.email,
-               nama_operator : this.data_operator.nama,
+               nama_asisten : this.data_operator.nama,
                'no._handphone' : this.data_operator.nomor_telp
              }
              console.log(this.formData,'dat')
@@ -179,7 +180,7 @@
           console.log('dat', this.formData);
           const res = await axios.put(
             `${this.url_api}/operator/${this.operator_id}`, {
-              nama: this.formData.nama_operator,
+              nama: this.formData.nama_asisten,
               email: this.formData.email,
               nomor_telp: this.formData['no._handphone'],
             }
@@ -206,8 +207,8 @@
             label: "nama asisten",
             placeholder: "Masukkan nama asisten",
             type: "text",
-          disabled: false,
-            name: "nama",
+            disabled: false,
+            name: "nama_asisten",
             maxlength: 50
           },
           {
