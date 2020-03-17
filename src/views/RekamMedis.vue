@@ -197,9 +197,11 @@ export default {
             return this.handleError("Anda belum memilih durasi konsultasi!");
           }
 
-          if (!this.saving_params.is_email) {
-            return this.handleError("Anda belum mengisi email konsultasi!");
-          }
+          console.log(this.saving_params);
+
+          // if (!this.saving_params.is_email) {
+          //   return this.handleError("Anda belum mengisi email konsultasi!");
+          // }
 
           if (!this.saving_params.is_email_format) {
             return this.handleError("Format email konsultasi tidak sesuai!");

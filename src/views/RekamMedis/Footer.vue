@@ -96,9 +96,6 @@
               </b-form-radio> -->
             <!-- <b-form-radio class="my-1" v-model="selectedRadio" name="some-radios" value="0">Tidak Membutuhkan
                 Konsultasi</b-form-radio> -->
-
-
-
           </div>
         </div>
         <!-- <div class="form-row">
@@ -283,12 +280,11 @@
       },
       validateEmail(email) {
         if(email == '' || email == null || email == undefined) {
-          this.pasienEmailError.state = false;
-          this.pasienEmailError.message = 'Email Tidak Boleh Kosong';
-
+          // this.pasienEmailError.state = false;
+          // this.pasienEmailError.message = 'Email Tidak Boleh Kosong';
           this.updateSavingParams({
             key: 'is_email',
-            value: false
+            value: true
           });
 
           this.updateSavingParams({
@@ -372,7 +368,6 @@
         }
         else {
           this.validateEmail(this.pasienEmail)
-
           // if(this.pasienEmail != '') {
           //   this.updateSavingParams({
           //     key: 'is_email',

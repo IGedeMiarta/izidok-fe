@@ -151,6 +151,11 @@ const actions = {
                 { ...state.postData }
             );
 
+            // const sendEmail = await axios.post(
+            //     store.state.URL_API + "/email/reminder",
+            //     { ...state.postData }
+            // );
+
             if (res.data.status) {
                 commit('setIsSaving', { key: 'is_saved', value: true });
             }
