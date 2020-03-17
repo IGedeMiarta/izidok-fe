@@ -22,7 +22,7 @@
                 <b-form @submit.prevent="updateProses">
                   <b-row class="justify-content-center">
                     <b-col sm="6">
-                      <b-form-group v-for="form in formBasicData" :key="form.tmpId" class="text-capitalize"
+                      <b-form-group  v-for="form in formBasicData" :key="form.tmpId" class="text-capitalize"
                         :invalid-feedback="
                       renderInvalidFeedback({
                         validationDesc: form['validation-desc']
@@ -30,14 +30,14 @@
                     " :state="renderError({ error: form.error })" style="margin-top:-7px;">
                         <label for="" class="text-capitalize">{{form.rawLabel}}</label>
                         <label for="" style="color:red"> *</label>
-                        <b-form-input :type="form.type || 'text'" @input="
+                        <b-form-input :type="form.type || 'text'"  @input="
                                       setValue({
                                         rawLabel: form.rawLabel,
                                         label: form.label,
                                         $event,
                                         tmpId: form.tmpId
                                       })
-                                    " :state="renderError({ error: form.error })" :value="getValue(form.label)" :maxlength='form.maxlength'
+                                    " :state="renderError({ error: form.error })" :value="getValue(form.label)" :disabled="form.rawDisabled" :maxlength='form.maxlength'
                           :placeholder="form.placeholder" />
                       </b-form-group>
                       <b-button class="ml-3 text-uppercase" variant="primary" style="font-size:17.5px;float:right"
@@ -206,6 +206,7 @@
             label: "nama operator",
             placeholder: "Masukkan nama operator",
             type: "text",
+          disabled: false,
             name: "nama",
             maxlength: 50
           },
@@ -214,12 +215,14 @@
             placeholder: "Masukkan email operator",
             type: "email",
             name: "email",
+            disabled: true,
             maxlength: 50,
           },
           {
             label: "no. handphone",
             placeholder: "Masukkan nomor handphone Anda",
             name: "nomor_telp",
+            disabled: true,
             maxlength: 15
           },
         ].map((item, index) => ({
@@ -227,7 +230,8 @@
           label: item.label.split(" ").join("_"),
           tmpId: index,
           error: null,
-          rawLabel: item.label
+          rawLabel: item.label,
+          rawDisabled: item.disabled
         }));
         return tmp;
       },
