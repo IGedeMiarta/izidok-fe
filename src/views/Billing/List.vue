@@ -323,26 +323,55 @@
                 <strong>Nama Paket</strong>
               </div>
               <div class="col-md-8">
-                :  <label class=" ml-3"></label>
+                :  <label class=" ml-3">{{belumAktif.paket}}</label>
               </div>
 
               <div class="col-md-4">
                 <strong>Durasi</strong>
               </div>
               <div class="col-md-8">
-                : <label class=" ml-3"></label>
+                : <label class=" ml-3">{{belumAktif.durasi}}</label>
               </div>
               <div class="col-md-4">
                 <strong>Fitur</strong>
               </div>
               <div class="col-md-8">
-                : <label class=" ml-3">asdasd</label>
+                : <label class=" ml-3">
+
+                    Dashboard Monitoring
+                    <br>
+                    e-Rekam Medis
+                    <template v-if="belumAktif.paket == 'Essential'">
+                      (250 visit pasien)                      
+                    </template>
+                    <template v-else-if="belumAktif.paket == 'Premium'">
+                      Unlimited
+                    </template>
+                    <template v-else>
+                      (75 visit pasien)
+                    </template>
+                    <br>
+                    Daftar Pasien
+                    <br>
+                    Registrasi Pasien
+                    <br>
+                    Manajemen Antrian
+                    <br>
+                    Manajemen Tarif
+                    <br>
+                    Manajemen Asisten Dokter
+                    <br>
+                    Pembayaran
+                    <br>
+                    Engagement Pasien Via Email
+
+                </label>
               </div>
               <div class="col-md-4">
                 <strong>User</strong>
               </div>
               <div class="col-md-8">
-                : <label class=" ml-3">asdasd</label>
+                : <label class=" ml-3">1 Dokter, 1 Asisten Dokter</label>
               </div>
             </div>
             <template v-slot:modal-footer>
@@ -455,7 +484,7 @@
           nama: null,
         }],
         detailStruk : null,
-        NotActive : [],
+        belumAktif : [],
         searchValue: [],
         detail : null,
         totalEntries: 0,
@@ -744,11 +773,10 @@
       detailNotActive(item){
         this.showModalNotActive()
         var i = item;
-
         axios.get(`${this.url_api}/billing/package/${i}`)
-          .then(res => {
-            this.notActive = res.data
-            console.log(this.notActive.data.paket)
+          .then((res) => {
+            this.belumAktif = res.data.data
+            console.log('data belum aktif',this.belumAktif)
           });
 
       },
