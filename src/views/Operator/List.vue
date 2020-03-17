@@ -341,7 +341,7 @@
           this.$refs['modal-operator'].show()
         } else {
            this.$swal({
-              text: `Kouta User Asisten untuk Paket ini sudah terpakai!`,
+              text: `Kuota User Asisten untuk Paket ini sudah terpakai!`,
               type: "warning",
               confirmButtonText: startCase("ya")
             })

@@ -4,7 +4,13 @@
       <div class="d-block p-0 avatar-icon-wrapper">
         <span class="badge badge-circle badge-success p-top-a">Online</span>
         <div class="avatar-icon rounded">
-          <img src="@/assets/img/avatars/avatar3.jpg" alt="" />
+          <template v-if="dataProfile.foto_profile === ''">
+            <img src="@/assets/img/avatars/avatar3.jpg" alt="" />
+          </template>
+          <template v-else>
+            <img :src="dataProfile.foto_profile">
+          </template>
+
         </div>
       </div>
       <div class="d-none d-md-block pl-2">
@@ -159,6 +165,7 @@
 
   export default {
     data: () => ({
+      dataProfile: [],
       formData: null,
       formBasicData: null,
       passwordVisible: false,
@@ -206,6 +213,7 @@
     mounted() {
       this.formBasicData = this.setformBasicData();
       this.formData = this.setformData();
+      this.getProfile();
     },
     computed: {
       userName() {
@@ -217,6 +225,17 @@
       }
     },
     methods: {
+      async getProfile() {
+        try {
+          var profile = this.$store.state.user.id
+          const res = await axios.get(`${this.url_api}/user/${profile}`)
+          this.dataProfile = res.data.data;
+          console.log(this.dataProfile.foto_profile)
+
+        } catch (e) {
+
+        }
+      },
       submitForm() {
         const tmp = this.formBasicData.filter(
           item => (item.label)

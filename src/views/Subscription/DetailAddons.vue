@@ -42,7 +42,7 @@
                             <strong class="float-right mr-3">Rp. 900.000,-</strong>
                           </div>
                           <div class="col-md-4 mt-2">
-                            <strong>Pilih Kouta</strong>
+                            <strong>Pilih Kuota</strong>
                           </div>
                           <div class="col-md-8 mt-2">
                             <b-form-radio-group class="float-right" :options="[

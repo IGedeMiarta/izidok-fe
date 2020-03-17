@@ -130,7 +130,7 @@
                   </div>
                   <!--                  <div class="col-md-6">-->
                   <!--                    <button class="btn float-left mt-3" style="background-color:#de51d9;color:white;width:60%">Beli-->
-                  <!--                      Kouta ADD-ON</button>-->
+                  <!--                      Kuota ADD-ON</button>-->
                   <!--                  </div>-->
                 </div>
               </div>
@@ -153,7 +153,7 @@
                             Paket
                           </th>
                           <th scope="col" >
-                            jumlah Kouta
+                            jumlah Kuota
                           </th>
                           <th scope="col">
                             Action
@@ -482,7 +482,7 @@
             thStyle: "width: 25%"
           },
           {
-            label: 'JUMLAH KOUTA',
+            label: 'JUMLAH KUOTA',
             key: 'jumlah_kouta',
             thStyle: "width: 25%"
           },

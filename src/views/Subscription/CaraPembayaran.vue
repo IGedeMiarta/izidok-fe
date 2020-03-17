@@ -116,7 +116,7 @@
                               </div>
                             </template> -->
                             <b-button @click="$router.push('/subskripsi')" variant="success"
-                              style="width:100%; margin-top:15px;">Kembali ke halaman Billing</b-button>
+                              style="width:100%; margin-top:15px;">Kembali ke halaman Subskripsi</b-button>
                           </div>
                         </div>
                       </div>
