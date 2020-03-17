@@ -323,7 +323,7 @@
                 <strong>Nama Paket</strong>
               </div>
               <div class="col-md-8">
-                :  <label class=" ml-3">{{belumAktif.paket}}</label>
+                :  <label class=" ml-3">{{belumAktif.paket}}-1</label>
               </div>
 
               <div class="col-md-4">
