@@ -199,8 +199,8 @@
                         </tr>
                         </tbody>
                       </table>
-                      <b-pagination class="d-flex justify-content-center mt-4" v-model="currentPage" :total-rows="rows"
-                                    :per-page="perPage"></b-pagination>
+                      <b-pagination class="d-flex justify-content-center mt-4" v-model="currentPageNotActive" :total-rows="rowsBelumAktif"
+                                    :per-page="perPageBelumAktif"></b-pagination>
                     </b-tab>
                     <b-tab title="BERAKHIR">
                       <table class="table table-striped table-hover mb-0">
@@ -498,6 +498,10 @@
         perPageNotActiveExpired: 5,
         currentPageNotActive: 1,
         currentPageExpired: 1,
+        perPageBelumAktif : 5,
+        rowsBelumAktif: 0,
+        fromPageBelumAktif: 0,
+        toPageBelumAktif: 0,
       }
     },
     mounted() {
@@ -506,6 +510,9 @@
       this.fetchActive();
     },
     watch: {
+      currentPageNotActive(){
+        this.fetchListNotActive()
+      },
       currentPage() {
         this.fetchRiwayatPembelian();
       },
@@ -586,7 +593,6 @@
           cancelButtonText: startCase("tidak"),
           confirmButtonText: startCase("ya")
         }).then(res => {
-          console.log(res.value)
           if (res.value) {
             var id_billing = $id
             axios.delete(`${this.url_api}/cancelsubscribe/${id_billing}`)
@@ -612,15 +618,15 @@
       async fetchListNotActive() {
         try {
           const res = await axios.get(
-            `${this.url_api}/billing/package`
+            `${this.url_api}/billing/package?page=${this.currentPageNotActive}`
           );
           this.dataNotActive = res.data.data.data;
+          this.rowsBelumAktif = res.data.data.total;
         } catch (err) {
           // console.log(err);
         }
       },
       caraBayar(id ) {
-        console.log(id)
         this.$router.push({
           name: "subskripsi-bayar",
           params: {
@@ -633,7 +639,6 @@
         axios.get(`${this.url_api}/billing/package-active`)
           .then(res => {
             this.dataActive = res.data
-            console.log(this.dataActive)
           });
       },
       async fetchListExpired() {
@@ -751,7 +756,6 @@
       },
       ToInvoice(item) {
         this.detailStruk = item;
-        console.log(item)
         this.$router.push({
           name: "struk-subskripsi",
           params: {
@@ -766,7 +770,6 @@
         axios.get(`${this.url_api}/detailpembayaran/${this.detailStruk.id}`)
           .then(res => {
             this.dataDetailRiwayatPembelian = res.data.data
-            console.log(this.dataDetailRiwayatPembelian)
           });
 
       },
@@ -776,7 +779,6 @@
         axios.get(`${this.url_api}/billing/package/${i}`)
           .then((res) => {
             this.belumAktif = res.data.data
-            console.log('data belum aktif',this.belumAktif)
           });
 
       },
