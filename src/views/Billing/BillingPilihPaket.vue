@@ -1,12 +1,14 @@
 <template>
   <div>
     <PageTitle class="text-left" heading="Pilih Paket Berlangganan Anda"/>
-    <div class="">
-      <b-row>
-        <b-col md="12">
-          <div class="col-md-12 ">
-
-            <b-row class="pl-1 pr-4">
+    <div class="card card-box mb-2" style=" align-content: center; align-items: center;">
+      <div class="app-content--inner p-0 d-flex flex-column">
+        <div class="container-fluid">
+          <div class="row justify-content-center">
+            <b-row class="mt-4">
+              <b-col md="12">
+                <div class="col-md-12 ">
+                  <b-row class="pl-4 pr-4">
               <!-- [
                   { label: 'tetanus', value: 'tetanus.jpeg' },
                   { label: 'cancer', value: 'cancer.jpeg' }
@@ -252,19 +254,20 @@
                 <b-col md="12" class="mt-4 " style="text-align: center;">
                   <span><strong>METODE PEMBAYARAN</strong></span>
                 </b-col>
-                <b-col sm="12" style="text-align: center; align-items: center; " v-for="data in dataPaygate" :key="data.id" >
-                  <img fluid :src="data.logo" height="40" width="120"
-                       class="mt-2 align-content-center" :alt="data.nama">
-                </b-col>
               </template>
-
             </b-row>
-
-
           </div>
-
         </b-col>
       </b-row>
+      <div class=" mb-4">
+        <img style=""  :src="dataPaygate[0].logo" height="40" width="120"
+             class="mt-2  " :alt="dataPaygate[0].nama">
+        <img style=""  :src="dataPaygate[1].logo" height="40" width="120"
+             class="mt-2 ml-2 " :alt="dataPaygate[1].nama">
+      </div>
+         </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
