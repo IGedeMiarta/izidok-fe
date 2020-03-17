@@ -207,51 +207,68 @@
                         <thead class="thead-light">
                         <tr class="text-capitalize">
                           <th scope="col">Waktu Pembelian</th>
-                          <th scope="col" class="text-center">
+                          <th scope="col" >
                             Paket
                           </th>
-                          <th scope="col" class="text-center">
+                          <th scope="col" >
                             Mulai Berlaku
                           </th>
-                          <th scope="col" class="text-center">
+                          <th scope="col" >
                             Habis Berlaku
                           </th>
-                          <th scope="col" class="text-center">
+                          <th scope="col" >
                             Action
                           </th>
                         </tr>
                         </thead>
                         <tbody class="list">
-                        <tr v-for="(data, index) in dataRawatJalan" :key="data.id">
+                        <tr v-for="(data) in dataPaketExpired" :key="data.id">
                           <td class="text-wrap">
                             <div class="align-box-row">
                               <div class="d-flex align-items-center">
-                                <span>{{ (currentPage - 1) * perPage + index + 1 }} </span>
+                                <span>{{ data.waktu_pembelian }} </span>
                               </div>
                             </div>
                           </td>
                           <td class="text-wrap">
                             <div class="align-box-row">
                                 <span class="d-block">
-                                  {{ data.pasien.nama }}
+                                  {{ data.paket }}
                                 </span>
                             </div>
                           </td>
-                          <td>
-                            <div class="text-center d-flex align-items-center justify-content-between">
-                              <span class="flex-grow-1">{{data.pasien['nomor_rekam_medis']}}</span>
-                              <span>
-                                  <b-button variant="dark" size="sm" @click="rekamMedis(data)">
-                                    <span class="btn-wrapper--icon">
-                                      <font-awesome-icon icon="sign-in-alt" /> </span></b-button>
+                           <td class="text-wrap">
+                            <div class="align-box-row">
+                                <span class="d-block">
+                                  {{ data.mulai_berlaku }}
+                                </span>
+                            </div>
+                          </td>
+                            <td class="text-wrap">
+                            <div class="align-box-row">
+                                <span class="d-block">
+                                  {{ data.habis_berlaku }}
+                                </span>
+                            </div>
+                          </td>
+                          <td class="text-wrap">
+                            <div class="align-box-row">
+                                <span class="d-block">
+                                   <b-button
+                                     @click="detailNotActive(data.id)"
+                                     variant="primary"
+                                     size="sm"
+                                     v-tooltip="'Detail Paket'"
+                                   ><font-awesome-icon icon="search"
+                                   /></b-button>
                                 </span>
                             </div>
                           </td>
                         </tr>
                         </tbody>
                       </table>
-                      <b-pagination class="d-flex justify-content-center mt-4" v-model="currentPage" :total-rows="rows"
-                                    :per-page="perPage"></b-pagination>
+                      <b-pagination class="d-flex justify-content-center mt-4" v-model="currentPageExpired" :total-rows="rowsExpired"
+                                    :per-page="perPageExpired"></b-pagination>
                     </b-tab>
                   </b-tabs>
                 </div>
@@ -495,9 +512,11 @@
         fromPage: 0,
         toPage: 0,
         perPage: 10,
-        perPageNotActiveExpired: 5,
-        currentPageNotActive: 1,
+        dataPaketExpired : [],
         currentPageExpired: 1,
+        perPageExpired: 5,
+        rowsExpired : 0,
+        currentPageNotActive: 1,
         perPageBelumAktif : 5,
         rowsBelumAktif: 0,
         fromPageBelumAktif: 0,
@@ -512,6 +531,9 @@
     watch: {
       currentPageNotActive(){
         this.fetchListNotActive()
+      },
+      currentPageExpired(){
+        this.fetchListExpired();
       },
       currentPage() {
         this.fetchRiwayatPembelian();
@@ -644,36 +666,10 @@
       async fetchListExpired() {
         try {
           const res = await axios.get(
-            `${this.url_api}/billing/package-expired`
+            `${this.url_api}/billing/package-expired?page=${this.currentPageExpired}`
           );
-          const {
-            success,
-            data
-          } = res.data;
-          if (success) {
-            const {
-              total
-            } = data;
-            const {
-              data: listDataExpired,
-              total: totalEntries,
-              to: toPage,
-              from: fromPage
-            } = data;
-            this.totalEntries = totalEntries;
-            this.toPage = toPage;
-            this.fromPage = fromPage;
-            this.dataExpired = [
-              ...listDataExpired.map((item, index) => {
-                return {
-                  ...item,
-                  no: (this.currentPage - 1) * this.perPage + index + 1
-                };
-              })
-            ];
-            this.rows = data.total;
-            return this;
-          }
+          this.dataPaketExpired = res.data.data.data;
+          this.rowsExpired = this.data.data.total
         } catch (err) {
           // console.log(err);
         }
