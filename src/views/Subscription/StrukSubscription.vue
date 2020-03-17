@@ -1,29 +1,45 @@
 <template>
 
-    <div class="card " style="border-radius: 0px;">
+    <div class="card" style="border-radius: 0px; align-content: center; align-items: center;">
+      <template v-if="dataPaygetDetail.detail.status_billing === 'LUNAS'">
+      <b-row>
+        <b-col sm="12" class="a">
+          <div>
+            <b-button
+              @click=" downloadInvoice(dataPaygetDetail.detail.billing_id)"
+              variant="success"
+              size="sm"
+              class="text-capitalize mr-2 btn-antrean btn-block mt-3"
+              style="width: auto; align-items: center; align-items: center;"
+            >DOWNLOAD INVOICE</b-button>
+          </div>
+        </b-col>
+      </b-row>
+      </template>
+
       <div class="card-body">
         <b-row>
-        <b-col sm="5"  style="text-align: left;" class="mt-3">
+        <b-col sm="5"  style="text-align: left;" class="mt-2">
            <img fluid :src="require('@/assets/izidok.png')" height="40" width="120">
           <p class="ml-2 mt-5"><strong>Dr. {{ dataPaygetDetail.dokter.nama}}</strong></p>
           <p class="ml-2 "><strong>No. Handphone : {{ dataPaygetDetail.dokter.nomor_telp}}</strong></p>
           <p class="ml-2 "><strong>{{ dataPaygetDetail.dokter.email}}</strong></p>
         </b-col>
-        <b-col sm="7"  style="text-align: left; text-align:left; " class="mt-xl-4">
+        <b-col sm="7"  style="text-align: left; text-align:left; " class="mt-xl-2">
           <span class="h4"><strong>INVOICE</strong></span>
           <p class=" mt-5"><strong>No. Invoice : {{ dataPaygetDetail.detail.transactionNo}}</strong></p>
           <p class=" "><strong>Tanggal Pembelian : {{ dataPaygetDetail.detail.transactionDate}}</strong></p>
           <p class=" "><strong>Tanggal Maksimal Pembayaran : {{ dataPaygetDetail.detail.transactionExpire}}</strong></p>
           <p class=" "><strong>Metode Pembayaran : {{ dataPaygetDetail.paygate.nama}}</strong></p>
           <template v-if="dataPaygetDetail.detail.status_billing === 'LUNAS'">
-            <p class=" "><strong>Status Pembayaran :</strong> <button class="btn-success">LUNAS</button></p>
+            <p class=" "><strong>Status Pembayaran :</strong> <label class="btn-success" style="padding:5px;">LUNAS</label></p>
           </template>
           <template v-else>
-            <p class=" "><strong>Status Pembayaran :</strong> <button class="btn-danger">MENUNGGU PEMBAYARAN</button></p>
+            <p class=" "><strong>Status Pembayaran :</strong> <label class="btn-danger" style="padding:5px;">MENUNGGU PEMBAYARAN</label></p>
           </template>
 
         </b-col>
-         <b-col sm="12"   style="text-align: left; text-align:left; " class="mt-xl-4">
+         <b-col sm="12"   style="text-align: left; text-align:left; " class="mt-xl-2">
            <div class="table-responsive-xs">
              <table class="table table-striped table-hover mb-0">
                <thead class="thead-dark">
@@ -75,7 +91,7 @@
 
 
     </div>
-  </div>
+      </div>
 </template>
 
 <script>
@@ -122,6 +138,20 @@
       this.getPaygetDetail();
     },
     methods: {
+      downloadInvoice(id) {
+          // axios.get(`${this.url_api}/invoice/${id}`)
+          //   .then(res => {
+          //
+          //   });
+        axios.get(`${this.url_api}/invoice/${id}`, {responseType: 'arraybuffer'})
+          .then(response => {
+              let blob = new Blob([response.data], { type: 'application/pdf' })
+              let link = document.createElement('a')
+              link.href = window.URL.createObjectURL(blob)
+              link.download = 'invoice'+id+'.pdf'
+              link.click()
+          })
+        },
       fieldList() {
         const {
           generateFieldList: g,

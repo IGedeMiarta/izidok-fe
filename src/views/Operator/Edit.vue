@@ -203,8 +203,8 @@
       },
       setFormBasicData() {
         const tmp = [{
-            label: "nama operator",
-            placeholder: "Masukkan nama operator",
+            label: "nama asisten",
+            placeholder: "Masukkan nama asisten",
             type: "text",
           disabled: false,
             name: "nama",
@@ -212,7 +212,7 @@
           },
           {
             label: "email",
-            placeholder: "Masukkan email operator",
+            placeholder: "Masukkan email asisten",
             type: "email",
             name: "email",
             disabled: true,

@@ -150,13 +150,13 @@ export default {
     setFormBasicData() {
       const tmp = [
         {
-          label: "nama operator",
-          placeholder: "Masukkan nama operator",
+          label: "nama asisten",
+          placeholder: "Masukkan nama asisten",
           type: "text"
         },
         {
           label: "email",
-          placeholder: "Masukkan email operator",
+          placeholder: "Masukkan email asisten",
           type: "email"
         }
       ].map((item, index) => ({

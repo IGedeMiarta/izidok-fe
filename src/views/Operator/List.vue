@@ -355,15 +355,15 @@
       },
       setFormBasicData() {
         const tmp = [{
-            label: "nama operator",
-            placeholder: "Masukkan nama operator",
+            label: "nama asisten",
+            placeholder: "Masukkan nama asisten",
             type: "text",
             name: "nama",
             maxlength: 50
           },
           {
             label: "email",
-            placeholder: "Masukkan email operator",
+            placeholder: "Masukkan email asisten",
             type: "email",
             name: "email",
             maxlength: 50,
