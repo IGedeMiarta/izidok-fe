@@ -123,10 +123,10 @@ const actions = {
         // end
 
         // agreement
-        if (!state.postData['agreement']) {
-            commit('setIsSaving', { key: 'is_agree', value: false });
-            return;
-        }
+        // if (!state.postData['agreement']) {
+        //     commit('setIsSaving', { key: 'is_agree', value: false });
+        //     return;
+        // }
 
         // next konsul
         if (!state.postData['next_konsultasi']) {

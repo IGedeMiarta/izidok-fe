@@ -180,7 +180,7 @@
         tglpilih: "",
         pengingatvalue:false,
         test : null,
-        checkbox: false,
+        checkbox: true,
         pasienEmail: null,
         pasienEmailError: {
           state: null,
@@ -350,17 +350,19 @@
           this.pengingatvalue = false;
         } 
       },
-      checkbox: function () {
-        // this.selectingWaktu();
-        this.updatePostData({
-          key: 'agreement',
-          value: this.checkbox
-        });
-        this.updateSavingParams({
-          key: 'is_agree',
-          value: true
-        });
-      },
+      // checkbox: () => {
+      //   // this.selectingWaktu();
+      //   this.updatePostData({
+      //     key: 'agreement',
+      //     value: true
+      //   }
+      //   );
+        
+      //   this.updateSavingParams({
+      //     key: 'is_agree',
+      //     value: false
+      //   });
+      // },
       pengingatvalue(newVal) {
         if(newVal === false) {
           this.updateSavingParams({
