@@ -418,7 +418,7 @@
             <div slot="modal-footer">
               <div class="align-content-center">
                 <b-button variant="primary mr-2" @click="caraBayar(dataDetailRiwayatPembelian.detail.billing_id)">Lihat Cara Pembayaran</b-button>
-                <b-button variant="danger" rclass="btn-link-dark mr-4" @click='closeModalBatalTransaksi(dataDetailRiwayatPembelian.detail.billing_id)'>Batalkan Transaksi</b-button>
+                <b-button variant="danger" rclass="btn-link-dark mr-4" @click='closeModalBatalTransaksi(dataDetailRiwayatPembelian.detail.id)'>Batalkan Transaksi</b-button>
               </div>
             </div>
           </b-modal>
