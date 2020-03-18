@@ -135,10 +135,10 @@ const actions = {
         }
 
       // email
-      if (!state.postData['email_konsultasi']) {
-        commit('setIsSaving', { key: 'is_email', value: false });
-        return;
-      }
+    //   if (!state.postData['email_konsultasi']) {
+    //     commit('setIsSaving', { key: 'is_email', value: false });
+    //     return;
+    //   }
 
         // console.log(state.postData);
 
