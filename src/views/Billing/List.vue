@@ -233,7 +233,7 @@
                           <td class="text-wrap">
                             <div class="align-box-row">
                                 <span class="d-block">
-                                  {{ data.paket }}
+                                  {{ data.nama }}
                                 </span>
                             </div>
                           </td>
