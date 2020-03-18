@@ -97,7 +97,8 @@
     },
     computed: {
       ...mapGetters({
-        initPage: "sidebar/initPage"
+        initPage: "sidebar/initPage",
+        getRolesName: 'getRolesName'
       }),
       sidebarCollapsed: {
         get() {
@@ -112,45 +113,29 @@
       toggleSidebar() {
         this.sidebarCollapsed = !this.sidebarCollapsed;
       },
+      filterMenuByRole(menus) {
+        let res = []
+        menus.forEach(menu => {
+          if(menu.child) {
+            menu.child = this.filterMenuByRole(menu.child)
+          }
+
+          if(menu.type) {
+            let valid = false
+            this.getRolesName.forEach(role => {
+              if(menu.type.indexOf(role) != -1) valid = true
+            })
+
+            if(valid) res.push(menu)
+          }
+        })
+        return res
+      },
       dataMenu() {
-        const manajemenKlinikChild = () => {
-          const signedInAs = "dokter praktek";
-          const tmp = [{
-              title: "Manajemen Dokter",
-              type: "klinik"
-            },
-            {
-              title: "Manajemen Asisten Dokter",
-              href: "/asisten-dokter",
-              type: ["klinik", "dokter praktek"]
-            },
-            {
-              title: "Manajemen Tarif",
-              href: "/tarif",
-              type: ["klinik", "dokter praktek"]
-            }
-          ];
-          const v = tmp.filter(item => item.type.includes(signedInAs));
-          return v;
-        };
-        const accountSettingChild = () => {
-          const signedInAs = "dokter praktek";
-          const tmp = [{
-              title: "Manajemen Dokter",
-              type: "klinik"
-            },
-            {
-              title: "Profil Dokter",
-              href: "/profile",
-              type: ["klinik", "dokter praktek"]
-            }
-          ];
-          const v = tmp.filter(item => item.type.includes(signedInAs));
-          return v;
-        };
-        const tmp = [{
+        const menus = [{
             title: "Dashboard",
             href: "/",
+            type: ["dokter_praktek"],
             icon: {
               element: "font-awesome-icon",
               attributes: {
@@ -161,6 +146,7 @@
           {
             title: "Registrasi Antrean",
             href: "/rawat-jalan/registrasi",
+            type: ["dokter_praktek"],
             icon: {
               element: "font-awesome-icon",
               attributes: {
@@ -171,6 +157,7 @@
           {
             title: "Antrean",
             href: "/rawat-jalan/antrean",
+            type: ["dokter_praktek"],
             icon: {
               element: "font-awesome-icon",
               attributes: {
@@ -181,6 +168,7 @@
           {
             title: "Daftar Pasien",
             href: "/pasien",
+            type: ["dokter_praktek"],
             icon: {
               element: "font-awesome-icon",
               attributes: {
@@ -191,6 +179,7 @@
           {
             title: "Rekam Medis",
             href: "/rekam-medis",
+            type: ["dokter_praktek"],
             icon: {
               element: "font-awesome-icon",
               attributes: {
@@ -200,17 +189,30 @@
           },
           {
             title: "Manajemen Pengguna",
+            type: ["dokter_praktek"],
             icon: {
               element: "font-awesome-icon",
               attributes: {
                 icon: "th-large"
               }
             },
-            child: manajemenKlinikChild()
+            child: [
+              {
+                title: "Manajemen Asisten Dokter",
+                href: "/asisten-dokter",
+                type: ["dokter_praktek"]
+              },
+              {
+                title: "Manajemen Tarif",
+                href: "/tarif",
+                type: ["dokter_praktek"]
+              }
+            ]
           },
           {
             title: "Pembayaran",
             href: "/pembayaran",
+            type: ["dokter_praktek"],
             icon: {
               element: "font-awesome-icon",
               attributes: {
@@ -221,6 +223,7 @@
           {
             title: "Subskripsi",
             href: "/subskripsi",
+            type: ["dokter_praktek"],
             icon: {
               element: "font-awesome-icon",
               attributes: {
@@ -230,17 +233,28 @@
           },
           {
             title: "Account Setting",
+            type: ["dokter_praktek"],
             icon: {
               element: "font-awesome-icon",
               attributes: {
                 icon: "cog"
               }
             },
-            child: accountSettingChild()
+            child: [
+              {
+                title: "Manajemen Dokter",
+                type: ["dokter_praktek"]
+              },
+              {
+                title: "Profil Dokter",
+                href: "/profile",
+                type: ["dokter_praktek"]
+              }
+            ]
           },
         ];
 
-        return tmp.map(item => ({
+        return this.filterMenuByRole(menus).map(item => ({
           ...item,
           disabled: this.initPage
         }));
