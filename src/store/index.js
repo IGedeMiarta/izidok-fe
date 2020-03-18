@@ -43,7 +43,14 @@ export default new Vuex.Store({
       getRoles(state).some(val => /(asisten|operator)/gi.test(val.name)),
     getInitiationPosition: (state) => state.initPosition,
     isFirstLogin: (state) => (state.user && state.user.is_first_login) == 1,
-    getKlinikId: (state) => state.user.klinik_id
+    getKlinikId: (state) => state.user.klinik_id,
+    getRolesName: state => {
+      let roles = [];
+      getRoles(state).forEach(role => {
+        roles.push(role.name)
+      })
+      return roles;
+    }
   },
   mutations: {
     SET_BEARER_TOKEN(state, value) {
