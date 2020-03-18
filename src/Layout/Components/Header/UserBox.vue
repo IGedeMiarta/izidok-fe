@@ -8,7 +8,7 @@
             <img src="@/assets/img/avatars/avatar3.jpg" alt="" />
           </template>
           <template v-else>
-            <img :src="dataProfile.foto_profile">
+            <img :src="dataProfile.foto_profile" class="img-pp">
           </template>
 
         </div>
@@ -453,3 +453,10 @@
     }
   };
 </script>
+
+<style lang="scss" scoped>
+.img-pp {
+  width: 100% !important;
+  height: auto !important;
+}
+</style>

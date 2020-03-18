@@ -94,6 +94,10 @@ import { mapMutations, mapState, mapGetters } from "vuex";
             routeName = "home";
             break;
         }
+
+        if(routeName == 'home') {
+          axios.get(`${this.url_api}/user/finish`)
+        }
         
         return {name:routeName}
       }
