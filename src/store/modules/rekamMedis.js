@@ -19,7 +19,8 @@ const getDefaultState = () => {
             is_saving: false,
             is_saved: false,
             is_agree: false,
-            is_next_konsul: false
+            is_next_konsul: false,
+            is_kuotanotnull: false,
         }
     }
 };
@@ -156,21 +157,30 @@ const actions = {
             //     { ...state.postData }
             // );
 
-            if (res.data.status) {
+          console.log(res.data.message)
+            if (res.data.message === "success") {
                 commit('setIsSaving', { key: 'is_saved', value: true });
+              commit('setIsSaving', { key: 'is_kuotanotnull', value: true });
+              const TransStatus = await axios.put(
+                store.state.URL_API + "/transaksi/" + transklinik_id, {
+                  status: 'SELESAI'
+                });
+              return res.data;
+
             }
 
-            commit('setIsSaving', { key: 'is_saving', value: false });
+             if (res.data.message === "Qouta telah habis") {
+               commit('setIsSaving', { key: 'is_kuotanotnull', value: false });
+               commit('setIsSaving', { key: 'is_saved', value: true });
+             }
+
+          commit('setIsSaving', { key: 'is_saving', value: false });
 
             // if successful, update transklinik (antrean) status to "SELESAI"
-            const TransStatus = await axios.put(
-                store.state.URL_API + "/transaksi/" + transklinik_id, {
-                status: 'SELESAI'
-            });
 
             console.log('Rawat Jalan Status: ', TransStatus.data.data.status);
 
-            return res.data;
+
 
         } catch (err) {
             commit('setIsSaving', { key: 'is_saving', value: false });

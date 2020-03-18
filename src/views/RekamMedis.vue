@@ -216,6 +216,10 @@ export default {
             return this.handleError("Penyimpanan Rekam Medis gagal!");
           }
 
+          if (!this.saving_params.is_kuotanotnull) {
+            return this.handleError("Kuota Anda telah habis, silahkan lakukan pembelian Paket untuk dapat melakukan aktivitas ini.");
+          }
+
           this.$swal
             .fire(
               "Rekam medis tersimpan!",
