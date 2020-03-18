@@ -73,7 +73,8 @@ import { mapMutations, mapState, mapGetters } from "vuex";
     methods: {
       ...mapMutations({
         collapseSidebar: "sidebar/SET_SIDEBAR_COLLAPSED",
-        setInitPage: 'sidebar/SET_INITIALIZATION_PAGE'
+        setInitPage: 'sidebar/SET_INITIALIZATION_PAGE',
+        setUserFirstLogin: "SET_USER_FIRST_LOGIN"
       }),
       determineNextRoute() {
         let routeName = "home";
@@ -97,6 +98,10 @@ import { mapMutations, mapState, mapGetters } from "vuex";
 
         if(routeName == 'home') {
           axios.get(`${this.url_api}/user/finish`)
+            .then(res => {
+              this.setInitPage(false);
+              this.setUserFirstLogin(0);
+            })
         }
         
         return {name:routeName}
