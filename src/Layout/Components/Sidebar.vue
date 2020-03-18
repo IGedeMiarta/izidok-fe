@@ -135,7 +135,7 @@
         const menus = [{
             title: "Dashboard",
             href: "/",
-            type: ["dokter_praktek"],
+            type: ["dokter_praktek", "operator"],
             icon: {
               element: "font-awesome-icon",
               attributes: {
@@ -146,7 +146,7 @@
           {
             title: "Registrasi Antrean",
             href: "/rawat-jalan/registrasi",
-            type: ["dokter_praktek"],
+            type: ["dokter_praktek", "operator"],
             icon: {
               element: "font-awesome-icon",
               attributes: {
@@ -157,7 +157,7 @@
           {
             title: "Antrean",
             href: "/rawat-jalan/antrean",
-            type: ["dokter_praktek"],
+            type: ["dokter_praktek", "operator"],
             icon: {
               element: "font-awesome-icon",
               attributes: {
@@ -168,7 +168,7 @@
           {
             title: "Daftar Pasien",
             href: "/pasien",
-            type: ["dokter_praktek"],
+            type: ["dokter_praktek", "operator"],
             icon: {
               element: "font-awesome-icon",
               attributes: {
@@ -179,7 +179,7 @@
           {
             title: "Rekam Medis",
             href: "/rekam-medis",
-            type: ["dokter_praktek"],
+            type: ["dokter_praktek", "operator"],
             icon: {
               element: "font-awesome-icon",
               attributes: {
@@ -189,7 +189,7 @@
           },
           {
             title: "Manajemen Pengguna",
-            type: ["dokter_praktek"],
+            type: ["dokter_praktek", "operator"],
             icon: {
               element: "font-awesome-icon",
               attributes: {
@@ -200,19 +200,19 @@
               {
                 title: "Manajemen Asisten Dokter",
                 href: "/asisten-dokter",
-                type: ["dokter_praktek"]
+                type: ["dokter_praktek", "operator"]
               },
               {
                 title: "Manajemen Tarif",
                 href: "/tarif",
-                type: ["dokter_praktek"]
+                type: ["dokter_praktek", "operator"]
               }
             ]
           },
           {
             title: "Pembayaran",
             href: "/pembayaran",
-            type: ["dokter_praktek"],
+            type: ["dokter_praktek", "operator"],
             icon: {
               element: "font-awesome-icon",
               attributes: {
@@ -223,7 +223,7 @@
           {
             title: "Subskripsi",
             href: "/subskripsi",
-            type: ["dokter_praktek"],
+            type: ["dokter_praktek", "operator"],
             icon: {
               element: "font-awesome-icon",
               attributes: {
@@ -233,7 +233,7 @@
           },
           {
             title: "Account Setting",
-            type: ["dokter_praktek"],
+            type: ["dokter_praktek", "operator"],
             icon: {
               element: "font-awesome-icon",
               attributes: {
@@ -243,12 +243,12 @@
             child: [
               {
                 title: "Manajemen Dokter",
-                type: ["dokter_praktek"]
+                type: ["dokter_praktek", "operator"]
               },
               {
                 title: "Profil Dokter",
                 href: "/profile",
-                type: ["dokter_praktek"]
+                type: ["dokter_praktek", "operator"]
               }
             ]
           },
