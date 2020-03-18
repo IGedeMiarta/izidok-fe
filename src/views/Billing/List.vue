@@ -290,13 +290,16 @@
                       <b-input size="sm" class="mt-2 w-70" v-if="data.field.searchable"
                                @input="searchValueChanged($event, data.field.key)" />
                     </template>
-
-                    <template v-slot:cell(jenis_kelamin)="data">
-                      {{ jenisKelamin(data.value) }}
-                    </template>
-
-                    <template v-slot:cell(status)="data">
-                      {{data.value}}
+                    <template v-slot:cell(status_text)="data">
+                      <template v-if="data.item.status_text == 'Menunggu Pembayaran'">
+                        <strong class="text-uppercase" style="color:blue;">{{data.value}}</strong>
+                      </template>
+                      <template v-else-if="data.item.status_text == 'Lunas'">
+                        <strong class="text-uppercase">{{data.value}}</strong>
+                      </template>
+                      <template v-else-if="data.item.status_text == 'Batal'">
+                        <strong class="text-uppercase" style="color:red">{{data.value}}</strong>
+                      </template>
                     </template>
                     <template v-slot:cell(actions)="data">
                       <template v-if=" data.item.status_text ==='Batal' || data.item.status_text ==='Gagal'  ">
