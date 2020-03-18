@@ -172,14 +172,14 @@
                           <td class="text-wrap">
                             <div class="align-box-row">
                                 <span class="d-block">
-                                  {{ data.paket }}
+                                  {{ data.nama }}
                                 </span>
                             </div>
                           </td>
                           <td class="text-wrap">
                             <div class="align-box-row">
                                 <span class="d-block">
-                                  {{ data.jumlah_kouta }}
+                                  {{ data.jumlah_kouta }} visit
                                 </span>
                             </div>
                           </td>
@@ -343,7 +343,7 @@
                 <strong>Nama Paket</strong>
               </div>
               <div class="col-md-8">
-                :  <label class=" ml-3">{{belumAktif.paket}}-1</label>
+                :  <label class=" ml-3">{{belumAktif.nama}}</label>
               </div>
 
               <div class="col-md-4">
@@ -361,14 +361,14 @@
                     Dashboard Monitoring
                     <br>
                     e-Rekam Medis
-                    <template v-if="belumAktif.paket == 'Essential'">
-                      (250 visit pasien)                      
+                    <template v-if="belumAktif.nama == 'Essential-1' || belumAktif.nama == 'Essential-12'">
+                      ({{250 * belumAktif.paket_bln}} visit pasien)                      
                     </template>
-                    <template v-else-if="belumAktif.paket == 'Premium'">
+                    <template v-else-if="belumAktif.nama == 'Premium-1' || belumAktif.nama == 'Premium-12'">
                       Unlimited
                     </template>
                     <template v-else>
-                      (75 visit pasien)
+                      ({{75 * belumAktif.paket_bln}} visit pasien)
                     </template>
                     <br>
                     Daftar Pasien
@@ -646,7 +646,16 @@
             `${this.url_api}/billing/package?page=${this.currentPageNotActive}`
           );
           this.dataNotActive = res.data.data.data;
+          // this.dataNotActive = [
+          //     ...dat.map((item, index) => {
+          //       return {
+          //         ...item,
+          //         pkt_bln : parseInt(item.durasi.replace(" Bulan", ""))
+          //       };
+          //     })
+          //   ];
           this.rowsBelumAktif = res.data.data.total;
+          
         } catch (err) {
           // console.log(err);
         }
@@ -777,7 +786,13 @@
         var i = item;
         axios.get(`${this.url_api}/billing/package/${i}`)
           .then((res) => {
-            this.belumAktif = res.data.data
+            let dat = res.data.data;
+            console.log('dat',dat)
+            this.belumAktif = 
+            {
+              ...dat,
+              paket_bln : parseInt(dat.durasi.replace(" Bulan", ""))
+            }
           });
 
       },
