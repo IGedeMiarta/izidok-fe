@@ -54,6 +54,13 @@
                </tr>
                </thead>
                <tbody>
+                 <template v-if="dataPaygetDetail.detail.status_billing === 'LUNAS'">
+                    <img src="@/assets/img/lunas.png" class="status-payment">
+                 </template>
+
+                 <template v-else>
+                      <img src="@/assets/img/BELUM.png" class="status-payment">
+                 </template>
                <tr>
                  <td class="tx-nowrap">{{dataPaygetDetail.detail.paket}}</td>
                  <td class="text-center"> 1</td>
@@ -62,7 +69,6 @@
                </tr>
                </tbody>
              </table>
-
            </div>
          </b-col>
           <b-col sm="12"  style="text-align: right;" class="mt-3">
@@ -210,3 +216,23 @@
   }
 
   </script>
+
+  <style scoped>
+  .status-payment {
+    position: absolute;
+    opacity: 0.3;
+    margin-left: 300px;
+    margin-right: auto;
+  }
+  @media only screen and (max-width: 900px) and (min-width:768px) {
+    .status-payment {
+      margin-left: 170px;
+    }
+  }
+  @media only screen and (max-width: 772px) and (min-width:270px) {
+    .status-payment {
+      margin-left: 50px;
+      position: relative;
+    }
+  }
+  </style>

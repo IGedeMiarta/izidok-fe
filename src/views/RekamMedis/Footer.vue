@@ -272,7 +272,6 @@
       },
       pasienEmailInput($event) {
         this.validateEmail($event);
-
         this.updatePostData({
           key: 'email_konsultasi',
           value: $event
