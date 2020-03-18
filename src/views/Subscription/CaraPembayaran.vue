@@ -34,7 +34,7 @@
                             </div>
                           </div>
                           <div class="col-md-12">
-                            <label for="">Jumlah yang harus dibayar :</label>
+                            <label >Jumlah yang harus dibayar :</label>
                           </div>
                           <div class="col-md-12">
                             <strong>Rp.{{this.dataPaygetDetail.detail.transactionAmount}},-</strong>
@@ -115,7 +115,9 @@
                                 </b-collapse>
                               </div>
                             </template> -->
-                            <b-button @click="$router.push('/subskripsi')" variant="success"
+                            <b-button  @click="
+                                  goSubskripsi()
+                                  "  variant="success"
                               style="width:100%; margin-top:15px;">Kembali ke halaman Subskripsi</b-button>
                           </div>
                         </div>
@@ -134,6 +136,7 @@
 
 <script>
   import axios from 'axios';
+  import {mapMutations} from "vuex";
   export default {
     data() {
       return {
@@ -144,6 +147,18 @@
       this.getPaygetDetail();
     },
     methods: {
+      ...mapMutations({
+        collapseSidebar: "sidebar/SET_SIDEBAR_COLLAPSED",
+        setInitPage: "sidebar/SET_INITIALIZATION_PAGE",
+        setUserFirstLogin: "SET_USER_FIRST_LOGIN"
+      }),
+      goSubskripsi(){
+        this.setInitPage(false);
+        this.setUserFirstLogin(0);
+        this.$router.push({
+          name: "subskripsi",
+        });
+      },
       copy_text(str) {
         const el = document.createElement('textarea');
         el.value = str;

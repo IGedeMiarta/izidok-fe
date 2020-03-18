@@ -153,6 +153,7 @@
       }
     },
     mounted() {
+      this.cekPaket();
       if (!this.isDoctor) {
         this.isOperator = true;
       } else {
@@ -178,6 +179,95 @@
       }
     },
     methods: {
+      async cekPaket() {
+        try {
+          const res = await axios.get(
+            `${this.url_api}/cekPaket`
+          );
+          //Kuota habis, masa berlaku masih ada, belum beli paket.
+          if (res.data.message === 'Kuota Anda telah habis, silahkan lakukan pembelian Paket untuk dapat melakukan aktivitas ini.') {
+            return this.$swal({
+              text: "Kuota Anda telah habis, silahkan lakukan pembelian Paket untuk dapat melakukan aktivitas ini.",
+              showCancelButton: false,
+              confirmButtonText: "OK",
+              type: "warning",
+              allowOutsideClick : false,
+              allowEnterKey: false,
+            }).then(res => {
+              console.log(res.value)
+              if (res.value) {
+                this.$router.push(`/subskripsi`);
+              }
+            });
+          }
+          //Kuota habis, masa berlaku habis, belum beli paket
+          if (res.data.message === 'Paket Anda telah berakhir, silahkan lakukan pembelian Paket untuk dapat melakukan aktivitas ini.') {
+            return this.$swal({
+              text: "Paket Anda telah berakhir, silahkan lakukan pembelian Paket untuk dapat melakukan aktivitas ini.",
+              showCancelButton: false,
+              confirmButtonText: "OK",
+              type: "warning",
+              allowOutsideClick : false,
+              allowEnterKey: false,
+            }).then(res => {
+              console.log(res.value)
+              if (res.value) {
+                this.$router.push(`/subskripsi`);
+              }
+            });
+          }
+          //Kuota masih ada, masa berlaku habis (kuota hangus), belum beli paket.
+          if (res.data.message === 'Masa Berlaku Paket Anda telah berakhir, silahkan lakukan pembelian untuk dapat melakukan aktivitas ini.') {
+            return this.$swal({
+              text: "Masa Berlaku Paket Anda telah berakhir, silahkan lakukan pembelian untuk dapat melakukan aktivitas ini.",
+              showCancelButton: false,
+              confirmButtonText: "OK",
+              type: "warning",
+              allowOutsideClick : false,
+              allowEnterKey: false,
+            }).then(res => {
+              console.log(res.value)
+              if (res.value) {
+                this.$router.push(`/subskripsi`);
+              }
+            });
+          }
+          //Saat inisiasi, memilih ‘beli paket’, lalu ketika statusnya sedang menunggu pembayaran, dia ingin akses menu lain.
+          if (res.data.message === 'Silahkan selesaikan proses Pembayaran Paket Anda untuk dapat melakukan aktivitas ini.') {
+            return this.$swal({
+              text: "Silahkan selesaikan proses Pembayaran Paket Anda untuk dapat melakukan aktivitas ini.",
+              showCancelButton: false,
+              confirmButtonText: "OK",
+              type: "warning",
+              allowOutsideClick : false,
+              allowEnterKey: false,
+            }).then(res => {
+              console.log(res.value)
+              if (res.value) {
+                this.$router.push(`/subskripsi`);
+              }
+            });
+          }
+          //saat blum ada paket satupun
+          if (res.data.message === 'belum melakukan pembelian paket apapun') {
+            return this.$swal({
+              text: "Anda tidak memiliki paket apapun, silahkan lakukan pembelian untuk dapat melakukan aktivitas ini.",
+              showCancelButton: false,
+              confirmButtonText: "OK",
+              type: "warning",
+              allowOutsideClick : false,
+              allowEnterKey: false,
+            }).then(res => {
+              console.log(res.value)
+              if (res.value) {
+                this.$router.push(`/subskripsi`);
+              }
+            });
+          }
+        } catch (err) {
+          // console.log(err);
+        }
+      },
       determineParameter() {
         const {
           searchValue,
@@ -193,47 +283,6 @@
           v += `&column=${sortBy}&order=${sortDesc ? "desc" : "asc"}`;
         }
         return v;
-      },
-      async fetchListPembayaran() {
-        try {
-          const today =
-            this.tanggalLahir && moment(this.tanggalLahir).format("YYYY-MM-DD");
-          const res = await axios.get(
-            `${this.url_api}/pembayaran?limit=${this.perPage}&page=${
-            this.currentPage
-          }${this.determineParameter()}`
-          );
-          const {
-            success,
-            data
-          } = res.data;
-          console.log(data);
-          if (success) {
-            const {
-              total,
-                data: listPembayaran,
-              total: totalEntries,
-              to: toPage,
-              from: fromPage
-            } = data;
-            
-            this.totalEntries = totalEntries;
-            this.toPage = toPage;
-            this.fromPage = fromPage;
-            this.pembayaranList = [
-              ...listPembayaran.map((item, index) => {
-                return {
-                  ...item,
-                  no: (this.currentPage - 1) * this.perPage + index + 1
-                };
-              })
-            ];
-            this.rows = data.total;
-            return this;
-          }
-        } catch (err) {
-          // console.log(err);
-        }
       },
       handleValueChanged({
         perPage,
