@@ -34,7 +34,7 @@
         </router-link>
       </div>
       <VuePerfectScrollbar class="scroll-area">
-        <sidebar-menu :disableHover="initPage" showOneChild :menu="dataMenu()" />
+        <sidebar-menu :disableHover="initPage" showOneChild :menu="dataMenu" />
       </VuePerfectScrollbar>
     </div>
   </div>
@@ -107,30 +107,7 @@
         set(value) {
           this.$store.commit("sidebar/SET_SIDEBAR_COLLAPSED", value);
         }
-      }
-    },
-    methods: {
-      toggleSidebar() {
-        this.sidebarCollapsed = !this.sidebarCollapsed;
-      },
-      filterMenuByRole(menus) {
-        let res = []
-        menus.forEach(menu => {
-          if(menu.child) {
-            menu.child = this.filterMenuByRole(menu.child)
-          }
-
-          if(menu.type) {
-            let valid = false
-            this.getRolesName.forEach(role => {
-              if(menu.type.indexOf(role) != -1) valid = true
-            })
-
-            if(valid) res.push(menu)
-          }
-        })
-        return res
-      },
+      }, 
       dataMenu() {
         const menus = [{
             title: "Dashboard",
@@ -179,7 +156,7 @@
           {
             title: "Rekam Medis",
             href: "/rekam-medis",
-            type: ["dokter_praktek", "operator"],
+            type: ["dokter_praktek"],
             icon: {
               element: "font-awesome-icon",
               attributes: {
@@ -200,7 +177,7 @@
               {
                 title: "Manajemen Asisten Dokter",
                 href: "/asisten-dokter",
-                type: ["dokter_praktek", "operator"]
+                type: ["dokter_praktek"]
               },
               {
                 title: "Manajemen Tarif",
@@ -258,6 +235,29 @@
           ...item,
           disabled: this.initPage
         }));
+      }
+    },
+    methods: {
+      toggleSidebar() {
+        this.sidebarCollapsed = !this.sidebarCollapsed;
+      },
+      filterMenuByRole(menus) {
+        let res = []
+        menus.forEach(menu => {
+          if(menu.child) {
+            menu.child = this.filterMenuByRole(menu.child)
+          }
+
+          if(menu.type) {
+            let valid = false
+            this.getRolesName.forEach(role => {
+              if(menu.type.indexOf(role) != -1) valid = true
+            })
+
+            if(valid) res.push(menu)
+          }
+        })
+        return res
       }
     }
   };
