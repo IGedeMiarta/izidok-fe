@@ -323,7 +323,7 @@
                           <b-button
                             variant="success"
                             size="sm"
-                            v-tooltip="'Halaman Pembayaran'"
+                            v-tooltip="'Detail Pembayaran'"
                             @click="detailTagihan(data.item)"
                             class="btn text-light font-size-md ml-1 pl-2 pr-2 btn-sm"
                           ><font-awesome-icon icon="money-bill-wave"
