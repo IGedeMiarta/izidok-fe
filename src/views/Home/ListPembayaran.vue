@@ -144,7 +144,7 @@ export default {
             confirmButtonText: "OK",
             type: "warning",
             allowOutsideClick : false,
-            allowEnterKey: false,
+            allowEscapeKey: false,
           }).then(res => {
             console.log(res.value)
             if (res.value) {
@@ -160,7 +160,7 @@ export default {
             confirmButtonText: "OK",
             type: "warning",
             allowOutsideClick : false,
-            allowEnterKey: false,
+            allowEscapeKey: false,
           }).then(res => {
             console.log(res.value)
             if (res.value) {
@@ -176,7 +176,7 @@ export default {
             confirmButtonText: "OK",
             type: "warning",
             allowOutsideClick : false,
-            allowEnterKey: false,
+            allowEscapeKey: false,
           }).then(res => {
             console.log(res.value)
             if (res.value) {
@@ -192,7 +192,7 @@ export default {
             confirmButtonText: "OK",
             type: "warning",
             allowOutsideClick : false,
-            allowEnterKey: false,
+            allowEscapeKey: false,
           }).then(res => {
             console.log(res.value)
             if (res.value) {
@@ -208,7 +208,7 @@ export default {
             confirmButtonText: "OK",
             type: "warning",
             allowOutsideClick : false,
-            allowEnterKey: false,
+            allowEscapeKey: false,
           }).then(res => {
             console.log(res.value)
             if (res.value) {
@@ -224,7 +224,7 @@ export default {
             confirmButtonText: "OK",
             type: "warning",
             allowOutsideClick : false,
-            allowEnterKey: false,
+            allowEscapeKey: false,
           }).then(res => {
             console.log(res.value)
             if (res.value) {
