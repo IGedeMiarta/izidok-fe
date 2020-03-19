@@ -146,9 +146,6 @@
                     </template>
                   </div>
                 </b-col>
-                <b-col md="12" class="mt-4 " style="text-align: center;">
-                  <span><strong>METODE PEMBAYARAN</strong></span>
-                </b-col>
               </template>
               <template v-if="dataPaket.length === 3">
                 <b-col sm="4" v-for="data in dataPaket" :key="data.id" >
@@ -254,15 +251,15 @@
                   </div>
 
                 </b-col>
-                <b-col md="12" class="mt-4 " style="text-align: center;">
-                  <span><strong>METODE PEMBAYARAN</strong></span>
-                </b-col>
               </template>
             </b-row>
           </div>
         </b-col>
       </b-row>
       <div class=" mb-4">
+        <b-col md="12" class="mt-4 " style="text-align: center;">
+          <span><strong>METODE PEMBAYARAN</strong></span>
+        </b-col>
         <img style=""  :src="dataPaygate[0].logo" height="40" width="120"
              class="mt-2  " :alt="dataPaygate[0].nama">
         <img style=""  :src="dataPaygate[1].logo" height="40" width="120"
