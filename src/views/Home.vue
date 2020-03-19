@@ -106,11 +106,11 @@
       </b-col>
       <b-col cols="3">
         <Paket
-          :sisa_hari="sisa_hari"
-          :habis_berlaku="habis_berlaku"
-          :nama_paket="nama_paket"
-          :paket="paket"
-          :sisa_kuota="sisa_kuota"
+          :sisa_hari="paketAnda.sisa_hari"
+          :habis_berlaku="paketAnda.habis_berlaku"
+          :nama_paket="paketAnda.nama_paket"
+          :paket="paketAnda.durasi_paket"
+          :sisa_kouta="paketAnda.sisa_kouta"
         />
       </b-col>
     </b-row>
@@ -214,11 +214,11 @@ export default {
               pasien_batal_hari_ini = 0,
               total_pendapatan_hari_ini = 0,
               paket_berlangganan: {
-                paket,
-                habis_berlaku,
+                durasi_paket,
                 sisa_hari,
-                sisa_kuota,
-                nama_paket
+                habis_berlaku,
+                sisa_kouta,
+                nama_paket,
               }
             }
           }
@@ -229,6 +229,13 @@ export default {
           this.nomor_antrean = nomor_antrian_saat_ini || 0;
           this.pasienBatalHariIni = pasien_batal_hari_ini || 0;
           this.totalPendapatan = total_pendapatan_hari_ini || 0;
+          this.paketAnda = {
+            nama_paket : nama_paket || 'Anda belum melakukan pembelian paket apapun',
+            durasi_paket : durasi_paket || '-',
+            sisa_kouta : sisa_kouta || '-',
+            habis_berlaku : habis_berlaku || '-',
+            sisa_hari : sisa_hari || '-'
+          }
         }
       } catch (err) {
         console.log(err);
@@ -270,7 +277,8 @@ export default {
     totalPasienHariIni: 0,
     pasienBaruHariIni: 0,
     pasienBatalHariIni: 0,
-    totalPendapatan: 0
+    totalPendapatan: 0,
+    paketAnda : {},
     // dataSeries: [
     //   {
     //     name: "Pasien Baru",

@@ -480,6 +480,7 @@
         nik: null
       },
       provinces: [],
+      checkPaketData :null,
       cities: [],
       tempat: {
         provinsi: null,
@@ -520,10 +521,107 @@
         }
       };
     },
-    mounted() {
-      this.formBasicData = this.setFormBasicData();
-      this.formData = this.setFormData();
-      this.getProvince();
+    async mounted() {
+      await this.checkPaket();
+      if(this.checkPaketData != ''){
+        if(this.checkPaketData.data.paket_id === 1) {
+            var nm_paket = "Trial"
+          }else if (this.checkPaketData.data.paket_id === 2) {
+            var nm_paket = "Starter"
+          }else if (this.checkPaketData.data.paket_id === 3) {
+            var nm_paket = "Essential"
+          }else {
+            var nm_paket = "Premium"
+          }
+           if(this.checkPaketData.message === 'Anda belum melakukan pembelian paket apapun'){
+           this.$swal({
+              text: this.checkPaketData.message,
+              type: "warning",
+              confirmButtonText: startCase("ya"),
+              allowOutsideClick : false,
+              showCancelButton: false,
+              allowEnterKey: false,
+           }).then(res => {
+           const {
+             value
+           } = res;
+           if (value) {
+              this.beingSubmit = true;
+              this.$router.push({name : 'subskripsi-pilih-paket'});
+           }
+         })
+        } else if (this.checkPaketData.message === 'Paket Anda '+nm_paket+' telah OTOMATIS Aktif mulai dari tanggal '+this.checkPaketData.data.started_date+' hingga '+this.checkPaketData.data.expired_date+'!') {
+          this.$swal({
+              text: this.checkPaketData.message,
+              type: "warning",
+              allowOutsideClick : false,
+              showCancelButton: false,
+              confirmButtonText: startCase("ya")
+           });
+            this.formBasicData = this.setFormBasicData();
+            this.formData = this.setFormData();
+            this.getProvince();
+        }
+         else if(this.checkPaketData.message === 'Paket Anda telah berakhir, silahkan lakukan pembelian Paket untuk dapat melakukan aktivitas ini.'){
+          this.$swal({
+              text: this.checkPaketData.message,
+              type: "warning",
+              allowOutsideClick : false,
+              showCancelButton: false,
+              allowEnterKey: false,
+              confirmButtonText: startCase("ya")
+           }).then(res => {
+           const {
+             value
+           } = res;
+           if (value) {
+              this.beingSubmit = true;
+              this.$router.push({name : 'subskripsi-pilih-paket'});
+           }
+         })
+        }
+        else if(this.checkPaketData.message === 'Masa Berlaku Paket Anda telah berakhir, silahkan lakukan pembelian untuk dapat melakukan aktivitas ini.')
+        {
+           this.$swal({
+              text: this.checkPaketData.message,
+              type: "warning",
+              confirmButtonText: startCase("ya"),
+              allowOutsideClick : false,
+              showCancelButton: false,
+              allowEnterKey: false,
+           }).then(res => {
+           const {
+             value
+           } = res;
+           if (value) {
+              this.beingSubmit = true;
+              this.$router.push({name : 'subskripsi-pilih-paket'});
+           }
+         })
+        } else if (this.checkPaketData.message === 'Kuota Anda telah habis, silahkan lakukan pembelian Paket untuk dapat melakukan aktivitas ini.')
+        {
+          this.$swal({
+              text: this.checkPaketData.message,
+              type: "warning",
+              confirmButtonText: startCase("ya"),
+              allowOutsideClick : false,
+              showCancelButton: false,
+              allowEnterKey: false,
+           }).then(res => {
+           const {
+             value
+           } = res;
+           if (value) {
+              this.beingSubmit = true;
+              this.$router.push({name : 'subskripsi-pilih-paket'});
+           }
+         });
+        }
+      } else { 
+          this.formBasicData = this.setFormBasicData();
+          this.formData = this.setFormData();
+          this.getProvince();
+        }
       // Promise.all([this.fetchDokter()]);
     },
     computed: {
@@ -535,6 +633,14 @@
       },
     },
     methods: {
+      async checkPaket(){
+       try {
+        const res = await axios.get(`${this.url_api}/cekPaket`);
+        this.checkPaketData = res.data
+       } catch {
+
+       }
+     },
       checkNIK() {
         clearTimeout(this.timeVerifyNIK)
         this.timeVerifyNIK = setTimeout(async () => {

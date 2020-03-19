@@ -19,9 +19,6 @@
     </div>
     <b-table :items="data" class="table-tab-home" :fields="fieldList()">
       <template v-slot:cell(id)="data">{{ data.item.no }}</template>
-      <template v-slot:cell(jenis_kelamin)="data">
-        {{ jenisKelamin(data.value) }}
-      </template>
       <template v-slot:cell(action)="data">
         <div class="d-flex flex-row justify-content-between">
           <template>
@@ -289,10 +286,6 @@ export default {
           {
             key: "nama",
             label: "nama pasien"
-          },
-          {
-            key: "jenis_kelamin",
-            label: "jenis kelamin"
           },
           {
             key: "status",

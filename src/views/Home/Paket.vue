@@ -14,7 +14,7 @@
       <p
         class="highlight-text text-red font-weight-bold align-self-center my-0"
       >
-        {{ sisa_kuota }}
+        {{ sisa_kouta }}
       </p>
       <p class="small text-capitalize">visite pasien tersisa</p>
       <b-button
@@ -29,7 +29,7 @@
 
 <script>
 export default {
-  props: ["habis_berlaku", "paket", "sisa_hari", "sisa_kuota", "nama_paket"]
+  props: ["habis_berlaku", "paket", "sisa_hari", "sisa_kouta", "nama_paket"]
 };
 </script>
 
