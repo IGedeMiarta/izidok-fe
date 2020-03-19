@@ -276,6 +276,7 @@ import {
       namaPasien: "",
       waktuRegistrasi: "",
       tanggal: null,
+      checkPaketData: null,
       searchValue: [],
       totalEntries: 0,
       isOperator: "",
@@ -345,18 +346,76 @@ import {
              |> (v => s({ field: v, customFunc: r }))
              |> (z => g({ field: z }))
         );
-      }
+      },
     },
-    mounted() {
-      moment.locale("id");
-      this.tanggal = moment().format("YYYY-MM-DD");
-      // this.fetchAntrean();
-      if (!this.isDoctor) {
-        this.isOperator = true;
-      } else {
-        this.isOperator = false;
-      }
-      // this.fetchListAntrean();
+    async mounted() {
+        await this.checkPaket();
+        if(this.checkPaketData.message === 'belum melakukan pembelian paket apapun'){
+           this.$swal({
+              text: this.checkPaketData.message,
+              type: "warning",
+              confirmButtonText: startCase("ya")
+           }).then(res => {
+           const {
+             value
+           } = res;
+           if (value) {
+              this.$router.push({name : 'subskripsi-pilih-paket'});
+           }
+         })
+        } else if(this.checkPaketData.message === 'Paket Anda telah berakhir, silahkan lakukan pembelian Paket untuk dapat melakukan aktivitas ini.'){
+          this.$swal({
+              text: this.checkPaketData.message,
+              type: "warning",
+              confirmButtonText: startCase("ya")
+           }).then(res => {
+           const {
+             value
+           } = res;
+           if (value) {
+              this.$router.push({name : 'subskripsi-pilih-paket'});
+           }
+         })
+        }
+        else if(this.checkPaketData.message === 'Masa Berlaku Paket Anda telah berakhir, silahkan lakukan pembelian untuk dapat melakukan aktivitas ini.')
+        {
+           this.$swal({
+              text: this.checkPaketData.message,
+              type: "warning",
+              confirmButtonText: startCase("ya")
+           }).then(res => {
+           const {
+             value
+           } = res;
+           if (value) {
+              this.$router.push({name : 'subskripsi-pilih-paket'});
+           }
+         })
+        } else if (this.checkPaketData.message === 'Kuota Anda telah habis, silahkan lakukan pembelian Paket untuk dapat melakukan aktivitas ini.')
+        {
+          this.$swal({
+              text: this.checkPaketData.message,
+              type: "warning",
+              confirmButtonText: startCase("ya")
+           }).then(res => {
+           const {
+             value
+           } = res;
+           if (value) {
+              this.$router.push({name : 'subskripsi-pilih-paket'});
+           }
+         });
+        }
+        else {
+          moment.locale("id");
+          this.tanggal = moment().format("YYYY-MM-DD");
+          // this.fetchAntrean();
+          if (!this.isDoctor) {
+            this.isOperator = true;
+          } else {
+            this.isOperator = false;
+          }
+        }
     },
     watch: {
       currentPage() {
@@ -377,6 +436,14 @@ import {
       }
     },
     methods: {
+     async checkPaket(){
+       try {
+        const res = await axios.get(`${this.url_api}/cekPaket`);
+        this.checkPaketData = res.data
+       } catch {
+
+       }
+     },
       handleValueChanged({
         perPage,
         currentPage
