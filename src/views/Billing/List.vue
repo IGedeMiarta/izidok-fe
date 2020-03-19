@@ -70,7 +70,6 @@
                             <template v-if="dataActive.message !== 'package not found'">
                               <template v-if="dataActive.data.pembelian === null">: -</template>
                               <template v-else><label>: {{dataActive.data.pembelian}}</label></template>
-
                             </template>
                           </div>
                           <div class="col-md-2">

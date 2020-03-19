@@ -359,9 +359,7 @@ import {
           }else {
             var nm_paket = "Premium"
           }
-         console.log('nama',nm_paket);
-        console.log(this.checkPaketData.data.started_date);
-        console.log(this.checkPaketData.data.expired_date);
+          
         if(this.checkPaketData.message === 'Anda belum melakukan pembelian paket apapun'){
            this.$swal({
               text: this.checkPaketData.message,
