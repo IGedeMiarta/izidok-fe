@@ -50,6 +50,7 @@
 
 <script>
 import { mapMutations, mapState, mapGetters } from "vuex";
+import axios from 'axios';
 
   export default {
     props: ["modalShow"],
