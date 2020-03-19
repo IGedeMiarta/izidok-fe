@@ -57,7 +57,7 @@
                             </template>
                             <template v-if="dataActive.message !== 'package not found'">
                               <label>: <label class="btn-primary"
-                                              style="padding-left: 6px; padding-right: 5px;  border-radius: 4px;">{{dataActive.data.sisa_kouta}}</label> dari {{dataActive.data.paket_kouta}}</label>
+                                              style="padding-left: 6px; padding-right: 5px;  border-radius: 4px;">{{dataActive.data.sisa_kouta}}</label> dari {{dataActive.data.jumlah_kouta}}</label>
                             </template>
                           </div>
                           <div class="col-md-2">
@@ -527,6 +527,7 @@
       }
     },
     mounted() {
+      this.cekPaket();
       this.fetchListNotActive();
       this.fetchListExpired();
       this.fetchActive();
@@ -609,6 +610,42 @@
       }
     },
     methods: {
+      async cekPaket() {
+        try {
+          const res = await axios.get(
+            `${this.url_api}/cekPaket`
+          );
+
+          if(res.data.data.paket_id === 1) {
+            var nm_paket = "Trial"
+          }else if (res.data.data.paket_id === 2) {
+            var nm_paket = "Starter"
+          }else if (res.data.data.paket_id === 3) {
+            var nm_paket = "Essential"
+          }else {
+            var nm_paket = "Premium"
+          }
+
+          //Kuota habis, masa berlaku masih ada/tidakada, sudah beli paket.
+          if (res.data.message === 'Paket Anda '+nm_paket+' telah OTOMATIS Aktif mulai dari tanggal '+res.data.data.started_date+' hingga '+res.data.data.expired_date+'!.') {
+            return this.$swal({
+              text: 'Paket Anda '+nm_paket+' telah OTOMATIS Aktif mulai dari tanggal '+res.data.data.started_date+' hingga '+res.data.data.expired_date+'!.',
+              showCancelButton: false,
+              confirmButtonText: "OK",
+              type: "warning",
+              allowOutsideClick : false,
+              allowEnterKey: false,
+            }).then(res => {
+              console.log(res.value)
+              if (res.value) {
+
+              }
+            });
+          }
+        } catch (err) {
+          // console.log(err);
+        }
+      },
       closeModalBatalTransaksi($id) {
         this.$swal({
           title: startCase("Batalkan Transaksi"),

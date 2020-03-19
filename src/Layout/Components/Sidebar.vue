@@ -219,10 +219,6 @@
             },
             child: [
               {
-                title: "Manajemen Dokter",
-                type: ["dokter_praktek", "operator"]
-              },
-              {
                 title: "Profil Dokter",
                 href: "/profile",
                 type: ["dokter_praktek", "operator"]
