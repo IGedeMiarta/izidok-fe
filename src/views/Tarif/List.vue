@@ -180,7 +180,7 @@
           <form role="form">
             <div class="form-row">
               <div class="form-group col-md-4">
-                <label for="inputNama">Nama Layanan</label>
+                <label >Nama Layanan</label>
                 <input
                   type="text"
                   class="form-control"
@@ -203,7 +203,7 @@
                 </template>
               </div>
               <div class="form-group col-md-3">
-                <label for="inputKode">Kode Layanan</label>
+                <label >Kode Layanan</label>
                 <input
                   type="text"
                   class="form-control"
@@ -244,7 +244,7 @@
                 </template>
               </div>
               <div class="form-group col-md-3">
-                <label for="inputLayanan">Tarif Layanan</label>
+                <label >Tarif Layanan</label>
                 <b-input-group append="Rp.">
                   <b-form-input
                     v-model.lazy="editData.tarif"
@@ -445,7 +445,7 @@ export default {
             confirmButtonText: "OK",
             type: "warning",
             allowOutsideClick : false,
-            allowEnterKey: false,
+            allowEscapeKey: false,
           }).then(res => {
             console.log(res.value)
             if (res.value) {
@@ -745,6 +745,7 @@ export default {
       try {
         const res = await axios.delete(`${this.url_api}/layanan/${id}`);
         const { status, data } = res.data;
+        console.log(res.data)
         if (status) {
           this.$swal({
             type: "success",
@@ -752,7 +753,14 @@ export default {
             text: startCase("Tarif berhasil di hapus")
           });
           this.fetchListTarif();
-        } else {
+        }
+        else if(res.data.message === "Data tarif minimal 2"){
+          this.$swal({
+            type: "error",
+            title: startCase("gagal"),
+            text: startCase("Tidak dapat menghapus tarif & layanan jika sudah mencapai batas minimal 2 layanan!")
+          });
+        }else {
           this.$swal({
             type: "error",
             title: startCase("gagal"),

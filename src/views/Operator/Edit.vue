@@ -191,8 +191,8 @@
           } = res.data;
           if (res.data.status == true) {
              this.$swal({
-              text: `Berhasil di rubah`,
-              type: "warning",
+              text: 'Data asisten '+this.formData.nama_asisten+' berhasil disimpan!',
+              type: "success",
               confirmButtonText: startCase("ya")
             })
             console.log('tes')

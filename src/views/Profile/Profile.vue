@@ -66,7 +66,7 @@
               </div>
               <div class="col-md-6">
                 <b-form-group label="Spesialisasi" label-for="input-1">
-                  <b-form-input v-model="dataProfile.klinik.spesialisasi.nama" :disabled="btnDisable == true"
+                  <b-form-input v-model="dataProfile.klinik.spesialisasi.nama" disabled
                     id="input-1" type="text">
                   </b-form-input>
                 </b-form-group>
@@ -177,7 +177,7 @@
               confirmButtonText: "OK",
               type: "warning",
               allowOutsideClick : false,
-              allowEnterKey: false,
+              allowEscapeKey: false,
             }).then(res => {
               console.log(res.value)
               if (res.value) {

@@ -64,7 +64,7 @@
         </div>
       </div>
       <b-modal ref="modal-operator" hide-footer title="Tambah Asisten">
-        <b-form @submit.prevent="submitInputDataOperator">
+        <b-form @submit.prevent="addOperator">
           <div class="col-sm-12">
             <b-form-group v-for="form in formBasicData" :key="form.tmpId" class="text-capitalize" :invalid-feedback="
                       renderInvalidFeedback({
@@ -323,7 +323,7 @@
               confirmButtonText: "OK",
               type: "warning",
               allowOutsideClick : false,
-              allowEnterKey: false,
+              allowEscapeKey: false,
             }).then(res => {
               console.log(res.value)
               if (res.value) {
@@ -523,6 +523,7 @@
             formData,
             formBasicData
           } = this;
+          console.log(formData)
           const tmpPostData = this.formBasicData.reduce((obj, item) => {
             const {
               label,
@@ -547,10 +548,16 @@
             this.$swal({
               text: `Asisten ${res.data.data.user.nama} berhasil ditambahkan!`,
               type: "success",
-              confirmButtonText: startCase("ya")
-            })
-            this.$router.push({
-              name: "operator-list"
+              confirmButtonText: startCase("ya"),
+              allowOutsideClick : false,
+              allowEscapeKey: false,
+            }).then(res => {
+              console.log(res.value)
+              if (res.value) {
+                this.$router.go({
+                  name: "operator-list"
+                });
+              }
             });
           }
         } catch (err) {
