@@ -547,7 +547,7 @@
            } = res;
            if (value) {
               this.beingSubmit = true;
-              this.$router.push({name : 'subskripsi-pilih-paket'});
+             this.$router.push(`/subskripsi`);
            }
          })
         } else if (this.checkPaketData.message === 'Paket Anda '+nm_paket+' telah OTOMATIS Aktif mulai dari tanggal '+this.checkPaketData.data.started_date+' hingga '+this.checkPaketData.data.expired_date+'!') {
@@ -576,7 +576,7 @@
            } = res;
            if (value) {
               this.beingSubmit = true;
-              this.$router.push({name : 'subskripsi-pilih-paket'});
+             this.$router.push(`/subskripsi`);
            }
          })
         }
@@ -595,7 +595,7 @@
            } = res;
            if (value) {
               this.beingSubmit = true;
-              this.$router.push({name : 'subskripsi-pilih-paket'});
+             this.$router.push(`/subskripsi`);
            }
          })
         } else if (this.checkPaketData.message === 'Kuota Anda telah habis, silahkan lakukan pembelian Paket untuk dapat melakukan aktivitas ini.')
@@ -613,7 +613,7 @@
            } = res;
            if (value) {
               this.beingSubmit = true;
-              this.$router.push({name : 'subskripsi-pilih-paket'});
+             this.$router.push(`/subskripsi`);
            }
          });
         }

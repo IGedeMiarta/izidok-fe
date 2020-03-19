@@ -308,7 +308,7 @@ export default {
              value
            } = res;
            if (value) {
-              this.$router.push({name : 'subskripsi-pilih-paket'});
+             this.$router.push(`/subskripsi`);
            }
          })
         } 
@@ -334,7 +334,7 @@ export default {
              value
            } = res;
            if (value) {
-              this.$router.push({name : 'subskripsi-pilih-paket'});
+             this.$router.push(`/subskripsi`);
            }
          })
         }
@@ -352,7 +352,7 @@ export default {
              value
            } = res;
            if (value) {
-              this.$router.push({name : 'subskripsi-pilih-paket'});
+             this.$router.push(`/subskripsi`);
            }
          })
         } else if (this.checkPaketData.message === 'Kuota Anda telah habis, silahkan lakukan pembelian Paket untuk dapat melakukan aktivitas ini.')
@@ -369,7 +369,7 @@ export default {
              value
            } = res;
            if (value) {
-              this.$router.push({name : 'subskripsi-pilih-paket'});
+             this.$router.push(`/subskripsi`);
            }
          });
         }
