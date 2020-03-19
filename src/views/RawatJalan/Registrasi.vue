@@ -32,8 +32,8 @@
                         validationDesc: form['validation-desc']
                       })
                     " style="position: relative" :state="renderError({ error: form.error })">
-                    <label for="" style="font-size : 13px">{{form.rawLabel}} {{form.satuan}}</label>
-                    <label for="" style="color:red">{{form.isImportant}}</label>
+                    <label  style="font-size : 13px">{{form.rawLabel}} {{form.satuan}}</label>
+                    <label  style="color:red">{{form.isImportant}}</label>
                     <!-- <Datetime input-class="form-control" zone="Asia/Jakarta" format="d LLL yyyy"
                         v-if="form.label == 'waktu_konsultasi'" @input="waktuKonsultasiSelected"
                         :min-datetime="minimumDatetime" :input-style="
@@ -154,9 +154,9 @@
       <b-modal :no-close-on-backdrop="true" @close="closeModall" :no-close-on-esc="true"  :cancel-disabled="true"  ref='modal-pasien' id="modal-1" style="color:#d3e8eb;" title="Registrasi Pasien Baru" hide-footer>
         <b-form row v-on:submit.prevent="addPasien">
           <div class="col-sm-12">
-            <b-form-group id="input-group-1" label-for="input-1">
-              <label for="">Nama Lengkap</label>
-              <label for="" style="color:red">*</label>
+            <b-form-group abel-for="input-1">
+              <label >Nama Lengkap</label>
+              <label  style="color:red">*</label>
               <b-form-input type="text" v-model.lazy="formDataRegister.nama" required>
               </b-form-input>
               <!-- <div class="error" v-if="!$v.nama.required">Name is required</div>
@@ -188,9 +188,9 @@
             </div>
           </div>
           <div class="col-sm-12">
-            <b-form-group id="input-group-1" label-for="input-1">
-              <label for="">No. Handphone</label>
-              <label for="" style="color:red">*</label>
+            <b-form-group label-for="input-1">
+              <label >No. Handphone</label>
+              <label  style="color:red">*</label>
               <b-form-input id="input-1" type="text" pattern=".{10,15}" :maxlength="15"
                 oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')"
                 v-model.trim="formDataRegister.nomor_hp" required>
@@ -201,8 +201,8 @@
             <div class="row">
               <div class="col-sm-6">
                 <b-form-group>
-                  <label for="">Jenis kelamin</label>
-                  <label for="" style="color:red"> *</label>
+                  <label >Jenis kelamin</label>
+                  <label  style="color:red"> *</label>
                   <b-form-radio-group required stacked class="text-capitalize" :options="[
                     { text: 'laki-laki', value: 1 },
                     { text: 'perempuan', value: 0 }
@@ -212,8 +212,8 @@
               </div>
               <div class="col-sm-6">
                 <b-form-group>
-                  <label for="">Tanggal Lahir</label>
-                  <label for="" style="color:red"> *</label>
+                  <label >Tanggal Lahir</label>
+                  <label style="color:red"> *</label>
                   <Datetime required input-class="form-control"  class="input-group" zone="Asia/Jakarta"
                     value-zone="Asia/Jakarta" format="d LLL yyyy" @input="tanggalLahirSelected"
                     :max-datetime="maximumDatetime" :input-style="
@@ -247,8 +247,8 @@
           </div>
           <div class="col-sm-12">
             <b-form-group id="input-group-1" label-for="input-1">
-              <label for="">Alamat</label>
-              <label for="" style="color:red">*</label>
+              <label >Alamat</label>
+              <label style="color:red">*</label>
               <b-form-textarea id="input-1" rows="3" max-rows="6" type="text" v-model="formDataRegister.alamat_rumah"
                 required>
               </b-form-textarea>
@@ -282,8 +282,8 @@
             </b-form-group>
           </div>
           <div class="col-sm-12">
-            <b-form-group id="input-group-1" label-for="input-1">
-              <label for="">No. HP penanggung Jawab</label>
+            <b-form-group  label-for="input-1">
+              <label >No. HP penanggung Jawab</label>
               <b-form-input id="input-1" type="text" pattern=".{10,15}" :maxlength="15"
                 oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')"
                 v-model.trim="formDataRegister.nomor_hp_penanggung_jawab">
