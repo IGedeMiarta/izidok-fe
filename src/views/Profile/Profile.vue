@@ -14,10 +14,19 @@
           <div class="col-md-12 no-padding">
             <div class="col-md-12 text-center">
               <template>
-                <picture-input ref="pictureInput" @change="onChangeImage" width="180" height="180"
-                  accept="image/jpeg,image/png" size="10" buttonClass="btn btn-primary button primary"
+                <picture-input
+                  :customStrings="{
+                    change: 'Ubah Foto',
+                    remove: 'Hapus Foto',
+                    drag: 'Klik untuk memilih file foto',
+                     fileSize: 'File maksimal foto',
+                     fileType: 'Jenis file ini tidak didukung'
+                   }"
+
+                  ref="pictureInput" @change="onChangeImage" width="180" height="180"
+                  accept="image/jpeg,image/png" size="1" buttonClass="btn btn-primary button primary"
                   removeButtonClass="btn btn-secondary button secondary" radius="50" z-index="0"
-                  :disabled="btnDisable == true" :removable="true"
+                  :disabled="btnDisable == true"  :removable="true"
                   :prefill="dataProfile.foto_profile">
                 </picture-input>
                 <label>Maks. 1 MB, File: jpeg, jpg, png</label>
