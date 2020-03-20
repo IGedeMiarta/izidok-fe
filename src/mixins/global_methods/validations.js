@@ -86,8 +86,8 @@ const validations = {
     const _label = label.split(" ").join("_");
     const $v_object = $v.formData[_label];
     const tmpIndex = formBasicData.findIndex(item => item.label === label);
-    $v_object.$touch();
-    Vue.set($vm.formBasicData[tmpIndex], "error", $v_object.$error);
+    if($v_object && $v_object.$touch && typeof $v_object.$touch == 'function') $v_object.$touch();
+    if($v_object && $v_object.$error) Vue.set($vm.formBasicData[tmpIndex], "error", $v_object.$error);
     Vue.set(
       $vm.formBasicData[tmpIndex],
       "validation-desc",
