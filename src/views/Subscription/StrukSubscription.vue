@@ -28,7 +28,7 @@
           <span class="h4"><strong>INVOICE</strong></span>
           <p class=" mt-5"><strong>No. Invoice : {{ dataPaygetDetail.detail.transactionNo}}</strong></p>
           <p class=" "><strong>Tanggal Pembelian : {{ moment(dataPaygetDetail.detail.transactionDate).format('Do MMMM YYYY')}}</strong></p>
-          <p class=" "><strong>Tanggal Maksimal Pembayaran : {{moment( dataPaygetDetail.detail.transactionExpire).format('Do MMMM YYYY h:mm:ss ')}}</strong></p>
+          <p class=" "><strong>Tanggal Maksimal Pembayaran : {{moment( dataPaygetDetail.detail.transactionExpire).format('Do MMMM YYYY kk:mm:ss ')}}</strong></p>
           <p class=" "><strong>Metode Pembayaran : {{ dataPaygetDetail.paygate.nama}}</strong></p>
           <template v-if="dataPaygetDetail.detail.status_billing === 'LUNAS'">
             <p class=" "><strong>Status Pembayaran :</strong> <label class="btn-success" style="padding:5px;">LUNAS</label></p>
