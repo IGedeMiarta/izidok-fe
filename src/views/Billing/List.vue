@@ -574,7 +574,7 @@
           [{
             key: "nomor_tagihan",
             label: "No. Tagihan",
-            thStyle: "width: 12%"
+            thStyle: "width: 18%"
           },
             {
               key: "produk",
@@ -596,7 +596,6 @@
               label: "Tanggal Bayar",
               thStyle: "width: 15%",
               class: ""
-
             },
             {
               key: "status_text",
