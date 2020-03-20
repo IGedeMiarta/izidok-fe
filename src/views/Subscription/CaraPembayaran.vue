@@ -37,17 +37,17 @@
                             <label >Jumlah yang harus dibayar :</label>
                           </div>
                           <div class="col-md-12">
-                            <strong>Rp.{{this.dataPaygetDetail.detail.transactionAmount}},-</strong>
+                            <strong>Rp {{parseInt(dataPaygetDetail.detail.transactionAmount).toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}},-</strong>
                             <button class="btn btn-default" @click="copy_text_money(dataPaygetDetail.detail.transactionAmount)"><u>salin</u></button>
                           </div>
                           <div class="col-md-12">
                             <!-- <template v-if="this.dataPaygetDetail.tutorial[0]"> -->
                               <div role="tablist" v-for="tuts in this.dataPaygetDetail.tutorial" :key="tuts.id">
                                 <b-card-header header-tag="header" class="p-1" role="tab">
-                                  <b-button block href="#" v-b-toggle.accordion-1 class="text-left"><strong>
+                                  <b-button block href="#" v-b-toggle="'collapse-'+tuts.id"  class="text-left"><strong>
                                       {{tuts.tipe }}</strong> </b-button>
                                 </b-card-header>
-                                <b-collapse id='accordion-1' accordion="my-accordion" role="tabpanel">
+                                <b-collapse  :id="'collapse-'+tuts.id" role="tabpanel">
                                   <b-card-body>
                                     <b-card-text>
                                       <ol v-for="(item,index) in tuts.desc" :key="index">
