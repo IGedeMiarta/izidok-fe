@@ -128,7 +128,7 @@
                     <b-dropdown-item @click="
                           assignDataRegistrasiPasien(data);
                         ">Detail Registrasi Antrean</b-dropdown-item>
-                    <template v-if="isOperator == false">
+                    <template v-if="isDoctor">
                       <b-dropdown-item @click="
                             rekamMedis(data)
                           ">Tulis rekam medis</b-dropdown-item>
@@ -279,7 +279,7 @@ import {
       checkPaketData: null,
       searchValue: [],
       totalEntries: 0,
-      isOperator: "",
+      // isOperator: "",
       statusAntrean: "Menunggu",
       sortBy: "",
       sortDesc: false,
@@ -442,11 +442,11 @@ import {
           moment.locale("id");
           this.tanggal = moment().format("YYYY-MM-DD");
           // this.fetchAntrean();
-          if (!this.isDoctor) {
-            this.isOperator = true;
-          } else {
-            this.isOperator = false;
-          }
+          // if (!this.isDoctor) {
+          //   this.isOperator = true;
+          // } else {
+          //   this.isOperator = false;
+          // }
         }
     },
     watch: {
