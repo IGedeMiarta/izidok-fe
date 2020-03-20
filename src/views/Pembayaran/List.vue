@@ -350,33 +350,46 @@
             }
           });
         }
-      }
-      // async fetchListpembayaran() {
-      //   try {
-      //     var today = new Date();
-      //     var date = today.getFullYear() + '-' + '0' + (today.getMonth() + 1) + '-' + today.getDate();
-      //     const res = await axios.get(
-      //       `${this.url_api}/pembayaran?from=${date}&to=${date}`
-      //     );
-      //     const {
-      //       success,
-      //       data
-      //     } = res.data;
-      //     if (success) {
-      //       const {
-      //         pembayaran: pembayaranData,
-      //         total
-      //       } = data;
-      //       const {
-      //         data: listPembayaran
-      //       } = pembayaranData;
-      //       this.pembayaranList = [...listPembayaran];
-      //       this.rows = pembayaranData.total;
-      //     }
-      //   } catch (err) {
-      //     // console.log(err);
-      //   }
-      // },
+      },
+      async fetchListPembayaran() {
+        try {
+          var today = new Date();
+          var date = today.getFullYear() + '-' + '0' + (today.getMonth() + 1) + '-' + today.getDate();
+          const res = await axios.get(
+            `${this.url_api}/pembayaran?limit=${this.perPage}&page=${
+              this.currentPage}&from=${date}&to=${date}`
+          );
+          const { success, data } = res.data;
+          if (success) {
+            const { total } = data;
+            const {
+              data: tmpData,
+              total: totalEntries,
+              to: toPage,
+              from: fromPage
+            } = data;
+            this.totalEntries = totalEntries;
+            this.toPage = toPage;
+            this.fromPage = fromPage;
+            this.pembayaranList = [
+              ...tmpData.map((item, index) => {
+                return {
+                  id: item.id,
+                  status: item.status,
+                  nama: item.nama,
+                  nomor_rekam_medis: item.nomor_rekam_medis,
+                  jenis_kelamin: item.jenis_kelamin,
+                };
+              })
+            ];
+            this.rows = total;
+            console.log(this.rows)
+            return this;
+          }
+        } catch (err) {
+          // console.log(err);
+        }
+      },
     }
   };
 </script>
