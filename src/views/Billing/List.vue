@@ -69,7 +69,7 @@
                             </template>
                             <template v-if="dataActive.message !== 'package not found'">
                               <template v-if="dataActive.data.pembelian === null">: -</template>
-                              <template v-else><label>: {{dataActive.data.pembelian}}</label></template>
+                              <template v-else><label>: {{moment(dataActive.data.pembelian).format('Do MMMM YYYY, h:mm:ss ') }}</label></template>
                             </template>
                           </div>
                           <div class="col-md-2">
@@ -80,7 +80,7 @@
                               <label>: -</label>
                             </template>
                             <template v-if="dataActive.message !== 'package not found'">
-                              <label>: {{dataActive.data.mulai_berlaku}}</label>
+                              <label>: {{ moment(dataActive.data.mulai_berlaku).format('Do MMMM YYYY, h:mm:ss ')}}</label>
                             </template>
                           </div>
                           <div class="col-md-2">
@@ -164,7 +164,7 @@
                           <td class="text-wrap">
                             <div class="align-box-row">
                               <div class="d-flex align-items-center">
-                                <span> {{ data.waktu_pembelian == null ? "-" : data.waktu_pembelian  }}</span>
+                                <span> {{ data.waktu_pembelian == null ? "-" : moment(data.waktu_pembelian).format('Do MMMM YYYY, h:mm:ss ')  }}</span>
                               </div>
                             </div>
                           </td>
@@ -225,7 +225,7 @@
                           <td class="text-wrap">
                             <div class="align-box-row">
                               <div class="d-flex align-items-center">
-                                <span>{{ data.waktu_pembelian }} </span>
+                                <span>{{ moment(data.waktu_pembelian).format('Do MMMM YYYY, h:mm:ss ')  }} </span>
                               </div>
                             </div>
                           </td>
@@ -405,7 +405,7 @@
             <div class="row" v-if="this.detailStruk !== null " style="font-size:14px;">
 
               <div class="col-md-7">
-                <label class="float-left"><strong>Total Pembelian :</strong> Rp. {{dataDetailRiwayatPembelian.detail.transactionAmount}}</label>
+                <label class="float-left"><strong>Total Pembelian :</strong> Rp {{parseInt(dataDetailRiwayatPembelian.detail.transactionAmount).toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}}</label>
               </div>
               <div class="col-md-5">
                 <b-button variant="success" size="sm" class="float-right text-uppercase" @click="ToInvoice(dataDetailRiwayatPembelian.detail.billing_id)">
@@ -413,11 +413,15 @@
                 </b-button>
               </div>
               <div class="col-md-12">
-                <label class="float-left"><strong>Tanggal Pembelian :</strong> {{dataDetailRiwayatPembelian.detail.transactionDate}}</label>
+                <label class="float-left"><strong>Tanggal Pembelian :</strong> {{
+                  moment(dataDetailRiwayatPembelian.detail.transactionDate).format('Do MMMM YYYY')
+                  }}</label>
               </div>
               <div class="col-md-12">
                 <div class="col-sm- text-center" >
-                  <label style="background-color:#ded5d5;padding-left:50px; padding-right:50px; " class="text-danger mt-3 mb-3">Bayar Sebelum {{dataDetailRiwayatPembelian.detail.transactionExpire}}</label>
+                  <label style="background-color:#ded5d5;padding-left:50px; padding-right:50px; " class="text-danger mt-3 mb-3">Bayar Sebelum {{
+                    moment(dataDetailRiwayatPembelian.detail.transactionExpire).format('Do MMMM YYYY h:mm:ss ')
+                    }}</label>
                 </div>
               </div>
               <div class="col-md-5">
@@ -450,6 +454,8 @@
 <script>
   import debounce from "lodash/debounce";
   import axios from "axios";
+  import moment from "moment";
+  moment.locale('id');
   import {
     library
   } from "@fortawesome/fontawesome-svg-core";
@@ -609,6 +615,9 @@
       }
     },
     methods: {
+      moment(){
+        return moment();
+      },
       async cekPaket() {
         try {
           const res = await axios.get(
