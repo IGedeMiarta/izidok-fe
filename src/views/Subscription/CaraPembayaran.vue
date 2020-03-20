@@ -50,8 +50,10 @@
                                 <b-collapse  :id="'collapse-'+tuts.id" role="tabpanel">
                                   <b-card-body>
                                     <b-card-text>
-                                      <ol v-for="(item,index) in tuts.desc" :key="index">
-                                        {{index}}. {{item}}
+                                      <ol style="padding-inline-start:20px !important">
+                                        <li v-for="(item,index) in tuts.desc" :key="index">
+                                          {{item}}
+                                        </li>
                                       </ol>
                                     </b-card-text>
                                   </b-card-body>
