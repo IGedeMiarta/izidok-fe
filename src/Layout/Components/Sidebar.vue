@@ -200,7 +200,7 @@
           {
             title: "Subskripsi",
             href: "/subskripsi",
-            type: ["dokter_praktek", "operator"],
+            type: ["dokter_praktek"],
             icon: {
               element: "font-awesome-icon",
               attributes: {
@@ -210,7 +210,7 @@
           },
           {
             title: "Account Setting",
-            type: ["dokter_praktek", "operator"],
+            type: ["dokter_praktek"],
             icon: {
               element: "font-awesome-icon",
               attributes: {
