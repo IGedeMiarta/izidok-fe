@@ -28,7 +28,7 @@
                     class="btn-link btn-lg d-flex align-items-center justify-content-between shadow-none"
                     v-b-toggle.accordion-2
                   >
-                    <span>Anamnesa</span>
+                    <span>Anamnesis</span>
                     <font-awesome-icon icon="angle-up" class="font-size-xl" />
                   </b-button>
                 </div>
