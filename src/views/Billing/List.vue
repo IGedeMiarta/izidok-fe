@@ -69,7 +69,7 @@
                             </template>
                             <template v-if="dataActive.message !== 'package not found'">
                               <template v-if="dataActive.data.pembelian === null">: -</template>
-                              <template v-else><label>: {{moment(dataActive.data.pembelian).format('Do MMMM YYYY, kk:mm:ss ') }}</label></template>
+                              <template v-else><label>: {{moment(dataActive.data.pembelian).format('Do MMMM YYYY kk:mm:ss ') }}</label></template>
                             </template>
                           </div>
                           <div class="col-md-2">
@@ -80,7 +80,7 @@
                               <label>: -</label>
                             </template>
                             <template v-if="dataActive.message !== 'package not found'">
-                              <label>: {{ moment(dataActive.data.mulai_berlaku).format('Do MMMM YYYY, kk:mm:ss ')}}</label>
+                              <label>: {{ moment(dataActive.data.mulai_berlaku).format('Do MMMM YYYY kk:mm:ss ')}}</label>
                             </template>
                           </div>
                           <div class="col-md-2">
@@ -164,7 +164,7 @@
                           <td class="text-wrap">
                             <div class="align-box-row">
                               <div class="d-flex align-items-center">
-                                <span> {{ data.waktu_pembelian == null ? "-" : moment(data.waktu_pembelian).format('Do MMMM YYYY, kk:mm:ss ')  }}</span>
+                                <span> {{ data.waktu_pembelian == null ? "-" : moment(data.waktu_pembelian).format('Do MMMM YYYY kk:mm:ss ')  }}</span>
                               </div>
                             </div>
                           </td>
@@ -225,7 +225,7 @@
                           <td class="text-wrap">
                             <div class="align-box-row">
                               <div class="d-flex align-items-center">
-                                <span>{{ moment(data.waktu_pembelian).format('Do MMMM YYYY, kk:mm:ss ')  }} </span>
+                                <span>{{ moment(data.waktu_pembelian).format('Do MMMM YYYY kk:mm:ss ')  }} </span>
                               </div>
                             </div>
                           </td>
