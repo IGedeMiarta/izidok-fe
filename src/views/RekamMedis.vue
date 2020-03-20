@@ -399,7 +399,7 @@ export default {
         this.$refs['box_anamnesa'].style.removeProperty('border-color');
       }
 
-      if (!this.postData.kode_penyakit) {
+      if (!this.postData.kode_penyakit || !this.postData.diagnosis_text) {
         this.$root.$emit('bv::toggle::collapse', 'accordion-4');
         document.getElementById("box_diagnosa").style.setProperty('border-color', 'red');
         return;
