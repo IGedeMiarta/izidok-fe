@@ -224,7 +224,7 @@ export default {
 
     //append data canvas to vuex global state
     this.updateCanvas({ key: "TATALAKSANA", value: this.canvas });
-    this.updatePostData({ key: "tatalaksana_is_draw", value: true });
+    this.updatePostData({ key: "tatalaksana_is_draw", value: false });
 
     // Get a regular interval for drawing to the screen
     window.requestAnimFrame = (function(callback) {

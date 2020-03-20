@@ -86,8 +86,8 @@ export default {
       currentPage: 1,
       rows: 1,
       perPage: 5,
+      searchValue: "",
       data: [],
-      searchValue: null,
       counter: 60,
       intervalCounter: null
     };
@@ -249,7 +249,7 @@ export default {
       try {
         const { searchValue } = this;
         const res = await axios.get(
-          `${this.url_api}/pembayaran?limit=${this.perPage}&page=${this.currentPage}&search=${searchValue}`
+          `${this.url_api}/pembayaran?limit=${this.perPage}&page=${this.currentPage}&nama_pasien=${searchValue}`
         );
         const { success, data } = res.data;
         if (success) {
