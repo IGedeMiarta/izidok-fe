@@ -100,7 +100,10 @@
     },
     methods: {
       kembali() {
-        this.$router.back();
+        // this.$router.back();
+        this.$router.push({
+          path: '/rekam-medis'
+        });
       },
       async fetchPasien() {
         let res = await axios.get(`${this.url_api}/pasien/${this.pasien_id}`);
