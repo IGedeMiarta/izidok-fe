@@ -13,7 +13,7 @@
                         <div class="row">
                           <div class="col-md-12"><strong>SEGERA LAKUKAN PEMBAYARAN SEBELUM</strong></div>
                           <div class="col-md-12" style="background-color : #f1e6e6">
-                            <strong style="font-size:12px;">{{moment(this.dataPaygetDetail.detail.transactionExpire).format('Do MMMM YYYY, kk:mm:ss ')}}</strong>
+                            <strong style="font-size:12px;">{{moment(this.dataPaygetDetail.detail.transactionExpire).format('Do MMMM YYYY kk:mm:ss ')}}</strong>
                           </div>
                           <div class="col-md-12 mt-2">
                             <label>Transfer Pembayaran ke Nomor Virtual Account</label>

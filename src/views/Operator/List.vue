@@ -182,7 +182,7 @@
     },
     validations: {
       formData: {
-        nama_operator: {
+        nama_asisten: {
           required,
           maxLength: maxLength(50)
         },
@@ -331,7 +331,6 @@
               allowOutsideClick : false,
               allowEscapeKey: false,
             }).then(res => {
-              console.log(res.value)
               if (res.value) {
 
               }
@@ -342,7 +341,6 @@
         }
       },
       editOperator({ id } = {}) {
-       console.log('editOperator',id)
       if (id) {
         this.$router.push({
           name: "operator-edit",
@@ -357,7 +355,6 @@
           const res = await axios.get(
             `${this.url_api}/operator`);
           this.dataOperator = res.data.data.operator.data
-          console.log(this.dataOperator)
         } catch {
 
         }
@@ -529,7 +526,6 @@
             formData,
             formBasicData
           } = this;
-          console.log(formData)
           const tmpPostData = this.formBasicData.reduce((obj, item) => {
             const {
               label,
@@ -558,7 +554,6 @@
               allowOutsideClick : false,
               allowEscapeKey: false,
             }).then(res => {
-              console.log(res.value)
               if (res.value) {
                 this.$router.go({
                   name: "operator-list"
