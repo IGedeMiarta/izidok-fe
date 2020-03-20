@@ -38,14 +38,20 @@
                   <td>{{item.last_active}}</td>
 
                   <td class="text-center">
-                    <b-link class="btn text-light font-size-md pl-2 pr-2 btn-sm ml-1 mr-1" @click="editOperator({id : item.id})"
-                      style="background-color:yellow;">
+                    <b-link 
+                      class="btn text-light font-size-md pl-2 pr-2 btn-sm ml-1 mr-1" 
+                      @click="editOperator({id : item.id})"
+                      style="background-color:yellow;"
+                      v-tooltip="'Ubah Asisten'">
                       <font-awesome-icon icon="pencil-alt" style="color:black;" />
                     </b-link>
-                    <b-link class="btn bg-danger text-light font-size-md pl-2 pr-2 btn-sm ml-1 mr-1" @click="removeOperator({
-                            id: item.id,
-                            nama: item.nama
-                        })">
+                    <b-link 
+                      class="btn bg-danger text-light font-size-md pl-2 pr-2 btn-sm ml-1 mr-1" 
+                      @click="removeOperator({
+                        id: item.id,
+                        nama: item.nama
+                      })"
+                      v-tooltip="'Hapus Asisten'">
                       <font-awesome-icon icon="trash-alt" />
                     </b-link>
                   </td>
