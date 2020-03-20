@@ -1,6 +1,8 @@
 <template>
   <div>
-    <PageTitle class="text-left" heading="Pilih Paket Berlangganan Anda"/>
+    <b-button @click="goBackSubskripsi()" sm="6" variant="primary"><font-awesome-icon icon="arrow-left" transform="shrink-2" class="text-white" /> Kembali ke Halaman Subskripsi</b-button>
+
+    <PageTitle sm="6" class="text-left" heading="Pilih Paket Berlangganan Anda"/>
     <div class="card card-box mb-2" style=" align-content: center; align-items: center;">
       <div class="app-content--inner p-0 d-flex flex-column">
         <div class="container-fluid">
@@ -284,6 +286,7 @@
     faUser,
     faSearch,
     faArrowRight,
+    faArrowLeft,
     faArrowUp,
     faCheck,
     faCheckCircle
@@ -296,6 +299,7 @@
   library.add(
     faHome,
     faArrowRight,
+    faArrowLeft,
     faArrowUp,
     faUser,
     faSearch,
@@ -335,6 +339,11 @@
         setInitPage: "sidebar/SET_INITIALIZATION_PAGE",
         setUserFirstLogin: "SET_USER_FIRST_LOGIN"
       }),
+      goBackSubskripsi(){
+        this.$router.push({
+          name: "subskripsi",
+        });
+      },
       detailPaket({ id } = {}) {
         if (id !== 1) {
           this.$router.push({

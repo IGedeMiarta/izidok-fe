@@ -19,7 +19,7 @@
           </b-row>
         </b-col>
         <b-col cols="12" class="ml-2 mt-4">
-          <h5 class="text-uppercase font-weight-bold"><u>anamnesa</u></h5>
+          <h5 class="text-uppercase font-weight-bold"><u>anamnesis</u></h5>
           <b-row>
             <b-col cols="12">
               <template v-if="this.datarekammedis.anamnesa.notes !== null">
