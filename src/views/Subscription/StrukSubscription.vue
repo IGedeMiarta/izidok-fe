@@ -27,8 +27,8 @@
         <b-col sm="5"  style="text-align: left; text-align:left; " class="mt-xl-2">
           <span class="h4"><strong>INVOICE</strong></span>
           <p class=" mt-5"><strong>No. Invoice : {{ dataPaygetDetail.detail.transactionNo}}</strong></p>
-          <p class=" "><strong>Tanggal Pembelian : {{ dataPaygetDetail.detail.transactionDate}}</strong></p>
-          <p class=" "><strong>Tanggal Maksimal Pembayaran : {{ dataPaygetDetail.detail.transactionExpire}}</strong></p>
+          <p class=" "><strong>Tanggal Pembelian : {{ moment(dataPaygetDetail.detail.transactionDate).format('Do MMMM YYYY')}}</strong></p>
+          <p class=" "><strong>Tanggal Maksimal Pembayaran : {{moment( dataPaygetDetail.detail.transactionExpire).format('Do MMMM YYYY h:mm:ss ')}}</strong></p>
           <p class=" "><strong>Metode Pembayaran : {{ dataPaygetDetail.paygate.nama}}</strong></p>
           <template v-if="dataPaygetDetail.detail.status_billing === 'LUNAS'">
             <p class=" "><strong>Status Pembayaran :</strong> <label class="btn-success" style="padding:5px;">LUNAS</label></p>
@@ -64,8 +64,8 @@
                <tr>
                  <td class="tx-nowrap">{{dataPaygetDetail.detail.paket}}</td>
                  <td class="text-center"> 1</td>
-                 <td class="text-right">Rp. {{dataPaygetDetail.detail.amount_real}}</td>
-                 <td  class="text-right">Rp. {{dataPaygetDetail.detail.amount_real}}</td>
+                 <td class="text-right">Rp {{dataPaygetDetail.detail.amount_real.toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}}</td>
+                 <td  class="text-right">Rp {{dataPaygetDetail.detail.amount_real.toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}}</td>
                </tr>
                </tbody>
              </table>
@@ -73,11 +73,11 @@
          </b-col>
           <b-col sm="12"  style="text-align: right;" class="mt-3">
             <b-col sm="12"  style="text-align: right;" class="mt-3">
-            <p class="ml-2 "><strong>Subtotal (Rp) : {{dataPaygetDetail.detail.amount_real}}</strong></p>
+            <p class="ml-2 "><strong>Subtotal (Rp) : Rp {{dataPaygetDetail.detail.amount_real.toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}}</strong></p>
             </b-col>
             <template v-if="dataPaygetDetail.detail.diskon !== null">
               <b-col sm="12"  style="text-align: right;" class="mt-3">
-                <p class="ml-2 "><strong>Potongan (Rp) : {{dataPaygetDetail.detail.diskon}}</strong></p>
+                <p class="ml-2 "><strong>Potongan (Rp) : Rp {{dataPaygetDetail.detail.diskon.toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}}</strong></p>
               </b-col>
             </template>
             <template v-else>
@@ -86,12 +86,9 @@
               </b-col>
             </template>
             <b-col sm="12"  style="text-align: right;" class="mt-3">
-              <p class="ml-2 "><strong>Total (Rp) : {{dataPaygetDetail.detail.amount_disc}}</strong></p>
+              <p class="ml-2 "><strong>Total (Rp) : Rp {{dataPaygetDetail.detail.amount_disc.toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}}</strong></p>
             </b-col>
           </b-col>
-
-
-
         </b-row>
         <b-col sm="12"   style="text-align: right; text-align:right; margin-top: 200px; " >
            <label><strong>customercare@medlinx.co.id, contact center : 021-723-7982</strong></label>
@@ -104,8 +101,10 @@
 
 <script>
 
-  import moment from "moment";
   import axios from 'axios';
+  import moment from "moment";
+  moment.locale('id');
+
   import {
     library
   } from "@fortawesome/fontawesome-svg-core";
@@ -146,6 +145,9 @@
       this.getPaygetDetail();
     },
     methods: {
+       moment(){
+        return moment();
+      },
       downloadInvoice(id) {
           // axios.get(`${this.url_api}/invoice/${id}`)
           //   .then(res => {

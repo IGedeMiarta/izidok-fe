@@ -84,7 +84,8 @@
             class="mx-1"
             variant="danger"
             @click="updateStatusAntrean(data.item.id)"
-            v-tooltip="'Hapus Antrean'"
+            v-tooltip="'Hapus Antrean'" 
+            v-if="data.item.status !== 'KONSULTASI'"
           >
             <font-awesome-icon icon="trash-alt" />
           </b-button>
