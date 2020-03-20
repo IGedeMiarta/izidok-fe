@@ -38,7 +38,7 @@
                   </div>
                 </b-collapse>
               </div>
-              <div class="card card-box">
+              <div class="card card-box" id="box_pemeriksaan_fisik">
                 <div class="card-header">
                   <b-button
                     class="btn-link btn-lg d-flex align-items-center justify-content-between shadow-none collapsed"
