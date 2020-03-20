@@ -6,6 +6,7 @@
     :taggable="taggable"
     :value="value"
     :disabled="disabled"
+    :clearable=false
     @input="$emit('input', $event)"
     :placeholder="placeholder"
   ></v-select>
