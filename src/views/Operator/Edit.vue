@@ -72,7 +72,28 @@
         formBasicData: null,
         formData: null,
         operator_id: null,
+        beingSubmit: false,
         data_operator: null
+      }
+    },
+    beforeRouteLeave(to, from, next) {
+      if (!this.beingSubmit) {
+        this.$swal({
+          title: startCase("keluar"),
+          text: `Apakah Anda yakin untuk keluar dari halaman ini?`,
+          type: "warning",
+          showCancelButton: true,
+          cancelButtonText: startCase("tidak"),
+          confirmButtonText: startCase("ya")
+        }).then(res => {
+          if (res.value) {
+            next();
+          } else {
+            next(false);
+          }
+        });
+      } else {
+        next();
       }
     },
     mounted() {
@@ -195,7 +216,7 @@
               type: "success",
               confirmButtonText: startCase("ya")
             })
-            console.log('tes')
+            this.beingSubmit = true;
             this.$router.push({name : 'operator-list'})
           }
         } catch (err) {
