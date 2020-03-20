@@ -104,22 +104,9 @@
     },
     methods: {
       keluar() {
-        this.$swal({
-          title: startCase("keluar"),
-          text: `Apakah Anda yakin untuk keluar dari halaman ini?`,
-          type: "warning",
-          showCancelButton: true,
-          cancelButtonText: startCase("tidak"),
-          confirmButtonText: startCase("ya")
-        }).then(res => {
-          if (res.value) {
-            this.$router.push({
-              name: 'operator-list'
-            })
-          } else {
-            next(false);
-          }
-        });
+        this.$router.push({
+          name: 'operator-list'
+        })
       },
       getOperator(id) {
         return axios.get(`${this.url_api}/operator/${id}`)
