@@ -13,7 +13,7 @@
                         <div class="row">
                           <div class="col-md-12"><strong>SEGERA LAKUKAN PEMBAYARAN SEBELUM</strong></div>
                           <div class="col-md-12" style="background-color : #f1e6e6">
-                            <strong style="font-size:12px;">{{moment(this.dataPaygetDetail.detail.transactionExpire).format('Do MMMM YYYY, h:mm:ss a')}}</strong>
+                            <strong style="font-size:12px;">{{moment(this.dataPaygetDetail.detail.transactionExpire).format('Do MMMM YYYY, h:mm:ss ')}}</strong>
                           </div>
                           <div class="col-md-12 mt-2">
                             <label>Transfer Pembayaran ke Nomor Virtual Account</label>
@@ -21,8 +21,8 @@
                           <div class="col-md-12">
                             <div class="row">
                               <div class="col-md-3">
-                                <img fluid :src="this.dataPaygetDetail.paygate.logo" height="40" width="120"
-                                  class="mt-4" :alt="this.dataPaygetDetail.paygate.nama">
+                                <img fluid :src="this.dataPaygetDetail.paygate.logo"
+                                  class="mt-4 logo-bank" :alt="this.dataPaygetDetail.paygate.nama">
                               </div>
                               <div class="col-md-6">
                                 <b-form-input disabled class="mt-4 text-center" style="color:blue"
@@ -199,3 +199,16 @@
     }
   }
 </script>
+
+<style scoped>
+  .logo-bank {
+    height: 40px;
+    width: 120px;
+  }
+  @media only screen and (max-width: 1132px) and (min-width:768px) {
+    .logo-bank {
+      height: 28px;
+      width: 85px;
+    }
+  }
+</style>

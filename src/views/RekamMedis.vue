@@ -22,7 +22,7 @@
                   </div>
                 </b-collapse>
               </div>
-              <div class="card card-box">
+              <div class="card card-box" ref="box_anamnesa">
                 <div class="card-header">
                   <b-button
                     class="btn-link btn-lg d-flex align-items-center justify-content-between shadow-none"
@@ -38,7 +38,7 @@
                   </div>
                 </b-collapse>
               </div>
-              <div class="card card-box" id="box_pemeriksaan_fisik">
+              <div class="card card-box">
                 <div class="card-header">
                   <b-button
                     class="btn-link btn-lg d-flex align-items-center justify-content-between shadow-none collapsed"
@@ -388,11 +388,15 @@ export default {
       });
     },
     validate() {
+      console.log('postData', this.postData)
       //only validate two field
-      if (!this.postData.organ_id) {
-        this.$root.$emit('bv::toggle::collapse', 'accordion-3');
-        document.getElementById("box_pemeriksaan_fisik").style.setProperty('border-color', 'red');
+      if (!this.postData.anamnesa_text) {
+        this.$root.$emit('bv::toggle::collapse', 'accordion-2');
+        this.$refs['box_anamnesa'].style.setProperty('border-color', 'red');
         return;
+      }
+      else {
+        this.$refs['box_anamnesa'].style.removeProperty('border-color');
       }
 
       if (!this.postData.kode_penyakit) {
