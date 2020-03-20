@@ -296,11 +296,7 @@
         }
       },
       determineParameter() {
-        const {
-          searchValue,
-          sortBy,
-          sortDesc
-        } = this;
+        const { searchValue, sortBy, sortDesc } = this;
         let v = "";
         searchValue.map(item => {
           const x = (item.key === "nama" && "nama_pasien") || item.key;
@@ -318,10 +314,9 @@
         perPage && (perPage |> (_ => (this.perPage = _)));
         currentPage && (currentPage |> (_ => (this.currentPage = _)));
       },
-      searchValueChanged: debounce(function (val, key) {
-        const {
-          searchValue
-        } = this;
+      searchValueChanged: debounce(function(val, key) {
+        const { searchValue } = this;
+
         const z = searchValue.filter(item => item.key !== key);
         this.searchValue = [
           ...z,
@@ -357,7 +352,7 @@
           var date = today.getFullYear() + '-' + '0' + (today.getMonth() + 1) + '-' + today.getDate();
           const res = await axios.get(
             `${this.url_api}/pembayaran?limit=${this.perPage}&page=${
-              this.currentPage}&from=${date}&to=${date}`
+              this.currentPage}&from=${date}&to=${date}${this.determineParameter()}`
           );
           const { success, data } = res.data;
           if (success) {
