@@ -336,7 +336,7 @@
             </b-form-group>
           </b-col>
           <b-col sm="6">
-            <b-form-group :label="renderLabel({ label: 'hubungan pasien' })" class="text-capitalize"
+            <b-form-group :label="renderLabel({ label: 'hubungan dengan pasien' })" class="text-capitalize"
               style="position: relative">
               <vue-select :options="
                 ['Suami/Istri', 'Orangtua', 'Kakak/Adik', 'Anak', 'Lainnya']
@@ -657,8 +657,9 @@
       this.formBasicData = this.setFormBasicData();
       this.formData = this.setFormData();
       // }
+
       this.getProvince();
-      await this.getPasienData();
+      this.getPasienData();
 
     },
     methods: {
@@ -848,7 +849,7 @@
         });
       },
       async getPasienData() {
-        if (this.idPasien) {
+         this.idPasien = this.$router.currentRoute.params.idPasien;
           try {
             const res = await axios.get(
               `${this.url_api}/pasien/${this.idPasien}`,
@@ -877,7 +878,6 @@
             console.log(err);
             // alert(err)
           }
-        }
       },
       whitelistValidation() {
         return this.setFormBasicData()
