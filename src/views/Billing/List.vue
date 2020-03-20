@@ -509,6 +509,7 @@
           nama: null,
         }],
         detailStruk : null,
+        checkDataInvoice : [],
         belumAktif : [],
         searchValue: [],
         detail : null,
@@ -531,11 +532,12 @@
         toPageBelumAktif: 0,
       }
     },
-    mounted() {
+    async mounted() {
       this.cekPaket();
       this.fetchListNotActive();
       this.fetchListExpired();
       this.fetchActive();
+      await this.checkBilling();
     },
     watch: {
       currentPageNotActive(){
@@ -572,7 +574,7 @@
           [{
             key: "nomor_tagihan",
             label: "No. Tagihan",
-            thStyle: "width: 12%"
+            thStyle: "width: 18%"
           },
             {
               key: "produk",
@@ -594,7 +596,6 @@
               label: "Tanggal Bayar",
               thStyle: "width: 15%",
               class: ""
-
             },
             {
               key: "status_text",
@@ -615,6 +616,17 @@
       }
     },
     methods: {
+      async checkBilling(){
+        try {
+           const res = await axios.get(
+            `${this.url_api}/billing/package-unpaid`
+          );
+          this.checkDataInvoice = res.data;
+          console.log(this.checkDataInvoice);
+        } catch {
+          
+        }
+      },
       moment(){
         return moment();
       },

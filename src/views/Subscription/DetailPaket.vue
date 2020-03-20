@@ -140,7 +140,7 @@
                                       </template>
                                       <template v-else-if="this.statusPotongan === 'percent' ">
                                         {{
-                                         (((dataDetail.harga * (lama_langganan-2)) + (dataPaygetDetail.biaya_admin))   - (((dataDetail.harga * (lama_langganan-2)) + (dataPaygetDetail.biaya_admin)) * (potongan/100))).toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")
+                                         (((dataDetail.harga * (lama_langganan-2)) + (dataPaygetDetail.biaya_admin)) - (((dataDetail.harga * (lama_langganan-2)) + (dataPaygetDetail.biaya_admin)) * (potongan/100))).toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")
                                         }}
                                       </template>
                                       <template v-else>
@@ -151,7 +151,8 @@
                                   <template v-else>
                                     <strong class="float-right">Rp
                                       <template v-if="this.statusPotongan === 'rupiah'">
-                                        {{( dataDetail.harga * lama_langganan) + (dataPaygetDetail.biaya_admin-potongan).toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}}
+                                         {{((dataDetail.harga * lama_langganan) + (dataPaygetDetail.biaya_admin-potongan)).toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")
+                                        }} 
                                       </template>
                                       <template v-else-if="this.statusPotongan === 'percent' ">
                                         {{
@@ -159,7 +160,7 @@
                                           }}
                                       </template>
                                       <template v-else>
-                                        {{(dataDetail.harga * lama_langganan + dataPaygetDetail.biaya_admin).toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}}
+                                        {{(dataDetail.harga * lama_langganan + dataPaygetDetail.biaya_admin).toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}} 
                                       </template>
                                     </strong>
                                   </template>
