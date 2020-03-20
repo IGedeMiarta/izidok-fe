@@ -59,7 +59,7 @@
                   <b-button
                     class="btn-link btn-lg d-flex align-items-center justify-content-between shadow-none collapsed"
                     v-b-toggle.accordion-4 >
-                    <span>Diagnosa</span>
+                    <span>Diagnosis</span>
                     <font-awesome-icon icon="angle-up" class="font-size-xl" />
                   </b-button>
                 </div>

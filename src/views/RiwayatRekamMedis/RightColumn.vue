@@ -41,7 +41,7 @@
           </template>
         </b-col>
         <b-col cols="12" class="ml-2 mt-4">
-          <h5 class="text-uppercase font-weight-bold"><u>diagnosa</u></h5>
+          <h5 class="text-uppercase font-weight-bold"><u>diagnosis</u></h5>
           <div v-for="items in kodediagnosa" :key="items.id">
             <p v-html="items.kode+' - '+items.description"></p>
           </div>
