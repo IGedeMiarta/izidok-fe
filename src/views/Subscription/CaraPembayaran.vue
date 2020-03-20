@@ -13,7 +13,7 @@
                         <div class="row">
                           <div class="col-md-12"><strong>SEGERA LAKUKAN PEMBAYARAN SEBELUM</strong></div>
                           <div class="col-md-12" style="background-color : #f1e6e6">
-                            <strong style="font-size:12px;">{{this.dataPaygetDetail.detail.transactionExpire}}</strong>
+                            <strong style="font-size:12px;">{{moment(this.dataPaygetDetail.detail.transactionExpire).format('Do MMMM YYYY, h:mm:ss a')}}</strong>
                           </div>
                           <div class="col-md-12 mt-2">
                             <label>Transfer Pembayaran ke Nomor Virtual Account</label>
@@ -137,6 +137,9 @@
 <script>
   import axios from 'axios';
   import {mapMutations} from "vuex";
+  import moment from "moment";
+  moment.locale('id');
+
   export default {
     data() {
       return {
@@ -152,6 +155,9 @@
         setInitPage: "sidebar/SET_INITIALIZATION_PAGE",
         setUserFirstLogin: "SET_USER_FIRST_LOGIN"
       }),
+      moment(){
+        return moment();
+      },
       goSubskripsi(){
         this.setInitPage(false);
         this.setUserFirstLogin(0);
