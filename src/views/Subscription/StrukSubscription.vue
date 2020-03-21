@@ -61,7 +61,7 @@
                  <td class="tx-nowrap">{{dataPaygetDetail.detail.paket}}-{{dataPaygetDetail.detail.durasi_paket}} ({{dataPaygetDetail.detail.durasi_paket}} Bulan)</td>
                  <td class="text-center"> 1</td>
                  <td class="text-right">Rp {{dataPaygetDetail.detail.harga_paket.toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}}</td>
-                 <td  class="text-right">Rp {{dataPaygetDetail.detail.harga_paket.toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}}</td>
+                 <td  class="text-right">Rp {{dataPaygetDetail.detail.amount_real.toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}}</td>
                </tr>
                </tbody>
              </table>
@@ -74,18 +74,18 @@
             <b-col sm="12"  style="text-align: right;" class="mt-3">
             <p class="ml-2 "><strong>Subtotal (Rp) : Rp {{(dataPaygetDetail.detail.amount_real+dataPaygetDetail.paygate.biaya_admin).toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}}</strong></p>
             </b-col>
-            <template v-if="dataPaygetDetail.detail.diskon !== null">
+            <template v-if="dataPaygetDetail.detail.satuan_promo == 'rupiah'">
               <b-col sm="12"  style="text-align: right;" class="mt-3">
                 <p class="ml-2 "><strong>Potongan (Rp) : Rp {{dataPaygetDetail.detail.diskon.toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}}</strong></p>
               </b-col>
             </template>
             <template v-else>
               <b-col sm="12"  style="text-align: right;" class="mt-3">
-                <p class="ml-2 "><strong>Potongan (Rp) : -</strong></p>
+                <p class="ml-2 "><strong>Potongan (%) : {{dataPaygetDetail.detail.diskon.toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}}%</strong></p>
               </b-col>
             </template>
             <b-col sm="12"  style="text-align: right;" class="mt-3">
-              <p class="ml-2 "><strong>Total (Rp) : Rp {{dataPaygetDetail.detail.amount_disc.toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}}</strong></p>
+              <p class="ml-2 "><strong>Total (Rp) : Rp {{(dataPaygetDetail.detail.amount_disc+dataPaygetDetail.paygate.biaya_admin).toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}}</strong></p>
             </b-col>
           </b-col>
         </b-row>
