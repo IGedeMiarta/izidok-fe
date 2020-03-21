@@ -89,17 +89,19 @@
                       @click="editModal(data.item)"
                       ><font-awesome-icon icon="pencil-alt"
                     /></b-button>
-                    <b-button
-                      variant="danger"
-                      size="sm"
-                      @click="
+                    <template v-if="data.item.priority !== 1">
+                      <b-button
+                        variant="danger"
+                        size="sm"
+                        @click="
                         removeTarif({
                           id: data.item.id,
                           nama_layanan: data.item.nama_layanan
                         })
                       "
                       ><font-awesome-icon icon="trash-alt"
-                    /></b-button>
+                      /></b-button>
+                    </template>
                   </span>
                 </template>
               </b-table>
@@ -179,29 +181,57 @@
         <div class="card-body">
           <form role="form">
             <div class="form-row">
-              <div class="form-group col-md-4">
-                <label >Nama Layanan</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="nm_layanan"
-                  v-model.trim="editData.nama_layanan"
-                  @input="setNameLayanan($event.target.value)"
-                  @keypress="onKeypressNamaLayanan"
-                  :class="isError('nama_layanan')"
-                />
-                <template v-if="editData.nama_layanan === ''">
-                  Nama layanan harus di isi
-                </template>
-                <template v-else-if="getErrorValidation('nama_layanan')">
-                  <b-form-invalid-feedback
-                    :force-show="true"
-                    class="text-capitalize"
-                  >
-                    {{ getErrorValidation("nama_layanan") }}
-                  </b-form-invalid-feedback>
-                </template>
-              </div>
+              <template v-if="editData.priority !== 1">
+                <div class="form-group col-md-4">
+                  <label >Nama Layanan</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="nm_layanan"
+                    v-model.trim="editData.nama_layanan"
+                    @input="setNameLayanan($event.target.value)"
+                    @keypress="onKeypressNamaLayanan"
+                    :class="isError('nama_layanan')"
+                  />
+                  <template v-if="editData.nama_layanan === ''">
+                    Nama layanan harus di isi
+                  </template>
+                  <template v-else-if="getErrorValidation('nama_layanan')">
+                    <b-form-invalid-feedback
+                      :force-show="true"
+                      class="text-capitalize"
+                    >
+                      {{ getErrorValidation("nama_layanan") }}
+                    </b-form-invalid-feedback>
+                  </template>
+                </div>
+              </template>
+              <template v-if="editData.priority === 1">
+                <div class="form-group col-md-4">
+                  <label >Nama Layanan</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="nm_layanan2"
+                    v-model.trim="editData.nama_layanan"
+                    @input="setNameLayanan($event.target.value)"
+                    @keypress="onKeypressNamaLayanan"
+                    disabled
+                    :class="isError('nama_layanan')"
+                  />
+                  <template v-if="editData.nama_layanan === ''">
+                    Nama layanan harus di isi
+                  </template>
+                  <template v-else-if="getErrorValidation('nama_layanan')">
+                    <b-form-invalid-feedback
+                      :force-show="true"
+                      class="text-capitalize"
+                    >
+                      {{ getErrorValidation("nama_layanan") }}
+                    </b-form-invalid-feedback>
+                  </template>
+                </div>
+              </template>
               <div class="form-group col-md-3">
                 <label >Kode Layanan</label>
                 <input
@@ -339,7 +369,8 @@ export default {
         id: null,
         kode_layanan: null,
         nama_layanan: null,
-        tarif: null
+        tarif: null,
+        priority: null,
       },
       shallowCopyEditData: null,
       errors: [],
@@ -612,6 +643,7 @@ export default {
     editModal(data) {
       const x = {
         id: data.id,
+        priority: data.priority,
         kode_layanan: data.kode_layanan,
         nama_layanan: data.nama_layanan,
         tarif: data.tarif
@@ -841,6 +873,11 @@ export default {
 }
 
 #nm_layanan,
+#dt_nm_layanan {
+  text-transform: capitalize;
+}
+
+#nm_layanan2,
 #dt_nm_layanan {
   text-transform: capitalize;
 }

@@ -17,7 +17,7 @@
                           <strong>Pilih Pembayaran</strong>
                         </div>
                         <div class="col-md-8">
-                          <vue-select class="align-content-right" :options="dataPaygate" v-model="selectedPaygate"
+                          <vue-select class="align-content-right" clearable=false :options="dataPaygate" v-model="selectedPaygate"
                             @input="getPaygetDetail" />
 
                         </div>
