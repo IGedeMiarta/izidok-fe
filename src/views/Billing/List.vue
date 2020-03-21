@@ -810,7 +810,6 @@
                 }
                 if(item.status === 0) {
                   this.adaTagihan = true
-                  console.log("asdasd",this.adaTagihan)
                 }
                 return {
                   ...item,
