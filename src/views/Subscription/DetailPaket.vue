@@ -230,6 +230,8 @@
         lama_langganan: 1,
         total_harga: 0,
         kode_promo: null,
+        id_promo: null,
+        real_amount: null,
         statusPromo: null,
         statusPotongan: null,
         hasilPromo: null,
@@ -282,6 +284,7 @@
         try {
           const res = await axios.post(`${this.url_api}/promo?kode=${this.kode_promo}`);
           this.statusPromo = res.data.message;
+          this.id_promo = res.data.data.id;
           this.potongan = res.data.data.value;
           this.statusPotongan = res.data.data.satuan;
         } catch {
@@ -293,40 +296,41 @@
 
           if (this.lama_langganan === "12") {
             if (this.statusPotongan === 'rupiah') {
-              this.total_bayar = (this.dataDetail.harga * (this.lama_langganan - 2)) + (this.dataPaygetDetail
-                .biaya_admin -
-                this.potongan);
+              this.total_bayar = (this.dataDetail.harga * (this.lama_langganan - 2))-this.potongan;
+              this.real_amount =  (this.dataDetail.harga * (this.lama_langganan - 2));
               // this.hasilPromo =
             } else if (this.statusPotongan === 'percent') {
               this.total_bayar = 
-              ( (this.dataDetail.harga * (this.lama_langganan - 2)) + (this.dataPaygetDetail.biaya_admin))-
-              (((this.dataDetail.harga * (this.lama_langganan - 2)) + (this.dataPaygetDetail.biaya_admin)) * (
-                this.potongan / 100))
+              ( (this.dataDetail.harga * (this.lama_langganan - 2)))-
+              (((this.dataDetail.harga * (this.lama_langganan - 2))) * (
+                this.potongan / 100));
+              this.real_amount = (this.dataDetail.harga * (this.lama_langganan - 2));
                 console.log('total',this.total_bayar)
             } else {
-              this.total_bayar = (this.dataDetail.harga * (this.lama_langganan - 2) + this.dataPaygetDetail
-                .biaya_admin)
+              this.total_bayar = (this.dataDetail.harga * (this.lama_langganan - 2));
+              this.real_amount = (this.dataDetail.harga * (this.lama_langganan - 2) );
             }
           } else {
             if (this.statusPotongan === 'rupiah') {
-              this.total_bayar = (this.dataDetail.harga * this.lama_langganan) + (this.dataPaygetDetail.biaya_admin -
-                this.potongan);
+              this.total_bayar = (this.dataDetail.harga * this.lama_langganan)-this.potongan;
+              this.real_amount = (this.dataDetail.harga * this.lama_langganan);
               // this.hasilPromo =
             } else if (this.statusPotongan === 'percent') {
               this.total_bayar = ((this.dataDetail.harga * this.lama_langganan + this.dataPaygetDetail.biaya_admin) - (this.dataDetail.harga * this.lama_langganan + this.dataPaygetDetail.biaya_admin) * (
-                this.potongan / 100))
+                this.potongan / 100));
+              this.real_amount = (this.dataDetail.harga * this.lama_langganan);
             } else {
-              this.total_bayar = (this.dataDetail.harga * this.lama_langganan + this.dataPaygetDetail.biaya_admin)
+              this.total_bayar = (this.dataDetail.harga * this.lama_langganan );
+              this.real_amount = (this.dataDetail.harga * this.lama_langganan );
             }
           }
 
-
           const res = await axios.post(`${this.url_api}/subscribe`, {
             pg_id: this.dataPaygetDetail.id,
-            promo_id: this.promo,
+            promo_id: this.id_promo,
             paket_id: this.dataDetail.id,
             amount_disc: this.total_bayar,
-            amount_real: this.total_bayar,
+            amount_real: this.real_amount,
             paket_bln: this.lama_langganan,
           })
           console.log(res);
