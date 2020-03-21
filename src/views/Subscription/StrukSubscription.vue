@@ -253,7 +253,7 @@
   .status-payment {
     position: absolute;
     opacity: 0.3;
-    margin-left: 300px;
+    margin-left: 325px;
     margin-right: auto;
   }
 

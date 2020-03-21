@@ -418,7 +418,7 @@
             <div class="row" v-if="this.detailStruk !== null " style="font-size:14px;">
 
               <div class="col-md-7">
-                <label class="float-left"><strong>Total Pembelian :</strong> Rp {{parseInt(dataDetailRiwayatPembelian.detail.transactionAmount).toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}}</label>
+                <label class="float-left"><strong>Total Pembelian :</strong> Rp {{parseInt(dataDetailRiwayatPembelian.detail.amount_pay).toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}}</label>
               </div>
               <div class="col-md-5">
                 <b-button variant="success" size="sm" class="float-right text-uppercase" @click="ToInvoice(dataDetailRiwayatPembelian.detail.billing_id)">
@@ -608,7 +608,7 @@
             {
               key: "tanggal_bayar",
               label: "Tanggal Bayar",
-              thStyle: "width: 15%",
+              thStyle: "width: 13%",
               class: ""
             },
             {
@@ -746,7 +746,6 @@
             bill_id: id
           }
         });
-
       },
       fetchActive() {
         axios.get(`${this.url_api}/billing/package-active`)
@@ -907,32 +906,6 @@
           }
         ];
       }, 500),
-      fetchListTagihan () {
-        this.totalEntries = 1;
-        this.toPage = 1;
-        this.fromPage = 1;
-        this.rows = 1;
-        this.dataTagihan = [{
-            id : 1,
-            no_tagihan: "IZID1123",
-            produk: "STARTER 1",
-            periode_berlaku: "1 BULAN",
-            total_pembayaran: "RP. 121.000",
-            tanggal_pembayaran: "27/02/2020",
-            status: "LUNAS",
-          },
-            {
-              id : 2,
-              no_tagihan: "IZID1124",
-              produk: "STARTER 2",
-              periode_berlaku: "12 BULAN",
-              total_pembayaran: "RP. 121.000",
-              tanggal_pembayaran: "27/02/2020",
-              status: "MENUNGGU PEMBAYARAN",
-            },
-          ];
-        return this;
-      }
     }
   }
 </script>
