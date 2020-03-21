@@ -349,7 +349,7 @@ import {
       },
     },
     async mounted() {
-        await this.checkPaket();
+        await this.cekPaket();
          moment.locale("id");
          this.tanggal = moment().format("YYYY-MM-DD");
     },
