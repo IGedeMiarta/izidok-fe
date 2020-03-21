@@ -1,5 +1,6 @@
 <template>
-
+  <div>
+    <b-button @click="goBackSubskripsi()" sm="6" variant="primary" class="mb-3"><font-awesome-icon icon="arrow-left" transform="shrink-2" class="text-white" /> Kembali ke Halaman Subskripsi</b-button>
     <div class="card" style="border-radius: 0px; align-content: center; align-items: center;">
       <template v-if="dataPaygetDetail.detail.status_billing === 'LUNAS'">
       <b-row>
@@ -79,13 +80,18 @@
                 <p class="ml-2 "><strong>Potongan (Rp) : Rp {{dataPaygetDetail.detail.diskon.toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}}</strong></p>
               </b-col>
             </template>
-            <template v-else>
+            <template v-if="dataPaygetDetail.detail.satuan_promo == 'persen'">
               <b-col sm="12"  style="text-align: right;" class="mt-3">
                 <p class="ml-2 "><strong>Potongan (%) : {{dataPaygetDetail.detail.diskon.toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}}%</strong></p>
               </b-col>
             </template>
+            <template v-else>
+              <b-col sm="12"  style="text-align: right;" class="mt-3">
+                <p class="ml-2 "><strong>Potongan (Rp) : -</strong></p>
+              </b-col>
+            </template>
             <b-col sm="12"  style="text-align: right;" class="mt-3">
-              <p class="ml-2 "><strong>Total (Rp) : Rp {{(dataPaygetDetail.detail.amount_disc+dataPaygetDetail.paygate.biaya_admin).toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}}</strong></p>
+              <p class="ml-2 "><strong>Total (Rp) : Rp {{(dataPaygetDetail.detail.amount_pay).toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}}</strong></p>
             </b-col>
           </b-col>
         </b-row>
@@ -96,6 +102,7 @@
 
     </div>
       </div>
+  </div>
 </template>
 
 <script>
@@ -112,6 +119,7 @@
     faUser,
     faSearch,
     faArrowRight,
+    faArrowLeft,
     faArrowUp,
     faCheck,
     faCheckCircle
@@ -124,6 +132,7 @@
   library.add(
     faHome,
     faArrowRight,
+    faArrowLeft,
     faArrowUp,
     faUser,
     faSearch,
@@ -146,6 +155,11 @@
     methods: {
        moment(){
         return moment();
+      },
+      goBackSubskripsi(){
+        this.$router.push({
+          name: "subskripsi",
+        });
       },
       downloadInvoice(id) {
           // axios.get(`${this.url_api}/invoice/${id}`)
@@ -193,6 +207,7 @@
           var isRoute = this.$router.currentRoute.params.bill_id;
           const res = await axios.get(`${this.url_api}/detailpembayaran/${isRoute}`)
           this.dataPaygetDetail = res.data.data;
+          console.log(this.dataPaygetDetail)
           const { success, data } = res.data.data.detail;
           if (success) {
             const { data: tmpData, total } = data;
