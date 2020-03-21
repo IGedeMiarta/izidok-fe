@@ -173,6 +173,7 @@
                         </div>
                         <div class="col-md-12 mt-3">
                           <b-button @click="prosesBayar" variant="success" class="float-right">Bayar Sekarang</b-button>
+                          <b-button  @click="kembali" variant="danger" class="float-right mr-3">Kembali</b-button>
                         </div>
                       </div>
                     </div>
@@ -279,6 +280,10 @@
       this.getPaygetDetail(ss);
     },
     methods: {
+      kembali(){
+         this.$router.push({
+              name: 'subskripsi-pilih-paket'});
+      },
       rerender(id) {
         this.$root.$emit("rerender", id);
       },

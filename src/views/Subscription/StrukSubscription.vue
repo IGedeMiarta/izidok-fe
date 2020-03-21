@@ -72,39 +72,70 @@
               </table>
             </div>
           </b-col>
-          <b-col sm="12" style="text-align: right;" class="mt-3">
-            <b-col sm="12" style="text-align: right;" class="mt-3">
-              <p class="ml-2 "><strong>Biaya Admin (Rp) : Rp
+          <b-col sm="8">
+          </b-col>
+          <b-col sm="4" class="mt-3">
+            <b-row>
+              <b-col sm="7" class="mt-3">
+                <strong>Biaya Admin (Rp) </strong>
+              </b-col>
+              <b-col sm="1" class="mt-3 p-0">
+                :
+              </b-col>
+              <b-col sm="4" class="mt-3 p-0 ">
+                <strong>Rp
                   {{dataPaygetDetail.paygate.biaya_admin.toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}}</strong>
-              </p>
+              </b-col>
+              <b-col sm="7" class="mt-3">
+              <strong>Subtotal (Rp) : 
+                 </strong>
             </b-col>
-            <b-col sm="12" style="text-align: right;" class="mt-3">
-              <p class="ml-2 "><strong>Subtotal (Rp) : Rp
-                  {{(dataPaygetDetail.detail.amount_real+dataPaygetDetail.paygate.biaya_admin).toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}}</strong>
-              </p>
+             <b-col sm="1" class="mt-3 p-0">
+                :
+              </b-col>
+            <b-col sm="4" class="mt-3 p-0" >
+               <strong> Rp {{(dataPaygetDetail.detail.amount_real+dataPaygetDetail.paygate.biaya_admin).toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}} </strong>
             </b-col>
             <template v-if="dataPaygetDetail.detail.satuan_promo == 'rupiah'">
-              <b-col sm="12" style="text-align: right;" class="mt-3">
-                <p class="ml-2 "><strong>Potongan (Rp) : Rp
-                    {{dataPaygetDetail.detail.diskon.toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}}</strong></p>
+               <b-col sm="7" class="mt-3">
+                 <strong>Potongan (Rp) </strong>
+               </b-col>
+                <b-col sm="1" class="mt-3 p-0">
+                :
               </b-col>
+               <b-col sm="4" class="mt-3 p-0" >
+                 <strong>{{dataPaygetDetail.detail.diskon.toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}}</strong>
+               </b-col>
             </template>
             <template v-if="dataPaygetDetail.detail.satuan_promo == 'percent'">
-              <b-col sm="12" style="text-align: right;" class="mt-3">
-                <p class="ml-2 "><strong>Potongan (%) :
-                    {{dataPaygetDetail.detail.diskon.toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}}%</strong></p>
+                <b-col sm="7" class="mt-3">
+                 <strong>Potongan (%) </strong>
+               </b-col>
+                <b-col sm="1" class="mt-3 p-0">
+                :
               </b-col>
+                <b-col sm="4" class="mt-3 p-0" >
+                  <strong>{{dataPaygetDetail.detail.diskon}} %</strong>
+                </b-col>
             </template>
             <template v-else>
-              <b-col sm="12" style="text-align: right;" class="mt-3">
-                <p class="ml-2 "><strong>Potongan (Rp) : - </strong></p>
+                <b-col sm="7" class="mt-3">
+                 <strong>Potongan (Rp) </strong>
+               </b-col>
+                  <b-col sm="1" class="mt-3 p-0">
+                :
               </b-col>
+                <b-col sm="4" class="mt-3 p-0" >
+                  <strong>-</strong>
+                </b-col>
             </template>
-            <b-col sm="12" style="text-align: right;" class="mt-3">
-              <p class="ml-2 "><strong>Total (Rp) : Rp
-                  {{(dataPaygetDetail.detail.amount_pay).toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}}</strong>
-              </p>
-            </b-col>
+              <b-col sm="7" class="mt-3">
+                <strong>Total (Rp)</strong>
+              </b-col>
+               <b-col sm="1" class="mt-3 p-0">
+               :</b-col>
+                <b-col sm="4" class="mt-3 p-0" > <strong>Rp {{(dataPaygetDetail.detail.amount_pay).toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}}</strong> </b-col>
+            </b-row>
           </b-col>
         </b-row>
         <b-col sm="12" style="text-align: right; text-align:right; margin-top: 200px; ">
@@ -164,11 +195,11 @@
       this.getPaygetDetail();
     },
     methods: {
-      convertDate(val){
-        return moment(val).format('DD MMMM YYYY HH:mm:ss ') 
+      convertDate(val) {
+        return moment(val).format('DD MMMM YYYY HH:mm:ss ')
       },
-      convertDateWithoutTime(val){
-        return moment(val).format('DD MMMM YYYY') 
+      convertDateWithoutTime(val) {
+        return moment(val).format('DD MMMM YYYY')
       },
       goBackSubskripsi() {
         this.$router.push({
@@ -265,20 +296,23 @@
   .status-payment {
     position: absolute;
     opacity: 0.3;
-    margin-left: 325px;
+    margin-left: 315px;
     margin-right: auto;
   }
 
   @media only screen and (max-width: 900px) and (min-width:768px) {
     .status-payment {
-      margin-left: 170px;
+      margin-left: 130px;
     }
   }
 
   @media only screen and (max-width: 772px) and (min-width:270px) {
     .status-payment {
-      margin-left: 50px;
-      position: relative;
+      margin-left: 80px;
+      margin-top: 35px;
+      height: 240px;
+      width: 320px;
+      /* position: relative; */
     }
   }
 </style>
