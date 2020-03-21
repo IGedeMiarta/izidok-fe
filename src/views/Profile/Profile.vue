@@ -168,31 +168,32 @@
             `${this.url_api}/cekPaket`
           );
 
-          if(res.data.data.paket_id === 1) {
-            var nm_paket = "Trial"
-          }else if (res.data.data.paket_id === 2) {
-            var nm_paket = "Starter"
-          }else if (res.data.data.paket_id === 3) {
-            var nm_paket = "Essential"
-          }else {
-            var nm_paket = "Premium"
-          }
+          if(res.data !== null) {
+            if(res.data.data.paket_id === 1) {
+              var nm_paket = "Trial"
+            }else if (res.data.data.paket_id === 2) {
+              var nm_paket = "Starter"
+            }else if (res.data.data.paket_id === 3) {
+              var nm_paket = "Essential"
+            }else {
+              var nm_paket = "Premium"
+            }
+            //Kuota habis, masa berlaku masih ada/tidakada, sudah beli paket.
+            if (res.data.message === 'Paket Anda '+nm_paket+' telah OTOMATIS Aktif mulai dari tanggal '+res.data.data.started_date+' hingga '+res.data.data.expired_date+'!') {
+              return this.$swal({
+                text: 'Paket Anda '+nm_paket+' telah OTOMATIS Aktif mulai dari tanggal '+res.data.data.started_date+' hingga '+res.data.data.expired_date+'!',
+                showCancelButton: false,
+                confirmButtonText: "OK",
+                type: "warning",
+                allowOutsideClick : false,
+                allowEscapeKey: false,
+              }).then(res => {
+                console.log(res.value)
+                if (res.value) {
 
-          //Kuota habis, masa berlaku masih ada/tidakada, sudah beli paket.
-          if (res.data.message === 'Paket Anda '+nm_paket+' telah OTOMATIS Aktif mulai dari tanggal '+res.data.data.started_date+' hingga '+res.data.data.expired_date+'!') {
-            return this.$swal({
-              text: 'Paket Anda '+nm_paket+' telah OTOMATIS Aktif mulai dari tanggal '+res.data.data.started_date+' hingga '+res.data.data.expired_date+'!',
-              showCancelButton: false,
-              confirmButtonText: "OK",
-              type: "warning",
-              allowOutsideClick : false,
-              allowEscapeKey: false,
-            }).then(res => {
-              console.log(res.value)
-              if (res.value) {
-
-              }
-            });
+                }
+              });
+            }
           }
         } catch (err) {
           // console.log(err);

@@ -522,106 +522,10 @@
       };
     },
     async mounted() {
-      await this.checkPaket();
-      if(this.checkPaketData != ''){
-        if(this.checkPaketData.data.paket_id === 1) {
-            var nm_paket = "Trial"
-          }else if (this.checkPaketData.data.paket_id === 2) {
-            var nm_paket = "Starter"
-          }else if (this.checkPaketData.data.paket_id === 3) {
-            var nm_paket = "Essential"
-          }else {
-            var nm_paket = "Premium"
-          }
-           if(this.checkPaketData.message === 'Anda belum melakukan pembelian paket apapun'){
-           this.$swal({
-              text: this.checkPaketData.message,
-              type: "warning",
-              confirmButtonText: startCase("ya"),
-              allowOutsideClick : false,
-              showCancelButton: false,
-              allowEnterKey: false,
-           }).then(res => {
-           const {
-             value
-           } = res;
-           if (value) {
-              this.beingSubmit = true;
-             this.$router.push(`/subskripsi`);
-           }
-         })
-        } else if (this.checkPaketData.message === 'Paket Anda '+nm_paket+' telah OTOMATIS Aktif mulai dari tanggal '+this.checkPaketData.data.started_date+' hingga '+this.checkPaketData.data.expired_date+'!') {
-          this.$swal({
-              text: this.checkPaketData.message,
-              type: "warning",
-              allowOutsideClick : false,
-              showCancelButton: false,
-              confirmButtonText: startCase("ya")
-           });
-            this.formBasicData = this.setFormBasicData();
-            this.formData = this.setFormData();
-            this.getProvince();
-        }
-         else if(this.checkPaketData.message === 'Paket Anda telah berakhir, silahkan lakukan pembelian Paket untuk dapat melakukan aktivitas ini.'){
-          this.$swal({
-              text: this.checkPaketData.message,
-              type: "warning",
-              allowOutsideClick : false,
-              showCancelButton: false,
-              allowEnterKey: false,
-              confirmButtonText: startCase("ya")
-           }).then(res => {
-           const {
-             value
-           } = res;
-           if (value) {
-              this.beingSubmit = true;
-             this.$router.push(`/subskripsi`);
-           }
-         })
-        }
-        else if(this.checkPaketData.message === 'Masa Berlaku Paket Anda telah berakhir, silahkan lakukan pembelian untuk dapat melakukan aktivitas ini.')
-        {
-           this.$swal({
-              text: this.checkPaketData.message,
-              type: "warning",
-              confirmButtonText: startCase("ya"),
-              allowOutsideClick : false,
-              showCancelButton: false,
-              allowEnterKey: false,
-           }).then(res => {
-           const {
-             value
-           } = res;
-           if (value) {
-              this.beingSubmit = true;
-             this.$router.push(`/subskripsi`);
-           }
-         })
-        } else if (this.checkPaketData.message === 'Kuota Anda telah habis, silahkan lakukan pembelian Paket untuk dapat melakukan aktivitas ini.')
-        {
-          this.$swal({
-              text: this.checkPaketData.message,
-              type: "warning",
-              confirmButtonText: startCase("ya"),
-              allowOutsideClick : false,
-              showCancelButton: false,
-              allowEnterKey: false,
-           }).then(res => {
-           const {
-             value
-           } = res;
-           if (value) {
-              this.beingSubmit = true;
-             this.$router.push(`/subskripsi`);
-           }
-         });
-        }
-      } else { 
+          await this.cekPaket();
           this.formBasicData = this.setFormBasicData();
           this.formData = this.setFormData();
           this.getProvince();
-        }
       // Promise.all([this.fetchDokter()]);
     },
     computed: {
@@ -633,14 +537,129 @@
       },
     },
     methods: {
-      async checkPaket(){
-       try {
-        const res = await axios.get(`${this.url_api}/cekPaket`);
-        this.checkPaketData = res.data
-       } catch {
+      async cekPaket() {
+        try {
+          const res = await axios.get(
+            `${this.url_api}/cekPaket`
+          );
 
-       }
-     },
+          //Kuota habis, masa berlaku masih ada, belum beli paket.
+          if (res.data.message === 'Kuota Anda telah habis, silahkan lakukan pembelian Paket untuk dapat melakukan aktivitas ini.') {
+            return this.$swal({
+              text: "Kuota Anda telah habis, silahkan lakukan pembelian Paket untuk dapat melakukan aktivitas ini.",
+              showCancelButton: false,
+              confirmButtonText: "OK",
+              type: "warning",
+              allowOutsideClick : false,
+              allowEscapeKey: false,
+            }).then(res => {
+              console.log(res.value)
+              if (res.value) {
+                this.beingSubmit = true;
+                this.$router.push(`/subskripsi`);
+              }
+            });
+          }
+          //Kuota habis, masa berlaku habis, belum beli paket
+          if (res.data.message === 'Paket Anda telah berakhir, silahkan lakukan pembelian Paket untuk dapat melakukan aktivitas ini.') {
+            return this.$swal({
+              text: "Paket Anda telah berakhir, silahkan lakukan pembelian Paket untuk dapat melakukan aktivitas ini.",
+              showCancelButton: false,
+              confirmButtonText: "OK",
+              type: "warning",
+              allowOutsideClick : false,
+              allowEscapeKey: false,
+            }).then(res => {
+              console.log(res.value)
+              if (res.value) {
+                this.beingSubmit = true;
+                this.$router.push(`/subskripsi`);
+              }
+            });
+          }
+          //Kuota masih ada, masa berlaku habis (kuota hangus), belum beli paket.
+          if (res.data.message === 'Masa Berlaku Paket Anda telah berakhir, silahkan lakukan pembelian untuk dapat melakukan aktivitas ini.') {
+            return this.$swal({
+              text: "Masa Berlaku Paket Anda telah berakhir, silahkan lakukan pembelian untuk dapat melakukan aktivitas ini.",
+              showCancelButton: false,
+              confirmButtonText: "OK",
+              type: "warning",
+              allowOutsideClick : false,
+              allowEscapeKey: false,
+            }).then(res => {
+              console.log(res.value)
+              if (res.value) {
+                this.beingSubmit = true;
+                this.$router.push(`/subskripsi`);
+              }
+            });
+          }
+          //Saat inisiasi, memilih ‘beli paket’, lalu ketika statusnya sedang menunggu pembayaran, dia ingin akses menu lain.
+          if (res.data.message === 'Silahkan selesaikan proses Pembayaran Paket Anda untuk dapat melakukan aktivitas ini.') {
+            return this.$swal({
+              text: "Silahkan selesaikan proses Pembayaran Paket Anda untuk dapat melakukan aktivitas ini.",
+              showCancelButton: false,
+              confirmButtonText: "OK",
+              type: "warning",
+              allowOutsideClick : false,
+              allowEscapeKey: false,
+            }).then(res => {
+              console.log(res.value)
+              if (res.value) {
+                this.beingSubmit = true;
+                this.$router.push(`/subskripsi`);
+              }
+            });
+          }
+          //saat blum ada paket satupun
+          if (res.data.message === 'Anda belum melakukan pembelian paket apapun') {
+            return this.$swal({
+              text: "Anda tidak memiliki paket apapun, silahkan lakukan pembelian untuk dapat melakukan aktivitas ini.",
+              showCancelButton: false,
+              confirmButtonText: "OK",
+              type: "warning",
+              allowOutsideClick : false,
+              allowEscapeKey: false,
+            }).then(res => {
+              console.log(res.value)
+              if (res.value) {
+                this.beingSubmit = true;
+                this.$router.push(`/subskripsi`);
+              }
+            });
+          }
+
+          if(res.data !== null) {
+            if(res.data.data.paket_id === 1) {
+              var nm_paket = "Trial"
+            }else if (res.data.data.paket_id === 2) {
+              var nm_paket = "Starter"
+            }else if (res.data.data.paket_id === 3) {
+              var nm_paket = "Essential"
+            }else {
+              var nm_paket = "Premium"
+            }
+          }
+          //Kuota habis, masa berlaku masih ada/tidakada, sudah beli paket.
+          if (res.data.message === 'Paket Anda '+nm_paket+' telah OTOMATIS Aktif mulai dari tanggal '+res.data.data.started_date+' hingga '+res.data.data.expired_date+'!') {
+            return this.$swal({
+              text: 'Paket Anda '+nm_paket+' telah OTOMATIS Aktif mulai dari tanggal '+res.data.data.started_date+' hingga '+res.data.data.expired_date+'!',
+              showCancelButton: false,
+              confirmButtonText: "OK",
+              type: "warning",
+              allowOutsideClick : false,
+              allowEscapeKey: false,
+            }).then(res => {
+              console.log(res.value)
+              if (res.value) {
+                this.beingSubmit = true;
+              }
+            });
+          }
+        } catch (err) {
+          // console.log(err);
+        }
+      },
       checkNIK() {
         clearTimeout(this.timeVerifyNIK)
         this.timeVerifyNIK = setTimeout(async () => {
