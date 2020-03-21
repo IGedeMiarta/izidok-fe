@@ -10,6 +10,19 @@
           active: true
         }
       ]" />
+    <template v-if="this.adaTagihan === true">
+    <div>
+      <div class="container-fluid">
+        <div class="row justify-content-center">
+          <div class="col-md-12  text-center" style="font-size:16px;">
+              <div class="card-body bg-sunny-morning">
+                <strong style="color:black;">Anda masih memiliki tagihan yang belum terbayar. Klik <button @click="goto('ScrollActivate')" style="color: #3b86ff; border: 0px; background: transparent" ><strong>DISINI</strong></button> untuk melihat lebih lanjut</strong>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </template>
     <div class="app-content--inner p-0 d-flex flex-column">
       <div class="container-fluid">
         <div class="row justify-content-center">
@@ -274,7 +287,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-12">
+          <div ref="ScrollActivate" class="col-md-12">
             <div class="card card-box mb-2 mt-3" style="border-radius:0px;">
               <div class="card-body">
                 <div class="col-md-12 text-center">
@@ -512,6 +525,7 @@
         checkDataInvoice : [],
         belumAktif : [],
         searchValue: [],
+        adaTagihan : false,
         detail : null,
         totalEntries: 0,
         sortBy: "",
@@ -616,6 +630,13 @@
       }
     },
     methods: {
+      goto(refName){
+          var element = this.$refs[refName];
+          console.log(element);
+          var top = element.offsetTop;
+          window.scrollTo(0, top);
+
+      },
       async checkBilling(){
         try {
            const res = await axios.get(
@@ -786,6 +807,10 @@
               ...listRiwayatPembelian.map((item, index) => {
                 if(item.tanggal_bayar === null){
                   item.tanggal_bayar = tglBayar
+                }
+                if(item.status === 0) {
+                  this.adaTagihan = true
+                  console.log("asdasd",this.adaTagihan)
                 }
                 return {
                   ...item,
