@@ -205,7 +205,7 @@
               label: "Jumlah (Rp)"
             },
 
-          ] | > (z => g({
+          ] |> (z => g({
             field: z
           }))
         );
