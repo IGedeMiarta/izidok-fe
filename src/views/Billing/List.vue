@@ -82,7 +82,7 @@
                             </template>
                             <template v-if="dataActive.message !== 'package not found'">
                               <template v-if="dataActive.data.pembelian === null">: -</template>
-                              <template v-else><label>: {{moment(dataActive.data.pembelian).format('Do MMMM YYYY kk:mm:ss ') }}</label></template>
+                              <template v-else><label>: {{convertDate(dataActive.data.pembelian)}}</label></template>
                             </template>
                           </div>
                           <div class="col-md-2">
@@ -93,7 +93,7 @@
                               <label>: -</label>
                             </template>
                             <template v-if="dataActive.message !== 'package not found'">
-                              <label>: {{ moment(dataActive.data.mulai_berlaku).format('Do MMMM YYYY kk:mm:ss ')}}</label>
+                              <label>: {{ convertDate(dataActive.data.mulai_berlaku)}}</label>
                             </template>
                           </div>
                           <div class="col-md-2">
@@ -104,7 +104,7 @@
                               <label>: -</label>
                             </template>
                             <template v-if="dataActive.message !== 'package not found'">
-                              <label>: {{dataActive.data.habis_berlaku}}</label>
+                              <label>: {{convertDate(dataActive.data.habis_berlaku)}}</label>
                             </template>
                           </div>
                         </div>
@@ -177,7 +177,7 @@
                           <td class="text-wrap">
                             <div class="align-box-row">
                               <div class="d-flex align-items-center">
-                                <span> {{ data.waktu_pembelian == null ? "-" : moment(data.waktu_pembelian).format('Do MMMM YYYY kk:mm:ss ')  }}</span>
+                                <span> {{ data.waktu_pembelian == null ? "-" : convertDate(data.waktu_pembelian) }}</span>
                               </div>
                             </div>
                           </td>
@@ -238,7 +238,7 @@
                           <td class="text-wrap">
                             <div class="align-box-row">
                               <div class="d-flex align-items-center">
-                                <span>{{ moment(data.waktu_pembelian).format('Do MMMM YYYY kk:mm:ss ')  }} </span>
+                                <span>{{ convertDate(data.waktu_pembelian)}} </span>
                               </div>
                             </div>
                           </td>
@@ -427,13 +427,13 @@
               </div>
               <div class="col-md-12">
                 <label class="float-left"><strong>Tanggal Pembelian :</strong> {{
-                  moment(dataDetailRiwayatPembelian.detail.transactionDate).format('Do MMMM YYYY')
+                  convertDateWithoutTime(dataDetailRiwayatPembelian.detail.transactionDate)
                   }}</label>
               </div>
               <div class="col-md-12">
                 <div class="col-sm- text-center" >
                   <label style="background-color:#ded5d5;padding-left:50px; padding-right:50px; " class="text-danger mt-3 mb-3">Bayar Sebelum {{
-                    moment(dataDetailRiwayatPembelian.detail.transactionExpire).format('Do MMMM YYYY kk:mm:ss ')
+                    convertDate(dataDetailRiwayatPembelian.detail.transactionExpire)
                     }}</label>
                 </div>
               </div>
@@ -630,12 +630,17 @@
       }
     },
     methods: {
+      convertDate(val){
+        return moment(val).format('DD MMMM YYYY HH:mm:ss ') 
+      },
+      convertDateWithoutTime(val){
+        return moment(val).format('DD MMMM YYYY') 
+      },
       goto(refName){
           var element = this.$refs[refName];
           console.log(element);
           var top = element.offsetTop;
           window.scrollTo(0, top);
-
       },
       async checkBilling(){
         try {
@@ -643,13 +648,9 @@
             `${this.url_api}/billing/package-unpaid`
           );
           this.checkDataInvoice = res.data;
-          console.log(this.checkDataInvoice);
         } catch {
           
         }
-      },
-      moment(){
-        return moment();
       },
       async cekPaket() {
         try {
