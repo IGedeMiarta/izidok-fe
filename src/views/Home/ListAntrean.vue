@@ -59,7 +59,7 @@
         </template>
       </template>
       <template v-slot:cell(action)="data">
-        <div class="d-flex flex-row justify-content-between">
+        <div class="d-flex flex-row">
           <b-button
             size="sm"
             class="mx-1"
