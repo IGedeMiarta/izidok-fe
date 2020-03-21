@@ -140,7 +140,8 @@
                                       </template>
                                       <template v-else-if="this.statusPotongan === 'percent' ">
                                         {{
-                                         (((dataDetail.harga * (lama_langganan-2)) + (dataPaygetDetail.biaya_admin)) - (((dataDetail.harga * (lama_langganan-2)) + (dataPaygetDetail.biaya_admin)) * (potongan/100))).toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")
+                                         (( (dataDetail.harga * (lama_langganan-2)) + (dataPaygetDetail.biaya_admin)) - 
+                                         (((dataDetail.harga * (lama_langganan-2))) * (potongan/100))).toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")
                                         }}
                                       </template>
                                       <template v-else>
@@ -156,7 +157,8 @@
                                       </template>
                                       <template v-else-if="this.statusPotongan === 'percent' ">
                                         {{
-                                          ((dataDetail.harga * lama_langganan + dataPaygetDetail.biaya_admin) -(dataDetail.harga * lama_langganan + dataPaygetDetail.biaya_admin)*(potongan/100)).toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")
+                                          ((dataDetail.harga * lama_langganan + dataPaygetDetail.biaya_admin) -
+                                          ((dataDetail.harga * lama_langganan)*(potongan/100))).toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")
                                           }}
                                       </template>
                                       <template v-else>
@@ -293,7 +295,6 @@
       },
       async prosesBayar() {
         try {
-
           if (this.lama_langganan === "12") {
             if (this.statusPotongan === 'rupiah') {
               this.total_bayar = (this.dataDetail.harga * (this.lama_langganan - 2))-this.potongan;
@@ -301,11 +302,10 @@
               // this.hasilPromo =
             } else if (this.statusPotongan === 'percent') {
               this.total_bayar = 
-              ( (this.dataDetail.harga * (this.lama_langganan - 2)))-
-              (((this.dataDetail.harga * (this.lama_langganan - 2))) * (
-                this.potongan / 100));
+              ((this.dataDetail.harga * (this.lama_langganan - 2))) -
+              (((this.dataDetail.harga * (this.lama_langganan - 2))) * 
+              (this.potongan / 100));
               this.real_amount = (this.dataDetail.harga * (this.lama_langganan - 2));
-                console.log('total',this.total_bayar)
             } else {
               this.total_bayar = (this.dataDetail.harga * (this.lama_langganan - 2));
               this.real_amount = (this.dataDetail.harga * (this.lama_langganan - 2) );
@@ -316,15 +316,14 @@
               this.real_amount = (this.dataDetail.harga * this.lama_langganan);
               // this.hasilPromo =
             } else if (this.statusPotongan === 'percent') {
-              this.total_bayar = ((this.dataDetail.harga * this.lama_langganan + this.dataPaygetDetail.biaya_admin) - (this.dataDetail.harga * this.lama_langganan + this.dataPaygetDetail.biaya_admin) * (
-                this.potongan / 100));
+              this.total_bayar = ((this.dataDetail.harga * this.lama_langganan) -
+               (this.dataDetail.harga * this.lama_langganan) * (this.potongan / 100));
               this.real_amount = (this.dataDetail.harga * this.lama_langganan);
             } else {
               this.total_bayar = (this.dataDetail.harga * this.lama_langganan );
               this.real_amount = (this.dataDetail.harga * this.lama_langganan );
             }
           }
-
           const res = await axios.post(`${this.url_api}/subscribe`, {
             pg_id: this.dataPaygetDetail.id,
             promo_id: this.id_promo,
@@ -333,10 +332,8 @@
             amount_real: this.real_amount,
             paket_bln: this.lama_langganan,
           })
-          console.log(res);
           if (res.data.status) {
             this.billing_id = res.data.billing_id;
-            console.log('bill', this.billing_id);
             this.$router.push({
               name: 'subskripsi-bayar',
               params: {
@@ -359,7 +356,6 @@
         axios.get(`${this.url_api}/paygate/${getdet}`)
           .then(res => {
             this.dataPaygetDetail = res.data.data
-            console.log(this.dataPaygetDetail)
           });
       },
       fetchDetailPaket() {
