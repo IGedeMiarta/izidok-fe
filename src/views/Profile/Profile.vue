@@ -294,7 +294,6 @@
             type: "warning",
             confirmButtonText: startCase("ya")
           });
-
           return;
         }
         if (this.dataProfile.nomor_telp.length <10 || this.dataProfile.nomor_telp.length >15) {
@@ -305,7 +304,6 @@
             type: "warning",
             confirmButtonText: startCase("ya")
           });
-
           return;
         }
         if (this.validasiNotelp === 'phone is already in use!' && this.dataProfile.nomor_telp !== this.nohpBefore) {
@@ -316,11 +314,8 @@
             type: "warning",
             confirmButtonText: startCase("ya")
           });
-
           return;
         }
-
-
         try {
           var profile = this.$store.state.user.id;
           const res = await axios.put(`${this.url_api}/user/${profile}`, {
