@@ -87,7 +87,7 @@
                   {{dataPaygetDetail.paygate.biaya_admin.toFixed().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.")}}</strong>
               </b-col>
               <b-col sm="7" class="mt-3">
-              <strong>Subtotal (Rp) : 
+              <strong>Subtotal (Rp)  
                  </strong>
             </b-col>
              <b-col sm="1" class="mt-3 p-0">
