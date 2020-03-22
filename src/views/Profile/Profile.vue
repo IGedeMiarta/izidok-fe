@@ -70,7 +70,7 @@
                   <label>No. Handphone</label>
                   <label style="color:red"> *</label>
                   <b-form-input v-model="dataProfile.nomor_telp"
-                                @input="cekValueNotelp(dataProfile.nomor_telp) "  :disabled="btnDisable == true" >
+                                @input="cekValueNotelp(dataProfile.nomor_telp)" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')" :disabled="btnDisable == true" :maxlength="15">
                   </b-form-input>
                   <template v-if="dataProfile.nomor_telp.length < 10">
                     <label style="color: red">Nomor telepon minimal 10 karakter</label>
