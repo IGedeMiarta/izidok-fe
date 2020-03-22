@@ -34,12 +34,16 @@
             </div>
             <div class="row mt-3">
               <div class="col-md-6">
-                <b-form-group label-for="input-1">
+                <b-form-group  novalidate="true" label-for="input-1">
                   <label>Nama Dokter</label>
                   <label style="color:red"> *</label>
                   <b-form-input v-model="dataProfile.nama" maxlength="50" :disabled="btnDisable == true" id="input-1"
-                    type="text" required>
+                                type="text" required>
                   </b-form-input>
+                  <template v-if="dataProfile.nama === ''">
+                    <label style="color: red">Nama Dokter harus diisi</label>
+                  </template>
+
                 </b-form-group>
                 <b-form-group :state="getDataError({ rawLabel: 'jenis kelamin' })" :invalid-feedback="
                   renderInvalidFeedback({
@@ -59,15 +63,28 @@
                   " class="text-capitalize" :options="[
                     { text: 'laki-laki', value: 1 },
                     { text: 'perempuan', value: 0 }
-                  ]" :disabled="btnDisable == true" :checked="getValue('jenis kelamin')">
+                  ]" :disabled="btnDisable == true"  :checked="getValue('jenis kelamin')">
                   </b-form-radio-group>
                 </b-form-group>
-                <b-form-group label-for="input-1">
+                <b-form-group >
                   <label>No. Handphone</label>
                   <label style="color:red"> *</label>
-                  <b-form-input v-model="dataProfile.nomor_telp" maxlength="15" :disabled="btnDisable == true"
-                    id="input-1" type="text" required>
+                  <b-form-input v-model="dataProfile.nomor_telp"
+                                @input="cekValueNotelp(dataProfile.nomor_telp) "  :disabled="btnDisable == true" >
                   </b-form-input>
+                  <template v-if="dataProfile.nomor_telp.length < 10">
+                    <label style="color: red">Nomor telepon minimal 10 karakter</label>
+                  </template>
+                  <template v-else-if="dataProfile.nomor_telp.length > 15">
+                    <label style="color: red">Nomor telepon maksimal 15 karakter</label>
+                  </template>
+                  <template v-else-if="this.validasiNotelp === 'phone is already in use!' && this.dataProfile.nomor_telp !== this.nohpBefore">
+                    <label style="color: red">Nomor telepon sudah digunakan</label>
+                  </template>
+                  <template v-else-if="btnDisable == false && this.validasiNotelp !== 'phone is already in use!' && this.inChange === true ">
+                    <label style="color: #1bc943">Nomor telepon dapat digunakan</label>
+                  </template>
+
                 </b-form-group>
                 <b-form-group label="Email" label-for="input-1">
                   <b-form-input v-model="dataProfile.email" disabled type="email" required />
@@ -132,6 +149,7 @@
   import PictureInput from 'vue-picture-input'
   import startCase from "lodash/startCase";
   import axios from 'axios'
+  import {email, maxLength, minLength, numeric, required} from "vuelidate/lib/validators";
   export default {
     components: {
       PictureInput,
@@ -139,7 +157,11 @@
     },
     data: () => {
       return {
-        dataProfile: [],
+        errors: [],
+        validasiNotelp:null,
+        dataProfile:[],
+        inChange: false,
+        nohpBefore: null,
         btnDisable: true,
         imageProps: {
           width: 75,
@@ -162,6 +184,31 @@
       this.cekPaket();
     },
     methods: {
+      cekValueNotelp(ceknotelp) {
+        if (ceknotelp.length < 15 && ceknotelp.length > 8) {
+          this.inChange = true;
+          if (this.timeVerifyPhone) clearTimeout(this.timeVerifyPhone)
+          return new Promise((resolve, reject) => {
+            this.timeVerifyPhone = setTimeout(() => {
+              axios.get(`${this.url_api}/phone/verify?nomor_telp=${ceknotelp}`)
+                .then(res => {
+                  const {
+                    data: {
+                      status,
+                      message
+                    }
+                  } = res;
+                  this.validasiNotelp = res.data.message
+                  resolve(status);
+                })
+                .catch(err => {
+
+                },)
+              resolve(true);
+            });
+          }, 5000);
+        }
+      },
       async cekPaket() {
         try {
           const res = await axios.get(
@@ -204,6 +251,7 @@
           var profile = this.$store.state.user.id
           const res = await axios.get(`${this.url_api}/user/${profile}`)
           this.dataProfile = res.data.data;
+          this.nohpBefore = this.dataProfile.nomor_telp
           
           this.provinces.forEach(prov => {
             if(prov.id == this.dataProfile.klinik.provinsi) {
@@ -236,6 +284,43 @@
         return this.formType === "detail";
       },
       async updateProses() {
+        this.errors = [];
+
+        if (!this.dataProfile.nama || !this.dataProfile.nomor_telp ) {
+          this.errors.push("Nama Dokter harus diisi!");
+          this.$swal({
+            title: "Gagal",
+            text: `Silahkan lengkapi seluruh kolom!`,
+            type: "warning",
+            confirmButtonText: startCase("ya")
+          });
+
+          return;
+        }
+        if (this.dataProfile.nomor_telp.length <10 || this.dataProfile.nomor_telp.length >15) {
+          this.errors.push("Nama Dokter harus diisi!");
+          this.$swal({
+            title: "Gagal",
+            text: `Silahkan lengkapi seluruh kolom!`,
+            type: "warning",
+            confirmButtonText: startCase("ya")
+          });
+
+          return;
+        }
+        if (this.validasiNotelp === 'phone is already in use!' && this.dataProfile.nomor_telp !== this.nohpBefore) {
+          this.errors.push("Nama Dokter harus diisi!");
+          this.$swal({
+            title: "Gagal",
+            text: `Silahkan lengkapi seluruh kolom!`,
+            type: "warning",
+            confirmButtonText: startCase("ya")
+          });
+
+          return;
+        }
+
+
         try {
           var profile = this.$store.state.user.id;
           const res = await axios.put(`${this.url_api}/user/${profile}`, {
@@ -248,10 +333,18 @@
             alamat: this.dataProfile.klinik.alamat,
           })
           if (res.data.status) {
+            this.inChange === false
             this.$swal({
               type: "success",
               title: startCase("Simpan Profil"),
               text: startCase("Simpan Profil berhasil.")
+            });
+          }else{
+            this.$swal({
+              title: "Gagal",
+              text: `Silahkan lengkapi seluruh kolom!`,
+              type: "failed",
+              confirmButtonText: startCase("ya")
             });
           }
           this.btnDisable = true;
