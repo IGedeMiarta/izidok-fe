@@ -343,7 +343,9 @@
             status,
             data
           } = res.data;
+          axios.get(`${this.url_api}/user/finish`)
           this.beingSubmit = true;
+          this.setUserFirstLogin(0);
           this.$router.push({
             path: "pilih-paket"
           });
