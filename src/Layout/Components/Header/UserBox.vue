@@ -4,7 +4,7 @@
       <div class="d-block p-0 avatar-icon-wrapper">
         <span class="badge badge-circle badge-success p-top-a">Online</span>
         <div class="avatar-icon rounded">
-          <template v-if="dataProfile.foto_profile === ''">
+          <template v-if="dataProfile.foto_profile === null">
             <img src="@/assets/img/avatars/avatar3.jpg" alt="" />
           </template>
           <template v-else>
@@ -230,7 +230,7 @@
           var profile = this.$store.state.user.id
           const res = await axios.get(`${this.url_api}/user/${profile}`)
           this.dataProfile = res.data.data;
-
+          console.log(this.dataProfile.foto_profile)
         } catch (e) {
 
         }
