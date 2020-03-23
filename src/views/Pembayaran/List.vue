@@ -122,7 +122,8 @@
         } = this;
         const r = val => Boolean(/(no|actions)\b/gi.test(val) ? !1 : 1);
         return (
-          [{
+          [
+            {
               key: "no"
             },
             {
@@ -372,6 +373,7 @@
               ...tmpData.map((item, index) => {
                 return {
                   id: item.id,
+                  no: (this.currentPage - 1) * this.perPage + index + 1,
                   status: item.status,
                   nama: item.nama,
                   nomor_rekam_medis: item.nomor_rekam_medis,
