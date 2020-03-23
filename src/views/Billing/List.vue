@@ -252,14 +252,14 @@
                            <td class="text-wrap">
                             <div class="align-box-row">
                                 <span class="d-block">
-                                  {{ data.mulai_berlaku }}
+                                  {{ convertDateWithoutTime(data.mulai_berlaku) }}
                                 </span>
                             </div>
                           </td>
                             <td class="text-wrap">
                             <div class="align-box-row">
                                 <span class="d-block">
-                                  {{ data.habis_berlaku }}
+                                  {{ convertDateWithoutTime(data.habis_berlaku) }}
                                 </span>
                             </div>
                           </td>
@@ -680,7 +680,9 @@
               }).then(res => {
                 console.log(res.value)
                 if (res.value) {
-
+                  this.fetchListExpired();
+                  this.fetchListNotActive();
+                  this.fetchActive();
                 }
               });
             }

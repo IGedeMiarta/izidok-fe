@@ -354,22 +354,7 @@ export default {
           `${this.url_api}/cekPaket`
         );
 
-        //Kuota habis, masa berlaku masih ada, belum beli paket.
-        if (res.data.message === 'Kuota Anda telah habis, silahkan lakukan pembelian Paket untuk dapat melakukan aktivitas ini.') {
-          return this.$swal({
-            text: "Kuota Anda telah habis, silahkan lakukan pembelian Paket untuk dapat melakukan aktivitas ini.",
-            showCancelButton: false,
-            confirmButtonText: "OK",
-            type: "warning",
-            allowOutsideClick : false,
-            allowEscapeKey: false,
-          }).then(res => {
-            console.log(res.value)
-            if (res.value) {
-              this.$router.push(`/subskripsi`);
-            }
-          });
-        }
+
         //Kuota habis, masa berlaku habis, belum beli paket
         if (res.data.message === 'Paket Anda telah berakhir, silahkan lakukan pembelian Paket untuk dapat melakukan aktivitas ini.') {
           return this.$swal({

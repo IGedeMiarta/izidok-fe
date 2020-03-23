@@ -6,28 +6,27 @@
         <div class="card card-box mb-5">
           <div class="card-body">
             <b-row class="d-flex align-items-center">
-              <b-col cols="12">
+              <b-col sm="12">
                 <strong>Contoh :</strong>
                 <b-row class="d-flex align-items-center mb-4">
-                  <b-col cols="4" class="text-capitalize">nama layanan</b-col>
-                  <b-col cols="3" class="text-capitalize">kode layanan</b-col>
-                  <b-col cols="3" class="text-capitalize">tarif layanan</b-col>
+                  <b-col sm="4" class="text-capitalize">nama layanan</b-col>
+                  <b-col sm="3" class="text-capitalize">kode layanan</b-col>
+                  <b-col sm="3" class="text-capitalize">tarif layanan</b-col>
                 </b-row>
               </b-col>
             </b-row>
-            <b-row class="d-flex align-items-center mb-3">
+            <b-row class="d-flex align-items-center">
               <b-col sm="12">
                 <b-row class="d-flex align-items-center mb-4" style="margin-top: -10px;">
-
-                  <b-col cols="4" class="text-capitalize">
+                  <b-col sm="4" class="text-capitalize mb-3">
                     <b-form-input value="Pemeriksaan EKG" disabled>
                     </b-form-input>
                   </b-col>
-                  <b-col cols="3" class="text-capitalize">
+                  <b-col sm="3" class="text-capitalize mb-3">
                     <b-form-input value="A001" disabled>
                     </b-form-input>
                   </b-col>
-                  <b-col cols="3" class="text-capitalize">
+                  <b-col sm="3" class="text-capitalize mb-3">
                     <b-form-input value="Rp. 75,000" class=" text-right" disabled />
                   </b-col>
                 </b-row>
