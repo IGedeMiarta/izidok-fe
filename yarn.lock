@@ -10424,10 +10424,10 @@ vue-select@3.1.0:
   resolved "https://registry.yarnpkg.com/vue-select/-/vue-select-3.1.0.tgz#ccebbc17e48f1e3be5f082224a0c45ceb07b8551"
   integrity sha512-DDC4W3s/wLlJ/oeR7tqwaN+Fw9CXQc4zNnOD8Lr8J2cyWgQOWnHuYAUvpGrWIt7PRea4jSu6quixEv5yTInpuQ==
 
-vue-sidebar-menu@3.10.0:
-  version "3.10.0"
-  resolved "https://registry.yarnpkg.com/vue-sidebar-menu/-/vue-sidebar-menu-3.10.0.tgz#19903ee69cfbe1840edd12eaeba57c80a50764f9"
-  integrity sha512-bd6bWFW3TlUBBr1lVZRw56fgcxmx+MxBRpzP1cC4DPpRXp+66ZDSNGtVajp6gnHRnJu1s6gqhEC12WTp6RYeMQ==
+vue-sidebar-menu@3.12.2:
+  version "3.12.2"
+  resolved "https://registry.yarnpkg.com/vue-sidebar-menu/-/vue-sidebar-menu-3.12.2.tgz#48411c62e13d076179955a8908d27cc0cb486522"
+  integrity sha512-DxxvsXHrpg2e/BUf8ihak5N5keTPns97GMNL9N7VMF9yVvQFK7I0nCIYmDF7HlVO8Sz6AcQEONrEwVxE8PklVw==
   dependencies:
     vue "^2.5.21"
 
