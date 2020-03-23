@@ -83,7 +83,10 @@
             size="sm"
             class="mx-1"
             variant="danger"
-            @click="updateStatusAntrean(data.item.id)"
+            @click="pembatalanAntrean({
+                            id: data.item.id,
+                            namaPasien: data.item.nama
+                          })"
             v-tooltip="'Hapus Antrean'" 
             v-if="data.item.status !== 'KONSULTASI'"
           >
@@ -152,6 +155,7 @@ import {
   faTrashAlt
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import startCase from "lodash/startCase";
 
 library.add(faSearch, faSignInAlt, faTrashAlt);
 
@@ -260,14 +264,42 @@ export default {
         }
       }, 1000);
     },
-    async updateStatusAntrean(id) {
+    async pembatalanAntrean({
+                                namaPasien = null,
+                                id
+                              } = {}) {
+      this.$swal({
+        title: startCase("pembatalan antrean"),
+        text: `Apakah antrean pasien ${namaPasien} benar akan dibatalkan?`,
+        type: "question",
+        showCancelButton: true,
+        cancelButtonText: startCase("tidak"),
+        confirmButtonText: startCase("ya")
+      }).then(res => {
+        const {
+          value
+        } = res;
+        if (value) {
+          this.updateStatusAntrean("batal", id);
+        }
+      });
+    },
+    async updateStatusAntrean(antreanStatus, id) {
       try {
-        const antreanStatus = "batal";
         const res = await axios.put(`${this.url_api}/transaksi/${id}`, {
           status: antreanStatus.toUpperCase()
         });
-        const { status, data, message } = res.data;
+        const {
+          status,
+          data,
+          message
+        } = res.data;
         if (status) {
+          this.$swal({
+            type: "success",
+            title: startCase("sukses hapus antrean"),
+            text: `Antrean pasien sudah dibatalkan.`,
+          });
           this.fetchData();
         } else {
           this.$swal({
@@ -275,7 +307,8 @@ export default {
             type: "warning"
           });
         }
-      } catch (err) {}
+      } catch (err) {
+      }
     },
     async fetchData() {
       try {
