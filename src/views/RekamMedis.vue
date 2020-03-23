@@ -329,6 +329,10 @@ export default {
           // if (!this.saving_params.is_agree) {
           //   return this.handleError("Anda belum menyetujui pernyataan!");
           // }
+          if (!this.saving_params.is_email_format) {
+            return this.handleError("Silahkan lengkapi Email Pengingat!");
+
+          }
 
           if (!this.saving_params.is_saved) {
             this.validate();

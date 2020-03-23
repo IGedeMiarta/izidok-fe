@@ -850,7 +850,7 @@
       },
       async getPasienData() {
          this.idPasien = this.$router.currentRoute.params.idPasien;
-          try {
+            try {
             const res = await axios.get(
               `${this.url_api}/pasien/${this.idPasien}`,
               this.idPasien

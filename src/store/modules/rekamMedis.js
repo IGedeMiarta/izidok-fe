@@ -21,6 +21,7 @@ const getDefaultState = () => {
             is_agree: false,
             is_next_konsul: false,
             is_kuotanotnull: false,
+            is_email_format: true,
         }
     }
 };
@@ -135,6 +136,25 @@ const actions = {
             return;
         }
 
+      if (state.saving_params['is_email_format'] === false) {
+        commit('setIsSaving', { key: 'is_email', value: false });
+        return;
+      }
+
+      //
+      // if (!state.postData['email_pengingat']) {
+      //   commit('setIsSaving', { key: 'is_email_format', value: false });
+      //   return;
+      // }
+      // if (this.saving_params.is_email_format === false) {
+      //   return this.$swal({
+      //     type: "error",
+      //     title: "Oops...",
+      //     text: 'Silahkan lengkapi Email Pengingat!'
+      //   });
+      // }
+
+
       // email
     //   if (!state.postData['email_konsultasi']) {
     //     commit('setIsSaving', { key: 'is_email', value: false });
@@ -145,7 +165,10 @@ const actions = {
 
         // process send to backend
         try {
-            commit('setIsSaving', { key: 'is_saving', value: true });
+
+
+
+          commit('setIsSaving', { key: 'is_saving', value: true });
 
             const res = await axios.post(
                 store.state.URL_API + "/rekam_medis",

@@ -128,6 +128,7 @@
   import {faCalendar, faInfoCircle
   } from "@fortawesome/free-solid-svg-icons";
   import { ToggleButton } from 'vue-js-toggle-button'
+  import axios from "axios";
   library.add(faCalendar,faInfoCircle);
   export default {
     components: {
@@ -186,7 +187,6 @@
       };
     },
     computed: {
-      ...mapGetters(["pasien"]),
       minimumDatetime() {
         return moment().format("YYYY-MM-DD");
       },
@@ -195,8 +195,7 @@
       }
     },
     mounted() {
-      this.pasienEmail = this.pasien.email;
-
+      this.getEmail();
       this.selectedRadio = {
         label: 'Tidak perlu konsul lanjutan',
         value: 99
@@ -223,6 +222,25 @@
       customFormatter(date) {
         return moment(date).format('dd MMM yyyy');
 
+      },
+      async getEmail() {
+        this.idPasien = this.$router.currentRoute.params.pasien_id;
+        try {
+          const res = await axios.get(
+            `${this.url_api}/pasien/${this.idPasien}`,
+            this.idPasien
+          );
+          const {
+            status,
+            data
+          } = res.data;
+          if (status) {
+            this.pasienEmail = res.data.data.email
+          }
+        } catch (err) {
+          console.log(err);
+          // alert(err)
+        }
       },
       tanggalSelected($event) {
         if (this.hari == 1 && $event) {
@@ -278,7 +296,23 @@
         });
       },
       validateEmail(email) {
-        if(email == '' || email == null || email == undefined) {
+
+          if(email == '' || email == null || email == undefined && this.pengingatvalue === true) {
+
+            this.pasienEmailError.state = false;
+            this.pasienEmailError.message = 'Email Tidak Boleh Kosong';
+            this.updateSavingParams({
+              key: 'is_email',
+              value: false
+            });
+
+            this.updateSavingParams({
+              key: 'is_email_format',
+              value: false
+            });
+          }
+        else if(email == '' || email == null || email == undefined) {
+
           // this.pasienEmailError.state = false;
           // this.pasienEmailError.message = 'Email Tidak Boleh Kosong';
           this.updateSavingParams({
@@ -308,10 +342,10 @@
         else {
           this.pasienEmailError.state = false;
           this.pasienEmailError.message = 'Format Email Tidak Sesuai';
-          
+
           this.updateSavingParams({
             key: 'is_email',
-            value: true
+            value: false
           });
 
           this.updateSavingParams({
@@ -362,6 +396,10 @@
         if(newVal === false) {
           this.updateSavingParams({
             key: 'is_email',
+            value: true
+          });
+          this.updateSavingParams({
+            key: 'is_email_format',
             value: true
           });
         }
