@@ -57,7 +57,10 @@ import axios from 'axios';
     beforeMount() {
       this.setInitPage(this.getInitiationPosition == "" ? false : true)
 
-      if (!this.sidebarCollapsed) {
+      if(this.isMobile()) {
+        this.collapseSidebar(false);
+      }
+      else if (!this.sidebarCollapsed) {
         this.collapseSidebar(true);
       }
     },
