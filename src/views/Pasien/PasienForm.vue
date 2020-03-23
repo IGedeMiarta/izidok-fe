@@ -608,7 +608,7 @@
   export default {
     components: {
       Datetime,
-      "vue-select": () => import("@/components/VueSelect.vue")
+      "vue-select": () => import("@/components/VueSelectDaftarPasien.vue")
     },
     props: {
       formType: {
