@@ -608,17 +608,17 @@
             {
               key: "tanggal_bayar",
               label: "Tanggal Bayar",
-              thStyle: "width: 13%",
+              thStyle: "width: 15%",
               class: ""
             },
             {
               key: "status_text",
               label: "status",
-              thStyle: "width: 15%",
+              thStyle: "width: 13%",
             },
             {
               key: "actions",
-              thStyle: "width: 12%"
+              thStyle: "width: 14%"
             },
           ] |> (v => s({
             field: v,
