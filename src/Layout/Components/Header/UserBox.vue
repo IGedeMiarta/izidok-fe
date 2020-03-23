@@ -15,7 +15,7 @@
       </div>
       <div class="d-none d-md-block pl-2">
         <div class="font-weight-bold">
-          {{ userName }}
+          {{ dataProfile.nama }}
         </div>
         <span class="text-black-50">
           <template v-if="userRole == 'Operator'">
