@@ -6,7 +6,7 @@
           <div class="flex-grow-1 w-100 d-flex align-items-center">
             <div class="container-fluid">
               <div class="row">
-                <div class="col-md-6 pl-0 d-none d-lg-flex align-items-center">
+                <div class="col-md-6 pl-0 d-lg-flex align-items-center">
                   <div class="wrap" :style="wrapStyle">
                     <img src="@/assets/img/forgot.jpg" :style="wrapImgStyle" alt="initial page izidok" />
                   </div>
