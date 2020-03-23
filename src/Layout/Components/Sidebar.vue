@@ -28,14 +28,16 @@
       </button>
     </div> -->
     <div class="sidebar-navigation">
-      <div class="nav-logo w-100 text-center my-4">
-        <router-link tag="a" class="d-block w-auto" active-class="active" to="/" exact>
-          <b-img center fluid-grow :src="require('@/assets/izidok.png')" alt="izidok" class="py-0 px-4" />
-        </router-link>
-      </div>
-      <VuePerfectScrollbar class="scroll-area">
-        <sidebar-menu :disableHover="initPage" showOneChild :menu="dataMenu" />
-      </VuePerfectScrollbar>
+      <sidebar-menu :disableHover="initPage" :menu="dataMenu">
+        <div slot="header">
+          <div class="nav-logo w-100 text-center my-4">
+            <router-link tag="a" class="d-block w-auto" active-class="active" to="/" exact>
+              <b-img center fluid-grow :src="require('@/assets/izidok.png')" alt="izidok" class="py-0 px-4" />
+            </router-link>
+          </div>
+        </div>
+        <div slot="dropdown-icon" style="font-size:1.4em;">&gt;</div>
+      </sidebar-menu>
     </div>
   </div>
 </template>
@@ -47,7 +49,7 @@
   import {
     SidebarMenu
   } from "vue-sidebar-menu";
-  import VuePerfectScrollbar from 'vue-perfect-scrollbar'
+  // import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 
   import {
     library
@@ -85,7 +87,7 @@
   export default {
     components: {
       SidebarMenu,
-      VuePerfectScrollbar: () => import("vue-perfect-scrollbar")
+      // VuePerfectScrollbar: () => import("vue-perfect-scrollbar")
     },
     props: {
       sidebarbg: String
@@ -258,3 +260,14 @@
     }
   };
 </script>
+
+<style lang="scss">
+.app-sidebar {
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  .vsm-arrow:after {
+    content: "" !important;
+  }
+}
+</style>
