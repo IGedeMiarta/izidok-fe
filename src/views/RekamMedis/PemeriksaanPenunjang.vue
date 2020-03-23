@@ -289,7 +289,7 @@ export default {
         if(i == 3 || this.selectedFiles.length == 3){
           this.$swal({
             type: "error",
-            title: "File Telah Mencapai Batas Maximal",
+            title: "File Telah Mencapai Batas Maksimal",
             text:
               "Anda hanya bisa mengunggah 3 file dalam 1x visit pasien!"
           });
