@@ -18,8 +18,7 @@
           </div>
           <div class="col-sm-3">
             <b-button class="text-uppercase" style="font-size:14.5px;float:right" v-b-modal.modal-1 variant="primary">
-              Tambah Pasien
-              Baru</b-button>
+              Tambah Pasien Baru</b-button>
           </div>
         </div>
         <div class="card-body">
@@ -290,6 +289,14 @@
               </b-form-input>
             </b-form-group>
           </div>
+          <div class="col-sm-12">
+            <b-form-group label="hubungan dengan pasien" class="text-capitalize">
+            <vue-select :options="
+                ['Suami/Istri', 'Orangtua', 'Kakak/Adik', 'Anak', 'Lainnya']
+              "  v-model="formDataRegister.hubungan_pasien" />
+          </b-form-group>
+          </div>
+          <div class="col-sm-12">
           <b-button class="ml-3 text-uppercase" variant="success" style="font-size:17.5px;float:right " type="submit">
             simpan
           </b-button>
@@ -297,6 +304,7 @@
             @click='closeModal'>
             Batal
           </b-button>
+          </div>
         </b-form>
       </b-modal>
     </div>
@@ -477,7 +485,8 @@
         status_perkawinan: null,
         golongan_darah: null,
         jenis_identitas: null,
-        nik: null
+        nik: null,
+        hubungan_pasien : null
       },
       provinces: [],
       checkPaketData :null,
@@ -738,7 +747,8 @@
                 status_perkawinan: "",
                 golongan_darah: "",
                 jenis_identitas: "",
-                nik: ""
+                nik: "",
+                hubungan_pasien: ""
               }
             this.$refs['modal-pasien'].hide()
           } else {
@@ -770,7 +780,8 @@
               status_perkawinan: "",
               golongan_darah: "",
               jenis_identitas: "",
-              nik: ""
+              nik: "",
+              hubungan_pasien: ""
             }
             this.$refs['modal-pasien'].hide()
           } else {
@@ -856,7 +867,8 @@
             status_perkawinan: "",
             golongan_darah: "",
             jenis_identitas: "",
-            nik: ""
+            nik: "",
+            hubungan_pasien: ""
           }
           let pasien = {
             id: res.data.data.id,
