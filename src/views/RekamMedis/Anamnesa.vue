@@ -95,7 +95,7 @@
       </div>
       <div class="col-md-12" v-show="isHidden">
         <label></label>
-        <Editor v-on:update-content="updateContent" />
+        <Editor v-on:update-content="updateContent" :editorContent="pasien.anamnesa"/>
       </div>
     </div>
   </div>
@@ -126,6 +126,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["pasien"]),
     canvas() {
       return this.$refs.canvas;
     }

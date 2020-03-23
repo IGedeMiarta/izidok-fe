@@ -3,7 +3,7 @@
         <quill-editor ref="myTextEditor"
                       v-model="content"
                       :options="editorOption"
-                      style="height: 300px; margin-bottom:50px">
+                      style="height: 300px; margin-bottom:50px" :value="content">
         </quill-editor>
         <!-- <button @click="save">save</button> -->
     </div>
