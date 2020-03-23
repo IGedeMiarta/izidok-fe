@@ -137,8 +137,8 @@
                     <!--                      </div>-->
                     <!--                    </div>-->
                   </div>
-                  <div class="col-md-9 mt-2">
-                    <button  @click="$router.push('/subskripsi/pilih-paket')" class="btn btn-primary float-right mt-3" style="width:60%">Beli Paket Berlangganan</button>
+                  <div class="col-md-6 mt-2">
+                    <button  @click="$router.push('/subskripsi/pilih-paket')" class="btn btn-primary mt-3">Beli Paket Berlangganan</button>
                   </div>
                   <!--                  <div class="col-md-6">-->
                   <!--                    <button class="btn float-left mt-3" style="background-color:#de51d9;color:white;width:60%">Beli-->

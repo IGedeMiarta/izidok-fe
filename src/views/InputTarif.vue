@@ -9,16 +9,16 @@
               <b-col sm="12">
                 <strong>Contoh :</strong>
                 <b-row class="d-flex align-items-center mb-4">
-                  <b-col sm="4" class="text-capitalize">nama layanan</b-col>
+                  <b-col lg="5" sm="4" class="text-capitalize">nama layanan</b-col>
                   <b-col sm="3" class="text-capitalize">kode layanan</b-col>
-                  <b-col sm="3" class="text-capitalize">tarif layanan</b-col>
+                  <b-col lg="3" sm="4" class="text-capitalize">tarif layanan</b-col>
                 </b-row>
               </b-col>
             </b-row>
             <b-row class="d-flex align-items-center">
               <b-col sm="12">
                 <b-row class="d-flex align-items-center mb-4" style="margin-top: -10px;">
-                  <b-col sm="4" class="text-capitalize mb-3">
+                  <b-col lg="5" sm="4" class="text-capitalize mb-3">
                     <b-form-input value="Pemeriksaan EKG" disabled>
                     </b-form-input>
                   </b-col>
@@ -26,7 +26,7 @@
                     <b-form-input value="A001" disabled>
                     </b-form-input>
                   </b-col>
-                  <b-col sm="3" class="text-capitalize mb-3">
+                  <b-col lg="3" sm="4" class="text-capitalize mb-3">
                     <b-form-input value="Rp. 75,000" class=" text-right" disabled />
                   </b-col>
                 </b-row>
@@ -36,13 +36,13 @@
               <b-row class="d-flex align-items-center">
                 <b-col sm="12">
                   <b-row class="d-flex align-items-center mb-4">
-                    <b-col sm="4" class="text-capitalize">nama layanan</b-col>
+                    <b-col lg="5" sm="4" class="text-capitalize">nama layanan</b-col>
                     <b-col sm="3" class="text-capitalize">kode layanan</b-col>
-                    <b-col sm="3" class="text-capitalize">tarif layanan</b-col>
+                    <b-col lg="3" sm="4" class="text-capitalize">tarif layanan</b-col>
                   </b-row>
                   <b-row class="d-flex align-items-center mb-3" v-for="(inputTarif, index) in tmpInputTarifData"
                     :key="inputTarif.id">
-                    <b-col sm="4">
+                    <b-col lg="5" sm="4">
                       <div role="group">
                         <b-form-input :value="inputTarif.nama_layanan" @change="
                             onChangeValue({
@@ -93,7 +93,7 @@
                         </b-form-invalid-feedback>
                       </div>
                     </b-col>
-                    <b-col sm="3">
+                    <b-col lg="3" sm="4">
                       <div role="group">
                         <b-form-input v-model.lazy="inputTarif.tarif_layanan" v-money="money"
                           :state="errorState({ label: 'tarif_layanan', index })"
@@ -107,8 +107,8 @@
                         </b-form-invalid-feedback>
                       </div>
                     </b-col>
-                    <b-col sm="2" v-if="index > 1">
-                      <b-button variant="danger" style="padding: .5rem .8rem; border-radius: 100%"
+                    <b-col sm="1" v-if="index > 1" style="height: 62px">
+                      <b-button variant="danger" :style="btnRemoveMobileStyle"
                         @click="removeInputTarifData(index)">
                         <font-awesome-icon icon="minus" />
                       </b-button>
@@ -117,7 +117,7 @@
                 </b-col>
               </b-row>
               <b-row class="d-flex align-items-center">
-                <b-col sm="10">
+                <b-col lg="10" sm="9">
                   <div class="d-flex justify-content-center">
                     <b-button variant="first" style="padding: .5rem .8rem; border-radius: 100%"
                       @click="addInputTarifData">
@@ -125,7 +125,7 @@
                     </b-button>
                   </div>
                 </b-col>
-                <b-col sm="2">
+                <b-col lg="2" sm="3" align="right">
                   <b-button class="text-capitalize" type="submit" variant="primary">simpan</b-button>
                 </b-col>
               </b-row>
@@ -199,7 +199,22 @@
       }
     },
     computed: {
-      ...mapGetters(["getKlinikId"])
+      ...mapGetters(["getKlinikId"]),
+      btnRemoveMobileStyle() {
+        if(this.isMobile()) {
+          return {
+            "padding": ".4rem .7rem",
+            "border-radius": "100%",
+            "margin-left": "-22px"
+          }
+        }
+
+        return {
+          "padding": ".5rem .8rem",
+          "border-radius": "100%",
+            "margin-left": "-8px"
+        }
+      }
     },
     mounted() {
       this.tmpInputTarifData = this.setTmpInputTarifData();
@@ -343,7 +358,9 @@
             status,
             data
           } = res.data;
+          axios.get(`${this.url_api}/user/finish`)
           this.beingSubmit = true;
+          this.setUserFirstLogin(0);
           this.$router.push({
             path: "pilih-paket"
           });

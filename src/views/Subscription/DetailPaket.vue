@@ -198,6 +198,7 @@
   } from "@fortawesome/free-solid-svg-icons";
   library.add(faCalendar, faInfoCircle);
   import moment from "moment";
+  import {mapMutations} from "vuex";
   import axios from 'axios';
   import {
     Money
@@ -280,6 +281,11 @@
       this.getPaygetDetail(ss);
     },
     methods: {
+      ...mapMutations({
+        collapseSidebar: "sidebar/SET_SIDEBAR_COLLAPSED",
+        setInitPage: "sidebar/SET_INITIALIZATION_PAGE",
+        setUserFirstLogin: "SET_USER_FIRST_LOGIN"
+      }),
       kembali(){
          this.$router.push({
               name: 'subskripsi-pilih-paket'});
@@ -329,6 +335,8 @@
               this.real_amount = (this.dataDetail.harga * this.lama_langganan );
             }
           }
+
+
           const res = await axios.post(`${this.url_api}/subscribe`, {
             pg_id: this.dataPaygetDetail.id,
             promo_id: this.id_promo,
@@ -338,6 +346,8 @@
             paket_bln: this.lama_langganan,
           })
           if (res.data.status) {
+            axios.get(`${this.url_api}/user/finish`)
+            this.setUserFirstLogin(0);
             this.billing_id = res.data.billing_id;
             this.$router.push({
               name: 'subskripsi-bayar',
@@ -346,6 +356,8 @@
               }
             });
           } else {
+            this.setInitPage(false);
+            this.setUserFirstLogin(0);
             this.$swal({
               title: startCase("Pembayaran Gagal"),
               text: `Pembayaran gagal dibuat`,
