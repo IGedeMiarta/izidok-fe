@@ -66,6 +66,14 @@
 <script>
   import startCase from "lodash/startCase";
   import axios from "axios";
+    import {
+    maxLength,
+    email,
+    numeric,
+    sameAs,
+    minLength,
+    required
+  } from "vuelidate/lib/validators";
   export default {
     data: () => {
       return {
@@ -74,6 +82,14 @@
         operator_id: null,
         beingSubmit: false,
         data_operator: null
+      }
+    },
+    validations: {
+      formData : {
+        nama_asisten: {
+            required,
+            maxLength: maxLength(50)
+        },
       }
     },
     beforeRouteLeave(to, from, next) {
@@ -218,9 +234,13 @@
             })
             this.beingSubmit = true;
             this.$router.push({name : 'operator-list'})
-          }
+          } 
         } catch (err) {
-          alert(err);
+           this.$swal({
+              text: 'Nama Asisten Harus diisi!',
+              type: "failed",
+              confirmButtonText: startCase("ya")
+            })
         }
       },
       setFormBasicData() {
