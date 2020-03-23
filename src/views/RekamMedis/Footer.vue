@@ -311,7 +311,7 @@
               value: false
             });
           }
-        else if(email == '' || email == null || email == undefined) {
+        else if(email == '' || email == null || email == undefined && this.pengingatvalue === false) {
 
           // this.pasienEmailError.state = false;
           // this.pasienEmailError.message = 'Email Tidak Boleh Kosong';
