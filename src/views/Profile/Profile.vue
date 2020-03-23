@@ -153,7 +153,7 @@
   export default {
     components: {
       PictureInput,
-      "vue-select": () => import("@/components/VueSelect.vue")
+      "vue-select": () => import("@/components/VueSelectClearable.vue")
     },
     data: () => {
       return {

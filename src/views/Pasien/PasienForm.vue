@@ -608,7 +608,7 @@
   export default {
     components: {
       Datetime,
-      "vue-select": () => import("@/components/VueSelectDaftarPasien.vue")
+      "vue-select": () => import("@/components/VueSelectClearable.vue")
     },
     props: {
       formType: {
