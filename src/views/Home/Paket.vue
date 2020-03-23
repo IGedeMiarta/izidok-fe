@@ -17,12 +17,6 @@
         {{ sisa_kouta }}
       </p>
       <p class="small text-capitalize">visite pasien tersisa</p>
-      <b-button
-        class="text-capitalize"
-        variant="primary"
-        :to="{ name: 'subskripsi' }"
-        >lebih lanjut</b-button
-      >
     </div>
   </div>
 </template>
