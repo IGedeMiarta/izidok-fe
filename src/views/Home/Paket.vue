@@ -17,13 +17,23 @@
         {{ sisa_kouta }}
       </p>
       <p class="small text-capitalize">visite pasien tersisa</p>
+      <template v-if="this.$store.state.user.roles[0].name === 'dokter_praktek' ">
+      <b-button
+        class="text-capitalize"
+        variant="primary"
+        :to="{ name: 'subskripsi' }"
+      >lebih lanjut</b-button>
+      </template>
     </div>
   </div>
 </template>
 
 <script>
+import startCase from "lodash/startCase";
+
 export default {
-  props: ["habis_berlaku", "paket", "sisa_hari", "sisa_kouta", "nama_paket"]
+  props: ["habis_berlaku", "paket", "sisa_hari", "sisa_kouta", "nama_paket"],
+  
 };
 </script>
 
