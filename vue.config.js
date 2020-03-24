@@ -1,8 +1,8 @@
 module.exports = {
     pwa: {
         name: 'izidok',
-        themeColor: '#8ec6ff',
-        msTileColor: '#d9ecff',
+        themeColor: '#eaeaea',
+        msTileColor: '#ffffff',
         appleMobileWebAppCapable: 'yes',
         appleMobileWebAppStatusBarStyle: 'black',
     
