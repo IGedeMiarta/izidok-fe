@@ -116,7 +116,20 @@
         />
       </b-col>
     </b-row>
-    <LaporanPendapatan />
+    <b-row>
+      <b-col sm="12">
+        <template v-if="isMobile()">
+          <div class="mt-5 text-center">
+            <b-link href="/laporan-pendapatan" class="btn btn-primary">
+              <font-awesome-icon icon="money-check-alt" /> Laporan Pendapatan
+            </b-link>
+          </div>
+        </template>
+        <template v-else>
+          <LaporanPendapatan />
+        </template>
+      </b-col>
+    </b-row>
     <!-- <div class="d-flex">
       <TrendPasien class="flex-grow-1 my-2" :seriesData="dataSeries" />
     </div> -->
@@ -126,6 +139,11 @@
 <script>
 import axios from "axios";
 import moment from "moment";
+
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { faMoneyCheckAlt } from "@fortawesome/free-solid-svg-icons";
+library.add(faMoneyCheckAlt);
 
 export default {
   name: "home",
