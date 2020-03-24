@@ -230,7 +230,7 @@
           this.$swal({
             type: "error",
             title: startCase("Gagal"),
-            text: startCase("Data Riwayat Rekam Medis tidak ditemukan!")
+            text: startCase(`Pasien ${res.data.data.nama} belum memiliki rekam medis!`)
           }).then(res => {
             if (res.value) {
               this.$router.push(`/rekam-medis`)

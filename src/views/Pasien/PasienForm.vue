@@ -731,7 +731,16 @@
           }
            ;
           if (this.$router.currentRoute.params.idPasien){
-            
+            let prov = this.cities[0].provinsi_id;
+            if(this.formType == 'edit'){
+              const {
+                id
+              } = this.tempat.provinsi;
+              if(id !== prov){
+                this.tempat.kota = null;
+                console.log('tes');
+              }
+            }
           }
           else if(this.cities[0].provinsi_id !== this.tempat.provinsi){
             this.tempat.kota = null;
