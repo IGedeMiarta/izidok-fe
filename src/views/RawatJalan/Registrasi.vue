@@ -734,6 +734,9 @@
               label: `${val.nama}`,
             }));
           }
+          if(this.cities[0].provinsi_id !== this.tempat.provinsi){
+            this.tempat.kota = null;
+          } 
         } catch (error) {
           console.error(error);
         }
@@ -893,6 +896,10 @@
             alamat_rumah: res.data.data.alamat_rumah,
             jenis_kelamin: res.data.data.jenis_kelamin,
             nomor_rekam_medis: res.data.data.nomor_rekam_medis,
+          }
+          this.tempat = {
+            kota : null,
+            provinsi : null,
           }
           this.beingSubmit = true;
           if (success) {
