@@ -30,7 +30,7 @@
         (no. rekam medis: {{ formData.nomor_rekam_medis }})
       </span>
     </h4>
-    <b-form v-on:submit.prevent="submitForm">
+    <b-form>
       <b-container>
         <b-row>
           <b-col sm="6">
@@ -407,7 +407,7 @@
           <b-col sm="6">
             <template v-if="formType !== 'detail'">
               <b-button class="ml-3 text-uppercase" variant="primary" style="font-size:17.5px;float:right "
-                type="submit">simpan
+                 @click="submitForm">simpan
                 <!-- <font-awesome-icon class="mx-auto" icon="caret-down" /> -->
               </b-button>
               <b-button @click="$emit('keluar', true)" class="text-uppercase" :variant="btnVariant()"
