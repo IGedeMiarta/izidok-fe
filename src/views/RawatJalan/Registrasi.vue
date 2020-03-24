@@ -11,13 +11,10 @@
     <b-container fluid>
       <div class="card card-box mb-5">
         <div class="card-header">
-          <div class="col-sm-4 float-left">
+          <div class="col-sm-7 float-left">
             <h4 class="text-capitalize my-2 ">form registrasi antrean</h4>
           </div>
           <div class="col-sm-5">
-
-          </div>
-          <div class="col-sm-3">
             <b-button class="text-uppercase" style="font-size:14.5px;float:right" v-b-modal.modal-1 variant="primary">
               Tambah Pasien Baru</b-button>
           </div>
@@ -26,7 +23,7 @@
           <b-form v-on:submit.prevent="submitForm">
             <template v-if="formBasicData && formBasicData.length">
               <b-row>
-                <b-col v-for="form in formBasicData" :sm="form.col" :key="form.tmpId">
+                <b-col v-for="form in formBasicData" :sm="form.col" :lg="form.colLg" :key="form.tmpId">
                   <b-form-group class="text-capitalize" :invalid-feedback="
                       renderInvalidFeedback({
                         validationDesc: form['validation-desc']
@@ -357,7 +354,8 @@
       label: "nama pasien",
       type: "select",
       isImportant: "*",
-      col: 5,
+      col: 12,
+      colLg: 5,
       validations: {
         required
       }
@@ -365,7 +363,8 @@
     {
       label: "no. rekam medis",
       type: "text",
-      col: 4,
+      col: 6,
+      colLg: 4,
       validations: {
         required,
         minLength: minLength(6)
@@ -374,7 +373,8 @@
     {
       label: "nomor handphone",
       type: "text",
-      col: 3,
+      col: 6,
+      colLg: 3,
       validations: {
         required,
         numeric,
@@ -385,6 +385,7 @@
       label: "jenis kelamin",
       type: "radio",
       col: 12,
+      colLg: 12,
       data: ["perempuan", "laki-laki"],
       isImportant: "*",
       validations: {
@@ -396,7 +397,7 @@
     //   label: "dokter",
     //   type: "select",
     //   isImportant: "*",
-    //   col: 6,
+    //   colLg: 6,
     //   validations: {
     //     required
     //   }
@@ -405,46 +406,52 @@
     {
       label: "tinggi badan",
       type: "text",
-      col: 2,
+      col: 4,
+      colLg: 2,
       satuan: '(cm)',
       validations: {}
     },
     {
       label: "berat badan",
       type: "text",
-      col: 2,
+      col: 4,
+      colLg: 2,
       satuan: '(kg)',
       validations: {}
     },
     {
       label: "suhu",
       type: "text",
-      col: 2,
+      col: 4,
+      colLg: 2,
       satuan: '(celcius)',
       validations: {}
     },
     {
       label: "sistole",
       type: "text",
-      col: 2,
+      col: 4,
+      colLg: 2,
       validations: {}
     },
     {
       label: "diastole",
       type: "text",
-      col: 2,
+      col: 4,
+      colLg: 2,
       validations: {}
     },
     {
       label: "nadi",
       type: "text",
-      col: 2,
+      col: 4,
+      colLg: 2,
       validations: {}
     },
     {
       label: "anamnesis",
       type: "textarea",
-      col: 12,
+      colLg: 12,
       validations: {}
     }
 
