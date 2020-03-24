@@ -731,14 +731,9 @@
           }
            ;
           if (this.$router.currentRoute.params.idPasien){
-            let prov = this.cities[0].provinsi_id;
             if(this.formType == 'edit'){
-              const {
-                id
-              } = this.tempat.provinsi;
-              if(id !== prov){
+              if(this.tempat.kota.provinsi_id !== this.tempat.provinsi.id){
                 this.tempat.kota = null;
-                console.log('tes');
               }
             }
           }
