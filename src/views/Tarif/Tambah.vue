@@ -23,75 +23,80 @@
                 <b-form @submit.prevent="submitInputTarif">
                   <b-row class="d-flex align-items-center">
                     <b-col sm="12">
+                      <b-row class="d-flex align-items-center mb-4">
+                        <b-col lg="5" sm="4" class="text-capitalize">nama layanan</b-col>
+                        <b-col sm="3" class="text-capitalize">kode layanan</b-col>
+                        <b-col lg="3" sm="4" class="text-capitalize">tarif layanan</b-col>
+                      </b-row>
                       <b-row class="d-flex align-items-center mb-3" v-for="(inputTarif, index) in tmpInputTarifData"
                         :key="inputTarif.id">
-                        <b-col sm="4">
-                          <label for="">Nama Layanan</label>
+                        <b-col lg="5" sm="4">
                           <div role="group">
-                            <b-form-input  :value="inputTarif.nama_layanan"
-                          @change="
-                            onChangeValue({
-                              label: 'nama_layanan',
-                              index,
-                              $event
-                            })
-                          "
-                          @input="
-                            onInputNamaLayanan(
-                              $event,
-                              index,
-                              inputTarif,
-                              'nama_layanan'
-                            )
-                          "
-                          :state="errorState({ label: 'nama_layanan', index })"
-                          :placeholder="placeholderInput('nama_layanan')"
-                          maxlength="50" ></b-form-input>
+                            <b-form-input :value="inputTarif.nama_layanan" @change="
+                                onChangeValue({
+                                  label: 'nama_layanan',
+                                  index,
+                                  $event
+                                })
+                              " @input="
+                                onInputNamaLayanan(
+                                  $event,
+                                  index,
+                                  inputTarif,
+                                  'nama_layanan'
+                                )
+                              " :state="errorState({ label: 'nama_layanan', index })"
+                              :placeholder="placeholderInput('nama_layanan')" maxlength="50">
+                            </b-form-input>
                             <b-form-invalid-feedback class="text-capitalize">
                               {{
-                            inputTarif.error &&
-                              inputTarif.error.nama_layanan.desc
-                          }}
-                            </b-form-invalid-feedback>
-                          </div>
-                        </b-col>
-                        <b-col sm="4">
-                          <label for="">Kode Layanan</label>
-                          <div role="group">
-                            <b-form-input :value="inputTarif.kode_layanan" @change="
-                            onChangeValue({
-                              label: 'kode_layanan',
-                              index,
-                              $event
-                            })
-                          " @input="onInputKode($event, index, inputTarif, 'kode_layanan')"
-                              :state="errorState({ label: 'kode_layanan', index })"
-                              :placeholder="placeholderInput('kode_layanan')" maxlength="5"></b-form-input>
-                            <b-form-invalid-feedback class="text-capitalize">
-                              {{
-                            inputTarif.error &&
-                              inputTarif.error.kode_layanan.desc
-                          }}
+                                inputTarif.error &&
+                                  inputTarif.error.nama_layanan.desc
+                              }}
                             </b-form-invalid-feedback>
                           </div>
                         </b-col>
                         <b-col sm="3">
-                          <label for="">Tarif Layanan</label>
                           <div role="group">
-                            <b-form-input v-model.lazy="inputTarif.tarif_layanan" v-money="money"
-                              :state="errorState({ label: 'tarif_layanan', index })"
-                              :placeholder="placeholderInput('tarif_layanan')" :maxlength="19" class="text-right">
-                            </b-form-input>
+                            <b-form-input :value="inputTarif.kode_layanan" @change="
+                                onChangeValue({
+                                  label: 'kode_layanan',
+                                  index,
+                                  $event
+                                })
+                              " @input="
+                                onInputKode(
+                                  $event,
+                                  index,
+                                  inputTarif,
+                                  'kode_layanan'
+                                )
+                              " :state="errorState({ label: 'kode_layanan', index })"
+                              :placeholder="placeholderInput('kode_layanan')" maxlength="5"></b-form-input>
                             <b-form-invalid-feedback class="text-capitalize">
                               {{
-                            inputTarif.error &&
-                              inputTarif.error.tarif_layanan.desc
-                          }}
+                                inputTarif.error &&
+                                  inputTarif.error.kode_layanan.desc
+                              }}
                             </b-form-invalid-feedback>
                           </div>
                         </b-col>
-                        <b-col sm="1" v-if="index > 0">
-                          <b-button variant="danger" style="padding: .5rem .8rem; border-radius: 100%"
+                        <b-col lg="3" sm="4">
+                          <div role="group">
+                            <b-form-input v-model.lazy="inputTarif.tarif_layanan" v-money="money"
+                              :state="errorState({ label: 'tarif_layanan', index })"
+                              :placeholder="placeholderInput('tarif_layanan')" maxlength="19" class="text-right">
+                            </b-form-input>
+                            <b-form-invalid-feedback class="text-capitalize">
+                              {{
+                                inputTarif.error &&
+                                  inputTarif.error.tarif_layanan.desc
+                              }}
+                            </b-form-invalid-feedback>
+                          </div>
+                        </b-col>
+                        <b-col sm="1" v-if="index > 0" style="height: 62px">
+                          <b-button variant="danger" :style="btnRemoveMobileStyle"
                             @click="removeInputTarifData(index)">
                             <font-awesome-icon icon="minus" />
                           </b-button>
@@ -100,7 +105,7 @@
                     </b-col>
                   </b-row>
                   <b-row class="d-flex align-items-center">
-                    <b-col sm="9">
+                    <b-col lg="8" md="7" sm="6">
                       <div class="d-flex justify-content-center">
                         <b-button variant="first" style="padding: .5rem .8rem; border-radius: 100%"
                           @click="addInputTarifData">
@@ -108,10 +113,9 @@
                         </b-button>
                       </div>
                     </b-col>
-                    <b-col sm="3">
-                      <b-button variant="danger" :to="{
-                        name: 'tarif-list'}">Keluar</b-button>
-                      <b-button class="text-capitalize float-right" type="submit" variant="primary">Simpan</b-button>
+                    <b-col lg="4" md="5" sm="6" align="right">
+                      <b-button class="text-capitalize mr-2" variant="danger" :to="{name: 'tarif-list'}">keluar</b-button>
+                      <b-button class="text-capitalize" type="submit" variant="primary">simpan</b-button>
                     </b-col>
                   </b-row>
                 </b-form>
@@ -172,6 +176,23 @@
       kodeLayananExistsInDb: [],
       namaLayananExistsInDb: [],
     }),
+    computed: {
+      btnRemoveMobileStyle() {
+        if(this.isMobile()) {
+          return {
+            "padding": ".4rem .7rem",
+            "border-radius": "100%",
+            "margin-left": "-22px"
+          }
+        }
+
+        return {
+          "padding": ".5rem .8rem",
+          "border-radius": "100%",
+            "margin-left": "-8px"
+        }
+      }
+    },
     beforeRouteLeave(to, from, next) {
       if (!this.beingSubmit) {
         this.$swal({
