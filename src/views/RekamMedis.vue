@@ -438,7 +438,7 @@ export default {
   transform: scale(1.3);
 }
 
-.active {
+.active_tool {
   color: #464159;
   transform: scale(1.3);
 }
