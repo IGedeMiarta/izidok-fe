@@ -14,7 +14,7 @@
       ]"
     />
 
-    <div class="container">
+    <div class="container-fluid">
       <div class="card card-box mb-3 ninja-shadow">
         <div class="card-body">
           <!-- <div class="row no-padding mb-3">

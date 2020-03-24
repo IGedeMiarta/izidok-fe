@@ -7,7 +7,8 @@
         },
         { label: 'registrasi', active: true }
       ]" />
-    <div class="container">
+
+    <b-container fluid>
       <div class="card card-box mb-5">
         <div class="card-header">
           <div class="col-sm-4 float-left">
@@ -322,7 +323,7 @@
           </div>
         </b-form>
       </b-modal>
-    </div>
+    </b-container>
   </div>
 </template>
 

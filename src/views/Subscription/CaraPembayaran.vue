@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="app-content--inner p-0 d-flex flex-column">
-      <div class="container">
+      <div class="container-fluid">
         <div class="row justify-content-center">
           <div class="col-md-12">
             <div class="card card-box mb-5">

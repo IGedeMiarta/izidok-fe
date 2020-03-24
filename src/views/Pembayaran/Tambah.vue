@@ -11,7 +11,7 @@
         }
       ]" />
 
-    <div class="container">
+    <div class="container-fluid">
       <div class="card card-box border-0">
         <div class="card-header border-0 py-4 px-5">
           <div class="d-flex flex-column w-100">
@@ -55,7 +55,7 @@
 
         <div class="card-footer">
           <div class="px-4 py-2 d-flex flex-row justify-content-end">
-            <b-container>
+            <b-container fluid>
               <b-row>
                 <b-col cols="6" offset="6">
                   <b-form-row class="d-flex align-items-center w-100 py-2">

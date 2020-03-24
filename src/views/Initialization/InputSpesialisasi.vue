@@ -2,7 +2,7 @@
   <div>
     <div class="app-content--inner p-0 d-flex flex-column">
       <page-title heading="Pilih Spesialisasi Anda" />
-      <div class="container">
+      <div class="container-fluid">
         <div class="card card-box mb-5">
           <div class="card-body">
             <template v-if="formBasicData && formBasicData.length">

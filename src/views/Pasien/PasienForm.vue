@@ -31,7 +31,7 @@
       </span>
     </h4>
     <b-form>
-      <b-container>
+      <b-container fluid>
         <b-row>
           <b-col sm="6">
             <b-form-group class="text-capitalize" style="position: relative"

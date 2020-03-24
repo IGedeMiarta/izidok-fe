@@ -4,7 +4,7 @@
       <form>
         <div class="form-row">
           <div class="form-group col-md-12">
-            <b-container class="bv-example-row">
+            <b-container fluid class="bv-example-row">
               <b-form-group>
                 <b-row>
                   <b-col class="col-md-4">
