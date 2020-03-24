@@ -229,45 +229,48 @@ export default {
         generateFieldList: g,
         setSearchableAndSortableFieldList: s
       } = this;
-      return (
-        [
-          {
-            key: "no"
-          },
-          {
-            key: "waktu_konsultasi",
-            label: "waktu konsultasi",
-            sortable: true
-          },
-          {
-            key: "nama",
-            label: "nama pasien",
-            sortable: true
-          },
-          {
-            key: "tanggal_lahir",
-            thStyle: "width: 150px",
-            sortable: true
-          },
-          {
-            key: "nomor_rekam_medis",
-            label: "no. rekam medis",
-            sortable: true
-          },
-          {
-            key: "diagnosis_icd_x",
-            thStyle: "width: 160px",
-            sortable: true
-          },
-          {
-            key: "jumlah_transaksi",
-            sortable: true
-          },
-          {
-            key: "actions",
-            thStyle: "width: 140px"
-          }
-        ] |>
+
+      const fields = [
+        {
+          key: "no"
+        },
+        {
+          key: "waktu_konsultasi",
+          label: "waktu konsultasi",
+          sortable: true
+        },
+        {
+          key: "nama",
+          label: "nama pasien",
+          sortable: true
+        },
+        {
+          key: "tanggal_lahir",
+          thStyle: "width: 150px",
+          sortable: true
+        },
+        {
+          key: "diagnosis_icd_x",
+          thStyle: "width: 160px",
+          sortable: true
+        },
+        {
+          key: "jumlah_transaksi",
+          sortable: true
+        },
+        {
+          key: "actions",
+          thStyle: "width: 140px"
+        }
+      ];
+
+      if(!this.isMobile()) fields.splice(4, 0, {
+        key: "nomor_rekam_medis",
+        label: "no. rekam medis",
+        sortable: true
+      })
+
+      return (fields |>
         // |> (v =>
         //   s({
         //     field: v,
