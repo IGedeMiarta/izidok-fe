@@ -29,7 +29,7 @@
         </div>
       </b-col>
     </b-row>
-    <b-row class="align-items-center">
+    <b-row class="align-items-center mb-2 mb-md-0">
       <b-col cols="12">
         <div class="d-flex justify-content-between">
           <div class="d-flex align-items-center w-100 mr-2">
@@ -48,7 +48,7 @@
               :goTo="{ name: 'antrean-rawat-jalan' }"
             />
           </div>
-          <div class="d-flex align-items-center w-100 mr-2">
+          <div class="d-md-flex align-items-center w-100 mr-2 d-sm-none">
             <CardDashboard
               title="no. antrean saat ini"
               :highlight="nomor_antrean"
@@ -56,7 +56,7 @@
               :goTo="{ name: 'antrean-rawat-jalan' }"
             />
           </div>
-          <div class="d-flex align-items-center w-100 mr-2">
+          <div class="d-flex align-items-center w-100">
             <CardDashboard
               title="jumlah pasien batal hari ini"
               :highlight="pasienBatalHariIni"
@@ -64,7 +64,38 @@
               :goTo="{ name: 'antrean-rawat-jalan' }"
             />
           </div>
-          <div class="d-flex align-items-center w-100">
+          <div class="d-md-flex align-items-center w-100 ml-2 d-sm-none">
+            <CardDashboard
+              title="total pendapatan hari ini"
+              :highlight="totalPendapatan"
+              bg-color="total-pendapatan-hari-ini"
+              :pointerHover="false"
+              :showArrow="false"
+            >
+              <template v-slot:highlight>
+                <p
+                  style="font-size: 1.5rem; font-weight: 700; word-break: break-word"
+                >
+                  {{ totalPendapatan }}
+                </p>
+              </template>
+            </CardDashboard>
+          </div>
+        </div>
+      </b-col>
+    </b-row>
+    <b-row class="align-items-center mb-5">
+      <b-col cols="12">
+        <div class="d-flex justify-content-between">
+          <div class="d-md-none align-items-center w-100 mr-2 d-sm-flex">
+            <CardDashboard
+              title="no. antrean saat ini"
+              :highlight="nomor_antrean"
+              bg-color="no-antrean-saat-ini"
+              :goTo="{ name: 'antrean-rawat-jalan' }"
+            />
+          </div>
+          <div class="d-md-none align-items-center w-100 d-sm-flex">
             <CardDashboard
               title="total pendapatan hari ini"
               :highlight="totalPendapatan"
