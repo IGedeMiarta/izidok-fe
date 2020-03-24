@@ -181,58 +181,36 @@
         <div class="card-body">
           <form role="form">
             <div class="form-row">
-              <template v-if="editData.priority !== 1">
-                <div class="form-group col-md-4">
-                  <label >Nama Layanan</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="nm_layanan"
-                    v-model.trim="editData.nama_layanan"
-                    @input="setNameLayanan($event.target.value)"
-                    @keypress="onKeypressNamaLayanan"
-                    :class="isError('nama_layanan')"
-                  />
-                  <template v-if="editData.nama_layanan === ''">
+              <div class="form-group col-md-12 col-lg-4">
+                <label >Nama Layanan</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="nm_layanan"
+                  v-model.trim="editData.nama_layanan"
+                  @input="setNameLayanan($event.target.value)"
+                  @keypress="onKeypressNamaLayanan"
+                  :class="isError('nama_layanan')"
+                  :disabled="editData.priority === 1"
+                />
+                <template v-if="editData.nama_layanan === ''">
+                  <b-form-invalid-feedback
+                    :force-show="true"
+                    class="text-capitalize"
+                  >
                     Nama layanan harus di isi
-                  </template>
-                  <template v-else-if="getErrorValidation('nama_layanan')">
-                    <b-form-invalid-feedback
-                      :force-show="true"
-                      class="text-capitalize"
-                    >
-                      {{ getErrorValidation("nama_layanan") }}
-                    </b-form-invalid-feedback>
-                  </template>
-                </div>
-              </template>
-              <template v-if="editData.priority === 1">
-                <div class="form-group col-md-4">
-                  <label >Nama Layanan</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="nm_layanan2"
-                    v-model.trim="editData.nama_layanan"
-                    @input="setNameLayanan($event.target.value)"
-                    @keypress="onKeypressNamaLayanan"
-                    disabled
-                    :class="isError('nama_layanan')"
-                  />
-                  <template v-if="editData.nama_layanan === ''">
-                    Nama layanan harus di isi
-                  </template>
-                  <template v-else-if="getErrorValidation('nama_layanan')">
-                    <b-form-invalid-feedback
-                      :force-show="true"
-                      class="text-capitalize"
-                    >
-                      {{ getErrorValidation("nama_layanan") }}
-                    </b-form-invalid-feedback>
-                  </template>
-                </div>
-              </template>
-              <div class="form-group col-md-3">
+                  </b-form-invalid-feedback>
+                </template>
+                <template v-else-if="getErrorValidation('nama_layanan')">
+                  <b-form-invalid-feedback
+                    :force-show="true"
+                    class="text-capitalize"
+                  >
+                    {{ getErrorValidation("nama_layanan") }}
+                  </b-form-invalid-feedback>
+                </template>
+              </div>
+              <div class="form-group col-md-6 col-lg-3">
                 <label >Kode Layanan</label>
                 <input
                   type="text"
@@ -273,9 +251,9 @@
                   </div>
                 </template>
               </div>
-              <div class="form-group col-md-3">
+              <div class="form-group col-md-6 col-lg-3">
                 <label >Tarif Layanan</label>
-                <b-input-group append="Rp.">
+                <b-input-group prepend="Rp.">
                   <b-form-input
                     v-model.lazy="editData.tarif"
                     v-money="money"
@@ -286,7 +264,7 @@
                   </b-form-input>
                 </b-input-group>
               </div>
-              <div class="form-group col-md-2" style="margin-top:30px;">
+              <div class="form-group col-md-12 col-lg-2" style="margin-top:30px;">
                 <b-button
                   variant="primary"
                   class="float-right"
