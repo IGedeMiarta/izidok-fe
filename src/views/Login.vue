@@ -76,7 +76,7 @@
                             <b-alert :show="isTooMuchFailed()" variant="danger">Anda telah gagal login terlalu banyak.
                             </b-alert>
                             <template>
-                              <router-link to="/forgot-password" style="margin-top : 15px;color:">Lupa
+                              <router-link to="/forgot-password" style="margin-top : 15px;">Lupa
                                 password?</router-link>
                             </template>
                             <button class="btn btn-lg btn-block mt-2 " :disabled="isTooMuchFailed()"

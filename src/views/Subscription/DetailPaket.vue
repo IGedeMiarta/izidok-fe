@@ -347,6 +347,7 @@
           })
           if (res.data.status) {
             axios.get(`${this.url_api}/user/finish`)
+            
             this.setUserFirstLogin(0);
             this.billing_id = res.data.billing_id;
             this.$router.push({
