@@ -284,6 +284,16 @@ export default {
     //on file selected handler
     async onFileSelected(event) {
       this.fileReaderPromises = [];
+      var a = document.getElementsByClassName("file-upload");
+      if ((a.length + event.target.files.length) > 3) {
+        this.$swal({
+          type: "error",
+          title: "File Telah Mencapai Batas Maksimal",
+          text:
+            "Anda hanya bisa mengunggah 3 file dalam 1x visit pasien!"
+        });
+        return;
+      }
 
       for (let i = 0; i < event.target.files.length; i++) {
         if(i == 3 || this.selectedFiles.length == 3){
