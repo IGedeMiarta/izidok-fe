@@ -187,13 +187,25 @@
             </b-form-group>
           </b-col>
           <b-col sm="6">
-            <b-form-group :label="renderLabel({ label: 'email' })" class="text-capitalize" style="position: relative;">
+            <b-form-group :label="renderLabel({ label: 'email' })" :invalid-feedback="
+            renderInvalidFeedback({
+              validationDesc: blindlyGetData({
+                rawLabel: 'email'
+              })
+            })
+          " :state="getDataError({ rawLabel: 'email' })" class="text-capitalize" style="position: relative;">
               <b-form-input @keyup="
               setValue({
                 rawLabel: 'email',
                 $event
               })
-            " :disabled="disabledForm()" :value="getValue('email')" :maxlength="30" />
+            " :disabled="disabledForm()" :value="getValue('email')" :maxlength="30" :invalid-feedback="
+            renderInvalidFeedback({
+              validationDesc: blindlyGetData({
+                rawLabel: 'email'
+              })
+            })
+          " />
             </b-form-group>
           </b-col>
           <b-col sm="2">
@@ -476,7 +488,9 @@
       label: "email",
       alias: "email",
       error: false,
-      validations: {}
+      validations: {
+        email
+      }
     },
     {
       label: "tanggal lahir",
