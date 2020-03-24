@@ -719,7 +719,8 @@
           var val;
           if (this.tempat.provinsi == '' || this.tempat.provinsi == null) {
             val = '';
-          } else {
+          } 
+           else {
             val = this.tempat.provinsi.id;
             const res = await axios.get(`${this.url_api}/getcitybyprovince/${val}`)
             // handle success
@@ -727,6 +728,13 @@
               ...val,
               label: `${val.nama}`,
             }));
+          }
+           ;
+          if (this.$router.currentRoute.params.idPasien){
+            
+          }
+          else if(this.cities[0].provinsi_id !== this.tempat.provinsi){
+            this.tempat.kota = null;
           }
         } catch (error) {
           console.error(error);
