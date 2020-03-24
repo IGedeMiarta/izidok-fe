@@ -329,11 +329,15 @@
           })
           if (res.data.status) {
             this.inChange === false
+
             this.$swal({
               type: "success",
               title: startCase("Simpan Profil"),
-              text: startCase("Simpan Profil berhasil.")
-            });
+              text: startCase("Simpan Profil berhasil."),
+            })
+            this.$router.go(`/profile`);
+
+
           }else{
             this.$swal({
               title: "Gagal",
