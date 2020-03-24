@@ -35,7 +35,17 @@
       target="userBoxPopover">
       <ul class="list-group list-group-flush text-left bg-transparent">
         <li class="list-group-item rounded-top">
-          <ul class="nav nav-pills nav-pills-hover flex-column text-capitalize">
+          <ul class="nav nav-pills nav-pills-hover flex-column">
+            <li class="d-block d-md-none font-weight-bold">{{ dataProfile.nama }}</li>
+            <li class="d-block d-md-none nav-item text-black-50">
+              <template v-if="userRole == 'Operator'">
+                Asisten Dokter
+              </template>
+              <template v-else>
+                {{ userRole }}
+              </template>
+            </li>
+            <li class="d-block d-md-none nav-item"><hr></li>
             <!-- <li
               class="nav-header d-flex text-primary pt-1 pb-2 font-weight-bold align-items-center"
             >
@@ -49,18 +59,18 @@
               </div>
             </li> -->
             <template v-if="userRole !== 'Operator'">
-              <li class="nav-item">
+              <li class="nav-item text-capitalize">
                 <a class="nav-link" href="javascript:void(0);" @click="pageProfile">
                   Account Setting
                 </a>
               </li>
             </template>
-            <li class="nav-item">
+            <li class="nav-item text-capitalize">
               <a class="nav-link" href="javascript:void(0);" @click="showModal">
                 ubah password
               </a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item text-capitalize">
               <a class="nav-link" href="javascript:void(0);" @click="logout">
                 log out
               </a>
