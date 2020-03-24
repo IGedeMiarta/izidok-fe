@@ -49,7 +49,6 @@
   import {
     SidebarMenu
   } from "vue-sidebar-menu";
-  // import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 
   import {
     library
@@ -86,8 +85,7 @@
 
   export default {
     components: {
-      SidebarMenu,
-      // VuePerfectScrollbar: () => import("vue-perfect-scrollbar")
+      SidebarMenu
     },
     props: {
       sidebarbg: String

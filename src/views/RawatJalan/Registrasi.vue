@@ -172,17 +172,32 @@
                 </b-form-group>
               </div>
               <div class="col-md-8">
+                <template v-if="this.formDataRegister['jenis_identitas'] !== '' && this.formDataRegister['jenis_identitas'] !== null">
                 <b-form-group label="No. identitas" class="text-capitalize" style="position: relative">
                   <b-form-input v-if="this.formDataRegister['jenis_identitas'] !== 'Paspor'"
                     v-model.trim="formDataRegister['nik']"
                     oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')" :maxlength="25"
-                    @keyup="checkNIK" />
+                    @keyup="checkNIK" required />
                   <b-form-input v-else :maxlength="25" type="text" v-model.trim="formDataRegister['nik']"
-                    @keyup="checkNIK" />
+                    @keyup="checkNIK"  required/>
                   <template v-if="this.$v.formDataRegister['nik'].error == true">
                     <label style="color:red">No. Identitas telah terdaftar</label>
                   </template>
                 </b-form-group>
+                </template>
+                 <template v-else-if="this.formDataRegister['jenis_identitas'] == null || this.formDataRegister['jenis_identitas'] == ''">
+                    <b-form-group label="No. identitas" class="text-capitalize" style="position: relative">
+                    <b-form-input v-if="this.formDataRegister['jenis_identitas'] !== 'Paspor'"
+                      v-model.trim="formDataRegister['nik']"
+                      oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')" :maxlength="25"
+                      @keyup="checkNIK" />
+                    <b-form-input v-else :maxlength="25" type="text" v-model.trim="formDataRegister['nik']"
+                      @keyup="checkNIK"  />
+                    <template v-if="this.$v.formDataRegister['nik'].error == true">
+                      <label style="color:red">No. Identitas telah terdaftar</label>
+                    </template>
+                  </b-form-group>
+                 </template>
               </div>
             </div>
           </div>
