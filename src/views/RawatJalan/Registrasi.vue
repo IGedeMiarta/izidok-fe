@@ -908,6 +908,7 @@
             this.options.nama_pasien = [eventVal]
             this.selectedPasien = eventVal;
             setTimeout(() => {
+              this.searchPasien(pasien, "nama_pasien");
               this.autoFill(pasien, "nama_pasien");
               this.setValue({
                 rawLabel: "nama pasien",
