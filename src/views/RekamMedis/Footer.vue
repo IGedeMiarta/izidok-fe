@@ -210,12 +210,13 @@
       });
       this.updatePostData({
         key: 'next_konsultasi',
-        value: 1
+        value: 99
       });
       this.updatePostData({
         key: 'tgl_next_konsultasi',
-        value: null
+        value: false
       });
+
     },
     methods: {
       ...mapActions(["updatePostData", "updateSavingParams"]),
@@ -243,13 +244,19 @@
         }
       },
       tanggalSelected($event) {
-        if (this.hari == 1 && $event) {
+        if ($event) {
           this.tgl_next_konsultasi = $event
+          console.log(this.tgl_next_konsultasi)
           this.updatePostData({
             key: 'tgl_next_konsultasi',
             value: this.tgl_next_konsultasi
           });
-          
+
+          this.updatePostData({
+            key: 'next_konsultasi',
+            value: '1'
+          });
+
           this.updateSavingParams({
             key: 'is_next_konsul',
             value: true
@@ -260,6 +267,15 @@
             key: 'is_next_konsul',
             value: false
           });
+          this.updatePostData({
+            key: 'tgl_next_konsultasi',
+            value: false
+          });
+          this.updatePostData({
+            key: 'next_konsultasi',
+            value: false
+          });
+
         }
       },
       handleError(message) {
@@ -280,11 +296,16 @@
       },
       selectingWaktu($event) {
         this.hari = $event.value
-        if (this.hari != 1) {
+        if (this.hari !== 1) {
           this.tgl_next_konsultasi =  this.hasil
           this.updatePostData({
             key: 'tgl_next_konsultasi',
             value: this.hasil
+          });
+        }else{
+          this.updatePostData({
+            key: 'tgl_next_konsultasi',
+            value: false
           });
         }
       },
@@ -357,10 +378,16 @@
     },
     watch: {
       selectedRadio: function(newVal) {
-        if(newVal.value == 1) {
+
+        if(newVal.value === 1) {
           this.updateSavingParams({
             key: 'is_next_konsul',
             value: false
+          });
+          this.tgl_next_konsultasi = false
+          this.updateSavingParams({
+            key: 'tgl_next_konsultasi',
+            value: this.tgl_next_konsultasi
           });
         }
         else {
@@ -368,12 +395,12 @@
             key: 'is_next_konsul',
             value: true
           });
+          this.updatePostData({
+            key: 'next_konsultasi',
+            value: newVal.value
+          });
         }
-        
-        this.updatePostData({
-          key: 'next_konsultasi',
-          value: newVal.value
-        });
+
 
         if(newVal.value == 99) {
           this.pengingatvalue = false;
