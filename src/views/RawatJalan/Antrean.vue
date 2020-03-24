@@ -111,17 +111,23 @@
               </template>
 
               <template  v-slot:cell(status)="data" >
-                 <template v-if="data.value == 'MENUNGGU'">
-                     <b-button variant="warning" size="sm" style="font-size:13px;">{{data.value}}</b-button>
-                  </template>
-                  <template v-if="data.value == 'KONSULTASI'">
-                    <b-button variant="primary" size="sm" style="font-size:13px;">{{data.value}}
-                    </b-button>
-                  </template>
+                <b-badge
+                  variant="warning"
+                  v-if="data.value.toLowerCase() === 'menunggu'"
+                  style="background-color: #e6bf32"
+                  >{{ data.value }}</b-badge
+                >
+                <b-badge
+                  variant="warning"
+                  v-else-if="data.value.toLowerCase() === 'selesai'"
+                  style="background-color: #4e4e4b"
+                  >{{ data.value }}</b-badge
+                >
+                <b-badge variant="primary" v-else>{{ data.value }}</b-badge>
               </template>
               <template v-slot:cell(actions)="data">
                 <span>
-                  <b-dropdown id="dropdown-1" class="m-md-2 text-capitalize" variant="primary" size="sm" right>
+                  <b-dropdown id="dropdown-1" class="text-capitalize" variant="primary" size="sm" right>
                     <template v-slot:button-content>
                       <font-awesome-icon icon="copy" />
                     </template>

@@ -29,7 +29,7 @@
         </div>
       </b-col>
     </b-row>
-    <b-row class="align-items-center mb-2 mb-md-0">
+    <b-row class="align-items-center mb-2 mb-lg-0">
       <b-col cols="12">
         <div class="d-flex justify-content-between">
           <div class="d-flex align-items-center w-100 mr-2">
@@ -48,7 +48,7 @@
               :goTo="{ name: 'antrean-rawat-jalan' }"
             />
           </div>
-          <div class="d-md-flex align-items-center w-100 mr-2 d-sm-none">
+          <div class="d-lg-flex align-items-center w-100 mr-2 d-sm-none">
             <CardDashboard
               title="no. antrean saat ini"
               :highlight="nomor_antrean"
@@ -64,7 +64,7 @@
               :goTo="{ name: 'antrean-rawat-jalan' }"
             />
           </div>
-          <div class="d-md-flex align-items-center w-100 ml-2 d-sm-none">
+          <div class="d-lg-flex align-items-center w-100 ml-2 d-sm-none">
             <CardDashboard
               title="total pendapatan hari ini"
               :highlight="totalPendapatan"
@@ -87,7 +87,7 @@
     <b-row class="align-items-center mb-5">
       <b-col cols="12">
         <div class="d-flex justify-content-between">
-          <div class="d-md-none align-items-center w-100 mr-2 d-sm-flex">
+          <div class="d-lg-none align-items-center w-100 mr-2 d-sm-flex">
             <CardDashboard
               title="no. antrean saat ini"
               :highlight="nomor_antrean"
@@ -95,7 +95,7 @@
               :goTo="{ name: 'antrean-rawat-jalan' }"
             />
           </div>
-          <div class="d-md-none align-items-center w-100 d-sm-flex">
+          <div class="d-lg-none align-items-center w-100 d-sm-flex">
             <CardDashboard
               title="total pendapatan hari ini"
               :highlight="totalPendapatan"
