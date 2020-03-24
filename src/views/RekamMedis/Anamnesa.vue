@@ -95,7 +95,7 @@
       </div>
       <div class="col-md-12" v-show="isHidden">
         <label></label>
-        <Editor v-on:update-content="updateContent" :editorContent="pasien.anamnesa"/>
+        <Editor :editorContent="pasien.anamnesa" v-on:update-content="updateContent"/>
       </div>
     </div>
   </div>
