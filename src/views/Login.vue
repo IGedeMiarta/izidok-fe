@@ -255,7 +255,7 @@
             // not first join
             if (!this.firstJoin) {
               this.setInitPage(false)
-              this.$router.push('/');
+              this.$router.go('/');
             }
           } else if (status == false && message == 'Please check your email to activate user...') {
             this.$router.push({
