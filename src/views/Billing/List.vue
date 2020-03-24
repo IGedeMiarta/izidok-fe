@@ -12,7 +12,7 @@
       ]" />
     <template v-if="this.adaTagihan === true">
     <div>
-      <div class="container-fluid">
+    <div class="container-fluid">
         <div class="row justify-content-center">
           <div class="col-md-12  text-center" style="font-size:16px;">
               <div class="card-body bg-sunny-morning">
@@ -137,8 +137,11 @@
                     <!--                      </div>-->
                     <!--                    </div>-->
                   </div>
-                  <div class="col-md-6 mt-2">
-                    <button  @click="$router.push('/subskripsi/pilih-paket')" class="btn btn-primary mt-3">Beli Paket Berlangganan</button>
+                  
+                  <div class="col-md-12 mt-2">
+                    <center>
+                     <button  @click="$router.push('/subskripsi/pilih-paket')" class="btn btn-primary mt-3" style="width:35%;">Beli Paket Berlangganan</button>
+                    </center>
                   </div>
                   <!--                  <div class="col-md-6">-->
                   <!--                    <button class="btn float-left mt-3" style="background-color:#de51d9;color:white;width:60%">Beli-->
