@@ -83,7 +83,9 @@
           </div>
         </div>
       </b-col>
-      <b-col cols="9" class="align-self-start">
+    </b-row>
+    <b-row>
+      <b-col md="9" sm="12" class="align-self-start">
         <b-tabs content-class="pt-3 pb-2" lazy class="tab-izd-home">
           <b-tab title="List Antrean" active>
             <div slot="title">
@@ -104,7 +106,7 @@
           </b-col>
         </b-row> -->
       </b-col>
-      <b-col cols="3">
+      <b-col md="3" sm="12" class="paket-wrapper">
         <Paket
           :sisa_hari="paketAnda.sisa_hari"
           :habis_berlaku="paketAnda.habis_berlaku"
@@ -377,6 +379,34 @@ $bg-izd-home-alternate: #d6d6d6;
 
   &.total-pendapatan-hari-ini {
     background-image: bgImage("total-pendapatan");
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .card-dashboard {
+    background-size: 240% !important;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .card-dashboard {
+    background-size: 260% !important;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .card-dashboard {
+    background-size: 380% !important;
+  }
+
+  .paket-wrapper {
+    margin-top: 1rem !important;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .card-dashboard {
+    background-size: 800% !important;
   }
 }
 </style>
