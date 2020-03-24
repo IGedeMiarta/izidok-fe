@@ -132,9 +132,20 @@ const actions = {
 
         // next konsul
         if (!state.postData['next_konsultasi']) {
+
             commit('setIsSaving', { key: 'is_next_konsul', value: false });
             return;
         }
+      if (state.postData['tgl_next_konsultasi' === false]) {
+
+        commit('setIsSaving', { key: 'is_next_konsul', value: false });
+        return;
+      }
+
+      // if (state.postData['tgl_next_konsultasi'] === null) {
+      //   commit('setIsSaving', { key: 'tgl_next_konsultasi', value: false });
+      //   return;
+      // }
 
       if (state.saving_params['is_email_format'] === false) {
         commit('setIsSaving', { key: 'is_email', value: false });
