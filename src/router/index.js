@@ -280,6 +280,11 @@ const routes = [
       }
     ]
   },
+  {
+    path: "/laporan-pendapatan",
+    name: "laporan-pendapatan",
+    component: () => import("../views/LaporanPendapatanPage.vue")
+  },
 ];
 
 const router = new VueRouter({

@@ -1,178 +1,178 @@
 <template>
   <div class="mt-5 py-3 px-4 laporan-pendapatan-wrapper">
-    <header class="laporan-pendapatan-header">
-      <b-row>
-        <b-col cols="6">
-          <p>
-            Laporan Pendapatan
-          </p>
-          <b-row class="align-items-center mb-2">
-            <b-col cols="2"><p class="text-capitalize m-0">periode</p></b-col>
-            <b-col cols="4"
-              ><b-form-select
-                size="sm"
-                v-model="periodeSelected"
-                :options="filterPeriode"
-              ></b-form-select
-            ></b-col>
-            <b-col cols="6" v-if="selectedPeriodeRange">
-              <DatePicker
-                v-model="dateRange"
-                type="daterange"
-                range-separator="To"
-                start-placeholder="Start date"
-                end-placeholder="End date"
-                size="small"
-                format="dd-MM-yyyy"
-                value-format="dd-MM-yyyy"
-                :disabledDate="disabledDate"
-                :picker-options="{
-                  disabledDate
-                }"
-              />
-            </b-col>
-          </b-row>
-          <p class="font-italic">
-            <small style="color: red"
-              >*Data yang ditampilkan maksimal 3 bulan terakhir</small
-            >
-          </p>
-        </b-col>
-        <b-col cols="6">
-          <div
-            class="d-flex flex-row justify-content-end align-items-center mb-2"
-          >
-            <span class="text-uppercase mr-3">periode :</span>
+    <b-row>
+      <b-col sm="12" lg="6">
+        <p>
+          Laporan Pendapatan
+        </p>
+        <b-row class="align-items-center mb-2">
+          <b-col sm="4" lg="2"><p class="text-capitalize m-0">periode</p></b-col>
+          <b-col sm="4" lg="4"
+            ><b-form-select
+              size="sm"
+              v-model="periodeSelected"
+              :options="filterPeriode"
+            ></b-form-select
+          ></b-col>
+          <b-col sm="8" offset-sm="4" lg="6" v-if="selectedPeriodeRange">
+            <DatePicker
+              v-model="dateRange"
+              type="daterange"
+              range-separator="To"
+              start-placeholder="Start date"
+              end-placeholder="End date"
+              size="small"
+              format="dd-MM-yyyy"
+              value-format="dd-MM-yyyy"
+              :disabledDate="disabledDate"
+              :picker-options="{
+                disabledDate
+              }"
+            />
+          </b-col>
+        </b-row>
+        <b-row class="mb-2">
+          <b-col sm="12">
+            <small class="font-italic" style="color: red">
+              *Data yang ditampilkan maksimal 3 bulan terakhir
+            </small>
+          </b-col>
+        </b-row>
+      </b-col>
+      <b-col sm="12" lg="6">
+        <b-row class="mb-2">
+          <b-col sm="4" lg="7" class="text-right-lg">PERIODE</b-col>
+          <b-col sm="8" lg="5">
             <b-form-input
               class="w-auto text-right"
               size="sm"
               disabled
               :value="periodeX({ periode: periodeSelected, rawValue: true })"
             />
-          </div>
-          <div
-            class="d-flex flex-row justify-content-end align-items-center mb-2"
-          >
-            <span class="text-uppercase mr-3">total pasien :</span>
+          </b-col>
+        </b-row>
+        <b-row class="mb-2">
+          <b-col sm="4" lg="7" class="text-right-lg">TOTAL PASIEN</b-col>
+          <b-col sm="8" lg="5">
             <b-form-input
               class="w-auto text-right"
               size="sm"
               disabled
               :value="totalPasienValue"
             />
-          </div>
-          <div
-            class="d-flex flex-row justify-content-end align-items-center mb-2"
-          >
-            <span class="text-uppercase mr-3">total pendapatan :</span>
+          </b-col>
+        </b-row>
+        <b-row class="mb-2">
+          <b-col sm="4" lg="7" class="text-right-lg">TOTAL PENDAPATAN</b-col>
+          <b-col sm="8" lg="5">
             <b-form-input
               class="w-auto text-right"
               size="sm"
               disabled
               :value="totalPendapatanValue"
             />
-          </div>
-        </b-col>
-      </b-row>
-    </header>
-    <section>
-      <DataTableWrapper
-        :perPage="perPage"
-        :currentPage="currentPage"
-        :customPagingClass="['custom-pagination']"
-        :customEntryOptions="{ f: 100 }"
-        dropdownSizeProps="sm"
-        :callbackFunc="fetchData"
-        @valueChanged="handleValueChanged"
+          </b-col>
+        </b-row>
+      </b-col>
+    </b-row>
+    
+    <DataTableWrapper
+      :perPage="perPage"
+      :currentPage="currentPage"
+      :customPagingClass="['custom-pagination']"
+      :customEntryOptions="{ f: 100 }"
+      dropdownSizeProps="sm"
+      :callbackFunc="fetchData"
+      @valueChanged="handleValueChanged"
+    >
+      <b-table
+        :items="dataList"
+        :fields="fieldList"
+        :sort-by.sync="sortBy"
+        :sort-desc.sync="sortDesc"
+        thead-tr-class="kntl"
+        :no-local-sorting="true"
+        :responsive="true"
       >
-        <b-table
-          :items="dataList"
-          :fields="fieldList"
-          :sort-by.sync="sortBy"
-          :sort-desc.sync="sortDesc"
-          thead-tr-class="kntl"
-          :no-local-sorting="true"
-        >
-          <template v-slot:head()="data">
-            {{ data.label }}
+        <template v-slot:head()="data">
+          {{ data.label }}
+          <b-input
+            size="sm"
+            class="mt-2 w-95"
+            v-if="data.field.searchable"
+            @input="searchValueChanged($event, data.field.key)"
+          />
+        </template>
+
+        <template v-slot:cell()="data">
+          <template
+            v-if="
+              data.item.leaveBlank &&
+                data.field.key &&
+                data.field.key.toLowerCase() !== 'no'
+            "
+          >
             <b-input
               size="sm"
               class="mt-2 w-95"
-              v-if="data.field.searchable"
               @input="searchValueChanged($event, data.field.key)"
             />
           </template>
+          <div class="text-wrap text-break" v-else>
+            {{ data.value }}
+          </div>
+        </template>
 
-          <template v-slot:cell()="data">
-            <template
-              v-if="
-                data.item.leaveBlank &&
-                  data.field.key &&
-                  data.field.key.toLowerCase() !== 'no'
-              "
+        <template v-slot:cell(jenis_kelamin)="data">
+          {{ jenisKelamin(data.value) }}
+        </template>
+
+        <template v-slot:cell(diagnosis_icd_x)="data">
+          <template v-if="data.item.leaveBlank">
+            <vue-select
+              :options="diagnosisList"
+              v-model="selectedDiagnosis"
+              class="custom-v-select w-95 mt-2"
+              :filterable="false"
+              @search="onSearch"
             >
-              <b-input
-                size="sm"
-                class="mt-2 w-95"
-                @input="searchValueChanged($event, data.field.key)"
-              />
-            </template>
-            <div class="text-wrap text-break" v-else>
+              <template slot="no-options">
+                Tulis untuk mencari diagnosis
+              </template>
+              <template slot="option" slot-scope="option">
+                {{ option.label }}
+              </template>
+              <template slot="selected-option" slot-scope="option">
+                {{ option.label }}
+              </template>
+            </vue-select>
+          </template>
+          <div
+            v-else
+            style="max-width: 140px"
+            v-tooltip="
+              detailDiagnosis({ pembayaran_id: data.item.pembayaran_id })
+            "
+          >
+            <p class="text-truncate d-inline-block w-100 pr-2 m-0">
               {{ data.value }}
-            </div>
-          </template>
+            </p>
+          </div>
+        </template>
 
-          <template v-slot:cell(jenis_kelamin)="data">
-            {{ jenisKelamin(data.value) }}
-          </template>
-
-          <template v-slot:cell(diagnosis_icd_x)="data">
-            <template v-if="data.item.leaveBlank">
-              <vue-select
-                :options="diagnosisList"
-                v-model="selectedDiagnosis"
-                class="custom-v-select w-95 mt-2"
-                :filterable="false"
-                @search="onSearch"
-              >
-                <template slot="no-options">
-                  Tulis untuk mencari diagnosis
-                </template>
-                <template slot="option" slot-scope="option">
-                  {{ option.label }}
-                </template>
-                <template slot="selected-option" slot-scope="option">
-                  {{ option.label }}
-                </template>
-              </vue-select>
-            </template>
-            <div
-              v-else
-              style="max-width: 140px"
-              v-tooltip="
-                detailDiagnosis({ pembayaran_id: data.item.pembayaran_id })
-              "
+        <template v-slot:cell(actions)="data">
+          <div v-if="!data.item.leaveBlank">
+            <b-button
+              variant="primary"
+              size="sm"
+              class="text-capitalize"
+              :to="`/pembayaran/struk/${data.item.pembayaran_id}`"
+              >lihat struk</b-button
             >
-              <p class="text-truncate d-inline-block w-100 pr-2 m-0">
-                {{ data.value }}
-              </p>
-            </div>
-          </template>
-
-          <template v-slot:cell(actions)="data">
-            <div v-if="!data.item.leaveBlank">
-              <b-button
-                variant="primary"
-                size="sm"
-                class="text-capitalize"
-                :to="`/pembayaran/struk/${data.item.pembayaran_id}`"
-                >lihat struk</b-button
-              >
-            </div>
-          </template>
-        </b-table>
-      </DataTableWrapper>
-    </section>
+          </div>
+        </template>
+      </b-table>
+    </DataTableWrapper>
   </div>
 </template>
 
@@ -229,45 +229,48 @@ export default {
         generateFieldList: g,
         setSearchableAndSortableFieldList: s
       } = this;
-      return (
-        [
-          {
-            key: "no"
-          },
-          {
-            key: "waktu_konsultasi",
-            label: "waktu konsultasi",
-            sortable: true
-          },
-          {
-            key: "nama",
-            label: "nama pasien",
-            sortable: true
-          },
-          {
-            key: "tanggal_lahir",
-            thStyle: "width: 150px",
-            sortable: true
-          },
-          {
-            key: "nomor_rekam_medis",
-            label: "no. rekam medis",
-            sortable: true
-          },
-          {
-            key: "diagnosis_icd_x",
-            thStyle: "width: 160px",
-            sortable: true
-          },
-          {
-            key: "jumlah_transaksi",
-            sortable: true
-          },
-          {
-            key: "actions",
-            thStyle: "width: 140px"
-          }
-        ] |>
+
+      const fields = [
+        {
+          key: "no"
+        },
+        {
+          key: "waktu_konsultasi",
+          label: "waktu konsultasi",
+          sortable: true
+        },
+        {
+          key: "nama",
+          label: "nama pasien",
+          sortable: true
+        },
+        {
+          key: "tanggal_lahir",
+          thStyle: "width: 150px",
+          sortable: true
+        },
+        {
+          key: "diagnosis_icd_x",
+          thStyle: "width: 160px",
+          sortable: true
+        },
+        {
+          key: "jumlah_transaksi",
+          sortable: true
+        },
+        {
+          key: "actions",
+          thStyle: "width: 140px"
+        }
+      ];
+
+      if(!this.isMobile()) fields.splice(4, 0, {
+        key: "nomor_rekam_medis",
+        label: "no. rekam medis",
+        sortable: true
+      })
+
+      return (fields |>
         // |> (v =>
         //   s({
         //     field: v,
@@ -569,6 +572,12 @@ $evenBgColor: #f9f9f9;
 
   .vs__dropdown-menu {
     width: auto !important;
+  }
+}
+
+@media screen and (min-width: 993px) {
+  .text-right-lg {
+    text-align: right;
   }
 }
 </style>

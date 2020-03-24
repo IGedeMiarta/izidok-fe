@@ -5,7 +5,7 @@
         <div class="app-content--inner d-flex align-items-center">
           <div class="flex-grow-1 w-100 d-flex align-items-center">
             <div class="bg-composed-wrapper--content py-5">
-              <div class="container">
+              <div class="-fluid">
                 <b-modal
                   centered
                   v-model="modalShow"

@@ -14,7 +14,7 @@
       ]"
     />
 
-    <div class="container">
+    <div class="container-fluid">
       <div class="card card-box">
         <div class="card-header">
           <h4 class="text-capitalize my-2">edit pasien</h4>

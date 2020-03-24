@@ -47,7 +47,7 @@
         </b-col>
       </template>
     </page-title>
-    <div class="container">
+    <div class="container-fluid">
       <div class="card card-box ">
         <div class="card-body p-4">
           <b-row style="height:700px;">

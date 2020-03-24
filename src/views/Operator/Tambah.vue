@@ -1,7 +1,7 @@
 <template>
   <div>
     <page-title heading="Manajemen Asisten Dokter" />
-    <div class="container">
+    <div class="container-fluid">
       <div class="card card-box mb-3 ninja-shadow">
         <div class="card-header">
           <div class="card-header--title">
@@ -11,7 +11,7 @@
           </div>
         </div>
         <div class="card-body">
-          <div class="container">
+          <div class="container-fluid">
             <div class="form-row justify-content-center">
               <div class="col-md-6">
                 <template v-if="formBasicData && formBasicData.length">

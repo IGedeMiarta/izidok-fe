@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-container class="mb-4">
+    <b-container fluid class="mb-4">
       <b-row>
         <b-col class="pl-0">
           <div class="d-flex text-capitalize align-items-center">

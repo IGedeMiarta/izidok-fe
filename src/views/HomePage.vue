@@ -3,7 +3,7 @@
     <div class="app-content p-0">
       <div class="app-content--inner d-flex align-items-center">
         <div class="flex-grow-1 w-100 d-flex align-items-center">
-          <div class="container">
+          <div class="container-fluid">
             <div class="row">
               <div class="col-lg-6 pl-0 d-none d-lg-flex align-items-center">
                 <img src="@/assets/img/forgot.jpg" class="img-fluid mb-5" alt="lupa password izidok" />
