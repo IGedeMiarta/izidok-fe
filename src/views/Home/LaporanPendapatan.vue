@@ -165,7 +165,7 @@
                 variant="primary"
                 size="sm"
                 class="text-capitalize"
-                :to="`/struk/${data.item.pembayaran_id}`"
+                :to="`/pembayaran/struk/${data.item.pembayaran_id}`"
                 >lihat struk</b-button
               >
             </div>
