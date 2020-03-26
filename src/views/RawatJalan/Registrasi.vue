@@ -161,28 +161,22 @@
           <div class="col-sm-12">
             <div class="row">
               <div class="col-md-4">
-                <b-form-group label="jenis identitas" class="text-capitalize" style="position: relative;">
+                <b-form-group class="text-capitalize" style="position: relative;">
+                  <label>Jenis Identitas</label>
+                  <template v-if="this.formDataRegister['jenis_identitas'] || this.formDataRegister['nik']">
+                    <label for="" style="color:red"> *</label>
+                  </template>
                   <vue-select :options="
                     ['KTP', 'SIM', 'Paspor']
                   " v-model="formDataRegister['jenis_identitas']" />
                 </b-form-group>
               </div>
               <div class="col-md-8">
-                <template v-if="this.formDataRegister['jenis_identitas'] !== '' && this.formDataRegister['jenis_identitas'] !== null">
-                <b-form-group label="No. identitas" class="text-capitalize" style="position: relative">
-                  <b-form-input v-if="this.formDataRegister['jenis_identitas'] !== 'Paspor'"
-                    v-model.trim="formDataRegister['nik']"
-                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')" :maxlength="25"
-                    @keyup="checkNIK" required />
-                  <b-form-input v-else :maxlength="25" type="text" v-model.trim="formDataRegister['nik']"
-                    @keyup="checkNIK"  required/>
-                  <template v-if="this.$v.formDataRegister['nik'].error == true">
-                    <label style="color:red">No. Identitas telah terdaftar</label>
-                  </template>
-                </b-form-group>
-                </template>
-                 <template v-else-if="this.formDataRegister['jenis_identitas'] == null || this.formDataRegister['jenis_identitas'] == ''">
-                    <b-form-group label="No. identitas" class="text-capitalize" style="position: relative">
+                    <b-form-group class="text-capitalize" style="position: relative">
+                      <label>No. identitas</label>
+                      <template v-if="this.formDataRegister['jenis_identitas'] || this.formDataRegister['nik']">
+                        <label for="" style="color:red"> *</label>
+                      </template>
                     <b-form-input v-if="this.formDataRegister['jenis_identitas'] !== 'Paspor'"
                       v-model.trim="formDataRegister['nik']"
                       oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')" :maxlength="25"
@@ -193,7 +187,6 @@
                       <label style="color:red">No. Identitas telah terdaftar</label>
                     </template>
                   </b-form-group>
-                 </template>
               </div>
             </div>
           </div>
@@ -894,105 +887,244 @@
           .map(item => item.rawLabel);
       },
       async addPasien(formDataRegister) {
-        try {
-          this.formDataRegister.tanggal_lahir = moment(this.formDataRegister.tanggal_lahir).format("YYYY-MM-DD")
-          const res = await axios.post(
-            `${this.url_api}/pasien`,
-            this.formDataRegister
-          );
-          const {
-            success,
-            data: {
-              nama,
-              nomor_rekam_medis
-            }
-          } = res.data;
-          this.formDataRegister = {
-            nama: "",
-            nomor_hp: "",
-            tanggal_lahir: "",
-            jenis_kelamin: "",
-            alamat_rumah: "",
-            provinsi: "",
-            kota: "",
-            email: "",
-            nama_penanggung_jawab: "",
-            nomor_hp_penanggung_jawab: "",
-            status_perkawinan: "",
-            golongan_darah: "",
-            jenis_identitas: "",
-            nik: "",
-            hubungan_pasien: ""
-          }
-          let pasien = {
-            id: res.data.data.id,
-            nama: `${res.data.data.nama} (${res.data.data.tanggal_lahir})`,
-            tanggal_lahir: res.data.data.tanggal_lahir,
-            nomor_hp: res.data.data.nomor_hp,
-            alamat_rumah: res.data.data.alamat_rumah,
-            jenis_kelamin: res.data.data.jenis_kelamin,
-            nomor_rekam_medis: res.data.data.nomor_rekam_medis,
-          }
-          this.tempat = {
-            kota : null,
-            provinsi : null,
-          }
-          this.beingSubmit = true;
-          if (success) {
-            this.$swal({
-              title: startCase("data berhasil disimpan"),
-              text: `Pasien atas nama '${nama}' tersimpan dengan nomor rekam medis ${nomor_rekam_medis}`,
-              type: "success"
-            });
-            let eventVal = {
-              label: pasien.nama,
-              value: pasien.id
-            }
-            this.options.nama_pasien = [eventVal]
-            this.selectedPasien = eventVal;
-            setTimeout(() => {
-              this.searchPasien(pasien, "nama_pasien");
-              this.autoFill(pasien, "nama_pasien");
-              this.setValue({
-                rawLabel: "nama pasien",
-                label: "nama_pasien",
-                $event: eventVal
-              })
-              this.formData['nama_pasien'] = eventVal
-            }, 200)
-            this.$refs['modal-pasien'].hide()
-          }
-        } catch (err) {
-          if (err.response) {
-            const {
-              message
-            } = err.response.data;
-            console.log(err.response.data);
-            let v = this.$v.formDataRegister;
-            if(err.response.data.tanggal_lahir){
-              v.tanggal_lahir.required = true;
-            }
-            if(err.response.data.alamat_rumah){
-               v.alamat.required = true;
-            }
-            if (err.response.data.nama){
-               v.nama.required = true;
-            }
+        console.log(this.formDataRegister['jenis_identitas'], this.formDataRegister['nik'])
 
-            if (err.response.data.nomor_hp){
-              console.log('tes');
-               v.nomor_hp.required = true;
+        if(!this.formDataRegister['jenis_identitas']  && !this.formDataRegister['nik']  ) {
+
+          try {
+            this.formDataRegister.tanggal_lahir = moment(this.formDataRegister.tanggal_lahir).format("YYYY-MM-DD")
+            const res = await axios.post(
+              `${this.url_api}/pasien`,
+              this.formDataRegister
+            );
+            const {
+              success,
+              data: {
+                nama,
+                nomor_rekam_medis
+              }
+            } = res.data;
+            this.formDataRegister = {
+              nama: "",
+              nomor_hp: "",
+              tanggal_lahir: "",
+              jenis_kelamin: "",
+              alamat_rumah: "",
+              provinsi: "",
+              kota: "",
+              email: "",
+              nama_penanggung_jawab: "",
+              nomor_hp_penanggung_jawab: "",
+              status_perkawinan: "",
+              golongan_darah: "",
+              jenis_identitas: "",
+              nik: "",
+              hubungan_pasien: ""
             }
-            // this.setValueValidate();
-            // this.$swal({
-            //   text: `${message || "something went wrong"}`,
-            //   type: "error"
-            // });
+            let pasien = {
+              id: res.data.data.id,
+              nama: `${res.data.data.nama} (${res.data.data.tanggal_lahir})`,
+              tanggal_lahir: res.data.data.tanggal_lahir,
+              nomor_hp: res.data.data.nomor_hp,
+              alamat_rumah: res.data.data.alamat_rumah,
+              jenis_kelamin: res.data.data.jenis_kelamin,
+              nomor_rekam_medis: res.data.data.nomor_rekam_medis,
+            }
+            this.tempat = {
+              kota : null,
+              provinsi : null,
+            }
+            this.beingSubmit = true;
+            if (success) {
+              this.$swal({
+                title: startCase("data berhasil disimpan"),
+                text: `Pasien atas nama '${nama}' tersimpan dengan nomor rekam medis ${nomor_rekam_medis}`,
+                type: "success"
+              });
+              let eventVal = {
+                label: pasien.nama,
+                value: pasien.id
+              }
+              this.options.nama_pasien = [eventVal]
+              this.selectedPasien = eventVal;
+              setTimeout(() => {
+                this.searchPasien(pasien, "nama_pasien");
+                this.autoFill(pasien, "nama_pasien");
+                this.setValue({
+                  rawLabel: "nama pasien",
+                  label: "nama_pasien",
+                  $event: eventVal
+                })
+                this.formData['nama_pasien'] = eventVal
+              }, 200)
+              this.$refs['modal-pasien'].hide()
+            }
+          } catch (err) {
+            if (err.response) {
+              const {
+                message
+              } = err.response.data;
+              console.log(err.response.data);
+              let v = this.$v.formDataRegister;
+              if(err.response.data.tanggal_lahir){
+                v.tanggal_lahir.required = true;
+              }
+              if(err.response.data.alamat_rumah){
+                v.alamat.required = true;
+              }
+              if (err.response.data.nama){
+                v.nama.required = true;
+              }
+
+              if (err.response.data.nomor_hp){
+                console.log('tes');
+                v.nomor_hp.required = true;
+              }
+              // this.setValueValidate();
+              // this.$swal({
+              //   text: `${message || "something went wrong"}`,
+              //   type: "error"
+              // });
+            }
+            // console.log(err);
+          } finally {
+            this.beingSubmit = false;
           }
-          // console.log(err);
-        } finally {
-          this.beingSubmit = false;
+        }else if(this.formDataRegister['jenis_identitas']  && this.formDataRegister['nik']){
+
+          try {
+            this.formDataRegister.tanggal_lahir = moment(this.formDataRegister.tanggal_lahir).format("YYYY-MM-DD")
+            const res = await axios.post(
+              `${this.url_api}/pasien`,
+              this.formDataRegister
+            );
+            const {
+              success,
+              data: {
+                nama,
+                nomor_rekam_medis
+              }
+            } = res.data;
+            this.formDataRegister = {
+              nama: "",
+              nomor_hp: "",
+              tanggal_lahir: "",
+              jenis_kelamin: "",
+              alamat_rumah: "",
+              provinsi: "",
+              kota: "",
+              email: "",
+              nama_penanggung_jawab: "",
+              nomor_hp_penanggung_jawab: "",
+              status_perkawinan: "",
+              golongan_darah: "",
+              jenis_identitas: "",
+              nik: "",
+              hubungan_pasien: ""
+            }
+            let pasien = {
+              id: res.data.data.id,
+              nama: `${res.data.data.nama} (${res.data.data.tanggal_lahir})`,
+              tanggal_lahir: res.data.data.tanggal_lahir,
+              nomor_hp: res.data.data.nomor_hp,
+              alamat_rumah: res.data.data.alamat_rumah,
+              jenis_kelamin: res.data.data.jenis_kelamin,
+              nomor_rekam_medis: res.data.data.nomor_rekam_medis,
+            }
+            this.tempat = {
+              kota : null,
+              provinsi : null,
+            }
+            this.beingSubmit = true;
+            if (success) {
+              this.$swal({
+                title: startCase("data berhasil disimpan"),
+                text: `Pasien atas nama '${nama}' tersimpan dengan nomor rekam medis ${nomor_rekam_medis}`,
+                type: "success"
+              });
+              let eventVal = {
+                label: pasien.nama,
+                value: pasien.id
+              }
+              this.options.nama_pasien = [eventVal]
+              this.selectedPasien = eventVal;
+              setTimeout(() => {
+                this.searchPasien(pasien, "nama_pasien");
+                this.autoFill(pasien, "nama_pasien");
+                this.setValue({
+                  rawLabel: "nama pasien",
+                  label: "nama_pasien",
+                  $event: eventVal
+                })
+                this.formData['nama_pasien'] = eventVal
+              }, 200)
+              this.$refs['modal-pasien'].hide()
+            }
+          } catch (err) {
+            if (err.response) {
+              const {
+                message
+              } = err.response.data;
+              console.log(err.response.data);
+              let v = this.$v.formDataRegister;
+              if(err.response.data.tanggal_lahir){
+                v.tanggal_lahir.required = true;
+              }
+              if(err.response.data.alamat_rumah){
+                v.alamat.required = true;
+              }
+              if (err.response.data.nama){
+                v.nama.required = true;
+              }
+
+              if (err.response.data.nomor_hp){
+                console.log('tes');
+                v.nomor_hp.required = true;
+              }
+              // this.setValueValidate();
+              // this.$swal({
+              //   text: `${message || "something went wrong"}`,
+              //   type: "error"
+              // });
+            }
+            // console.log(err);
+          } finally {
+            this.beingSubmit = false;
+          }
         }
+        else if(this.formDataRegister['jenis_identitas'] !== null && !this.formDataRegister['nik']  ) {
+
+          return this.$swal({
+            text: `Nomor Identitas harus diisi !`,
+            type: "error",
+            showCancelButton: false,
+            confirmButtonText: startCase("ya")
+          }).then(res => {
+            const {
+              value
+            } = res;
+            if (value) {
+              return;
+            }
+          });
+        }
+        else if(!this.formDataRegister['jenis_identitas'] && this.formDataRegister['nik']  !== null ) {
+          return this.$swal({
+            text: `Jenis Identitas harus diisi !`,
+            type: "error",
+            showCancelButton: false,
+            confirmButtonText: startCase("ya")
+          }).then(res => {
+            const {
+              value
+            } = res;
+            if (value) {
+              return;
+            }
+          });
+        }
+
+
       },
       submitForm() {
         const {
