@@ -492,7 +492,7 @@ export default {
             ]) || [...tmpList];
           this.totalPasienValue = total_pasien;
           this.totalPendapatanValue = total_pendapatan;
-          this.periodeValue = periode;
+          this.periodeValue = periode;  
           this.rows = totalEntries;
           this.totalEntries = totalEntries;
           this.toPage = toPage;

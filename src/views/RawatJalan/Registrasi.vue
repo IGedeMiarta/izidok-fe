@@ -28,8 +28,8 @@
                         validationDesc: form['validation-desc']
                       })
                     " style="position: relative" :state="renderError({ error: form.error })">
-                    <label  style="font-size : 13px">{{form.rawLabel}} {{form.satuan}}</label>
-                    <label  style="color:red">{{form.isImportant}}</label>
+                    <label style="font-size : 13px">{{form.rawLabel}} {{form.satuan}}</label>
+                    <label style="color:red">{{form.isImportant}}</label>
                     <!-- <Datetime input-class="form-control" zone="Asia/Jakarta" format="d LLL yyyy"
                         v-if="form.label == 'waktu_konsultasi'" @input="waktuKonsultasiSelected"
                         :min-datetime="minimumDatetime" :input-style="
@@ -88,11 +88,7 @@
                       " v-if="
                         form.type === 'select' &&
                           form.rawLabel === 'nama pasien'
-                      " :filterable="false"
-                      @search="searchPasien"
-                      style="font-size:13.4px;"
-                      v-model="selectedPasien"
-                    >
+                      " :filterable="false" @search="searchPasien" style="font-size:13.4px;" v-model="selectedPasien">
                       <template slot="no-options" v-if="form.rawLabel === 'nama pasien'">
                         tulis nama lengkap pasien
                       </template>
@@ -147,15 +143,16 @@
           </b-form>
         </div>
       </div>
-      <b-modal :no-close-on-backdrop="true" @close="closeModall" :no-close-on-esc="true"  :cancel-disabled="true"  ref='modal-pasien' id="modal-1" style="color:#d3e8eb;" title="Registrasi Pasien Baru" hide-footer>
+      <b-modal :no-close-on-backdrop="true" @close="closeModall" :no-close-on-esc="true" :cancel-disabled="true"
+        ref='modal-pasien' id="modal-1" style="color:#d3e8eb;" title="Registrasi Pasien Baru" hide-footer>
         <b-form row v-on:submit.prevent="addPasien">
           <div class="col-sm-12">
             <b-form-group abel-for="input-1">
-              <label >Nama Lengkap</label>
-              <label  style="color:red">*</label>
+              <label>Nama Lengkap</label>
+              <label style="color:red">*</label>
               <b-form-input type="text" v-model.trim="formDataRegister.nama">
               </b-form-input>
-              <div class="error" v-if="!$v.formDataRegister.nama.required">Nama harus diisi!</div>
+              <div class="error" v-if="!$v.formDataRegister.nama.required && $v.formDataRegister.nama.$model == ''">Nama harus diisi!</div>
             </b-form-group>
           </div>
           <div class="col-sm-12">
@@ -172,57 +169,56 @@
                 </b-form-group>
               </div>
               <div class="col-md-8">
-                    <b-form-group class="text-capitalize" style="position: relative">
-                      <label>No. identitas</label>
-                      <template v-if="this.formDataRegister['jenis_identitas'] || this.formDataRegister['nik']">
-                        <label for="" style="color:red"> *</label>
-                      </template>
-                    <b-form-input v-if="this.formDataRegister['jenis_identitas'] !== 'Paspor'"
-                      v-model.trim="formDataRegister['nik']"
-                      oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')" :maxlength="25"
-                      @keyup="checkNIK" />
-                    <b-form-input v-else :maxlength="25" type="text" v-model.trim="formDataRegister['nik']"
-                      @keyup="checkNIK"  />
-                    <template v-if="this.$v.formDataRegister['nik'].error == true">
-                      <label style="color:red">No. Identitas telah terdaftar</label>
-                    </template>
-                  </b-form-group>
+                <b-form-group class="text-capitalize" style="position: relative">
+                  <label>No. identitas</label>
+                  <template v-if="this.formDataRegister['jenis_identitas'] || this.formDataRegister['nik']">
+                    <label for="" style="color:red"> *</label>
+                  </template>
+                  <b-form-input v-if="this.formDataRegister['jenis_identitas'] !== 'Paspor'"
+                    v-model.trim="formDataRegister['nik']"
+                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')" :maxlength="25"
+                    @keyup="checkNIK" />
+                  <b-form-input v-else :maxlength="25" type="text" v-model.trim="formDataRegister['nik']"
+                    @keyup="checkNIK" />
+                  <template v-if="this.$v.formDataRegister['nik'].error == true">
+                    <label style="color:red">No. Identitas telah terdaftar</label>
+                  </template>
+                </b-form-group>
               </div>
             </div>
           </div>
           <div class="col-sm-12">
             <b-form-group label-for="input-1">
-              <label >No. Handphone</label>
-              <label  style="color:red">*</label>
+              <label>No. Handphone</label>
+              <label style="color:red">*</label>
               <b-form-input id="input-1" type="text" pattern=".{10,15}" :maxlength="15"
                 oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')"
-                v-model.trim="formDataRegister.nomor_hp" >
+                v-model.trim="formDataRegister.nomor_hp">
               </b-form-input>
-               <div class="error" v-if="!$v.formDataRegister.nomor_hp.required">No. Handphone harus diisi!</div>
-               <div class="error" v-if="!$v.formDataRegister.nomor_hp.minLength">No. Handphone minimal 10 angka!</div>
+              <div class="error" v-if="!$v.formDataRegister.nomor_hp.required && $v.formDataRegister.nomor_hp.$model == ''">No. Handphone harus diisi!</div>
+              <div class="error" v-if="!$v.formDataRegister.nomor_hp.minLength">No. Handphone minimal 10 angka!</div>
             </b-form-group>
           </div>
           <div class="col-sm-12">
             <div class="row">
               <div class="col-sm-6">
                 <b-form-group>
-                  <label >Jenis kelamin</label>
-                  <label  style="color:red"> *</label>
-                  <b-form-radio-group  stacked class="text-capitalize" :options="[
+                  <label>Jenis kelamin</label>
+                  <label style="color:red"> *</label>
+                  <b-form-radio-group stacked class="text-capitalize" :options="[
                     { text: 'laki-laki', value: 1 },
                     { text: 'perempuan', value: 0 }
                   ]" v-model.trim="formDataRegister.jenis_kelamin">
                   </b-form-radio-group>
-                   <div class="error" v-if="!$v.formDataRegister.jenis_kelamin.required">Jenis Kelamin harus diisi!</div>
+                  <div class="error" v-if="!$v.formDataRegister.jenis_kelamin.required  && $v.formDataRegister.jenis_kelamin.$model == ''">Jenis Kelamin harus diisi!</div>
                 </b-form-group>
               </div>
               <div class="col-sm-6">
                 <b-form-group>
-                  <label >Tanggal Lahir</label>
+                  <label>Tanggal Lahir</label>
                   <label style="color:red"> *</label>
-                  <Datetime input-class="form-control"  class="input-group" zone="Asia/Jakarta"
-                    value-zone="Asia/Jakarta" format="d LLL yyyy" @input="tanggalLahirSelected"
-                    :max-datetime="maximumDatetime" :input-style="
+                  <Datetime input-class="form-control" class="input-group" zone="Asia/Jakarta" value-zone="Asia/Jakarta"
+                    format="d LLL yyyy" @input="tanggalLahirSelected" :max-datetime="maximumDatetime" :input-style="
                     getDataError({ rawLabel: 'tanggal lahir' }) === null
                       ? null
                       : getDataError({ rawLabel: 'tanggal lahir' })
@@ -237,7 +233,9 @@
                       </b-input-group-text>
                     </template>
                   </Datetime>
-                    <div class="error" v-if="!$v.formDataRegister.tanggal_lahir.required && formDataRegister.tanggal_lahir == null">Tanggal Lahir harus diisi!</div>
+                  <div class="error"
+                    v-if="formDataRegister.tanggal_lahir == 'Invalid date' ">Tanggal
+                    Lahir harus diisi!</div>
                 </b-form-group>
               </div>
               <div class="col-sm-6">
@@ -254,12 +252,12 @@
           </div>
           <div class="col-sm-12">
             <b-form-group id="input-group-1" label-for="input-1">
-              <label >Alamat</label>
+              <label>Alamat</label>
               <label style="color:red">*</label>
-              <b-form-textarea id="input-1" rows="3" max-rows="6" type="text" v-model.trim="formDataRegister.alamat_rumah"
-                >
+              <b-form-textarea id="input-1" rows="3" max-rows="6" type="text"
+                v-model.trim="formDataRegister.alamat_rumah">
               </b-form-textarea>
-              <div class="error" v-if="!$v.formDataRegister.alamat">Alamat harus diisi!</div>
+              <div class="error" v-if="!$v.formDataRegister.alamat && $v.formDataRegister.alamat.$model == ''">Alamat harus diisi!</div>
             </b-form-group>
           </div>
           <div class="col-sm-12">
@@ -290,8 +288,8 @@
             </b-form-group>
           </div>
           <div class="col-sm-12">
-            <b-form-group  label-for="input-1">
-              <label >No. HP penanggung Jawab</label>
+            <b-form-group label-for="input-1">
+              <label>No. HP penanggung Jawab</label>
               <b-form-input id="input-1" type="text" pattern=".{10,15}" :maxlength="15"
                 oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')"
                 v-model.trim="formDataRegister.nomor_hp_penanggung_jawab">
@@ -300,19 +298,19 @@
           </div>
           <div class="col-sm-12">
             <b-form-group label="hubungan dengan pasien" class="text-capitalize">
-            <vue-select :options="
+              <vue-select :options="
                 ['Suami/Istri', 'Orangtua', 'Kakak/Adik', 'Anak', 'Lainnya']
-              "  v-model="formDataRegister.hubungan_pasien" />
-          </b-form-group>
+              " v-model="formDataRegister.hubungan_pasien" />
+            </b-form-group>
           </div>
           <div class="col-sm-12">
-          <b-button class="ml-3 text-uppercase" variant="success" style="font-size:17.5px;float:right " type="submit">
-            simpan
-          </b-button>
-          <b-button class="ml-3 text-uppercase" to="{ name: 'antrean-rawat-jalan' }" variant="danger" style="font-size:17.5px;float:right "
-            @click='closeModal'>
-            Batal
-          </b-button>
+            <b-button class="ml-3 text-uppercase" variant="success" style="font-size:17.5px;float:right " type="submit">
+              simpan
+            </b-button>
+            <b-button class="ml-3 text-uppercase" to="{ name: 'antrean-rawat-jalan' }" variant="danger"
+              style="font-size:17.5px;float:right " @click='closeModal'>
+              Batal
+            </b-button>
           </div>
         </b-form>
       </b-modal>
@@ -459,28 +457,6 @@
       "vue-select": () => import("vue-select"),
       Datetime
     },
-    // validations: {
-    //   nama: {
-    //     required,
-    //     maxLength: maxLength(50),
-    //   },
-    //   alamat_rumah: {
-    //     required,
-    //     minLength: minLength(2),
-    //     maxLength: maxLength(30)
-    //   },
-    //   nomor_hp: {
-    //     required,
-    //     numeric,
-    //     maxLength: maxLength(15)
-    //   },
-    //   jenis_kelamin: {
-    //     required
-    //   },
-    //   tanggal_lahir: {
-    //     required
-    //   }
-    // },
     data: () => ({
       formBasicData: null,
       formData: null,
@@ -506,10 +482,10 @@
         golongan_darah: null,
         jenis_identitas: null,
         nik: null,
-        hubungan_pasien : null
+        hubungan_pasien: null
       },
       provinces: [],
-      checkPaketData :null,
+      checkPaketData: null,
       cities: [],
       tempat: {
         provinsi: null,
@@ -546,27 +522,31 @@
         },
         formDataRegister: {
           nik: {},
-          nama : {
+          nama: {
             required
           },
-          nomor_hp : {
+          nomor_hp: {
             required,
-            minLength : minLength(10)
+            minLength: minLength(10)
           },
-          alamat : {
+          alamat: {
             required
           },
-          tanggal_lahir: {required},
-          jenis_kelamin : {required}
+          tanggal_lahir: {
+            required
+          },
+          jenis_kelamin: {
+            required
+          }
         }
       };
     },
     async mounted() {
-          await this.cekPaket();
-          this.formBasicData = this.setFormBasicData();
-          this.formData = this.setFormData();
-          this.getProvince();
-          // await this.setValueValidate();
+      await this.cekPaket();
+      this.formBasicData = this.setFormBasicData();
+      this.formData = this.setFormData();
+      this.getProvince();
+      // await this.setValueValidate();
       // Promise.all([this.fetchDokter()]);
     },
     computed: {
@@ -580,15 +560,15 @@
     methods: {
       // setName(value) {
       //   this.formDataRegister.nama = value
-        // this.$v.formDataRegister.nama.$touch()
+      // this.$v.formDataRegister.nama.$touch()
       // },
-      async setValueValidate(){
+      async setValueValidate() {
         let v = this.$v.formDataRegister;
         this.formDataRegister.nama = v.nama.$model;
-        this.formDataRegister.nomor_hp = v.nama.$model.nomor_hp;
-        this.formDataRegister.alamat_rumah = v.nama.$model.alamat;
-        this.formDataRegister.tanggal_lahir = v.nama.$model.tanggal_lahir;
-        this.formDataRegister.jenis_kelamin = v.nama.$model.jenis_kelamin;
+        this.formDataRegister.nomor_hp = v.nomor_hp.$model.nomor_hp;
+        this.formDataRegister.alamat_rumah = v.alamat.$model.alamat;
+        this.formDataRegister.tanggal_lahir = v.tanggal_lahir.$model.tanggal_lahir;
+        this.formDataRegister.jenis_kelamin = v.jenis_kelamin.$model.jenis_kelamin;
       },
       async cekPaket() {
         try {
@@ -597,13 +577,14 @@
           );
 
           //Kuota habis, masa berlaku masih ada, belum beli paket.
-          if (res.data.message === 'Kuota Anda telah habis, silahkan lakukan pembelian Paket untuk dapat melakukan aktivitas ini.') {
+          if (res.data.message ===
+            'Kuota Anda telah habis, silahkan lakukan pembelian Paket untuk dapat melakukan aktivitas ini.') {
             return this.$swal({
               text: "Kuota Anda telah habis, silahkan lakukan pembelian Paket untuk dapat melakukan aktivitas ini.",
               showCancelButton: false,
               confirmButtonText: "OK",
               type: "warning",
-              allowOutsideClick : false,
+              allowOutsideClick: false,
               allowEscapeKey: false,
             }).then(res => {
               console.log(res.value)
@@ -614,13 +595,14 @@
             });
           }
           //Kuota habis, masa berlaku habis, belum beli paket
-          if (res.data.message === 'Paket Anda telah berakhir, silahkan lakukan pembelian Paket untuk dapat melakukan aktivitas ini.') {
+          if (res.data.message ===
+            'Paket Anda telah berakhir, silahkan lakukan pembelian Paket untuk dapat melakukan aktivitas ini.') {
             return this.$swal({
               text: "Paket Anda telah berakhir, silahkan lakukan pembelian Paket untuk dapat melakukan aktivitas ini.",
               showCancelButton: false,
               confirmButtonText: "OK",
               type: "warning",
-              allowOutsideClick : false,
+              allowOutsideClick: false,
               allowEscapeKey: false,
             }).then(res => {
               console.log(res.value)
@@ -631,13 +613,15 @@
             });
           }
           //Kuota masih ada, masa berlaku habis (kuota hangus), belum beli paket.
-          if (res.data.message === 'Masa Berlaku Paket Anda telah berakhir, silahkan lakukan pembelian untuk dapat melakukan aktivitas ini.') {
+          if (res.data.message ===
+            'Masa Berlaku Paket Anda telah berakhir, silahkan lakukan pembelian untuk dapat melakukan aktivitas ini.'
+            ) {
             return this.$swal({
               text: "Masa Berlaku Paket Anda telah berakhir, silahkan lakukan pembelian untuk dapat melakukan aktivitas ini.",
               showCancelButton: false,
               confirmButtonText: "OK",
               type: "warning",
-              allowOutsideClick : false,
+              allowOutsideClick: false,
               allowEscapeKey: false,
             }).then(res => {
               console.log(res.value)
@@ -648,13 +632,14 @@
             });
           }
           //Saat inisiasi, memilih ‘beli paket’, lalu ketika statusnya sedang menunggu pembayaran, dia ingin akses menu lain.
-          if (res.data.message === 'Silahkan selesaikan proses Pembayaran Paket Anda untuk dapat melakukan aktivitas ini.') {
+          if (res.data.message ===
+            'Silahkan selesaikan proses Pembayaran Paket Anda untuk dapat melakukan aktivitas ini.') {
             return this.$swal({
               text: "Silahkan selesaikan proses Pembayaran Paket Anda untuk dapat melakukan aktivitas ini.",
               showCancelButton: false,
               confirmButtonText: "OK",
               type: "warning",
-              allowOutsideClick : false,
+              allowOutsideClick: false,
               allowEscapeKey: false,
             }).then(res => {
               console.log(res.value)
@@ -671,7 +656,7 @@
               showCancelButton: false,
               confirmButtonText: "OK",
               type: "warning",
-              allowOutsideClick : false,
+              allowOutsideClick: false,
               allowEscapeKey: false,
             }).then(res => {
               console.log(res.value)
@@ -682,25 +667,27 @@
             });
           }
 
-          if(res.data !== null) {
-            if(res.data.data.paket_id === 1) {
+          if (res.data !== null) {
+            if (res.data.data.paket_id === 1) {
               var nm_paket = "Trial"
-            }else if (res.data.data.paket_id === 2) {
+            } else if (res.data.data.paket_id === 2) {
               var nm_paket = "Starter"
-            }else if (res.data.data.paket_id === 3) {
+            } else if (res.data.data.paket_id === 3) {
               var nm_paket = "Essential"
-            }else {
+            } else {
               var nm_paket = "Premium"
             }
           }
           //Kuota habis, masa berlaku masih ada/tidakada, sudah beli paket.
-          if (res.data.message === 'Paket Anda '+nm_paket+' telah OTOMATIS Aktif mulai dari tanggal '+res.data.data.started_date+' hingga '+res.data.data.expired_date+'!') {
+          if (res.data.message === 'Paket Anda ' + nm_paket + ' telah OTOMATIS Aktif mulai dari tanggal ' + res.data
+            .data.started_date + ' hingga ' + res.data.data.expired_date + '!') {
             return this.$swal({
-              text: 'Paket Anda '+nm_paket+' telah OTOMATIS Aktif mulai dari tanggal '+res.data.data.started_date+' hingga '+res.data.data.expired_date+'!',
+              text: 'Paket Anda ' + nm_paket + ' telah OTOMATIS Aktif mulai dari tanggal ' + res.data.data
+                .started_date + ' hingga ' + res.data.data.expired_date + '!',
               showCancelButton: false,
               confirmButtonText: "OK",
               type: "warning",
-              allowOutsideClick : false,
+              allowOutsideClick: false,
               allowEscapeKey: false,
             }).then(res => {
               console.log(res.value)
@@ -716,7 +703,8 @@
       checkNIK() {
         clearTimeout(this.timeVerifyNIK)
         this.timeVerifyNIK = setTimeout(async () => {
-          if (this.formDataRegister['jenis_identitas'] == null || this.formDataRegister['jenis_identitas'] == "") {
+          if (this.formDataRegister['jenis_identitas'] == null || this.formDataRegister['jenis_identitas'] ==
+            "") {
             this.$v.formDataRegister['nik'].error = false;
           } else {
             const res = await axios.get(
@@ -758,12 +746,12 @@
             val = this.tempat.provinsi.id;
             const res = await axios.get(`${this.url_api}/getcitybyprovince/${val}`)
             // handle success
-          this.cities = res.data.data.kota.map(val => ({
+            this.cities = res.data.data.kota.map(val => ({
               ...val,
               label: `${val.nama}`,
             }));
           }
-          if(this.cities[0].provinsi_id !== this.tempat.provinsi){
+          if (this.cities[0].provinsi_id !== this.tempat.provinsi) {
             this.tempat.kota = null;
           }
         } catch (error) {
@@ -781,22 +769,22 @@
         }).then(res => {
           if (res.value) {
             this.formDataRegister = {
-                nama: "",
-                nomor_hp: "",
-                tanggal_lahir: "",
-                jenis_kelamin: "",
-                alamat_rumah: "",
-                provinsi: "",
-                kota: "",
-                email: "",
-                nama_penanggung_jawab: "",
-                nomor_hp_penanggung_jawab: "",
-                status_perkawinan: "",
-                golongan_darah: "",
-                jenis_identitas: "",
-                nik: "",
-                hubungan_pasien: ""
-              }
+              nama: null,
+              nomor_hp: null,
+              tanggal_lahir: null,
+              jenis_kelamin: null,
+              alamat_rumah: null,
+              provinsi: "",
+              kota: "",
+              email: "",
+              nama_penanggung_jawab: "",
+              nomor_hp_penanggung_jawab: "",
+              status_perkawinan: "",
+              golongan_darah: "",
+              jenis_identitas: "",
+              nik: "",
+              hubungan_pasien: ""
+            }
             this.$refs['modal-pasien'].hide()
           } else {
             next(false);
@@ -889,7 +877,7 @@
       async addPasien(formDataRegister) {
         console.log(this.formDataRegister['jenis_identitas'], this.formDataRegister['nik'])
 
-        if(!this.formDataRegister['jenis_identitas']  && !this.formDataRegister['nik']  ) {
+        if (!this.formDataRegister['jenis_identitas'] && !this.formDataRegister['nik']) {
 
           try {
             this.formDataRegister.tanggal_lahir = moment(this.formDataRegister.tanggal_lahir).format("YYYY-MM-DD")
@@ -905,11 +893,11 @@
               }
             } = res.data;
             this.formDataRegister = {
-              nama: "",
-              nomor_hp: "",
-              tanggal_lahir: "",
-              jenis_kelamin: "",
-              alamat_rumah: "",
+              nama: null,
+              nomor_hp: null,
+              tanggal_lahir: null,
+              jenis_kelamin: null,
+              alamat_rumah: null,
               provinsi: "",
               kota: "",
               email: "",
@@ -931,8 +919,8 @@
               nomor_rekam_medis: res.data.data.nomor_rekam_medis,
             }
             this.tempat = {
-              kota : null,
-              provinsi : null,
+              kota: null,
+              provinsi: null,
             }
             this.beingSubmit = true;
             if (success) {
@@ -966,17 +954,17 @@
               } = err.response.data;
               console.log(err.response.data);
               let v = this.$v.formDataRegister;
-              if(err.response.data.tanggal_lahir){
+              if (err.response.data.tanggal_lahir) {
                 v.tanggal_lahir.required = true;
               }
-              if(err.response.data.alamat_rumah){
+              if (err.response.data.alamat_rumah) {
                 v.alamat.required = true;
               }
-              if (err.response.data.nama){
+              if (err.response.data.nama) {
                 v.nama.required = true;
               }
 
-              if (err.response.data.nomor_hp){
+              if (err.response.data.nomor_hp) {
                 console.log('tes');
                 v.nomor_hp.required = true;
               }
@@ -990,7 +978,7 @@
           } finally {
             this.beingSubmit = false;
           }
-        }else if(this.formDataRegister['jenis_identitas']  && this.formDataRegister['nik']){
+        } else if (this.formDataRegister['jenis_identitas'] && this.formDataRegister['nik']) {
 
           try {
             this.formDataRegister.tanggal_lahir = moment(this.formDataRegister.tanggal_lahir).format("YYYY-MM-DD")
@@ -1006,11 +994,11 @@
               }
             } = res.data;
             this.formDataRegister = {
-              nama: "",
-              nomor_hp: "",
-              tanggal_lahir: "",
-              jenis_kelamin: "",
-              alamat_rumah: "",
+              nama: null,
+              nomor_hp: null,
+              tanggal_lahir: null,
+              jenis_kelamin: null,
+              alamat_rumah: null,
               provinsi: "",
               kota: "",
               email: "",
@@ -1032,8 +1020,8 @@
               nomor_rekam_medis: res.data.data.nomor_rekam_medis,
             }
             this.tempat = {
-              kota : null,
-              provinsi : null,
+              kota: null,
+              provinsi: null,
             }
             this.beingSubmit = true;
             if (success) {
@@ -1067,17 +1055,17 @@
               } = err.response.data;
               console.log(err.response.data);
               let v = this.$v.formDataRegister;
-              if(err.response.data.tanggal_lahir){
+              if (err.response.data.tanggal_lahir) {
                 v.tanggal_lahir.required = true;
               }
-              if(err.response.data.alamat_rumah){
+              if (err.response.data.alamat_rumah) {
                 v.alamat.required = true;
               }
-              if (err.response.data.nama){
+              if (err.response.data.nama) {
                 v.nama.required = true;
               }
 
-              if (err.response.data.nomor_hp){
+              if (err.response.data.nomor_hp) {
                 console.log('tes');
                 v.nomor_hp.required = true;
               }
@@ -1091,8 +1079,7 @@
           } finally {
             this.beingSubmit = false;
           }
-        }
-        else if(this.formDataRegister['jenis_identitas'] !== null && !this.formDataRegister['nik']  ) {
+        } else if (this.formDataRegister['jenis_identitas'] !== null && !this.formDataRegister['nik']) {
 
           return this.$swal({
             text: `Nomor Identitas harus diisi !`,
@@ -1107,8 +1094,7 @@
               return;
             }
           });
-        }
-        else if(!this.formDataRegister['jenis_identitas'] && this.formDataRegister['nik']  !== null ) {
+        } else if (!this.formDataRegister['jenis_identitas'] && this.formDataRegister['nik'] !== null) {
           return this.$swal({
             text: `Jenis Identitas harus diisi !`,
             type: "error",
@@ -1336,6 +1322,7 @@
       }
     }
   }
+
   .error {
     color: red;
     margin-top: 3px;
