@@ -2,7 +2,7 @@
   <div>
     <page-title heading="Registrasi Antrean" :breadcrumb="[
         {
-          label: 'rawat jalan',
+          label: 'REGISTRASI ANTREAN',
           link: '/antrean'
         },
         { label: 'registrasi', active: true }

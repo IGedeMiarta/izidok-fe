@@ -374,7 +374,6 @@ export default {
         showCancelButton: true,
         confirmButtonText: "Ya",
         cancelButtonText: "Tidak",
-        reverseButtons: true,
         type: "warning"
       }).then(res => {
         if (res.value) {
