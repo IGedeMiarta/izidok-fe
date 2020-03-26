@@ -17,7 +17,7 @@
           <input
             type="text"
             class="form-control"
-
+            id="tensi_diastole"
             :value="pasien.tensi_diastole"
             @input="updateAnamnesa({key:$event.target.id, value: $event.target.value})"
           />
@@ -27,7 +27,7 @@
           <input
             type="text"
             class="form-control"
-
+            id="tinggi_badan"
             :value="pasien.tinggi_badan"
             @input="updateAnamnesa({key:$event.target.id, value: $event.target.value})"
           />
@@ -37,7 +37,7 @@
           <input
             type="text"
             class="form-control"
-
+            id="berat_badan"
             :value="pasien.berat_badan"
             @input="updateAnamnesa({key:$event.target.id, value: $event.target.value})"
           />
@@ -46,15 +46,15 @@
       <div class="form-row">
         <div class="form-group col-md-2">
           <label >Nadi</label>
-          <input type="text" class="form-control" :value="pasien.nadi" @input="updateAnamnesa({key:$event.target.id, value: $event.target.value})"/>
+          <input type="text" class="form-control" id="nadi" :value="pasien.nadi" @input="updateAnamnesa({key:$event.target.id, value: $event.target.value})"/>
         </div>
         <div class="form-group col-md-2">
           <label >Suhu</label>
-          <input type="text" class="form-control" :value="pasien.suhu" @input="updateAnamnesa({key:$event.target.id, value: $event.target.value})"/>
+          <input type="text" class="form-control" id="suhu" :value="pasien.suhu" @input="updateAnamnesa({key:$event.target.id, value: $event.target.value})"/>
         </div>
         <div class="form-group col-md-4">
           <label >Respirasi</label>
-          <input type="text" class="form-control" :value="pasien.respirasi" @input="updateAnamnesa({key:$event.target.id, value: $event.target.value})"/>
+          <input type="text" class="form-control"  :value="0" @input="updateAnamnesa({key:$event.target.id, value: $event.target.value})"/>
         </div>
       </div>
     </form>
