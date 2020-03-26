@@ -978,11 +978,11 @@
             if (err.response.data.nama){
                v.nama.required = true;
             }
-           
+
             if (err.response.data.nomor_hp){
               console.log('tes');
                v.nomor_hp.required = true;
-            }  
+            }
             // this.setValueValidate();
             // this.$swal({
             //   text: `${message || "something went wrong"}`,
