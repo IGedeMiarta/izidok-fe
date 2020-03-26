@@ -253,7 +253,7 @@
                       : getDataError({ rawLabel: 'tanggal lahir' })
                       ? null
                       : 'border-color: red'
-                  " :max-datetime="maximumDatetime" ref="dob">
+                  " :max-datetime="maximumDatetime" ref="dob" @click="datetimeOpen">
                 <template v-slot:after>
                   <b-input-group-text @click="triggerDob" slot="append" style="
                     border-top-left-radius:0; border-left-width: 0; border-bottom-left-radius: 0; cursor: pointer
@@ -677,6 +677,9 @@
 
     },
     methods: {
+      datetimeOpen() {
+        console.log('opened')
+      },
       triggerDob() {
         const x = this.$refs.dob
         const {
