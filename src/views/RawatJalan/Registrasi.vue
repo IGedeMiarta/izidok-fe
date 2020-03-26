@@ -152,7 +152,8 @@
               <label style="color:red">*</label>
               <b-form-input type="text" v-model.trim="formDataRegister.nama">
               </b-form-input>
-              <div class="error" v-if="!$v.formDataRegister.nama.required && $v.formDataRegister.nama.$model == ''">Nama harus diisi!</div>
+              <div class="error" v-if="!$v.formDataRegister.nama.required && $v.formDataRegister.nama.$model == '' || this.checkError.nama !== null">Nama
+                harus diisi!</div>
             </b-form-group>
           </div>
           <div class="col-sm-12">
@@ -195,7 +196,9 @@
                 oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')"
                 v-model.trim="formDataRegister.nomor_hp">
               </b-form-input>
-              <div class="error" v-if="!$v.formDataRegister.nomor_hp.required && $v.formDataRegister.nomor_hp.$model == ''">No. Handphone harus diisi!</div>
+              <div class="error"
+                v-if="!$v.formDataRegister.nomor_hp.required && $v.formDataRegister.nomor_hp.$model == ''">No. Handphone
+                harus diisi!</div>
               <div class="error" v-if="!$v.formDataRegister.nomor_hp.minLength">No. Handphone minimal 10 angka!</div>
             </b-form-group>
           </div>
@@ -210,7 +213,9 @@
                     { text: 'perempuan', value: 0 }
                   ]" v-model.trim="formDataRegister.jenis_kelamin">
                   </b-form-radio-group>
-                  <div class="error" v-if="!$v.formDataRegister.jenis_kelamin.required  && $v.formDataRegister.jenis_kelamin.$model == ''">Jenis Kelamin harus diisi!</div>
+                  <div class="error"
+                    v-if="!$v.formDataRegister.jenis_kelamin.required  && $v.formDataRegister.jenis_kelamin.$model == '' || this.checkError.jenis_kelamin !== null">
+                    Jenis Kelamin harus diisi!</div>
                 </b-form-group>
               </div>
               <div class="col-sm-6">
@@ -233,8 +238,7 @@
                       </b-input-group-text>
                     </template>
                   </Datetime>
-                  <div class="error"
-                    v-if="formDataRegister.tanggal_lahir == 'Invalid date' ">Tanggal
+                  <div class="error" v-if="formDataRegister.tanggal_lahir == 'Invalid date' ">Tanggal
                     Lahir harus diisi!</div>
                 </b-form-group>
               </div>
@@ -257,7 +261,8 @@
               <b-form-textarea id="input-1" rows="3" max-rows="6" type="text"
                 v-model.trim="formDataRegister.alamat_rumah">
               </b-form-textarea>
-              <div class="error" v-if="!$v.formDataRegister.alamat && $v.formDataRegister.alamat.$model == ''">Alamat harus diisi!</div>
+              <div class="error" v-if="!$v.formDataRegister.alamat && $v.formDataRegister.alamat.$model == ''">Alamat
+                harus diisi!</div>
             </b-form-group>
           </div>
           <div class="col-sm-12">
@@ -484,6 +489,12 @@
         nik: null,
         hubungan_pasien: null
       },
+      checkError: {
+          nama: null,
+          alamat: null,
+          nomor_telp: null,
+          jenis_kelamin: null,
+        },
       provinces: [],
       checkPaketData: null,
       cities: [],
@@ -548,6 +559,12 @@
       this.getProvince();
       // await this.setValueValidate();
       // Promise.all([this.fetchDokter()]);
+      if(this.checkError.nama !== null || this.formDataRegister.nama !== null){
+        this.checkError.nama = null;
+      }
+      if(this.checkError.jenis_kelamin !== null || this.formDataRegister.jenis_kelamin !== null){
+        this.checkError.jenis_kelamin = null;
+      }
     },
     computed: {
       minimumDatetime() {
@@ -565,6 +582,7 @@
       async setValueValidate() {
         let v = this.$v.formDataRegister;
         this.formDataRegister.nama = v.nama.$model;
+      
         this.formDataRegister.nomor_hp = v.nomor_hp.$model.nomor_hp;
         this.formDataRegister.alamat_rumah = v.alamat.$model.alamat;
         this.formDataRegister.tanggal_lahir = v.tanggal_lahir.$model.tanggal_lahir;
@@ -615,7 +633,7 @@
           //Kuota masih ada, masa berlaku habis (kuota hangus), belum beli paket.
           if (res.data.message ===
             'Masa Berlaku Paket Anda telah berakhir, silahkan lakukan pembelian untuk dapat melakukan aktivitas ini.'
-            ) {
+          ) {
             return this.$swal({
               text: "Masa Berlaku Paket Anda telah berakhir, silahkan lakukan pembelian untuk dapat melakukan aktivitas ini.",
               showCancelButton: false,
@@ -802,11 +820,11 @@
         }).then(res => {
           if (res.value) {
             this.formDataRegister = {
-              nama: "",
-              nomor_hp: "",
-              tanggal_lahir: "",
-              jenis_kelamin: "",
-              alamat_rumah: "",
+              nama: null,
+              nomor_hp: null,
+              tanggal_lahir: null,
+              jenis_kelamin: null,
+              alamat_rumah: null,
               provinsi: "",
               kota: "",
               email: "",
@@ -944,7 +962,13 @@
                   $event: eventVal
                 })
                 this.formData['nama_pasien'] = eventVal
-              }, 200)
+              }, 200);
+                
+            this.checkError.nama = null;
+            this.checkError.jenis_kelamin = null;
+            this.checkError.alamat = null;
+            this.checkError.nomor_telp = null;
+
               this.$refs['modal-pasien'].hide()
             }
           } catch (err) {
@@ -954,20 +978,22 @@
               } = err.response.data;
               console.log(err.response.data);
               let v = this.$v.formDataRegister;
-              if (err.response.data.tanggal_lahir) {
-                v.tanggal_lahir.required = true;
-              }
-              if (err.response.data.alamat_rumah) {
-                v.alamat.required = true;
-              }
-              if (err.response.data.nama) {
-                v.nama.required = true;
-              }
-
-              if (err.response.data.nomor_hp) {
-                console.log('tes');
-                v.nomor_hp.required = true;
-              }
+              let cek = Object.keys(err.response.data).map(item => {
+               console.log(item)
+                if (item == 'nama') {
+                  this.checkError.nama = item;
+                }
+                if (item == 'alamat_rumah') {
+                  this.cekPaket.alamat = item;
+                }
+                if (item == 'nomor_hp') {
+                  this.cekPaket.nomor_telp = item;
+                }
+                if (item == 'jenis_kelamin') {
+                  this.checkError.jenis_kelamin = item;
+                }
+              });
+              // console.log('cek',cek);
               // this.setValueValidate();
               // this.$swal({
               //   text: `${message || "something went wrong"}`,
@@ -1055,20 +1081,6 @@
               } = err.response.data;
               console.log(err.response.data);
               let v = this.$v.formDataRegister;
-              if (err.response.data.tanggal_lahir) {
-                v.tanggal_lahir.required = true;
-              }
-              if (err.response.data.alamat_rumah) {
-                v.alamat.required = true;
-              }
-              if (err.response.data.nama) {
-                v.nama.required = true;
-              }
-
-              if (err.response.data.nomor_hp) {
-                console.log('tes');
-                v.nomor_hp.required = true;
-              }
               // this.setValueValidate();
               // this.$swal({
               //   text: `${message || "something went wrong"}`,
@@ -1260,6 +1272,7 @@
               text: `Antrean atas nama ${nama_lengkap} tersimpan pada urutan ${nomor_antrian}`,
               type: "success",
             });
+          
             this.$router.push("/rawat-jalan/antrean");
           } else {
             this.$swal({

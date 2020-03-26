@@ -395,8 +395,7 @@
             (item.key === "nama" && "nama_pasien") ||
             (r.test(item.key) && v) ||
             item.key;
-            console.log('itemnya',item)
-          tmp += `&${x}=${item.value}`;
+            tmp += `&${x}=${item.value}`;
         });
 
         if (selectedDiagnosis) {
