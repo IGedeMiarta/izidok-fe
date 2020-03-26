@@ -273,8 +273,8 @@
             minLength: minLength(10),
 
             verifyPhone(val) {
-              if(val.length<10)
-                return
+              // if(val.length<10)
+              //   return
               if(this.timeVerifyPhone) clearTimeout(this.timeVerifyPhone)
 
               return new Promise((resolve, reject) => {
