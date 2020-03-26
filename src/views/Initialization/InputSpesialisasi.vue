@@ -255,6 +255,17 @@ export default {
       let statusX;
       const { constructPostData } = this;
       try {
+        if(this.formData['Apakah_Anda_memiliki_Asisten?'] == false) {
+          const resSkipAsisten = await axios.post(`${this.url_api}/user/skip_asisten`)
+          if(resSkipAsisten.data.status == false) {
+            this.$swal({
+              text: `${resSkipAsisten.data.status || "something went wrong"}`,
+              type: "error"
+            });
+            return;
+          }
+        }
+
         const res = await axios.put(
           `${this.url_api}/klinik/${this.getKlinikId}`,
           constructPostData()

@@ -72,14 +72,14 @@
                 </b-form-group>
 
                 <div class="float-right">
-                  <router-link
-                    tag="button"
-                    to="/input-tarif"
-                    class="text-capitalize mr-2 btn btn-danger"
-                    >lewati</router-link
+                  <b-button
+                    class="text-capitalize"
+                    variant="danger"
+                    @click="lewati"
+                    >Lewati</b-button
                   >
                   <b-button
-                    class="text-capitalize ml-2"
+                    class="text-capitalize ml-4"
                     type="submit"
                     variant="primary"
                     >Lanjut</b-button
@@ -412,6 +412,27 @@ export default {
           rawLabel
         });
       }
+    },
+    lewati() {
+      axios.post(`${this.url_api}/user/skip_asisten`)
+        .then(res => {
+          if(res.data.status == false) {
+            this.$swal({
+              text: `${res.data.message || "something went wrong"}`,
+              type: "error"
+            });
+            return;
+          }
+
+          this.$router.push({name: 'input-tarif'})
+        })
+        .catch(err => {
+            this.$swal({
+              text: "something went wrong",
+              type: "error"
+            });
+            return;
+        })
     }
   }
 };
