@@ -580,7 +580,7 @@
                 created_at : data.created_at
               }
             });
-            
+
           } else {
             console.log(match);
             let match = message.match(/(email|nomor_telp) is already in used/);

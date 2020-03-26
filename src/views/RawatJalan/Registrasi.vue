@@ -88,8 +88,8 @@
                       " v-if="
                         form.type === 'select' &&
                           form.rawLabel === 'nama pasien'
-                      " :filterable="false" 
-                      @search="searchPasien" 
+                      " :filterable="false"
+                      @search="searchPasien"
                       style="font-size:13.4px;"
                       v-model="selectedPasien"
                     >
@@ -772,7 +772,7 @@
           }
           if(this.cities[0].provinsi_id !== this.tempat.provinsi){
             this.tempat.kota = null;
-          } 
+          }
         } catch (error) {
           console.error(error);
         }
@@ -978,11 +978,11 @@
             if (err.response.data.nama){
                v.nama.required = true;
             }
-           
+
             if (err.response.data.nomor_hp){
               console.log('tes');
                v.nomor_hp.required = true;
-            }  
+            }
             // this.setValueValidate();
             // this.$swal({
             //   text: `${message || "something went wrong"}`,

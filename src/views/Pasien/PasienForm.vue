@@ -79,7 +79,7 @@
             </b-form-group>
           </b-col>
           <b-col sm="2">
-            <b-form-group :label="renderLabel({ label: 'jenis identitas' })" class="text-capitalize"
+            <b-form-group  class="text-capitalize"
               style="position: relative;" :state="getDataError({ rawLabel: 'jenis identitas' })" :invalid-feedback="
                   renderInvalidFeedback({
                     validationDesc: blindlyGetData({
@@ -87,6 +87,10 @@
                     })
                   })
                 ">
+              <label>Jenis Identitas</label>
+              <template v-if="this.formData['jenis_identitas'] || this.formData['nik']">
+              <label for="" style="color:red"> *</label>
+              </template>
               <vue-select :options="
                     ['KTP', 'SIM', 'Paspor']
                   " @input="
@@ -98,7 +102,7 @@
             </b-form-group>
           </b-col>
           <b-col sm="4">
-            <b-form-group label="No. identitas" class="text-capitalize" style="position: relative"
+            <b-form-group  class="text-capitalize" style="position: relative"
               :state="getDataError({ rawLabel: 'nik' })" :invalid-feedback="
             renderInvalidFeedback({
               validationDesc: blindlyGetData({
@@ -106,6 +110,10 @@
               })
             })
           ">
+              <label>No. identitas</label>
+              <template v-if="this.formData['jenis_identitas'] || this.formData['nik']">
+                <label for="" style="color:red"> *</label>
+              </template>
               <template v-if="this.formData['jenis_identitas'] !== '' && this.formData['jenis_identitas'] !== null">
                 <b-form-input v-if="this.formData['jenis_identitas'] !== 'Paspor'" @keypress="
               onKeyInputNumber({
@@ -974,24 +982,78 @@
         });
       },
       submitForm() {
-        const {
-          formBasicData
-        } = this;
-        formBasicData.map(item => {
-          this.triggerValidation({
-            label: item.label,
-            $v: this.$v,
-            $vm: this,
-            rawLabel: item.rawLabel
+
+        if(!this.formData['jenis_identitas']  && !this.formData['nik']  ) {
+          const {
+            formBasicData
+          } = this;
+          formBasicData.map(item => {
+            this.triggerValidation({
+              label: item.label,
+              $v: this.$v,
+              $vm: this,
+              rawLabel: item.rawLabel
+            });
           });
-        });
-        if (formBasicData.every(item => item.error !== null && !item.error)) {
-          if (this.formData.provinsi) {
-            this.formData.provinsi = this.tempat.provinsi.id;
-            this.formData.kota = this.tempat.kota.id;
+          if (formBasicData.every(item => item.error !== null && !item.error)) {
+            if (this.formData.provinsi) {
+              this.formData.provinsi = this.tempat.provinsi.id;
+              this.formData.kota = this.tempat.kota.id;
+            }
+            this.$emit("submitForm", this.formData);
           }
-          this.$emit("submitForm", this.formData);
+        }else if(this.formData['jenis_identitas']  && this.formData['nik']){
+          const {
+            formBasicData
+          } = this;
+          formBasicData.map(item => {
+            this.triggerValidation({
+              label: item.label,
+              $v: this.$v,
+              $vm: this,
+              rawLabel: item.rawLabel
+            });
+          });
+          if (formBasicData.every(item => item.error !== null && !item.error)) {
+            if (this.formData.provinsi) {
+              this.formData.provinsi = this.tempat.provinsi.id;
+              this.formData.kota = this.tempat.kota.id;
+            }
+            this.$emit("submitForm", this.formData);
+          }
         }
+        else if(this.formData['jenis_identitas'] !== null && !this.formData['nik']  ) {
+
+          return this.$swal({
+            text: `Nomor Identitas harus diisi !`,
+            type: "error",
+            showCancelButton: false,
+            confirmButtonText: startCase("ya")
+          }).then(res => {
+            const {
+              value
+            } = res;
+            if (value) {
+             return;
+            }
+          });
+        }
+        else if(!this.formData['jenis_identitas'] && this.formData['nik']  !== null ) {
+          return this.$swal({
+            text: `Jenis Identitas harus diisi !`,
+            type: "error",
+            showCancelButton: false,
+            confirmButtonText: startCase("ya")
+          }).then(res => {
+            const {
+              value
+            } = res;
+            if (value) {
+              return;
+            }
+          });
+        }
+
       }
     }
   };
