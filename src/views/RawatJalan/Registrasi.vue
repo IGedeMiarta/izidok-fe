@@ -7,8 +7,7 @@
         },
         { label: 'registrasi', active: true }
       ]" />
-
-    <b-container fluid>
+    <div class="container-fluid">
       <div class="card card-box mb-5">
         <div class="card-header">
           <div class="col-sm-7 float-left">
@@ -154,10 +153,9 @@
             <b-form-group abel-for="input-1">
               <label >Nama Lengkap</label>
               <label  style="color:red">*</label>
-              <b-form-input type="text" v-model.lazy="formDataRegister.nama" required>
+              <b-form-input type="text" v-model.trim="formDataRegister.nama">
               </b-form-input>
-              <!-- <div class="error" v-if="!$v.nama.required">Name is required</div>
-              <div class="error" v-if="!$v.nama.minLength">Name must have at lea</div> -->
+              <div class="error" v-if="!$v.formDataRegister.nama.required">Nama harus diisi!</div>
             </b-form-group>
           </div>
           <div class="col-sm-12">
@@ -205,8 +203,10 @@
               <label  style="color:red">*</label>
               <b-form-input id="input-1" type="text" pattern=".{10,15}" :maxlength="15"
                 oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')"
-                v-model.trim="formDataRegister.nomor_hp" required>
+                v-model.trim="formDataRegister.nomor_hp" >
               </b-form-input>
+               <div class="error" v-if="!$v.formDataRegister.nomor_hp.required">No. Handphone harus diisi!</div>
+               <div class="error" v-if="!$v.formDataRegister.nomor_hp.minLength">No. Handphone minimal 10 angka!</div>
             </b-form-group>
           </div>
           <div class="col-sm-12">
@@ -215,18 +215,19 @@
                 <b-form-group>
                   <label >Jenis kelamin</label>
                   <label  style="color:red"> *</label>
-                  <b-form-radio-group required stacked class="text-capitalize" :options="[
+                  <b-form-radio-group  stacked class="text-capitalize" :options="[
                     { text: 'laki-laki', value: 1 },
                     { text: 'perempuan', value: 0 }
-                  ]" v-model="formDataRegister.jenis_kelamin">
+                  ]" v-model.trim="formDataRegister.jenis_kelamin">
                   </b-form-radio-group>
+                   <div class="error" v-if="!$v.formDataRegister.jenis_kelamin.required">Jenis Kelamin harus diisi!</div>
                 </b-form-group>
               </div>
               <div class="col-sm-6">
                 <b-form-group>
                   <label >Tanggal Lahir</label>
                   <label style="color:red"> *</label>
-                  <Datetime required input-class="form-control"  class="input-group" zone="Asia/Jakarta"
+                  <Datetime input-class="form-control"  class="input-group" zone="Asia/Jakarta"
                     value-zone="Asia/Jakarta" format="d LLL yyyy" @input="tanggalLahirSelected"
                     :max-datetime="maximumDatetime" :input-style="
                     getDataError({ rawLabel: 'tanggal lahir' }) === null
@@ -234,7 +235,7 @@
                       : getDataError({ rawLabel: 'tanggal lahir' })
                       ? null
                       : 'border-color: red'
-                  " ref="dob" v-model="formDataRegister.tanggal_lahir">
+                  " ref="dob" v-model.trim="formDataRegister.tanggal_lahir">
                     <template v-slot:after>
                       <b-input-group-text @click="triggerDob" slot="append" style="
                     border-top-left-radius:0; border-left-width: 0; border-bottom-left-radius: 0; cursor: pointer
@@ -243,6 +244,7 @@
                       </b-input-group-text>
                     </template>
                   </Datetime>
+                    <div class="error" v-if="!$v.formDataRegister.tanggal_lahir.required && formDataRegister.tanggal_lahir == null">Tanggal Lahir harus diisi!</div>
                 </b-form-group>
               </div>
               <div class="col-sm-6">
@@ -261,9 +263,10 @@
             <b-form-group id="input-group-1" label-for="input-1">
               <label >Alamat</label>
               <label style="color:red">*</label>
-              <b-form-textarea id="input-1" rows="3" max-rows="6" type="text" v-model="formDataRegister.alamat_rumah"
-                required>
+              <b-form-textarea id="input-1" rows="3" max-rows="6" type="text" v-model.trim="formDataRegister.alamat_rumah"
+                >
               </b-form-textarea>
+              <div class="error" v-if="!$v.formDataRegister.alamat">Alamat harus diisi!</div>
             </b-form-group>
           </div>
           <div class="col-sm-12">
@@ -320,7 +323,7 @@
           </div>
         </b-form>
       </b-modal>
-    </b-container>
+    </div>
   </div>
 </template>
 
@@ -397,7 +400,7 @@
     //   label: "dokter",
     //   type: "select",
     //   isImportant: "*",
-    //   colLg: 6,
+    //   col: 6,
     //   validations: {
     //     required
     //   }
@@ -451,6 +454,7 @@
     {
       label: "anamnesis",
       type: "textarea",
+      col: 12,
       colLg: 12,
       validations: {}
     }
@@ -519,7 +523,6 @@
         kota: null,
       }
     }),
-
     beforeRouteLeave(to, from, next) {
       if (!this.beingSubmit) {
         this.$swal({
@@ -549,7 +552,19 @@
           }, {})
         },
         formDataRegister: {
-          nik: {}
+          nik: {},
+          nama : {
+            required
+          },
+          nomor_hp : {
+            required,
+            minLength : minLength(10)
+          },
+          alamat : {
+            required
+          },
+          tanggal_lahir: {required},
+          jenis_kelamin : {required}
         }
       };
     },
@@ -558,6 +573,7 @@
           this.formBasicData = this.setFormBasicData();
           this.formData = this.setFormData();
           this.getProvince();
+          // await this.setValueValidate();
       // Promise.all([this.fetchDokter()]);
     },
     computed: {
@@ -569,6 +585,18 @@
       },
     },
     methods: {
+      // setName(value) {
+      //   this.formDataRegister.nama = value
+        // this.$v.formDataRegister.nama.$touch()
+      // },
+      async setValueValidate(){
+        let v = this.$v.formDataRegister;
+        this.formDataRegister.nama = v.nama.$model;
+        this.formDataRegister.nomor_hp = v.nama.$model.nomor_hp;
+        this.formDataRegister.alamat_rumah = v.nama.$model.alamat;
+        this.formDataRegister.tanggal_lahir = v.nama.$model.tanggal_lahir;
+        this.formDataRegister.jenis_kelamin = v.nama.$model.jenis_kelamin;
+      },
       async cekPaket() {
         try {
           const res = await axios.get(
@@ -737,7 +765,7 @@
             val = this.tempat.provinsi.id;
             const res = await axios.get(`${this.url_api}/getcitybyprovince/${val}`)
             // handle success
-            this.cities = res.data.data.kota.map(val => ({
+          this.cities = res.data.data.kota.map(val => ({
               ...val,
               label: `${val.nama}`,
             }));
@@ -880,7 +908,7 @@
             }
           } = res.data;
           this.formDataRegister = {
-          nama: "",
+            nama: "",
             nomor_hp: "",
             tanggal_lahir: "",
             jenis_kelamin: "",
@@ -939,10 +967,27 @@
             const {
               message
             } = err.response.data;
-            this.$swal({
-              text: `${message || "something went wrong"}`,
-              type: "error"
-            });
+            console.log(err.response.data);
+            let v = this.$v.formDataRegister;
+            if(err.response.data.tanggal_lahir){
+              v.tanggal_lahir.required = true;
+            }
+            if(err.response.data.alamat_rumah){
+               v.alamat.required = true;
+            }
+            if (err.response.data.nama){
+               v.nama.required = true;
+            }
+           
+            if (err.response.data.nomor_hp){
+              console.log('tes');
+               v.nomor_hp.required = true;
+            }  
+            // this.setValueValidate();
+            // this.$swal({
+            //   text: `${message || "something went wrong"}`,
+            //   type: "error"
+            // });
           }
           // console.log(err);
         } finally {
@@ -1158,5 +1203,9 @@
         border-color: red;
       }
     }
+  }
+  .error {
+    color: red;
+    margin-top: 3px;
   }
 </style>

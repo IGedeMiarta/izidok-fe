@@ -77,6 +77,8 @@ import axios from "axios";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faSearch, faMoneyBill } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import moment from "moment";
+moment.locale('id');
 
 library.add(faSearch, faMoneyBill);
 
@@ -107,7 +109,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ getKlinikId: "getKlinikId", isDoctor: "doctorRole" })
+    ...mapGetters({ getKlinikId: "getKlinikId", isDoctor: "doctorRole" }),
+     now() {
+      return moment().format("YYYY-MM-DD");
+    },
   },
   beforeMount() {
     this.counterFunc();
@@ -235,6 +240,7 @@ export default {
         // console.log(err);
       }
     },
+    
     counterFunc() {
       if (this.intervalCounter) clearInterval(this.intervalCounter);
 
@@ -251,7 +257,7 @@ export default {
       try {
         const { searchValue } = this;
         const res = await axios.get(
-          `${this.url_api}/pembayaran?limit=${this.perPage}&page=${this.currentPage}&nama_pasien=${searchValue}`
+          `${this.url_api}/pembayaran?limit=${this.perPage}&page=${this.currentPage}&nama_pasien=${searchValue}&tanggal_pembayaran=${this.now}`
         );
         const { success, data } = res.data;
         if (success) {

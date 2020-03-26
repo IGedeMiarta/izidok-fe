@@ -1,6 +1,6 @@
 <template>
   <b-link
-    class="card border-0 card-box card-box-hover-rise card-box-hover text-white align-box-row align-items-start mb-5 w-100 card-dashboard"
+    class="card border-0 card-box card-box-hover-rise card-box-hover text-white align-box-row align-items-start w-100 card-dashboard"
     :class="[bgColor, pointerHoverProps]"
     :to="goTo"
   >

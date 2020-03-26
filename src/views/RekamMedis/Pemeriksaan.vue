@@ -26,7 +26,7 @@
             v-on:click="isPen = false; 
               isActive = 'eraser'"
             v-show="!isHidden"
-            :class="{ active: isActive === 'eraser' }"
+            :class="{ active_tool: isActive === 'eraser' }"
           />
           <!-- <font-awesome-icon
             icon="pen-alt"
@@ -36,7 +36,7 @@
               updatePostData({key:'pemeriksaan_is_draw', value: true});
               isActive = 'pen';
               organChanged()"
-            :class="{ active: isActive === 'pen' }"
+            :class="{ active_tool: isActive === 'pen' }"
           /> -->
           <!-- <font-awesome-icon
             icon="keyboard"
@@ -45,7 +45,7 @@
               updatePostData({key:'pemeriksaan_is_draw', value: true});
               isActive = 'keyboard';
               organChanged()"
-            :class="{ active: isActive === 'keyboard' }"
+            :class="{ active_tool: isActive === 'keyboard' }"
           /> -->
         </div>
         <div class="row d-flex justify-content-end mr-2">

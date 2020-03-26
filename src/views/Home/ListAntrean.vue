@@ -59,40 +59,29 @@
         </template>
       </template>
       <template v-slot:cell(action)="data">
-        <div class="d-flex flex-row">
-          <b-button
-            size="sm"
-            class="mx-1"
-            variant="primary"
-            v-tooltip="'View Detail'"
-            @click="showDetail(data.item.id)"
-          >
-            <font-awesome-icon icon="search" />
-          </b-button>
-          <b-button
-            size="sm"
-            class="mx-1"
-            variant="success"
-            :to="`/rekam-medis/${data.item.id}/${data.item.pasien_id}`"
-            v-if="isDoctor"
-            v-tooltip="'Halaman Rekam Medis'"
-          >
-            <font-awesome-icon icon="sign-in-alt" />
-          </b-button>
-          <b-button
-            size="sm"
-            class="mx-1"
-            variant="danger"
-            @click="pembatalanAntrean({
-                            id: data.item.id,
-                            namaPasien: data.item.nama
-                          })"
-            v-tooltip="'Hapus Antrean'" 
-            v-if="data.item.status !== 'KONSULTASI'"
-          >
-            <font-awesome-icon icon="trash-alt" />
-          </b-button>
-        </div>
+        <span>
+          <b-dropdown id="dropdown-1" class="text-capitalize" variant="primary" size="sm" right>
+            <template v-slot:button-content>
+              <font-awesome-icon icon="copy" />
+            </template>
+            <b-dropdown-item @click="
+                  showDetail(data.item.id);
+                ">Detail Registrasi Antrean</b-dropdown-item>
+            <template v-if="isDoctor">
+              <b-dropdown-item @click="
+                    rekamMedis(data)
+                  ">Tulis rekam medis</b-dropdown-item>
+            </template>
+            <template v-if="data.item.status !== 'KONSULTASI'">
+            <b-dropdown-item @click="
+                  pembatalanAntrean({
+                    id: data.item.id,
+                    namaPasien: data.item.nama
+                  })
+                ">hapus antrean</b-dropdown-item>
+            </template>
+          </b-dropdown>
+        </span>
       </template>
     </b-table>
     <b-pagination
@@ -152,12 +141,13 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faSearch,
   faSignInAlt,
-  faTrashAlt
+  faTrashAlt,
+  faCopy
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import startCase from "lodash/startCase";
 
-library.add(faSearch, faSignInAlt, faTrashAlt);
+library.add(faSearch, faSignInAlt, faTrashAlt, faCopy);
 
 const __dataRegistrasiPasien = {
   dp: {
@@ -373,7 +363,7 @@ export default {
           },
           {
             key: "action",
-            thStyle: "width: 150px"
+            thStyle: "width: 70px"
           }
         ] |> (z => g({ field: z }))
       );
@@ -412,7 +402,13 @@ export default {
           });
         }
       });
-    }
+    },
+    rekamMedis(data) {
+      const {
+        item
+      } = data;
+      this.$router.push(`/rekam-medis/${item.id}/${item.pasien_id}`);
+    },
   }
 };
 </script>
