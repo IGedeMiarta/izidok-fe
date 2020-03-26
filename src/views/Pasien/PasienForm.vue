@@ -444,10 +444,8 @@
     numeric,
     email
   } from "vuelidate/lib/validators";
-  import "vue-datetime/dist/vue-datetime.css";
-  import {
-    Datetime
-  } from "vue-datetime";
+  import "@/components/Datetime/datetime.css";
+  import { Datetime } from "@/components/Datetime";
   import "vue2-dropzone/dist/vue2Dropzone.min.css";
   import moment from "moment";
   moment.locale('id');
