@@ -75,4 +75,18 @@ export default {
     overflow: scroll;
   }
 }
+
+@media only screen and (max-width: 500px) {
+  .vdatetime-popup {
+    height: 100%;
+    overflow: scroll;
+  }
+}
+
+@media only screen and (max-width: 500px) and (min-height: 500px) {
+  .vdatetime-popup {
+    height: auto !important;
+    overflow: scroll;
+  }
+}
 </style>
