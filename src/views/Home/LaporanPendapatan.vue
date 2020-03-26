@@ -429,9 +429,7 @@ export default {
       const r = new RegExp("diagnosis", "gi");
       const v = "kode_penyakit_id";
       let tmp = "";
-
       tmp += `${periodeX({ periode })}`;
-
       searchValue.map(item => {
         const x =
           (item.key === "nama" && "nama_pasien") ||
@@ -442,7 +440,7 @@ export default {
 
       if (selectedDiagnosis) {
         const { code, label } = selectedDiagnosis;
-        tmp = `&${v}=${code}`;
+        tmp = `&${v}=${code}${tmp}`;
       }
 
       if (sortBy) {
@@ -459,7 +457,7 @@ export default {
         const res = await axios.get(
           `${this.url_api}/pembayaran/pendapatan?limit=${this.perPage}&page=${
             this.currentPage
-          }${determineParameter()}`
+          }${determineParameter()}&from=`
         );
         const {
           success,
@@ -514,7 +512,7 @@ export default {
         if (success) {
           this.diagnosisList = data.map(item => ({
             label: item.description,
-            code: item.kode
+            code: item.id
           }));
         }
       } catch (err) {
