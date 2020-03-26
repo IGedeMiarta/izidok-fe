@@ -1,23 +1,18 @@
 <template>
   <div id="app" class="d-flex flex-fill">
-    <template v-if="isBeta">
-      <div class="p-4">Izidok Is Under Construction</div>
-    </template>
-    <template v-else>
-      <loading :active.sync="isLoading" :is-full-page="true">
-        <b-spinner
-          style="width:5rem;height:5rem;color:#4b80b6 !important;"
-          type="grow"
-          label="Loading..."
-          variant="info"
-        ></b-spinner>
-      </loading>
-      <component :is="layout">
-        <transition name="fade" mode="out-in">
-          <router-view></router-view>
-        </transition>
-      </component>
-    </template>
+    <loading :active.sync="isLoading" :is-full-page="true">
+      <b-spinner
+        style="width:5rem;height:5rem;color:#4b80b6 !important;"
+        type="grow"
+        label="Loading..."
+        variant="info"
+      ></b-spinner>
+    </loading>
+    <component :is="layout">
+      <transition name="fade" mode="out-in">
+        <router-view></router-view>
+      </transition>
+    </component>
   </div>
 </template>
 
@@ -40,12 +35,6 @@ export default {
     },
     auth_error() {
       return this.$store.state.autherror;
-    },
-    isBeta() {
-      return (
-        process.env.VUE_APP_IS_BETA == 1 &&
-        moment().isBetween("2020-03-09", "2020-03-15")
-      );
     }
   },
   methods: {
@@ -73,8 +62,6 @@ export default {
     if (this.$store.state.autherror) {
       this.showAuthError();
     }
-
-    console.log("isBeta", this.isBeta);
   }
 };
 </script>
