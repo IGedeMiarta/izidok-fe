@@ -740,9 +740,13 @@
            ;
           if (this.$router.currentRoute.params.idPasien){
             if(this.formType == 'edit'){
+              if(this.tempat.provinsi === null){
+                  this.tempat.kota = null;
+              }
               if(this.tempat.kota.provinsi_id !== this.tempat.provinsi.id){
                 this.tempat.kota = null;
               }
+              
             }
           }
           else if(this.cities[0].provinsi_id !== this.tempat.provinsi){
