@@ -103,7 +103,7 @@ export default {
   data() {
     return {
       pembayaran_id: null,
-      afterPrintInjected: false,
+      // afterPrintInjected: false,
       iframeStrukStyle: {
         height: '600px',
         width: '362px',
@@ -161,25 +161,25 @@ export default {
     },
     cetakStruk() {
 
-      let fnAfterPrint = (e) => {
-        this.$swal({
-          title: startCase("struk berhasil di cetak"),
-          text: `Silahkan ambil struk pembayaran Anda`,
-          type: "success",
-          confirmButtonText: startCase("ok")
-        });
-      };
+      // let fnAfterPrint = (e) => {
+      //   this.$swal({
+      //     title: startCase("struk berhasil di cetak"),
+      //     text: `Silahkan ambil struk pembayaran Anda`,
+      //     type: "success",
+      //     confirmButtonText: startCase("ok")
+      //   });
+      // };
 
-      if(this.afterPrintInjected == false) {
-        if(this.$refs.iframeStruk.contentWindow.onafterprint) {
-          this.$refs.iframeStruk.contentWindow.onafterprint = fnAfterPrint
-        }
-        else {
-          this.$refs.iframeStruk.contentWindow.addEventListener('afterprint', fnAfterPrint)
-        }
+      // if(this.afterPrintInjected == false) {
+      //   if(this.$refs.iframeStruk.contentWindow.onafterprint) {
+      //     this.$refs.iframeStruk.contentWindow.onafterprint = fnAfterPrint
+      //   }
+      //   else {
+      //     this.$refs.iframeStruk.contentWindow.addEventListener('afterprint', fnAfterPrint)
+      //   }
 
-        this.afterPrintInjected = true
-      }
+      //   this.afterPrintInjected = true
+      // }
 
       this.$refs.iframeStruk.contentWindow.print()
     },

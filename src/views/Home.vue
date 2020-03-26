@@ -3,7 +3,7 @@
     <div class="app-content--inner p-0 d-flex flex-column"> -->
   <div>
     <b-row class="my-4">
-      <b-col cols="12">
+      <b-col>
         <div>
           <ol class="d-inline-block breadcrumb text-uppercase font-size-xs p-0">
             <li class="d-inline-block breadcrumb-item">
@@ -16,14 +16,14 @@
               dashboard
             </li>
           </ol>
-          <div class="d-flex flex-row align-items-center">
+          <div class="d-sm-flex flex-row align-items-center">
             <h5
               class="display-4 mt-1 mb-1 font-weight-bold text-capitalize flex-grow-1"
             >
-              dashboard
+              dashboard <span class="d-inline d-md-none">Hari ini</span>
             </h5>
             <h5 class="display-4 mt-1 mb-1 font-weight-bold text-capitalize">
-              Hari ini, {{ nowIndonesia }}
+              <span class="d-none d-md-inline">Hari ini, </span>{{ nowIndonesia }}
             </h5>
           </div>
         </div>
@@ -48,7 +48,7 @@
               :goTo="{ name: 'antrean-rawat-jalan' }"
             />
           </div>
-          <div class="d-lg-flex align-items-center w-100 mr-2 d-sm-none">
+          <div class="d-lg-flex align-items-center w-100 mr-2 d-none">
             <CardDashboard
               title="no. antrean saat ini"
               :highlight="nomor_antrean"
@@ -64,7 +64,7 @@
               :goTo="{ name: 'antrean-rawat-jalan' }"
             />
           </div>
-          <div class="d-lg-flex align-items-center w-100 ml-2 d-sm-none">
+          <div class="d-lg-flex align-items-center w-100 ml-2 d-none">
             <CardDashboard
               title="total pendapatan hari ini"
               :highlight="totalPendapatan"
@@ -202,7 +202,7 @@ export default {
     },
     nowIndonesia() {
       moment.locale("ID");
-      return moment().format("D MMMM YYYY");
+      return moment().format("dddd, D MMMM YYYY");
     }
   },
   methods: {
