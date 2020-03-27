@@ -203,7 +203,7 @@
                 <b-form-group class="text-capitalize" style="position: relative;">
                   <label>Jenis Identitas</label>
                   <template v-if="this.formDataRegister['jenis_identitas'] || this.formDataRegister['nik']">
-                    <labelstyle="color:red"> *</label>
+                    <label style="color:red"> *</label>
                   </template>
                   <vue-select :options="
                     ['KTP', 'SIM', 'Paspor']
