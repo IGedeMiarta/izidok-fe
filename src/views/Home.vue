@@ -20,10 +20,10 @@
             <h5
               class="display-4 mt-1 mb-1 font-weight-bold text-capitalize flex-grow-1"
             >
-              dashboard <span class="d-inline d-md-none">Hari ini</span>
+              dashboard
             </h5>
             <h5 class="display-4 mt-1 mb-1 font-weight-bold text-capitalize">
-              <span class="d-none d-md-inline">Hari ini, </span>{{ nowIndonesia }}
+              Hari ini, {{ nowIndonesia }}
             </h5>
           </div>
         </div>
