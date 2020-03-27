@@ -152,7 +152,9 @@
               <label style="color:red">*</label>
               <b-form-input type="text" v-model.trim="formDataRegister.nama">
               </b-form-input>
-              <div class="error" v-if="!$v.formDataRegister.nama.required && $v.formDataRegister.nama.$model == '' || this.checkError.nama !== null">Nama
+              <div class="error"
+                v-if="(!$v.formDataRegister.nama.required && $v.formDataRegister.nama.$model == '') || this.checkError.nama !== null">
+                Nama
                 harus diisi!</div>
             </b-form-group>
           </div>
@@ -197,7 +199,8 @@
                 v-model.trim="formDataRegister.nomor_hp">
               </b-form-input>
               <div class="error"
-                v-if="!$v.formDataRegister.nomor_hp.required && $v.formDataRegister.nomor_hp.$model == ''">No. Handphone
+                v-if="!$v.formDataRegister.nomor_hp.required && $v.formDataRegister.nomor_hp.$model == '' || this.checkError.nomor_hp !== null">
+                No. Handphone
                 harus diisi!</div>
               <div class="error" v-if="!$v.formDataRegister.nomor_hp.minLength">No. Handphone minimal 10 angka!</div>
             </b-form-group>
@@ -261,7 +264,9 @@
               <b-form-textarea id="input-1" rows="3" max-rows="6" type="text"
                 v-model.trim="formDataRegister.alamat_rumah">
               </b-form-textarea>
-              <div class="error" v-if="!$v.formDataRegister.alamat && $v.formDataRegister.alamat.$model == ''">Alamat
+              <div class="error"
+                v-if="!$v.formDataRegister.alamat && $v.formDataRegister.alamat.$model == ''  || this.checkError.alamat_rumah !== null">
+                Alamat
                 harus diisi!</div>
             </b-form-group>
           </div>
@@ -490,11 +495,11 @@
         hubungan_pasien: null
       },
       checkError: {
-          nama: null,
-          alamat: null,
-          nomor_telp: null,
-          jenis_kelamin: null,
-        },
+        nama: null,
+        alamat_rumah: null,
+        nomor_hp: null,
+        jenis_kelamin: null,
+      },
       provinces: [],
       checkPaketData: null,
       cities: [],
@@ -552,21 +557,25 @@
         }
       };
     },
+
     async mounted() {
       await this.cekPaket();
       this.formBasicData = this.setFormBasicData();
       this.formData = this.setFormData();
       this.getProvince();
+      await this.resetError();
       // await this.setValueValidate();
       // Promise.all([this.fetchDokter()]);
-      if(this.checkError.nama !== null || this.formDataRegister.nama !== null){
-        this.checkError.nama = null;
-      }
-      if(this.checkError.jenis_kelamin !== null || this.formDataRegister.jenis_kelamin !== null){
-        this.checkError.jenis_kelamin = null;
-      }
+
     },
     computed: {
+      // checkNama(val){
+      //   if((this.formDataRegister.nama !== null) || this.checkError.nama !== null){
+      //      this.checkError.nama = null;
+      //   } else {
+      //      this.checkError.nama !== null
+      //   }
+      // },
       minimumDatetime() {
         return moment().format("YYYY-MM-DD");
       },
@@ -579,10 +588,26 @@
       //   this.formDataRegister.nama = value
       // this.$v.formDataRegister.nama.$touch()
       // },
+      async resetError() {
+        if (this.checkError.nama !== null) {
+          console.log('m')
+          if ((this.formDataRegister.nama !== null || this.formDataRegister.nama != '')) {
+            console.log('masukk')
+            this.checkError.nama = null;
+          }
+        }
+        if (this.checkError.jenis_kelamin !== null) {
+          console.log('k')
+          if (this.formDataRegister.jenis_kelamin !== null) {
+            console.log('c')
+            this.checkError.jenis_kelamin = null;
+          }
+        }
+      },
       async setValueValidate() {
         let v = this.$v.formDataRegister;
         this.formDataRegister.nama = v.nama.$model;
-      
+
         this.formDataRegister.nomor_hp = v.nomor_hp.$model.nomor_hp;
         this.formDataRegister.alamat_rumah = v.alamat.$model.alamat;
         this.formDataRegister.tanggal_lahir = v.tanggal_lahir.$model.tanggal_lahir;
@@ -896,7 +921,6 @@
         console.log(this.formDataRegister['jenis_identitas'], this.formDataRegister['nik'])
 
         if (!this.formDataRegister['jenis_identitas'] && !this.formDataRegister['nik']) {
-
           try {
             this.formDataRegister.tanggal_lahir = moment(this.formDataRegister.tanggal_lahir).format("YYYY-MM-DD")
             const res = await axios.post(
@@ -963,11 +987,11 @@
                 })
                 this.formData['nama_pasien'] = eventVal
               }, 200);
-                
-            this.checkError.nama = null;
-            this.checkError.jenis_kelamin = null;
-            this.checkError.alamat = null;
-            this.checkError.nomor_telp = null;
+
+              this.checkError.nama = null;
+              this.checkError.jenis_kelamin = null;
+              this.checkError.alamat_rumah = null;
+              this.checkError.nomor_hp = null;
 
               this.$refs['modal-pasien'].hide()
             }
@@ -979,17 +1003,19 @@
               console.log(err.response.data);
               let v = this.$v.formDataRegister;
               let cek = Object.keys(err.response.data).map(item => {
-               console.log(item)
-                if (item == 'nama') {
+                console.log('itemnya', item)
+                if (item === 'nama') {
                   this.checkError.nama = item;
                 }
-                if (item == 'alamat_rumah') {
-                  this.cekPaket.alamat = item;
+                if (item === 'alamat_rumah') {
+                  console.log('disini', item)
+                  this.checkError.alamat_rumah = item;
                 }
-                if (item == 'nomor_hp') {
-                  this.cekPaket.nomor_telp = item;
+                if (item === 'nomor_hp') {
+                  console.log('disini 2', item)
+                  this.checkError.nomor_hp = item;
                 }
-                if (item == 'jenis_kelamin') {
+                if (item === 'jenis_kelamin') {
                   this.checkError.jenis_kelamin = item;
                 }
               });
@@ -1272,7 +1298,7 @@
               text: `Antrean atas nama ${nama_lengkap} tersimpan pada urutan ${nomor_antrian}`,
               type: "success",
             });
-          
+
             this.$router.push("/rawat-jalan/antrean");
           } else {
             this.$swal({
