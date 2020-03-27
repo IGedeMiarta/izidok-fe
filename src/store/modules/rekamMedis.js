@@ -130,12 +130,13 @@ const actions = {
         //     return;
         // }
 
-        // next konsul
-        if (!state.postData['next_konsultasi']) {
 
-            commit('setIsSaving', { key: 'is_next_konsul', value: false });
-            return;
-        }
+      // next konsul
+      if (!state.postData['next_konsultasi']) {
+
+        commit('setIsSaving', { key: 'is_next_konsul', value: false });
+        return;
+      }
       if (state.postData['tgl_next_konsultasi' === false]) {
 
         commit('setIsSaving', { key: 'is_next_konsul', value: false });
