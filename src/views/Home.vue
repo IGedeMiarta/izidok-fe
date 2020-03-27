@@ -257,35 +257,20 @@ export default {
         const res = await axios.get(`${this.url_api}/dash-pasien`);
         const {
           status,
-          data: {
-            data: {
-              pasien_hari_ini = 10,
-              pasien_baru_hari_ini = 0,
-              nomor_antrian_saat_ini = 0,
-              pasien_batal_hari_ini = 0,
-              total_pendapatan_hari_ini = 0,
-              paket_berlangganan: {
-                durasi_paket,
-                sisa_hari,
-                habis_berlaku,
-                sisa_kouta,
-                nama_paket,
-              }
-            }
-          }
+          data
         } = res;
         if (status) {
-          this.totalPasienHariIni = pasien_hari_ini || 0;
-          this.pasienBaruHariIni = pasien_baru_hari_ini || 0;
-          this.nomor_antrean = nomor_antrian_saat_ini || 0;
-          this.pasienBatalHariIni = pasien_batal_hari_ini || 0;
-          this.totalPendapatan = total_pendapatan_hari_ini || 0;
+          this.totalPasienHariIni = data.data.pasien_hari_ini || 0;
+          this.pasienBaruHariIni = data.data.pasien_baru_hari_ini || 0;
+          this.nomor_antrean = data.data.nomor_antrian_saat_ini || 0;
+          this.pasienBatalHariIni = data.data.pasien_batal_hari_ini || 0;
+          this.totalPendapatan = data.data.total_pendapatan_hari_ini || 0;
           this.paketAnda = {
-            nama_paket : nama_paket || 'Anda belum melakukan pembelian paket apapun',
-            durasi_paket : durasi_paket || '-',
-            sisa_kouta : sisa_kouta || '-',
-            habis_berlaku : habis_berlaku || '-',
-            sisa_hari : sisa_hari || '-'
+            nama_paket : data.data.paket_berlangganan.nama_paket || 'Anda belum melakukan pembelian paket apapun',
+            durasi_paket : data.data.paket_berlangganan.durasi_paket || '-',
+            sisa_kouta : data.data.paket_berlangganan.sisa_kouta || '-',
+            habis_berlaku : data.data.paket_berlangganan.habis_berlaku || '-',
+            sisa_hari : data.data.paket_berlangganan.sisa_hari || '-'
           }
         }
       } catch (err) {
