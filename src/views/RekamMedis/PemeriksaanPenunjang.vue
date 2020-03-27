@@ -213,7 +213,7 @@
       class="row file-upload"
     >
       <div class="col-md-4">
-        <label>{{ item.name }}</label>
+        <label class="text-break">{{ item.name }}</label>
       </div>
       <div class="col-md-2">
         <label>{{ item.size / 1000 }} KB</label>

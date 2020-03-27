@@ -13,25 +13,25 @@
         <b-col sm="8">
           <b-row>
             <b-col sm="12">
-              <h5 class="display-4 mt-1 mb-2 font-weight-bold">Riwayat Rekam Medis</h5>
+              <h5 class="display-4 mt-1 mb-2 font-weight-bold text-left">Riwayat Rekam Medis</h5>
             </b-col>
           </b-row>
           <b-row>
             <b-col sm="4">
-              <p class="text-uppercase mb-2">Nama Pasien</p>
+              <p class="text-uppercase mb-2 text-left">Nama Pasien</p>
             </b-col>
             <b-col sm="1">:</b-col>
-            <b-col sm="7">
-              <p class="text-uppercase mb-2">{{ pasien.nama }}</p>
+            <b-col sm="6">
+              <p class="text-uppercase text-left mb-2">{{ pasien.nama }}</p>
             </b-col>
           </b-row>
           <b-row>
             <b-col sm="4">
-              <p class="text-uppercase mb-2">Nomor Rekam Medis</p>
+              <p class="text-uppercase mb-2 text-left">Nomor Rekam Medis</p>
             </b-col>
             <b-col sm="1">:</b-col>
-            <b-col sm="7">
-              <p class="text-uppercase mb-2">{{ pasien.nomor_rekam_medis }}</p>
+            <b-col sm="6">
+              <p class="text-uppercase text-left mb-2">{{ pasien.nomor_rekam_medis }}</p>
             </b-col>
           </b-row>
         </b-col>
