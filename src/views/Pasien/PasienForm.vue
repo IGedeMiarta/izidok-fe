@@ -79,7 +79,7 @@
             </b-form-group>
           </b-col>
           <b-col sm="2">
-            <b-form-group :label="renderLabel({ label: 'jenis identitas' })" class="text-capitalize"
+            <b-form-group class="text-capitalize"
               style="position: relative;" :state="getDataError({ rawLabel: 'jenis identitas' })" :invalid-feedback="
                   renderInvalidFeedback({
                     validationDesc: blindlyGetData({
@@ -87,6 +87,10 @@
                     })
                   })
                 ">
+              <label>Jenis Identitas</label>
+              <template v-if="this.formData['jenis_identitas'] || this.formData['nik']">
+                <label style="color:red"> *</label>
+              </template>
               <vue-select :options="
                     ['KTP', 'SIM', 'Paspor']
                   " @input="
@@ -98,7 +102,7 @@
             </b-form-group>
           </b-col>
           <b-col sm="4">
-            <b-form-group label="No. identitas" class="text-capitalize" style="position: relative"
+            <b-form-group  class="text-capitalize" style="position: relative"
               :state="getDataError({ rawLabel: 'nik' })" :invalid-feedback="
             renderInvalidFeedback({
               validationDesc: blindlyGetData({
@@ -106,6 +110,10 @@
               })
             })
           ">
+              <label>No. identitas</label>
+              <template v-if="this.formData['jenis_identitas'] || this.formData['nik']">
+                <label for="" style="color:red"> *</label>
+              </template>
               <template v-if="this.formData['jenis_identitas'] !== '' && this.formData['jenis_identitas'] !== null">
                 <b-form-input v-if="this.formData['jenis_identitas'] !== 'Paspor'" @keypress="
               onKeyInputNumber({
@@ -361,7 +369,7 @@
             </b-form-group>
           </b-col>
           <b-col sm="6">
-            <b-form-group label="provinsi" class="text-capitalize" style="position: relative"
+            <b-form-group lass="text-capitalize" style="position: relative"
               :state="getDataError({ rawLabel: 'provinsi' })" :invalid-feedback="
               renderInvalidFeedback({
                 validationDesc: blindlyGetData({
@@ -369,12 +377,16 @@
                 })
               })
             ">
+              <label>Provinsi</label>
+              <template v-if="tempat.provinsi">
+                <label style="color:red"> *</label>
+              </template>
               <vue-select :options="provinces" @input="getCity" :disabled="disabledForm()" v-model="tempat.provinsi" />
             </b-form-group>
           </b-col>
           <b-col sm="6"> </b-col>
           <b-col sm="6">
-            <b-form-group label="kota" class="text-capitalize" style="position: relative"
+            <b-form-group  class="text-capitalize" style="position: relative"
               :state="getDataError({ rawLabel: 'kota' })" :invalid-feedback="
               renderInvalidFeedback({
                 validationDesc: blindlyGetData({
@@ -382,6 +394,10 @@
                 })
               })
             ">
+              <label>Kota</label>
+              <template v-if="tempat.provinsi">
+                <label style="color:red"> *</label>
+              </template>
               <vue-select :options="cities" v-model="tempat.kota" @input="setDataTempat" :disabled="disabledForm()" />
             </b-form-group>
           </b-col>
@@ -715,6 +731,7 @@
         }, 550);
       },
       async getCity() {
+        console.log(this.formData['provinsi'] ,this.formData['kota'] )
         try {
           var val;
           if (this.tempat.provinsi == '' || this.tempat.provinsi == null) {
@@ -974,6 +991,37 @@
         });
       },
       submitForm() {
+        if  (!this.formData['jenis_identitas']  && !this.formData['nik']  ) {
+        } else if(this.formData['jenis_identitas']  && this.formData['nik']){
+        } else if(this.formData['jenis_identitas'] !== null && !this.formData['nik']  ) {
+          return this.$swal({
+            text: `Nomor Identitas harus diisi !`,
+            type: "error",
+            showCancelButton: false,
+            confirmButtonText: startCase("ya")
+          }).then(res => {
+            const {
+              value
+            } = res;
+            if (value) {
+              return;
+            }
+          });
+        } else if(!this.formData['jenis_identitas'] && this.formData['nik']  !== null ) {
+          return this.$swal({
+            text: `Jenis Identitas harus diisi !`,
+            type: "error",
+            showCancelButton: false,
+            confirmButtonText: startCase("ya")
+          }).then(res => {
+            const {
+              value
+            } = res;
+            if (value) {
+              return;
+            }
+          });
+        }
         const {
           formBasicData
         } = this;
