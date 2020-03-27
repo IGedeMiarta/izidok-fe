@@ -13,11 +13,13 @@
             <b-form-select size="sm" v-model="periodeSelected" :options="filterPeriode"></b-form-select>
           </b-col>
           <b-col sm="8" offset-sm="4" lg="6" v-if="selectedPeriodeRange">
-            <DatePicker v-model="dateRange" type="daterange" range-separator="To" start-placeholder="Start date"
+            <!-- <DatePicker v-model="dateRange" type="daterange" range-separator="To" start-placeholder="Start date"
               end-placeholder="End date" size="small" format="dd-MM-yyyy" value-format="dd-MM-yyyy"
               :disabledDate="disabledDate" :picker-options="{
                 disabledDate
-              }" />
+              }" /> -->
+            <!-- <CalendarX/> -->
+            <DatePickerX v-model="dateRange" :popover="{ placement: 'auto', visibility: 'click', positionFixed: true }" mode="range" :input-props="{placeholder: 'Pilih Tanggal', readonly: true}" :masks="{input: 'DD-MM-YYYY'}" :max-date="maxDate" :min-date="minDate" :is-required="true"/>
           </b-col>
         </b-row>
         <b-row class="mb-2">
@@ -129,9 +131,11 @@
 
   export default {
     components: {
-      DatePicker,
+      // DatePicker,
       DataTableWrapper: () => import("../../components/DataTableWrapper"),
-      "vue-select": () => import("vue-select")
+      "vue-select": () => import("vue-select"),
+      // CalendarX: () => import('v-calendar/lib/components/calendar.umd'),
+      DatePickerX: () => import('v-calendar/lib/components/date-picker.umd')
     },
     data() {
       return {
@@ -154,6 +158,12 @@
       };
     },
     computed: {
+      minDate() {
+        return moment().subtract(3, 'months').toDate();
+      },
+      maxDate() {
+        return moment().toDate()
+      },
       selectedPeriodeRange() {
         const {
           periodeSelected
@@ -313,7 +323,7 @@
               dateRange
             } = this;
             if (dateRange) {
-              const [startDate, endDate] = dateRange;
+              const {start: startDate, end: endDate} = dateRange;
               const formatDate = "DD-MM-YYYY";
               if (rawValue) {
                 return `${moment(startDate, formatDate).format(
