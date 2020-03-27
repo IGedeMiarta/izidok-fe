@@ -667,6 +667,20 @@
         kota: null,
       }
     }),
+    watch: {
+      'tempat.provinsi': {
+        handler: function(newVal, oldVal) {
+          if (newVal === oldVal) {
+            const { provinsi_name: pnl } = newVal
+            const { provinsi_name: pnb } = oldVal
+            if (pnl.toLowerCase() !== pnb.toLowerCase()) {
+              this.provinsi.kota = null
+            }
+          }
+        },
+        nested: true
+      }
+    },
     computed: {
       maximumDatetime() {
         return moment().format("YYYY-MM-DD");
