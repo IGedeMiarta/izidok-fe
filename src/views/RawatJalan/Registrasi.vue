@@ -77,6 +77,45 @@
                           })
                         " />
                     </template>
+                    <template v-if="
+                        form.type === 'textspecial' &&
+                          form.label !== 'waktu_konsultasi'
+                      ">
+                      <b-form-input v-if="
+                          !/(badan)/gi.test(form.label) &&
+                            ![
+                              'tensi sistole',
+                              'tensi diastole',
+                              'nadi'
+                            ].includes(form.rawLabel.toLowerCase()) &&
+                            whitelistValidation &&
+                            !whitelistValidation().includes(
+                              form.rawLabel.toLowerCase()
+                            )
+                        " :type="form.type || 'text'" v-model="formData[form.label]" @keyup="
+                          setValue({
+                            rawLabel: form.rawLabel,
+                            label: form.label,
+                            $event,
+                            tmpId: form.tmpId
+                          })
+                        " :state="renderError({ error: form.error })" disabled />
+                      <b-form-input v-else :type="form.type || 'text'" v-model.lazy="formData[form.label]" @keyup="
+                          setValue({
+                            rawLabel: form.rawLabel,
+                            label: form.label,
+                            $event,
+                            tmpId: form.tmpId
+                          })
+                        "
+                        @keypress="
+                          onKeyInputNumberSpecial({
+                            label: form.label,
+                            rawLabel: form.rawLabel,
+                            $event
+                          })
+                        " />
+                    </template>
 
                     <vue-select :class="{ error: form.error }" :options="options[form.label]" @input="
                         setValue({
@@ -164,7 +203,7 @@
                 <b-form-group class="text-capitalize" style="position: relative;">
                   <label>Jenis Identitas</label>
                   <template v-if="this.formDataRegister['jenis_identitas'] || this.formDataRegister['nik']">
-                    <label for="" style="color:red"> *</label>
+                    <labelstyle="color:red"> *</label>
                   </template>
                   <vue-select :options="
                     ['KTP', 'SIM', 'Paspor']
@@ -175,7 +214,7 @@
                 <b-form-group class="text-capitalize" style="position: relative">
                   <label>No. identitas</label>
                   <template v-if="this.formDataRegister['jenis_identitas'] || this.formDataRegister['nik']">
-                    <label for="" style="color:red"> *</label>
+                    <label style="color:red"> *</label>
                   </template>
                   <b-form-input v-if="this.formDataRegister['jenis_identitas'] !== 'Paspor'"
                     v-model.trim="formDataRegister['nik']"
@@ -417,7 +456,7 @@
 
     {
       label: "tinggi badan",
-      type: "text",
+      type: "textspecial",
       col: 4,
       colLg: 2,
       satuan: '(cm)',
@@ -425,7 +464,7 @@
     },
     {
       label: "berat badan",
-      type: "text",
+      type: "textspecial",
       col: 4,
       colLg: 2,
       satuan: '(kg)',
@@ -433,7 +472,7 @@
     },
     {
       label: "suhu",
-      type: "text",
+      type: "textspecial",
       col: 4,
       colLg: 2,
       satuan: '(celcius)',
@@ -905,7 +944,7 @@
           }
         });
       },
-      onKeyInputNumber({
+      onKeyInputNumberSpecial({
         label,
         rawLabel,
         $event
@@ -916,7 +955,28 @@
         if (
           charCode > 31 &&
           (charCode < 48 || charCode > 57) &&
-          charCode !== 46
+          charCode !== 44
+        ) {
+          evt.preventDefault();
+        } else {
+          void this.setValue({
+            label,
+            rawLabel,
+            $event
+          });
+        }
+      },
+      onKeyInputNumber({
+                         label,
+                         rawLabel,
+                         $event
+                       }) {
+        var evt = $event;
+        evt = evt ? evt : window.event;
+        var charCode = evt.which ? evt.which : evt.keyCode;
+        if (
+          charCode > 31 &&
+          (charCode < 48 || charCode > 57)
         ) {
           evt.preventDefault();
         } else {

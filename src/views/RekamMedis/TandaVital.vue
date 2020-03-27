@@ -28,7 +28,7 @@
             type="text"
             class="form-control"
             id="tinggi_badan"
-            :value="pasien.tinggi_badan"
+            :value="pasien.tinggi_badan.toString().replace('.',',')"
             @input="updateAnamnesa({key:$event.target.id, value: $event.target.value})"
           />
         </div>
@@ -38,7 +38,7 @@
             type="text"
             class="form-control"
             id="berat_badan"
-            :value="pasien.berat_badan"
+            :value="pasien.berat_badan.toString().replace('.',',')"
             @input="updateAnamnesa({key:$event.target.id, value: $event.target.value})"
           />
         </div>
@@ -50,7 +50,7 @@
         </div>
         <div class="form-group col-md-2">
           <label >Suhu</label>
-          <input type="text" class="form-control" id="suhu" :value="pasien.suhu" @input="updateAnamnesa({key:$event.target.id, value: $event.target.value})"/>
+          <input type="text" class="form-control" id="suhu" :value="pasien.suhu.toString().replace('.',',')" @input="updateAnamnesa({key:$event.target.id, value: $event.target.value})"/>
         </div>
         <div class="form-group col-md-4">
           <label >Respirasi</label>
@@ -65,10 +65,20 @@
 import { mapGetters, mapActions } from "vuex";
 
 export default {
+  data: () => ({
+   bb:0,
+   tb:0,
+   suhu:0,
+  }),
   name: "Anamnesa",
   computed: mapGetters(["pasien"]),
-  methods: mapActions(["updateAnamnesa"]),
+  methods: {
+    ...mapActions(["updateAnamnesa"]),
+
+  },
+
 };
+
 </script>
 
 <style>
