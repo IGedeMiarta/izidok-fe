@@ -9,6 +9,7 @@ const getDefaultState = () => {
         penyakits: [],
         pasien: {},
         postData: {},
+        transaksi: {},
         canvas_pemeriksaan: null,
         canvas_diagnosa: null,
         canvas_anamnesa: null,
@@ -29,6 +30,7 @@ const getDefaultState = () => {
 const state = getDefaultState();
 
 const getters = {
+    trx: state => state.transaksi,
     pasien: state => state.pasien,
     organs: state => state.organs,
     postData: state => state.postData,
@@ -61,6 +63,9 @@ const actions = {
             store.state.URL_API + "/transaksi/" + transklinik_id, {
             status: 'KONSULTASI'
         });
+
+        // console.log(TransStatus.data)
+        commit('setTransaksi', TransStatus.data.data)
 
         // console.log('Rawat Jalan Status: ', TransStatus.data.data.status);
 
@@ -230,6 +235,7 @@ const mutations = {
         Object.assign(state, getDefaultState())
     },
     setPasien: (state, pasien) => (state.pasien = pasien.data),
+    setTransaksi: (state, transData) => (state.transaksi = transData),
     setOrgans: (state, organs) => (state.organs = organs.data.organ),
     setPostData: (state, payload) => {
         state.postData[payload.key] = payload.value;

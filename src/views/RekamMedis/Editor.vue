@@ -25,7 +25,7 @@
         data() {
             return {
                 name: '01-example',
-                content: this.editorContent,
+                // content: this.editorContent,
                 editorOption: {
                     modules: {
                         toolbar: [
@@ -46,11 +46,19 @@
             editor() {
                 return this.$refs.myTextEditor.quill
             },
-        },
-        watch:{
-            content: function(){
-                this.$emit('update-content', this.content);
+            content: {
+              set(val) {
+                this.$emit('update-content', val);
+              },
+              get() {
+                return this.editorContent
+              }
             }
-        }
+        },
+        // watch:{
+        //     content: function(){
+        //         this.$emit('update-content', this.content);
+        //     }
+        // }
     }
 </script>

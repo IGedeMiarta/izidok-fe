@@ -121,7 +121,6 @@
 <script>
 import Header from "./RekamMedis/Header.vue";
 import TandaVital from "./RekamMedis/TandaVital";
-import Anamnesa from "./RekamMedis/Anamnesa";
 import Pemeriksaan from "./RekamMedis/Pemeriksaan.vue";
 import Diagnosa from "./RekamMedis/Diagnosa";
 import TataLaksana from "./RekamMedis/TataLaksana";
@@ -161,7 +160,7 @@ export default {
   components: {
     Header,
     TandaVital,
-    Anamnesa,
+    Anamnesa: () => import("./RekamMedis/Anamnesa"),
     Pemeriksaan,
     Diagnosa,
     TataLaksana,

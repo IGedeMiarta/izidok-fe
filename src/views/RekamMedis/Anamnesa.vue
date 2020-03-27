@@ -95,7 +95,7 @@
       </div>
       <div class="col-md-12" v-show="isHidden">
         <label></label>
-        <Editor :editorContent="pasien.anamnesa" v-on:update-content="updateContent"/>
+        <Editor :editorContent="anamnesa" v-on:update-content="updateContent"/>
       </div>
     </div>
   </div>
@@ -126,7 +126,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["pasien"]),
+    ...mapGetters(["pasien", 'trx']),
+    anamnesa() {
+      const { anamnesa } = this.trx
+      return anamnesa
+    },
     canvas() {
       return this.$refs.canvas;
     }
