@@ -8,62 +8,95 @@
           <font-awesome-icon
             icon="eraser"
             class="font-size-xl m-2 grow icon"
-            v-on:click="isPen = false; 
-              isActive = 'eraser'"
+            v-on:click="
+              isPen = false;
+              isActive = 'eraser';
+            "
             v-show="!isHidden"
             :class="{ active_tool: isActive === 'eraser' }"
           />
           <font-awesome-icon
             icon="pen-alt"
             class="font-size-xl m-2 grow icon"
-            v-on:click="isHidden = false;
+            v-on:click="
+              isHidden = false;
               isPen = true;
-              updatePostData({key:'pemeriksaan_penunjang_is_draw', value: true});
-              isActive = 'pen'"
+              updatePostData({
+                key: 'pemeriksaan_penunjang_is_draw',
+                value: true
+              });
+              isActive = 'pen';
+            "
             :class="{ active_tool: isActive === 'pen' }"
           />
           <font-awesome-icon
             icon="keyboard"
             class="font-size-xl m-2 grow icon"
-            v-on:click="isHidden = true;
-              updatePostData({key:'pemeriksaan_penunjang_is_draw', value: false});
-              isActive = 'keyboard'"
+            v-on:click="
+              isHidden = true;
+              updatePostData({
+                key: 'pemeriksaan_penunjang_is_draw',
+                value: false
+              });
+              isActive = 'keyboard';
+            "
             :class="{ active_tool: isActive === 'keyboard' }"
           />
         </div>
         <div class="row d-flex justify-content-end mr-2">
           <div>
-            <input type="range" class="custom-range" min="1" max="50" v-model.number="penWidth" />
+            <input
+              type="range"
+              class="custom-range"
+              min="1"
+              max="50"
+              v-model.number="penWidth"
+            />
           </div>
         </div>
         <div class="row d-flex justify-content-end mr-2">
           <div>
             <span
-              @click="penColor('blue');isColorActive = 'blue'"
+              @click="
+                penColor('blue');
+                isColorActive = 'blue';
+              "
               class="dot grow"
               style="background-color: blue;"
               :class="{ color_active: isColorActive === 'blue' }"
             ></span>
             <span
-              @click="penColor('red');isColorActive = 'red'"
+              @click="
+                penColor('red');
+                isColorActive = 'red';
+              "
               class="dot grow"
               style="background-color: red;"
               :class="{ color_active: isColorActive === 'red' }"
             ></span>
             <span
-              @click="penColor('#54c756');isColorActive = 'green'"
+              @click="
+                penColor('#54c756');
+                isColorActive = 'green';
+              "
               class="dot grow"
               style="background-color: #54c756;"
               :class="{ color_active: isColorActive === 'green' }"
             ></span>
             <span
-              @click="penColor('#555');isColorActive = 'black'"
+              @click="
+                penColor('#555');
+                isColorActive = 'black';
+              "
               class="dot grow"
               style="background-color: #555;"
               :class="{ color_active: isColorActive === 'black' }"
             ></span>
             <span
-              @click="penColor('orange');isColorActive = 'yellow'"
+              @click="
+                penColor('orange');
+                isColorActive = 'yellow';
+              "
               class="dot grow"
               style="background-color: orange;"
               :class="{ color_active: isColorActive === 'yellow' }"
@@ -91,9 +124,12 @@
           @touchmove="handleTouchmove"
           width="1000"
           height="500"
-        >Your browser does not support the HTML 5 Canvas.</canvas>
+          >Your browser does not support the HTML 5 Canvas.</canvas
+        >
         <div class="col-md-4">
-          <b-button @click="clear" variant="warning" size="sm" class="m-1">Clear</b-button>
+          <b-button @click="clear" variant="warning" size="sm" class="m-1"
+            >Clear</b-button
+          >
         </div>
       </div>
       <div class="col-md-12" v-show="isHidden">
@@ -109,38 +145,60 @@
     </div>
 
     <div id="upload-box" class="row justify-content-md-center">
-      <b-button variant="dark" @click="$refs.cameraInput.click()">
-        <span class="btn-wrapper--icon">
-          <font-awesome-icon icon="camera" />
-        </span>
-        <span class="btn-wrapper--label">Dari Kamera</span>
-      </b-button>
-      <input
-        type="file"
-        accept="image/*"
-        capture="environment"
-        style="display:none"
-        ref="cameraInput"
-        @change="onImageCaptured"
-      />
-      <div class="col-md-auto">Atau</div>
-      <b-button variant="dark" @click="$refs.fileInput.click()">
-        <span class="btn-wrapper--icon">
-          <font-awesome-icon icon="folder" />
-        </span>
-        <span class="btn-wrapper--label">Cari File</span>
-      </b-button>
-      <input
-        type="file"
-        @change="onFileSelected"
-        style="display:none"
-        ref="fileInput"
-        multiple="multiple"
-      />
+      <template v-if="!activateCamera">
+        <b-button variant="dark" @click="determineAction">
+          <span class="btn-wrapper--icon">
+            <font-awesome-icon icon="camera" />
+          </span>
+          <span class="btn-wrapper--label">Dari Kamera</span>
+        </b-button>
+        <input
+          type="file"
+          accept="image/*"
+          capture="environment"
+          style="display:none"
+          ref="cameraInput"
+          @change="onImageCaptured"
+        />
+        <div class="col-md-auto">Atau</div>
+        <b-button variant="dark" @click="$refs.fileInput.click()">
+          <span class="btn-wrapper--icon">
+            <font-awesome-icon icon="folder" />
+          </span>
+          <span class="btn-wrapper--label">Cari File</span>
+        </b-button>
+        <input
+          type="file"
+          @change="onFileSelected"
+          style="display:none"
+          ref="fileInput"
+          multiple="multiple"
+        />
+      </template>
+      <template v-else>
+        <web-cam
+          class="my-3"
+          ref="webcam"
+          @started="onStarted"
+          @stopped="onStopped"
+          @error="onError"
+          @cameras="onCameras"
+          @camera-change="onCameraChange"
+          :device-id="deviceId"
+        />
+        <b-button variant="dark" @click="onCapture">
+          <span class="btn-wrapper--icon">
+            <font-awesome-icon icon="camera" />
+          </span>
+          <span class="btn-wrapper--label text-capitalize">ambil gambar</span>
+        </b-button>
+      </template>
     </div>
     <div class="row">
       <div class="col-md-6">
-        <label style="font-style:italic">Format yang digunakan: JPEG, JPG, PNG, PDF</label>
+        <label style="font-style:italic"
+          >Format yang digunakan: JPEG, JPG, PNG, PDF</label
+        >
       </div>
     </div>
     <br />
@@ -149,12 +207,16 @@
         <label>Hasil Pemeriksaan Penunjang</label>
       </div>
     </div>
-    <div v-for="(item, index) in selectedFiles" :key="item.index" class="row file-upload">
+    <div
+      v-for="(item, index) in selectedFiles"
+      :key="item.index"
+      class="row file-upload"
+    >
       <div class="col-md-4">
-        <label>{{item.name}}</label>
+        <label>{{ item.name }}</label>
       </div>
       <div class="col-md-2">
-        <label>{{item.size / 1000}} KB</label>
+        <label>{{ item.size / 1000 }} KB</label>
       </div>
       <div class="col-md-3">
         <!-- <b-progress :value="fileProgress[item.name]" :max="100" :label="`${fileProgress[item.name]}%`" show-value animated></b-progress> -->
@@ -197,10 +259,12 @@ import store from "@/store/";
 import { mapGetters, mapActions } from "vuex";
 import Editor from "./Editor";
 import { ImageCompressor, getImageSize } from "compressor-img";
+import { WebCam } from "vue-web-cam";
 
 export default {
   components: {
-    Editor
+    Editor,
+    WebCam
   },
   data() {
     return {
@@ -219,7 +283,11 @@ export default {
       promises: [],
       fileReaderPromises: [],
       uploadedFiles: [],
-      supportedFiles: ["png", "jpg", "jpeg", "pdf"]
+      supportedFiles: ["png", "jpg", "jpeg", "pdf"],
+      camera: null,
+      devices: [],
+      deviceId: null,
+      activateCamera: false
     };
   },
   computed: {
@@ -227,7 +295,67 @@ export default {
       return this.$refs.canvas;
     }
   },
+  watch: {
+    camera: function(id) {
+      this.deviceId = id;
+    },
+    devices: function() {
+      // Once we have a list select the first one
+      const [first, ...tail] = this.devices;
+      if (first) {
+        this.camera = first.deviceId;
+        this.deviceId = first.deviceId;
+      }
+    }
+  },
   methods: {
+    determineAction() {
+      if (this.isMobile()) {
+        $refs.cameraInput.click();
+      } else {
+        this.activateCamera = true;
+        this.$nextTick(this.onStart);
+      }
+    },
+    onCapture() {
+      this.processWebcamImage(this.$refs.webcam.capture());
+      this.activateCamera = false;
+      this.onStop();
+    },
+    processWebcamImage(x) {
+      fetch(x)
+        .then(res => res.blob())
+        .then(blob => {
+          this.selectedFiles = Array(1).fill({
+            name: `webcam_captured_${+new Date()}`,
+            file: blob,
+            size: blob.size
+          });
+        })
+        .then(this.processUpload);
+    },
+    onStarted(stream) {},
+    onStopped(stream) {},
+    onStop() {
+      this.$refs.webcam.stop();
+    },
+    onStart() {
+      this.$refs.webcam.start();
+    },
+    onError(error) {
+      this.$swal({
+        type: "error",
+        title: "Camera access denied",
+        text: error
+      });
+    },
+    onCameras(cameras) {
+      this.devices = cameras;
+    },
+    onCameraChange(deviceId) {
+      this.deviceId = deviceId;
+      this.camera = deviceId;
+    },
     ...mapActions(["updatePostData", "updateCanvas"]),
     updateContent(content) {
       this.updatePostData({
@@ -285,23 +413,21 @@ export default {
     async onFileSelected(event) {
       this.fileReaderPromises = [];
       var a = document.getElementsByClassName("file-upload");
-      if ((a.length + event.target.files.length) > 3) {
+      if (a.length + event.target.files.length > 3) {
         this.$swal({
           type: "error",
           title: "File Telah Mencapai Batas Maksimal",
-          text:
-            "Anda hanya bisa mengunggah 3 file dalam 1x visit pasien!"
+          text: "Anda hanya bisa mengunggah 3 file dalam 1x visit pasien!"
         });
         return;
       }
 
       for (let i = 0; i < event.target.files.length; i++) {
-        if(i == 3 || this.selectedFiles.length == 3){
+        if (i == 3 || this.selectedFiles.length == 3) {
           this.$swal({
             type: "error",
             title: "File Telah Mencapai Batas Maksimal",
-            text:
-              "Anda hanya bisa mengunggah 3 file dalam 1x visit pasien!"
+            text: "Anda hanya bisa mengunggah 3 file dalam 1x visit pasien!"
           });
           return;
         }
@@ -327,12 +453,15 @@ export default {
         }
       }
 
-      await Promise.all(this.fileReaderPromises).then(res => {
-        res.map(item => {
-          this.selectedFiles.push(item);
-        });
-      });
-
+      await Promise.all(this.fileReaderPromises)
+        .then(res => {
+          res.map(item => {
+            this.selectedFiles.push(item);
+          });
+        })
+        .then(this.processUpload);
+    },
+    async processUpload() {
       if (this.selectedFiles.length > 0) {
         this.selectedFiles.map(item => {
           if (!item.isUploading) {
@@ -407,8 +536,9 @@ export default {
     },
     //camera handler
     onImageCaptured(event) {
+      console.log(event);
       //handle image from camera or from disk here...
-      this.onFileSelected(event);
+      // this.onFileSelected(event);
     },
     //download selected file
     downloadFile(item) {
@@ -440,8 +570,8 @@ export default {
         .indexOf(filename);
 
       const doDelete = axios.post(store.state.URL_API + "/delete-cloud", {
-          filenames: [this.uploadedFiles[removeIndex].uploaded_name]
-        });
+        filenames: [this.uploadedFiles[removeIndex].uploaded_name]
+      });
 
       doDelete.then(res => {
         console.log("delete", res);
