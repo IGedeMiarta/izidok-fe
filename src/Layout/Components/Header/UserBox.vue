@@ -58,18 +58,20 @@
                 </a>
               </div>
             </li> -->
-            <template v-if="userRole !== 'Operator'">
+            <template v-if="!initPage">
+              <template v-if="userRole !== 'Operator'">
+                <li class="nav-item text-capitalize">
+                  <a class="nav-link" href="javascript:void(0);" @click="pageProfile">
+                    Account Setting
+                  </a>
+                </li>
+              </template>
               <li class="nav-item text-capitalize">
-                <a class="nav-link" href="javascript:void(0);" @click="pageProfile">
-                  Account Setting
+                <a class="nav-link" href="javascript:void(0);" @click="showModal">
+                  ubah password
                 </a>
               </li>
             </template>
-            <li class="nav-item text-capitalize">
-              <a class="nav-link" href="javascript:void(0);" @click="showModal">
-                ubah password
-              </a>
-            </li>
             <li class="nav-item text-capitalize">
               <a class="nav-link" href="javascript:void(0);" @click="logout">
                 log out
@@ -172,6 +174,9 @@
     numeric,
     helpers
   } from "vuelidate/lib/validators";
+  import {
+    mapGetters
+  } from "vuex";
 
   export default {
     data: () => ({
@@ -226,6 +231,9 @@
       this.getProfile();
     },
     computed: {
+      ...mapGetters({
+        initPage: "sidebar/initPage"
+      }),
       userName() {
         return startCase(this.$store.state.user.nama)
       },
