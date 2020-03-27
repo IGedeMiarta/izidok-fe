@@ -271,12 +271,20 @@
             </b-form-group>
           </div>
           <div class="col-sm-12">
-            <b-form-group label="provinsi" class="text-capitalize">
+            <b-form-group  class="text-capitalize">
+              <label>Provinsi</label>
+              <template v-if="tempat.provinsi">
+                <label style="color:red"> *</label>
+              </template>
               <vue-select :options="provinces" @input="getCity" v-model="tempat.provinsi" />
             </b-form-group>
           </div>
           <div class="col-sm-12">
-            <b-form-group label="kota" class="text-capitalize">
+            <b-form-group class="text-capitalize">
+              <label>Kota</label>
+              <template v-if="tempat.provinsi">
+                <label style="color:red"> *</label>
+              </template>
               <vue-select :options="cities" v-model="tempat.kota" @input="setDataTempat" />
             </b-form-group>
           </div>
