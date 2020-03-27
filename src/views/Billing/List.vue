@@ -595,7 +595,7 @@
           },
             {
               key: "produk",
-              label: "Produk",
+              label: "Paket",
               thStyle: "width: 15%"
             },
             {
@@ -634,10 +634,10 @@
     },
     methods: {
       convertDate(val){
-        return moment(val).format('DD MMMM YYYY HH:mm:ss ') 
+        return moment(val).format('DD MMMM YYYY HH:mm:ss ')
       },
       convertDateWithoutTime(val){
-        return moment(val).format('DD MMMM YYYY') 
+        return moment(val).format('DD MMMM YYYY')
       },
       goto(refName){
           var element = this.$refs[refName];
@@ -652,7 +652,7 @@
           );
           this.checkDataInvoice = res.data;
         } catch {
-          
+
         }
       },
       async cekPaket() {
@@ -740,7 +740,7 @@
           //     })
           //   ];
           this.rowsBelumAktif = res.data.data.total;
-          
+
         } catch (err) {
           // console.log(err);
         }
@@ -779,7 +779,7 @@
         let v = "";
         searchValue.map(item => {
           const x =
-            (item.key === "produk" && "produk") || item.key;
+            (item.key === "paket" && "paket") || item.key;
           v += `&${x}=${item.value}`;
         });
 
