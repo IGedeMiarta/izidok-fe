@@ -520,6 +520,7 @@
         }).then(res => {
           if (res.value) {
             next();
+            
           } else {
             next(false);
           }
@@ -828,6 +829,12 @@
               nik: "",
               hubungan_pasien: ""
             }
+            this.checkError = {
+              nama : null,
+              jenis_kelamin : null,
+              alamat_rumah : null,
+              nomor_hp :null
+            }
             this.$refs['modal-pasien'].hide()
           } else {
             next(false);
@@ -1071,6 +1078,11 @@
               jenis_kelamin: res.data.data.jenis_kelamin,
               nomor_rekam_medis: res.data.data.nomor_rekam_medis,
             }
+             this.checkError.nama = null;
+              this.checkError.jenis_kelamin = null;
+              this.checkError.alamat_rumah = null;
+              this.checkError.nomor_hp = null;
+
             this.tempat = {
               kota: null,
               provinsi: null,
