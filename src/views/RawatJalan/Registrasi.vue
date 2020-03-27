@@ -14,7 +14,12 @@
             <h4 class="text-capitalize my-2 ">form registrasi antrean</h4>
           </div>
           <div class="col-sm-5">
-            <b-button class="text-uppercase" style="font-size:14.5px;float:right" v-b-modal.modal-1 variant="primary">
+            <b-button class="text-uppercase" style="font-size:14.5px;float:right" @click="() => {
+                this.tambahPasienModal = true
+                this.$nextTick(() => {
+                  this.$refs['modal-pasien'].show()
+                })
+              }" v-b-modal.modal-1 variant="primary">
               Tambah Pasien Baru</b-button>
           </div>
         </div>
@@ -143,6 +148,7 @@
           </b-form>
         </div>
       </div>
+      <template v-if="tambahPasienModal">
       <b-modal :no-close-on-backdrop="true" @close="closeModall" :no-close-on-esc="true" :cancel-disabled="true"
         ref='modal-pasien' id="modal-1" style="color:#d3e8eb;" title="Registrasi Pasien Baru" hide-footer>
         <b-form row v-on:submit.prevent="addPasien">
@@ -332,6 +338,7 @@
           </div>
         </b-form>
       </b-modal>
+      </template>
     </div>
   </div>
 </template>
@@ -476,6 +483,7 @@
       Datetime
     },
     data: () => ({
+      tambahPasienModal: false,
       formBasicData: null,
       formData: null,
       options: {
@@ -880,7 +888,15 @@
           } else {
             this.$refs['modal-pasien'].show()
           }
+        }).then(() => {
+          this.tambahPasienModal = false
+          this.resetFormTambahPasien()
         });
+      },
+      resetFormTambahPasien() {
+        Object.keys(this.checkError).map(item => {
+          this.checkError[item] = null
+        })
       },
       triggerDob() {
         const x = this.$refs.dob
