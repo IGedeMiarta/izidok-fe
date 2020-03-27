@@ -90,6 +90,8 @@
     FontAwesomeIcon
   } from "@fortawesome/vue-fontawesome";
   import debounce from "lodash/debounce";
+  import moment from "moment";
+  moment.locale('id');
   library.add(faArrowRight,faMoneyBillWave, faArrowUp, faTrashAlt, faSearch, faPencilAlt);
 
   export default {
@@ -280,15 +282,17 @@
               }
               //Kuota habis, masa berlaku masih ada/tidakada, sudah beli paket.
               if (res.data.message === 'Paket Anda '+nm_paket+' telah OTOMATIS Aktif mulai dari tanggal '+res.data.data.started_date+' hingga '+res.data.data.expired_date+'!') {
+                moment.locale("ID");
+                var dateStart = moment(res.data.data.started_date).format('DD MMMM YYYY');
+                var dateEnd = moment(res.data.data.expired_date).format('DD MMMM YYYY');
                 return this.$swal({
-                  text: 'Paket Anda '+nm_paket+' telah OTOMATIS Aktif mulai dari tanggal '+res.data.data.started_date+' hingga '+res.data.data.expired_date+'!',
+                  text: 'Paket Anda '+nm_paket+' telah OTOMATIS Aktif mulai dari tanggal '+dateStart+' hingga '+dateEnd+' !',
                   showCancelButton: false,
                   confirmButtonText: "OK",
                   type: "warning",
                   allowOutsideClick : false,
                   allowEscapeKey: false,
                 }).then(res => {
-                  console.log(res.value)
                   if (res.value) {
 
                   }
