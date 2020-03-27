@@ -4,7 +4,7 @@
       <form>
         <div class="form-row">
           <div class="form-group col-md-12">
-            <b-container fluid class="bv-example-row">
+            <b-container class="bv-example-row">
               <b-form-group>
                 <b-row>
                   <b-col class="col-md-4">
@@ -58,7 +58,7 @@
                         Aktifkan pengingat melalui Email?
                         <template v-if="pengingatvalue === true">
                           <vue-select  class="text-capitalize bg-white mt-2"  :options="PilihanPengingat"
-                                      v-model="selectedPengingat" disabled="disabled"   />
+                                       v-model="selectedPengingat" disabled="disabled"   />
                           <b-input type="text" class="form-control mt-1" :state="pasienEmailError.state" :placeholder="phEmailReminder" v-model="pasienEmail" @input="pasienEmailInput" />
                           <div class="invalid-feedback d-block" v-if="pasienEmailError.state == false">{{ pasienEmailError.message }}</div>
 
@@ -201,8 +201,8 @@
         value: 99
       };
       this.selectedPengingat = {
-          label: 'Email',
-          value: 1
+        label: 'Email',
+        value: 1
       };
       this.updateSavingParams({
         key: 'is_next_konsul',
@@ -318,20 +318,20 @@
       },
       validateEmail(email) {
 
-          if(email == '' || email == null || email == undefined && this.pengingatvalue === true) {
+        if(email == '' || email == null || email == undefined && this.pengingatvalue === true) {
 
-            this.pasienEmailError.state = false;
-            this.pasienEmailError.message = 'Email Tidak Boleh Kosong';
-            this.updateSavingParams({
-              key: 'is_email',
-              value: false
-            });
+          this.pasienEmailError.state = false;
+          this.pasienEmailError.message = 'Email Tidak Boleh Kosong';
+          this.updateSavingParams({
+            key: 'is_email',
+            value: false
+          });
 
-            this.updateSavingParams({
-              key: 'is_email_format',
-              value: false
-            });
-          }
+          this.updateSavingParams({
+            key: 'is_email_format',
+            value: false
+          });
+        }
         else if(email == '' || email == null || email == undefined && this.pengingatvalue === false) {
 
           // this.pasienEmailError.state = false;
@@ -349,7 +349,7 @@
         else if(email, /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
           this.pasienEmailError.state = null;
           this.pasienEmailError.message = '';
-          
+
           this.updateSavingParams({
             key: 'is_email',
             value: true
@@ -404,7 +404,7 @@
 
         if(newVal.value == 99) {
           this.pengingatvalue = false;
-        } 
+        }
       },
       // checkbox: () => {
       //   // this.selectingWaktu();
@@ -413,7 +413,7 @@
       //     value: true
       //   }
       //   );
-        
+
       //   this.updateSavingParams({
       //     key: 'is_agree',
       //     value: false

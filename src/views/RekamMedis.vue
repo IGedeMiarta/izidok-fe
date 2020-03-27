@@ -154,8 +154,14 @@ library.add(
 
 import { mapGetters, mapActions } from "vuex";
 import router from "@/router";
+import startCase from "lodash/startCase";
 
 export default {
+  data: () => {
+    return {
+      beingSubmit: false,
+    }
+  },
   name: "RekamMedis",
   components: {
     Header,
@@ -166,6 +172,26 @@ export default {
     TataLaksana,
     PemeriksaanPenunjang,
     Footer
+  },
+  beforeRouteLeave(to, from, next) {
+    if (!this.beingSubmit) {
+      this.$swal({
+        title: startCase("keluar"),
+        text: `Apakah Anda yakin untuk keluar dari halaman ini?`,
+        type: "warning",
+        showCancelButton: true,
+        cancelButtonText: startCase("tidak"),
+        confirmButtonText: startCase("ya")
+      }).then(res => {
+        if (res.value) {
+          next();
+        } else {
+          next(false);
+        }
+      });
+    } else {
+      next();
+    }
   },
   mounted() {
     this.cekPaket();
@@ -191,6 +217,7 @@ export default {
           }).then(res => {
             console.log(res.value)
             if (res.value) {
+              this.beingSubmit = true;
               this.$router.push(`/subskripsi`);
             }
           });
@@ -207,6 +234,7 @@ export default {
           }).then(res => {
             console.log(res.value)
             if (res.value) {
+              this.beingSubmit = true;
               this.$router.push(`/subskripsi`);
             }
           });
@@ -223,6 +251,7 @@ export default {
           }).then(res => {
             console.log(res.value)
             if (res.value) {
+              this.beingSubmit = true;
               this.$router.push(`/subskripsi`);
             }
           });
@@ -239,6 +268,7 @@ export default {
           }).then(res => {
             console.log(res.value)
             if (res.value) {
+              this.beingSubmit = true;
               this.$router.push(`/subskripsi`);
             }
           });
@@ -255,6 +285,7 @@ export default {
           }).then(res => {
             console.log(res.value)
             if (res.value) {
+              this.beingSubmit = true;
               this.$router.push(`/subskripsi`);
             }
           });
@@ -317,17 +348,6 @@ export default {
             return this.handleError("Anda belum memilih durasi konsultasi!");
           }
 
-          // if (!this.saving_params.is_email) {
-          //   return this.handleError("Anda belum mengisi email konsultasi!");
-          // }
-
-          // if (!this.saving_params.is_email_format) {
-          //   return this.handleError("Format email konsultasi tidak sesuai!");
-          // }
-
-          // if (!this.saving_params.is_agree) {
-          //   return this.handleError("Anda belum menyetujui pernyataan!");
-          // }
           if (!this.saving_params.is_email_format) {
             return this.handleError("Silahkan lengkapi Email Pengingat!");
 
@@ -341,7 +361,7 @@ export default {
           if (!this.saving_params.is_kuotanotnull) {
             return this.handleError("Kuota Anda telah habis, silahkan lakukan pembelian Paket untuk dapat melakukan aktivitas ini.");
           }
-
+          this.beingSubmit = true;
           this.$swal
             .fire(
               "Rekam medis tersimpan!",
