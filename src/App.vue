@@ -69,6 +69,12 @@ export default {
 <style lang="scss">
 @import "assets/bamburgh.scss";
 
+.vld-overlay {
+  &.is-full-page {
+    z-index: 1100;
+  }
+}
+
 @media only screen and (max-width: 768px) and (orientation: landscape) {
   .vdatetime-popup {
     height: 100%;
