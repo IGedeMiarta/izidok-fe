@@ -80,7 +80,6 @@
         <template v-slot:cell(jenis_kelamin)="data">
           {{ jenisKelamin(data.value) }}
         </template>
-
         <template v-slot:cell(diagnosis_icd_x)="data">
           <template v-if="data.item.leaveBlank">
             <vue-select :options="diagnosisList" v-model="selectedDiagnosis" class="custom-v-select w-95 mt-2"
@@ -154,7 +153,7 @@
         selectedDiagnosis: null,
         fromPage: 0,
         toPage: 0,
-        totalEntries: 0
+        totalEntries: 0,
       };
     },
     computed: {
@@ -217,25 +216,77 @@
           }
         ];
 
+        const fieldsOperator = [{
+          key: "no"
+        },
+          {
+            key: "waktu_konsultasi",
+            label: "waktu konsultasi",
+            sortable: true
+          },
+          {
+            key: "nama",
+            label: "nama pasien",
+            sortable: true
+          },
+          {
+            key: "tanggal_lahir",
+            thStyle: "width: 150px",
+            sortable: true
+          },
+          {
+            key: "jumlah_transaksi",
+            sortable: true
+          },
+          {
+            key: "actions",
+            thStyle: "width: 140px"
+          }
+        ];
+
         if (!this.isMobile()) fields.splice(4, 0, {
           key: "nomor_rekam_medis",
           label: "no. rekam medis",
           sortable: true
         })
 
-        return (fields |>
-          // |> (v =>
-          //   s({
-          //     field: v,
-          //     customFunc: val =>
-          //       val.toLowerCase() === "no" || /(jumlah|actions)/gi.test(val)
-          //         ? 0
-          //         : 1
-          //   }))
-          (z => g({
-            field: z
-          }))
-        );
+        if (!this.isMobile()) fieldsOperator.splice(4, 0, {
+          key: "nomor_rekam_medis",
+          label: "no. rekam medis",
+          sortable: true
+        })
+
+        if(this.$store.state.user.roles[0].name === 'dokter_praktek'){
+          return (fields |>
+              // |> (v =>
+              //   s({
+              //     field: v,
+              //     customFunc: val =>
+              //       val.toLowerCase() === "no" || /(jumlah|actions)/gi.test(val)
+              //         ? 0
+              //         : 1
+              //   }))
+              (z => g({
+                field: z
+              }))
+
+          );
+        }else{
+          return (fieldsOperator |>
+              // |> (v =>
+              //   s({
+              //     field: v,
+              //     customFunc: val =>
+              //       val.toLowerCase() === "no" || /(jumlah|actions)/gi.test(val)
+              //         ? 0
+              //         : 1
+              //   }))
+              (z => g({
+                field: z
+              }))
+
+          );
+        }
       }
     },
     watch: {
