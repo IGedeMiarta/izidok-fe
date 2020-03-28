@@ -14,7 +14,10 @@
       <p
         class="highlight-text text-red font-weight-bold align-self-center my-0"
       >
-        {{ sisa_kouta }}
+        <template v-if="nama_paket === 'Premium'" ><font-awesome-layers class="fa-md mr-4 btn-actions">
+          <font-awesome-icon icon="infinity" />
+        </font-awesome-layers></template>
+      <template v-else>{{ sisa_kouta }}</template>
       </p>
       <p class="small text-capitalize">visite pasien tersisa</p>
       <template v-if="this.$store.state.user.roles[0].name === 'dokter_praktek' ">
@@ -30,8 +33,23 @@
 
 <script>
 import startCase from "lodash/startCase";
+import {
+  faArrowRight, faArrowUp, faCheck, faCheckCircle,
+  faHome,
+  faInfinity, faSearch, faUser
+} from "@fortawesome/free-solid-svg-icons";
+import {
+  FontAwesomeLayers
+} from "@fortawesome/vue-fontawesome";
+import {library} from "@fortawesome/fontawesome-svg-core";
+library.add(
+  faInfinity
+);
 
 export default {
+  components: {
+    FontAwesomeLayers,
+  },
   props: ["habis_berlaku", "paket", "sisa_hari", "sisa_kouta", "nama_paket"],
   
 };
