@@ -195,7 +195,7 @@
             <b-form-group abel-for="input-1">
               <label>Nama Lengkap</label>
               <label style="color:red">*</label>
-              <b-form-input type="text" v-model.trim="formDataRegister.nama">
+              <b-form-input type="text" v-model.trim="formDataRegister.nama" @input="checkInput({object: 'nama', val: $event.target.value})">
               </b-form-input>
               <div class="error"
                 v-if="(!$v.formDataRegister.nama.required && $v.formDataRegister.nama.$model == '') || this.checkError.nama !== null">
@@ -241,7 +241,7 @@
               <label style="color:red">*</label>
               <b-form-input id="input-1" type="text" pattern=".{10,15}" :maxlength="15"
                 oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')"
-                v-model.trim="formDataRegister.nomor_hp">
+                v-model.trim="formDataRegister.nomor_hp" @input="checkInput({object: 'nomor_hp', val: $event.target.value})">
               </b-form-input>
               <div class="error"
                 v-if="!$v.formDataRegister.nomor_hp.required && $v.formDataRegister.nomor_hp.$model == '' || this.checkError.nomor_hp !== null">
@@ -259,7 +259,7 @@
                   <b-form-radio-group stacked class="text-capitalize" :options="[
                     { text: 'laki-laki', value: 1 },
                     { text: 'perempuan', value: 0 }
-                  ]" v-model.trim="formDataRegister.jenis_kelamin">
+                  ]" v-model.trim="formDataRegister.jenis_kelamin" @input="checkInput({object: 'jenis_kelamin', val: $event})">
                   </b-form-radio-group>
                   <div class="error"
                     v-if="!$v.formDataRegister.jenis_kelamin.required  && $v.formDataRegister.jenis_kelamin.$model == '' || this.checkError.jenis_kelamin !== null">
@@ -277,7 +277,7 @@
                       : getDataError({ rawLabel: 'tanggal lahir' })
                       ? null
                       : 'border-color: red'
-                  " ref="dob" v-model.trim="formDataRegister.tanggal_lahir">
+                  " ref="dob" v-model.trim="formDataRegister.tanggal_lahir" @change="checkInput({object: 'tanggal_lahir', val: $event.target.value})">
                     <template v-slot:after>
                       <b-input-group-text @click="triggerDob" slot="append" style="
                     border-top-left-radius:0; border-left-width: 0; border-bottom-left-radius: 0; cursor: pointer
@@ -307,7 +307,7 @@
               <label>Alamat</label>
               <label style="color:red">*</label>
               <b-form-textarea id="input-1" rows="3" max-rows="6" type="text"
-                v-model.trim="formDataRegister.alamat_rumah">
+                v-model.trim="formDataRegister.alamat_rumah" @input="checkInput({object: 'alamat_rumah', val: $event})">
               </b-form-textarea>
               <div class="error"
                 v-if="!$v.formDataRegister.alamat && $v.formDataRegister.alamat.$model == ''  || this.checkError.alamat_rumah !== null">
@@ -564,6 +564,20 @@
         kota: null,
       }
     }),
+    // watch: {
+    //   formDataRegister: {
+    //     handler: function(newVal, oldVal) {
+    //       console.log(newVal, oldVal)
+    //       Object.keys(newVal).map(item => {
+    //         const tmp = ['nama', 'nomor_hp', 'jenis_kelamin', 'tanggal_lahir', 'alamat_rumah']
+    //         if (tmp.includes(item.toLowerCase())) {
+    //           this.checkError[item] = (newVal[item] !== oldVal[item] && newVal[item]) && null || item
+    //         }
+    //       })
+    //     },
+    //     deep: true
+    //   }
+    // },
     beforeRouteLeave(to, from, next) {
       if (!this.beingSubmit) {
         this.$swal({
@@ -641,6 +655,9 @@
       },
     },
     methods: {
+      checkInput({object, val} = {}) {
+        this.checkError[object] = val ? null : object
+      },
       // setName(value) {
       //   this.formDataRegister.nama = value
       // this.$v.formDataRegister.nama.$touch()
@@ -1294,7 +1311,7 @@
         let value = $event;
         if (typeof $event === "object") {
           if ($event) {
-            if ($event && $event.target && $event.target.value) {
+            if ($event && $event.target && $event) {
               const {
                 target: {
                   value
