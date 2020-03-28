@@ -78,7 +78,7 @@
                 :value="getValue('no. handphone')" :maxlength="15" />
             </b-form-group>
           </b-col>
-          <b-col sm="2">
+          <b-col sm="6" lg="2">
             <b-form-group class="text-capitalize"
               style="position: relative;" :state="getDataError({ rawLabel: 'jenis identitas' })" :invalid-feedback="
                   renderInvalidFeedback({
@@ -101,7 +101,7 @@
                   " :disabled="disabledForm()" :value="getValue('jenis identitas')" />
             </b-form-group>
           </b-col>
-          <b-col sm="4">
+          <b-col sm="6" lg="4">
             <b-form-group  class="text-capitalize" style="position: relative"
               :state="getDataError({ rawLabel: 'nik' })" :invalid-feedback="
             renderInvalidFeedback({
@@ -216,7 +216,7 @@
           " />
             </b-form-group>
           </b-col>
-          <b-col sm="2">
+          <b-col sm="6" lg="2">
             <b-form-group :state="getDataError({ rawLabel: 'jenis kelamin' })" :invalid-feedback="
                   renderInvalidFeedback({
                     validationDesc: blindlyGetData({
@@ -238,7 +238,7 @@
               </b-form-radio-group>
             </b-form-group>
           </b-col>
-          <b-col sm="4">
+          <b-col sm="6" lg="4">
             <b-form-group class="text-capitalize" style="position: relative"
               :state="getDataError({ rawLabel: 'tanggal lahir' })" :invalid-feedback="
                   renderInvalidFeedback({
@@ -290,10 +290,7 @@
             " :disabled="disabledForm()" :value="getValue('nama penanggung jawab')" :maxlength="30" />
             </b-form-group>
           </b-col>
-          <b-col sm="2">
-
-          </b-col>
-          <b-col sm="4">
+          <b-col sm="6" lg="4" offset-lg="2">
             <b-form-group :label="renderLabel({ label: 'gol. darah' })" class="text-capitalize"
               style="position: relative;" :state="getDataError({ rawLabel: 'gol. darah' })" :invalid-feedback="
                   renderInvalidFeedback({
