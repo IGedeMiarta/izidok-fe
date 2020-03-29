@@ -378,7 +378,7 @@
               <template v-if="tempat.provinsi">
                 <label style="color:red"> *</label>
               </template>
-              <vue-select :options="provinces" @input="getCity" :disabled="disabledForm()" v-model="tempat.provinsi" />
+              <vue-select :options="provinces" @input="getCity" :disabled="disabledForm()" v-model="tempat.provinsi"/>
             </b-form-group>
           </b-col>
           <b-col sm="6"> </b-col>
@@ -665,6 +665,12 @@
       }
     }),
     watch: {
+      tempat: {
+        handler: function(val) {
+          console.log(val)
+        },
+        deep: true
+      },
       'tempat.provinsi': {
         handler: function(newVal, oldVal) {
           if (newVal === oldVal) {
@@ -675,7 +681,7 @@
             }
           }
         },
-        nested: true
+        deep: true
       }
     },
     computed: {
@@ -743,6 +749,7 @@
       },
       async getCity() {
         console.log(this.formData['provinsi'] ,this.formData['kota'] )
+        this.tempat.kota = null
         try {
           var val;
           if (this.tempat.provinsi == '' || this.tempat.provinsi == null) {
