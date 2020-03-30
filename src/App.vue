@@ -77,22 +77,28 @@ export default {
 
 @media only screen and (max-width: 768px) and (orientation: landscape) {
   .vdatetime-popup {
-    height: 100%;
-    overflow: scroll;
+    transform: scale(.8, .7) translate(-60%, -70%) !important;
   }
-}
+} 
 
-@media only screen and (max-width: 500px) {
-  .vdatetime-popup {
-    height: 100%;
-    overflow: scroll;
-  }
-}
+// @media only screen and (max-width: 768px) and (orientation: landscape) {
+//   .vdatetime-popup {
+//     height: 100%;
+//     overflow: scroll;
+//   }
+// }
 
-@media only screen and (max-width: 500px) and (min-height: 500px) {
-  .vdatetime-popup {
-    height: auto !important;
-    overflow: scroll;
-  }
-}
+// @media only screen and (max-width: 500px) {
+//   .vdatetime-popup {
+//     height: 100%;
+//     overflow: scroll;
+//   }
+// }
+
+// @media only screen and (max-width: 500px) and (min-height: 500px) {
+//   .vdatetime-popup {
+//     height: auto !important;
+//     overflow: scroll;
+//   }
+// }
 </style>
