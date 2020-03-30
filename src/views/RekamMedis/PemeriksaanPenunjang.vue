@@ -170,6 +170,7 @@
         <input
           type="file"
           @change="onFileSelected"
+          @click="resetFileInput"
           style="display:none"
           ref="fileInput"
           multiple="multiple"
@@ -410,9 +411,23 @@ export default {
       ];
       return file && acceptedImageTypes.includes(file["type"]);
     },
+    resetFileInput() {
+      const x = this.$refs.fileInput
+      x.value = ''
+    },
     //on file selected handler
     async onFileSelected(event) {
+      const { target: { files } } = event
       this.fileReaderPromises = [];
+
+      if (this.selectedFiles.some(x => Object.keys(files).filter(item => item !== 'length').some(item => files[item].name === x.name))) {
+        this.$swal({
+          type: "error",
+          text: "Anda tidak bisa memasukkan data yang sama!"
+        });
+        return false
+      }
+
       var a = document.getElementsByClassName("file-upload");
       if (a.length + event.target.files.length > 3) {
         this.$swal({
