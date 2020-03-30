@@ -24,7 +24,7 @@
                                 <img fluid :src="this.dataPaygetDetail.paygate.logo"
                                   class="mt-4 logo-bank" :alt="this.dataPaygetDetail.paygate.nama">
                               </div>
-                              <div class="col-md-6">
+                              <div class="col-md-6 pr-md-0">
                                 <b-form-input disabled class="mt-4 text-center p-md-1" style="color:blue"
                                   :value="this.dataPaygetDetail.detail.customerAccount"></b-form-input>
                               </div>
@@ -177,6 +177,10 @@
         el.select();
         document.execCommand('copy');
         document.body.removeChild(el);
+        this.$snack.show({
+          time: 2000,
+          text: 'Customer Account berhasil di Salin'
+        })
       },
       copy_text_money(str) {
         const elem = document.createElement('textarea');
@@ -188,6 +192,10 @@
         elem.select();
         document.execCommand('copy');
         document.body.removeChild(elem);
+        this.$snack.show({
+          time: 2000,
+          text: 'Jumlah yang harus dibayar berhasil di Salin'
+        })
       },
       async getPaygetDetail() {
         try {
@@ -213,4 +221,8 @@
       width: 85px;
     }
   }
+</style>
+
+<style lang="sass">
+@import '~vue-snack/dist/vue-snack.min.css'
 </style>

@@ -12,7 +12,9 @@ import Vuelidate from "vuelidate";
 import VueSweetalert2 from "vue-sweetalert2";
 import PageTitle from "./Layout/Components/PageTitle";
 import VTooltip from "v-tooltip";
+import VueSnackbar from 'vue-snack' 
 
+Vue.use(VueSnackbar)
 Vue.use(VTooltip);
 Vue.use(Vuelidate);
 Vue.use(BootstrapVue);

@@ -10471,6 +10471,11 @@ vue-slider-component@3.0.33:
   dependencies:
     vue-property-decorator "^8.0.0"
 
+vue-snack@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/vue-snack/-/vue-snack-0.1.4.tgz#4ad6da17d0f9b2cbc43de1a6a1d681eddcd602d4"
+  integrity sha512-Ex4tb8rpegyED+eCi43a+Xi8xDlTDnQYIROxgKErJ32RxprkacxF7aubDY5WE55kfSBUwyLsqRjbIhAnn+pGzw==
+
 vue-stickykit@1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/vue-stickykit/-/vue-stickykit-1.0.5.tgz#4341ba8c6448f9b9dcfbc231d39767f1cb62c2ca"

@@ -7,12 +7,12 @@
             <b-container class="bv-example-row">
               <b-form-group>
                 <b-row>
-                  <b-col class="col-md-12 col-lg-4 mb-md-2">
+                  <div class="col-md-12 col-lg-4 col-sm-12 col-xs-12 mb-sm-2 col-xs-2 mb-xs-2 mb-md-2">
                     <strong>Konsultasi Selanjutnya</strong>
                     <vue-select @click="triggerDob" class="text-capitalize bg-white mt-2"  :options="
                       waktuKonsul" v-model="selectedRadio" @input="selectingWaktu($event)" />
-                  </b-col>
-                  <b-col class="col-md-12 col-lg-3  mb-md-2">
+                  </div>
+                  <div class="col-md-12 col-lg-3 col-sm-12 col-xs-12 mb-sm-2 col-xs-2 mb-xs-2 mb-md-2">
                     <template  v-if="selectedRadio.label === 'Pilih Tanggal...' ">
                       <strong>Tanggal Konsultasi</strong>
                       <Datetime  type="date" required input-class="form-control mt-2" class="input-group" zone="Asia/Jakarta"
@@ -48,11 +48,11 @@
                         </template>
                       </Datetime>
                     </template>
-                  </b-col>
+                  </div>
 
                   <template v-if="selectedRadio.label !== 'Tidak perlu konsul lanjutan'
                    && selectedRadio.label !==''  ">
-                    <b-col class="col-md-12 col-lg-4 mb-md-2">
+                    <div class="col-md-12 col-lg-4 col-sm-12 col-xs-12 mb-sm-2 col-xs-2 mb-xs-2 mb-md-2">
                       <label class="text-primary ">
                         <font-awesome-icon v-tooltip.bottom-start="'Pengingat akan dikirimkan kepada pasien 1 hari sebelum waktu kunjungan!'" class="mx-auto" icon="info-circle"/>
                         Aktifkan pengingat melalui Email?
@@ -65,8 +65,8 @@
                         </template>
                       </label>
 
-                    </b-col>
-                    <b-col class="col-md-12 col-lg-1 mb-md-2">
+                    </div>
+                    <div class="col-md-12 col-lg-1 col-sm-12 col-xs-12 mb-sm-2 col-xs-2 mb-xs-2 mb-md-2">
                       <toggle-button
                         v-model="pengingatvalue"
                         :labels="{ checked: ' Ya', unchecked: ' Tidak' }"
@@ -79,7 +79,7 @@
                           }"
 
                       />
-                    </b-col>
+                    </div>
                   </template>
 
                 </b-row>

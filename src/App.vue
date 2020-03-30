@@ -75,7 +75,7 @@ export default {
   }
 }
 
-@media only screen and (max-width: 768px) and (orientation: landscape) {
+@media only screen and (max-width: 900px) {
   .vdatetime-popup {
     transform: scale(.8, .7) translate(-60%, -70%) !important;
   }
