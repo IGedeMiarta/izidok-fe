@@ -310,8 +310,9 @@ export default {
   },
   methods: {
     determineAction() {
+      console.log(this.isMobile())
       if (this.isMobile()) {
-        $refs.cameraInput.click();
+        this.$refs.cameraInput.click();
       } else {
         this.activateCamera = true;
         this.$nextTick(this.onStart);
