@@ -10,12 +10,11 @@
         <b-col cols="12">
           {{ datetimeFormat(datarekammedis.updated_at) }}
         </b-col>
-        <b-col cols="12" class="ml-3 mt-4">
+        <b-col cols="12" class="ml-2 mt-4">
           <h5 class="text-uppercase font-weight-bold"><u>tanda-tanda vital</u></h5>
           <b-row v-for="(data, index) in tandaVital()" :key="index">
-            <b-col cols="4" class="text-capitalize">{{ data.label }}</b-col>
-            <b-col cols="1">:</b-col>
-            <b-col cols="7">{{ data.value }}</b-col>
+            <b-col cols="6" class="text-capitalize">{{ data.label }}</b-col>
+            <b-col cols="6">: {{ data.value }}</b-col>
           </b-row>
         </b-col>
         <b-col cols="12" class="ml-2 mt-4">

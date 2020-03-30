@@ -17,24 +17,20 @@
           <div class="d-flex flex-column w-100">
             <span class="text-capitalize mb-1">{{now}}</span>
             <b-row class="mb-1">
-              <b-col cols="2">No. RM </b-col>
-              <b-col cols="auto">:</b-col>
-              <b-col cols="auto">{{ pembayaranList['transklinik'].pasien.nomor_rekam_medis }}</b-col>
+              <b-col cols="3">No. RM </b-col>
+              <b-col cols="9">: {{ pembayaranList['transklinik'].pasien.nomor_rekam_medis }}</b-col>
             </b-row>
             <b-row class="mb-1">
-              <b-col cols="2">Nama Pasien </b-col>
-              <b-col cols="auto">:</b-col>
-              <b-col cols="auto">{{ pembayaranList['transklinik'].pasien.nama }}</b-col>
+              <b-col cols="3">Nama Pasien </b-col>
+              <b-col cols="9">: {{ pembayaranList['transklinik'].pasien.nama }}</b-col>
             </b-row>
             <b-row class="mb-1">
-              <b-col cols="2">Nama Dokter </b-col>
-              <b-col cols="auto">:</b-col>
-              <b-col cols="auto">{{ pembayaranList['created_by'].nama }}</b-col>
+              <b-col cols="3">Nama Dokter </b-col>
+              <b-col cols="9">: {{ pembayaranList['created_by'].nama }}</b-col>
             </b-row>
             <b-row class="mb-1">
-              <b-col cols="2">Waktu Masuk </b-col>
-              <b-col cols="auto">:</b-col>
-              <b-col cols="auto">{{ waktuMasuk  }}</b-col>
+              <b-col cols="3">Waktu Masuk </b-col>
+              <b-col cols="9">: {{ waktuMasuk  }}</b-col>
             </b-row>
           </div>
         </div>
