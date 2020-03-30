@@ -25,7 +25,7 @@
                                   class="mt-4 logo-bank" :alt="this.dataPaygetDetail.paygate.nama">
                               </div>
                               <div class="col-md-6">
-                                <b-form-input disabled class="mt-4 text-center" style="color:blue"
+                                <b-form-input disabled class="mt-4 text-center p-md-0" style="color:blue"
                                   :value="this.dataPaygetDetail.detail.customerAccount"></b-form-input>
                               </div>
                               <div class="col-md-3">

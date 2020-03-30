@@ -13,7 +13,7 @@
                     </div>
                     <div class="card-body">
                       <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-4 pr-md-0">
                           <strong>Pilih Pembayaran</strong>
                         </div>
                         <div class="col-md-8">
@@ -27,7 +27,7 @@
                         <div class="col-md-8 mt-2">
                           <label class="float-right mr-3">{{dataDetail.nama}}</label>
                         </div>
-                        <div class="col-md-4 mt-2">
+                        <div class="col-md-4 mt-2 pr-md-0">
                           <strong>Lama Berlangganan</strong>
                         </div>
                         <div class="col-md-8 mt-2">
