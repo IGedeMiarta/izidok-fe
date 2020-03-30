@@ -135,6 +135,7 @@
 </template>
 
 <script>
+import { EventBus } from '../../../event-bus';
   import {
     library
   } from "@fortawesome/fontawesome-svg-core";
@@ -229,6 +230,7 @@
       this.formBasicData = this.setformBasicData();
       this.formData = this.setformData();
       this.getProfile();
+      this.watchImageUploaded()
     },
     computed: {
       ...mapGetters({
@@ -243,6 +245,11 @@
       }
     },
     methods: {
+      watchImageUploaded() {
+        EventBus.$on('image-uploaded', async val => {
+          await this.getProfile()
+        });
+      },
       async getProfile() {
         try {
           var profile = this.$store.state.user.id

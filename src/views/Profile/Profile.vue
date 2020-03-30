@@ -145,6 +145,7 @@
 </template>
 
 <script>
+import { EventBus } from '../../event-bus';
   import PictureInput from 'vue-picture-input'
   import startCase from "lodash/startCase";
   import axios from 'axios'
@@ -300,6 +301,8 @@
 
           axios.post(`${this.url_api}/user/upload-foto/${profile}`, formData, {
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+          }).then(() => {
+            EventBus.$emit('image-uploaded', true);
           });
         }
       },
