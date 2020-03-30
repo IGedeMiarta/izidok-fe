@@ -95,7 +95,7 @@
                         <div class="col-md-8 mt-2">
                           <b-button variant="primary" @click="checkKodePromo" class="float-right" size="md">Gunakan
                           </b-button>
-                          <b-form-input v-model="kode_promo" class="col-md-4 float-right mr-2"></b-form-input>
+                          <b-form-input v-model="kode_promo" class="col-md-4 float-right mr-2 p-md-1"></b-form-input>
                         </div>
                         <div class="col-md-12 text-center mt-2" style="background-color : yellow"
                           v-if="this.statusPromo">
@@ -129,10 +129,10 @@
                                     </strong>
                                   </div>
                                 </template>
-                                <div class="col-md-4">
+                                <div class="col-lg-4 col-md-6">
                                   <strong>Total Pembayaran</strong>
                                 </div>
-                                <div class="col-md-8 float-right">
+                                <div class="col-lg-8 col-md-6">
                                   <template v-if="lama_langganan === '12' ">
                                     <strong class="float-right">Rp
                                       <template v-if="this.statusPotongan === 'rupiah'">
