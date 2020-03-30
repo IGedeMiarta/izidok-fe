@@ -27,8 +27,7 @@
                   accept="image/jpeg,image/png" size="1" buttonClass="btn btn-primary button primary"
                   removeButtonClass="btn btn-secondary button secondary" radius="50" z-index="0"
                   :disabled="btnDisable == true"  :removable="true"
-                  :prefill="dataProfile.foto_profile">
-                </picture-input>
+                  :prefill="dataProfile.foto_profile"/>
                 <label>Maks. 1 MB, File: jpeg, jpg, png</label>
               </template>
             </div>
@@ -177,7 +176,8 @@
         tempat: {
           provinsi: {id:null},
           kota: {id:null},
-        }
+        },
+        prefillImage: null
       }
     },
     async mounted() {
@@ -185,7 +185,25 @@
       await this.getProfile();
       this.cekPaket();
     },
+    watch: {
+      dataProfile: {
+        handler: function(val) {
+          if (val) {
+            this.fetchImg()
+          }
+        },
+        deep: true
+      }
+    },
     methods: {
+      fetchImg() {
+        fetch(this.dataProfile.foto_profile)
+        .then(response => response.blob())
+        .then(images => {
+            const x = URL.createObjectURL(images)
+            this.prefillImage = x
+        })
+      },
       cekValueNotelp(ceknotelp) {
         if (ceknotelp.length < 15 && ceknotelp.length > 8) {
           this.inChange = true;
