@@ -54,7 +54,7 @@
         </div>
         <div class="form-group col-md-4">
           <label >Respirasi</label>
-          <input type="text" class="form-control"  :value="0" @input="updateAnamnesa({key:$event.target.id, value: $event.target.value})"/>
+          <input type="text" class="form-control" id="respirasi"  :value="0" @input="updateAnamnesa({key:$event.target.id, value: $event.target.value})"/>
         </div>
       </div>
     </form>
