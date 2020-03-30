@@ -5,6 +5,7 @@
         <div class="form-group col-md-2">
           <label >TD Sistole</label>
           <input
+            @keypress="checkInput"
             type="text"
             class="form-control"
             id="tensi_sistole"
@@ -15,6 +16,7 @@
         <div class="form-group col-md-2">
           <label >TD Diastole</label>
           <input
+            @keypress="checkInput"
             type="text"
             class="form-control"
             id="tensi_diastole"
@@ -25,6 +27,7 @@
         <div class="form-group col-md-2">
           <label >TB</label>
           <input
+            @keypress="checkInput"
             type="text"
             class="form-control"
             id="tinggi_badan"
@@ -35,6 +38,7 @@
         <div class="form-group col-md-2">
           <label >BB</label>
           <input
+            @keypress="checkInput"
             type="text"
             class="form-control"
             id="berat_badan"
@@ -46,15 +50,15 @@
       <div class="form-row">
         <div class="form-group col-md-2">
           <label >Nadi</label>
-          <input type="text" class="form-control" id="nadi" :value="pasien.nadi" @input="updateAnamnesa({key:$event.target.id, value: $event.target.value})"/>
+          <input @keypress="checkInput" type="text" class="form-control" id="nadi" :value="pasien.nadi" @input="updateAnamnesa({key:$event.target.id, value: $event.target.value})"/>
         </div>
         <div class="form-group col-md-2">
           <label >Suhu</label>
-          <input type="text" class="form-control" id="suhu" :value="pasien.suhu.toString().replace('.',',')" @input="updateAnamnesa({key:$event.target.id, value: $event.target.value})"/>
+          <input @keypress="checkInput" type="text" class="form-control" id="suhu" :value="pasien.suhu.toString().replace('.',',')" @input="updateAnamnesa({key:$event.target.id, value: $event.target.value})"/>
         </div>
         <div class="form-group col-md-4">
           <label >Respirasi</label>
-          <input type="text" class="form-control" id="respirasi"  :value="0" @input="updateAnamnesa({key:$event.target.id, value: $event.target.value})"/>
+          <input @keypress="checkInput" type="text" class="form-control" id="respirasi"  :value="0" @input="updateAnamnesa({key:$event.target.id, value: $event.target.value})"/>
         </div>
       </div>
     </form>
@@ -74,7 +78,16 @@ export default {
   computed: mapGetters(["pasien"]),
   methods: {
     ...mapActions(["updateAnamnesa"]),
-
+    checkInput($event) {
+      const { key } = $event;
+      var evt = $event;
+      evt = evt ? evt : window.event;
+      if (/[^0-9]/.test(key)) {
+        evt.preventDefault();
+      } else {
+        console.log('good to go')
+      }
+    }
   },
 
 };

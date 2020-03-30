@@ -195,7 +195,7 @@
             <b-form-group abel-for="input-1">
               <label>Nama Lengkap</label>
               <label style="color:red">*</label>
-              <b-form-input type="text" v-model.trim="formDataRegister.nama" @input="checkInput({object: 'nama', val: $event.target.value})">
+              <b-form-input type="text" v-model.trim="formDataRegister.nama" @input="checkInput({object: 'nama', val: $event})">
               </b-form-input>
               <div class="error"
                 v-if="(!$v.formDataRegister.nama.required && $v.formDataRegister.nama.$model == '') || this.checkError.nama !== null">
@@ -241,7 +241,7 @@
               <label style="color:red">*</label>
               <b-form-input id="input-1" type="text" pattern=".{10,15}" :maxlength="15"
                 oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')"
-                v-model.trim="formDataRegister.nomor_hp" @input="checkInput({object: 'nomor_hp', val: $event.target.value})">
+                v-model.trim="formDataRegister.nomor_hp" @input="checkInput({object: 'nomor_hp', val: $event})">
               </b-form-input>
               <div class="error"
                 v-if="!$v.formDataRegister.nomor_hp.required && $v.formDataRegister.nomor_hp.$model == '' || this.checkError.nomor_hp !== null">
@@ -277,7 +277,7 @@
                       : getDataError({ rawLabel: 'tanggal lahir' })
                       ? null
                       : 'border-color: red'
-                  " ref="dob" v-model.trim="formDataRegister.tanggal_lahir" @change="checkInput({object: 'tanggal_lahir', val: $event.target.value})">
+                  " ref="dob" v-model.trim="formDataRegister.tanggal_lahir" @change="checkInput({object: 'tanggal_lahir', val: $event})">
                     <template v-slot:after>
                       <b-input-group-text @click="triggerDob" slot="append" style="
                     border-top-left-radius:0; border-left-width: 0; border-bottom-left-radius: 0; cursor: pointer
@@ -656,7 +656,12 @@
     },
     methods: {
       checkInput({object, val} = {}) {
-        this.checkError[object] = val ? null : object
+        if (typeof val === 'Object') {
+          const tmp = val.target.value
+          this.checkError[object] = object === 'jenis_kelamin' || tmp ? null : object
+        } else {
+          this.checkError[object] = object === 'jenis_kelamin' || val ? null : object
+        }
       },
       // setName(value) {
       //   this.formDataRegister.nama = value
@@ -944,13 +949,12 @@
               hubungan_pasien: ""
             }
             this.$refs['modal-pasien'].hide()
+            this.tambahPasienModal = false
+            this.resetFormTambahPasien()
           } else {
             this.$refs['modal-pasien'].show()
           }
-        }).then(() => {
-          this.tambahPasienModal = false
-          this.resetFormTambahPasien()
-        });
+        })
       },
       resetFormTambahPasien() {
         Object.keys(this.checkError).map(item => {
