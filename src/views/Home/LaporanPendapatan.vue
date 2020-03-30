@@ -12,7 +12,7 @@
           <b-col sm="4" lg="4">
             <b-form-select size="sm" v-model="periodeSelected" :options="filterPeriode"></b-form-select>
           </b-col>
-          <b-col sm="8" offset-sm="4" lg="6" v-if="selectedPeriodeRange">
+          <b-col sm="8" offset-sm="4" offset-lg="2" lg="6" class="mt-2" v-if="selectedPeriodeRange">
             <!-- <DatePicker v-model="dateRange" type="daterange" range-separator="To" start-placeholder="Start date"
               end-placeholder="End date" size="small" format="dd-MM-yyyy" value-format="dd-MM-yyyy"
               :disabledDate="disabledDate" :picker-options="{
