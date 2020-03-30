@@ -575,6 +575,7 @@ export default {
     //remove selected file
     removeFile(file, index) {
       this.selectedFiles.splice(index, 1);
+      this.promises.splice(index, 1);
       let filename = file.name;
       filename = filename.split(" ").join("_");
       filename = filename.split(".").join("_");
