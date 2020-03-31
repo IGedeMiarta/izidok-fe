@@ -9,7 +9,10 @@ module.exports = {
         // configure the workbox plugin
         workboxPluginMode: 'GenerateSW',
         manifestOptions: {
-            background_color: '#ffffff'
+            description: 'Aplikasi Rekam Medis Elektronik Pilihan Dokter',
+            background_color: '#ffffff',
+            display: 'standalone',
+            start_url: '/index.html'
         }
     }
 }
