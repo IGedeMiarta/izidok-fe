@@ -1057,7 +1057,7 @@
             this.formData.kota = this.tempat.kota && this.tempat.kota.id ? this.tempat.kota.id : null;
           }
 
-          if(this.formData.provinsi && !this.formData.kota) {
+          if(this.tempat.provinsi && !this.tempat.kota) {
             return this.$swal({
               text: `Kota Harus Diisi !`,
               type: "error",
