@@ -258,14 +258,14 @@
           </div>
         </b-col>
       </b-row>
-      <div class=" mb-4">
+      <div class="mb-4 center">
         <b-col md="12" class="mt-4 " style="text-align: center;">
           <span><strong>METODE PEMBAYARAN</strong></span>
         </b-col>
         <img style=""  :src="dataPaygate[0].logo" height="40" width="120"
              class="mt-2  " :alt="dataPaygate[0].nama">
-        <img style=""  :src="dataPaygate[1].logo" height="40" width="120"
-             class="mt-2 ml-2 " :alt="dataPaygate[1].nama">
+<!--        <img style=""  :src="dataPaygate[1].logo" height="40" width="120"-->
+<!--             class="mt-2 ml-2 " :alt="dataPaygate[1].nama">-->
       </div>
          </div>
         </div>
