@@ -552,9 +552,9 @@ export default {
     },
     //camera handler
     onImageCaptured(event) {
-      console.log(event);
+      // console.log(event);
       //handle image from camera or from disk here...
-      // this.onFileSelected(event);
+      this.onFileSelected(event);
     },
     //download selected file
     downloadFile(item) {
