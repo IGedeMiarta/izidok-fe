@@ -179,8 +179,8 @@ import { EventBus } from '../../event-bus';
         provinces: [],
         image : null,
         tempat: {
-          provinsi: {id:null},
-          kota: {id:null},
+          provinsi: null,
+          kota: null,
         },
         prefillImage: null
       }
@@ -290,7 +290,7 @@ import { EventBus } from '../../event-bus';
             }
           });
 
-          if(this.tempat.provinsi.id) {
+          if(this.tempat.provinsi && this.tempat.provinsi.id) {
             this.getCity();
           }
         } catch (e) {
@@ -346,7 +346,7 @@ import { EventBus } from '../../event-bus';
           });
           return;
         }
-        if(this.tempat.provinsi.id && !this.tempat.kota.id) {
+        if(this.tempat.provinsi && !this.tempat.kota) {
           this.$swal({
             text: `Kota Harus Diisi !`,
             type: "error",
@@ -362,8 +362,8 @@ import { EventBus } from '../../event-bus';
             nomor_telp: this.dataProfile.nomor_telp,
             jenis_kelamin: this.dataProfile.jenis_kelamin,
             nomor_ijin: this.dataProfile.klinik.nomor_ijin,
-            provinsi: this.tempat.provinsi.id,
-            kota: this.tempat.kota.id,
+            provinsi: this.tempat.provinsi && this.tempat.provinsi.id ? this.tempat.provinsi.id : null,
+            kota: this.tempat.kota && this.tempat.kota.id ? this.tempat.kota.id : null,
             alamat: this.dataProfile.klinik.alamat,
           })
           if (res.data.status) {
@@ -391,8 +391,8 @@ import { EventBus } from '../../event-bus';
         }
       },
       setDataTempat() {
-        this.dataProfile.klinik['provinsi'] = this.tempat.provinsi.id
-        this.dataProfile.klinik['kota'] = this.tempat.kota.id
+        this.dataProfile.klinik['provinsi'] = this.tempat.provinsi && this.tempat.provinsi.id ? this.tempat.provinsi.id : null
+        this.dataProfile.klinik['kota'] = this.tempat.kota && this.tempat.kota.id ? this.tempat.kota.id : null
       },
       getProvince() {
         axios.get(`${this.url_api}/province`)
@@ -411,8 +411,8 @@ import { EventBus } from '../../event-bus';
       async getCity() {
         try {
           var val;
-          this.tempat.kota = {id:null};
-          if (this.tempat.provinsi == '' || this.tempat.provinsi == null) {
+          this.tempat.kota = null;
+          if (!this.tempat.provinsi || !this.tempat.provinsi.id) {
             val = '';
           } else {
             val = this.tempat.provinsi.id;
