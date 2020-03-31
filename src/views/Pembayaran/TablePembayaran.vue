@@ -1,41 +1,52 @@
 <template>
-  <b-table :fields="fields()" :items="details" borderless class="table-pembayaran">
-    <template v-slot:cell(no)="data">
-      {{data.index + 1}}
-    </template>
+  <div>
+    <b-table :fields="fields()" :items="details" borderless class="table-pembayaran" style="">
+      <template v-slot:cell(no)="data">
+        {{data.index + 1}}
+      </template>
 
-    <template v-slot:cell(layanan)="data">
-      <vue-select :class="{'is-invalid':layananErrors.includes(data.item.kode_layanan)}" :options="listLayanan" v-model="data.item.nama_layanan" @input="inputLayanan($event, data.index)" value="nama_layanan" :disabled="assistantRole"></vue-select>
-      <div class="invalid-feedback d-block" v-if="layananErrors.includes(data.item.kode_layanan)">Layanan Tidak Boleh Sama</div>
-    </template>
+      <template v-slot:cell(layanan)="data">
+        <vue-select :class="{'is-invalid':layananErrors.includes(data.item.kode_layanan)}" :options="listLayanan" v-model="data.item.nama_layanan" @input="inputLayanan($event, data.index)" value="nama_layanan" :disabled="assistantRole"></vue-select>
+        <div class="invalid-feedback d-block" v-if="layananErrors.includes(data.item.kode_layanan)">Layanan Tidak Boleh Sama</div>
+      </template>
 
-    <template v-slot:cell(qty)="data">
-      <b-form-input min=1 @keypress="isNumber($event)" type="number" v-model="data.item.quantity" :disabled="assistantRole" />
-    </template>
+      <template v-slot:cell(qty)="data">
+        <b-form-input min=1 @keypress="isNumber($event)" type="number" v-model="data.item.quantity" :disabled="assistantRole" />
+      </template>
 
-    <template v-slot:cell(nilai)="data">
-      <money v-model="data.item.tarif" v-bind="money" class="form-control text-right" disabled />
-    </template>
+      <template v-slot:cell(nilai)="data">
+        <money v-model="data.item.tarif" v-bind="money" class="form-control text-right" disabled />
+      </template>
 
-    <template v-slot:cell(subtotal)="data">
-      <div class="d-flex align-items-center">
-        <money  :value="data.item.quantity * data.item.tarif" v-bind="money" class="form-control flex-grow-1 text-right" disabled />
-        <div class="d-flex flex-shrink-1 justify-content-around ml-3" v-if="!assistantRole">
-          <font-awesome-layers class="fa-lg mr-1 btn-actions" @click="kurang(data.index)"
-            :class="{ invisible: data.index < 1 }" v-if="data.index > 1">
-            <font-awesome-icon icon="circle" />
-            <font-awesome-icon icon="minus" transform="shrink-6" class="text-white" />
-          </font-awesome-layers>
-          <font-awesome-layers class="fa-lg ml-1 btn-actions" @click="tambah"
-            :class="{ invisible: data.index !== details.length - 1 }">
-            <font-awesome-icon icon="circle" />
-            <font-awesome-icon icon="plus" transform="shrink-6" class="text-white" />
-          </font-awesome-layers>
+      <template v-slot:cell(subtotal)="data">
+        <div class="d-flex align-items-center">
+          <money  :value="data.item.quantity * data.item.tarif" v-bind="money" class="form-control flex-grow-1 text-right" disabled />
+          <div class="d-flex flex-shrink-1 justify-content-around ml-2 action-pembayaran" v-if="!assistantRole">
+            <template v-if="data.index <= 1">
+              <span style="width:34px" class="d-inline d-lg-none"> </span>
+            </template>
+            <font-awesome-layers class="fa-lg ml-2 btn-actions action-pembayaran-kurang" @click="kurang(data.index)"
+              :class="{ invisible: data.index < 1 }" v-if="data.index > 1">
+              <font-awesome-icon icon="circle" />
+              <font-awesome-icon icon="minus" transform="shrink-6" class="text-white" />
+            </font-awesome-layers>
+            <font-awesome-layers class="fa-lg ml-2 btn-actions d-none d-lg-inline" @click="tambah"
+              :class="{ invisible: data.index !== details.length - 1 }">
+              <font-awesome-icon icon="circle" />
+              <font-awesome-icon icon="plus" transform="shrink-6" class="text-white" />
+            </font-awesome-layers>
+          </div>
         </div>
-      </div>
-    </template>
+      </template>
+    </b-table>
 
-  </b-table>
+    <div align="center" class="d-block d-lg-none">
+      <font-awesome-layers class="fa-lg btn-actions" @click="tambah">
+        <font-awesome-icon icon="circle" />
+        <font-awesome-icon icon="plus" transform="shrink-6" class="text-white" />
+      </font-awesome-layers>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -265,6 +276,17 @@
   .btn-actions {
     font-size: 26px;
     cursor: pointer;
+  }
+  @media screen and (max-width: 992px) {
+    .action-pembayaran {
+      margin-right: -45px !important;
+    }
+    .action-pembayaran-kurang {
+      border-radius: 100%;
+      -webkit-box-shadow: 4px 0px 8px 0px rgba(204,204,204,1);
+      -moz-box-shadow: 4px 0px 8px 0px rgba(204,204,204,1);
+      box-shadow: 4px 0px 8px 0px rgba(204,204,204,1);
+    }
   }
 </style>
 <style lang="scss">

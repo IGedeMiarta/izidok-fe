@@ -34,35 +34,33 @@
             </b-row>
           </div>
         </div>
-        <template
-          v-if="pembayaranList.status == 'BELUM LUNAS' || pembayaranList.status == 'Belum Lunas' || pembayaranList.status == 'belum lunas'">
-          <h3 class="m-4" style="margin-bottom:0 !important;">Belum Lunas</h3>
-          <div class="card-body">
+        <div class="card-body">
+          <template
+            v-if="pembayaranList.status == 'BELUM LUNAS' || pembayaranList.status == 'Belum Lunas' || pembayaranList.status == 'belum lunas'">
+            <h3>Belum Lunas</h3>
             <TablePembayaran @valueChanged="calc" @layananDuplicateErrorState="layananDuplicateError = $event" :items="pembayaranDetails" />
-          </div>
-        </template>
-        <template
-          v-if="pembayaranList.status == 'LUNAS' || pembayaranList.status == 'lunas' || pembayaranList.status == 'Lunas'">
-          <h3 class="m-4" style="margin-bottom:0 !important;">Lunas</h3>
-          <div class="card-body">
+          </template>
+          <template
+            v-if="pembayaranList.status == 'LUNAS' || pembayaranList.status == 'lunas' || pembayaranList.status == 'Lunas'">
+            <h3>Lunas</h3>
             <TablePembayaran @valueChanged="calc" @layananDuplicateErrorState="layananDuplicateError = $event" />
-          </div>
-        </template>
+          </template>
+        </div>
 
         <div class="card-footer">
-          <div class="px-4 py-2 d-flex flex-row justify-content-end">
+          <div class="py-2 d-flex flex-row justify-content-end">
             <b-container fluid>
               <b-row>
                 <b-col cols="6" offset="6">
                   <b-form-row class="d-flex align-items-center w-100 py-2">
                     <b-col cols="4">Total</b-col>
-                    <b-col cols="7">
+                    <b-col cols="8">
                       <money v-model="total" v-bind="money" class="form-control text-right" disabled />
                     </b-col>
                   </b-form-row>
                   <b-form-row class="d-flex align-items-center w-100 py-2">
                     <b-col cols="4">Diskon</b-col>
-                    <b-col cols="7">
+                    <b-col cols="8">
                       <b-input-group append="%">
                         <b-form-input v-model.lazy="potongan" @keypress="isNumber($event)" :disabled="assistantRole" class="text-right" />
                       </b-input-group>
@@ -70,18 +68,18 @@
                   </b-form-row>
                   <b-form-row class="d-flex align-items-center w-100 py-2">
                     <b-col cols="4">Total Nett</b-col>
-                    <b-col cols="7">
+                    <b-col cols="8">
                       <money :value="nett" v-bind="money" class="form-control text-right" disabled />
                     </b-col>
                   </b-form-row>
                   <b-form-row class="d-flex align-items-right w-100 py-2">
-                    <b-col cols="11">
+                    <b-col class="pt-2" align="right">
                       <!-- <b-button variant="danger" class="text-uppercase mr-3" @click="previewStruk">preview struk</b-button> -->
                       <b-button variant="danger" class="text-uppercase mr-3" @click="kembali" v-if="assistantRole">kembali</b-button>
                       <b-button variant="success" class="text-uppercase mr-3" @click="simpanPembayaran" v-if="!assistantRole">simpan</b-button>
                       <b-button variant="primary" class="text-uppercase" @click="bayarModal">bayar</b-button>
                     </b-col>
-                    </b-form-row>
+                  </b-form-row>
                 </b-col>
               </b-row>
             </b-container>
