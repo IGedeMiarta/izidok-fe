@@ -1035,6 +1035,13 @@
       async addPasien(formDataRegister) {
         console.log(this.formDataRegister['jenis_identitas'], this.formDataRegister['nik'])
 
+        if(this.tempat.provinsi && !this.tempat.kota) {
+          return this.$swal({
+            text: "Kota Harus Diisi !",
+            type: "error"
+          });
+        }
+
         if (!this.formDataRegister['jenis_identitas'] && !this.formDataRegister['nik']) {
           try {
             this.formDataRegister.tanggal_lahir = moment(this.formDataRegister.tanggal_lahir).format("YYYY-MM-DD")
