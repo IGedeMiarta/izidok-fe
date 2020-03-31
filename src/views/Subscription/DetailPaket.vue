@@ -232,6 +232,7 @@
           masked: false
         },
         lama_langganan: 1,
+        firstPaygate:true,
         total_harga: 0,
         kode_promo: null,
         id_promo: null,
@@ -272,13 +273,7 @@
     },
     mounted() {
       this.fetchDetailPaket();
-
-      let ss = {
-        label: 'BCA Virtual Account',
-        value: 2
-      };
-      this.selectedPaygate = ss;
-      this.getPaygetDetail(ss);
+      this.getPaygetDetail();
     },
     methods: {
       ...mapMutations({
@@ -391,6 +386,15 @@
                 value: item.id
               })
             })
+            if(this.firstPaygate === true) {
+              let ss = {
+                label: res.data.data.paygate[0].nama,
+                value: res.data.data.paygate[0].id
+              };
+              this.selectedPaygate = ss;
+              this.getPaygetDetail(ss)
+              this.firstPaygate = false;
+            }
           });
       },
 

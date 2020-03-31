@@ -4,7 +4,7 @@
     <div class="card card-box mb-2" style=" align-content: center; align-items: center;">
       <div class="app-content--inner p-0 d-flex flex-column">
         <div class="container-fluid">
-          <div class="row justify-content-center">
+          <div class="justify-content-center">
           <b-row class="mt-4">
             <b-col md="12">
              <div class="col-md-12 ">
@@ -146,9 +146,6 @@
                     </template>
                   </div>
                 </b-col>
-                <b-col md="12" class="mt-4 " style="text-align: center;">
-                  <span><strong>METODE PEMBAYARAN</strong></span>
-                </b-col>
               </template>
               <template v-if="dataPaket.length === 3">
                 <b-col sm="4" v-for="data in dataPaket" :key="data.id" >
@@ -252,20 +249,26 @@
                     </template>
                   </div>
                 </b-col>
-                <b-col md="12" class="mt-4 " style="text-align: center;">
-                  <span><strong>METODE PEMBAYARAN</strong></span>
-                </b-col>
               </template>
             </b-row>
           </div>
         </b-col>
       </b-row>
-      <div class="mb-4">
-        <img style=""  :src="dataPaygate[0].logo" height="40" width="120"
-             class="mt-2  " :alt="dataPaygate[0].nama">
-        <img style=""  :src="dataPaygate[1].logo" height="40" width="120"
-             class="mt-2 ml-2 " :alt="dataPaygate[1].nama">
+      <div class="row justify-content-center">
+      <b-row>
+        <b-col>
+          <div class="mb-4">
+            <b-col md="12" class="mt-4 " style="text-align: center;">
+                <span><strong>METODE PEMBAYARAN</strong></span>
+            </b-col>
+            <a  v-for="data in dataPaygate" :key="data.id" col="3">
+          <img style=""  :src="data.logo" height="40" width="120"
+               class="mt-2 ml-2  " :alt="data.nama">
+            </a>
                 </div>
+        </b-col>
+      </b-row>
+      </div>
               </div>
             </div>
           </div>
