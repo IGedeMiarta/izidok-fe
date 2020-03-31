@@ -11,7 +11,7 @@ module.exports = {
         manifestOptions: {
             description: 'Aplikasi Rekam Medis Elektronik Pilihan Dokter',
             background_color: '#ffffff',
-            display: 'fullscreen',
+            display: 'standalone',
             start_url: '/index.html'
         }
     }
