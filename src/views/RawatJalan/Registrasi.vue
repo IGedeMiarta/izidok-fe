@@ -1038,7 +1038,9 @@
         if(this.tempat.provinsi && !this.tempat.kota) {
           return this.$swal({
             text: "Kota Harus Diisi !",
-            type: "error"
+            type: "error",
+            showCancelButton: false,
+            confirmButtonText: startCase("ya")
           });
         }
 

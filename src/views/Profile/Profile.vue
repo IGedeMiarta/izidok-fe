@@ -116,7 +116,7 @@
                   <vue-select v-model="tempat.provinsi" :disabled="btnDisable == true" :options="provinces"
                     @input="getCity" />
                 </b-form-group>
-                <b-form-group label="kota" class="text-capitalize" style="position: relative"
+                <b-form-group class="text-capitalize" style="position: relative"
                   :state="getDataError({ rawLabel: 'kota' })" :invalid-feedback="
               renderInvalidFeedback({
                 validationDesc: blindlyGetData({
@@ -124,6 +124,10 @@
                 })
               })
             ">
+                  <legend tabindex="-1" class="bv-no-focus-ring col-form-label pt-0">
+                    kota
+                    <span v-if="tempat.provinsi && tempat.provinsi.id" class="text-danger">*</span>
+                  </legend>
                   <vue-select :disabled="btnDisable == true" :options="cities" v-model="tempat.kota"
                     @input="setDataTempat" />
                 </b-form-group>
@@ -342,6 +346,15 @@ import { EventBus } from '../../event-bus';
           });
           return;
         }
+        if(this.tempat.provinsi.id && !this.tempat.kota.id) {
+          this.$swal({
+            text: `Kota Harus Diisi !`,
+            type: "error",
+            showCancelButton: false,
+            confirmButtonText: startCase("ya")
+          });
+          return;
+        }
         try {
           var profile = this.$store.state.user.id;
           const res = await axios.put(`${this.url_api}/user/${profile}`, {
@@ -398,6 +411,7 @@ import { EventBus } from '../../event-bus';
       async getCity() {
         try {
           var val;
+          this.tempat.kota = {id:null};
           if (this.tempat.provinsi == '' || this.tempat.provinsi == null) {
             val = '';
           } else {
