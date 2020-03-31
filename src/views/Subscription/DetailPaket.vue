@@ -274,7 +274,7 @@
       this.fetchDetailPaket();
 
       let ss = {
-        label: 'Permata Virtual Account',
+        label: 'BCA Virtual Account',
         value: 2
       };
       this.selectedPaygate = ss;

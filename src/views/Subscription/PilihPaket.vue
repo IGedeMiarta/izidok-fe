@@ -261,12 +261,10 @@
         </b-col>
       </b-row>
       <div class="mb-4">
-        <div  v-for="data in dataPaygate" :key="data.id">
-        <img style=""  :src="data.logo" height="40" width="120"
-             class="mt-2  " :alt="data.nama">
-      </div>
-<!--        <img style=""  :src="dataPaygate[1].logo" height="40" width="120"-->
-<!--             class="mt-2 ml-2 " :alt="dataPaygate[1].nama">-->
+        <img style=""  :src="dataPaygate[0].logo" height="40" width="120"
+             class="mt-2  " :alt="dataPaygate[0].nama">
+        <img style=""  :src="dataPaygate[1].logo" height="40" width="120"
+             class="mt-2 ml-2 " :alt="dataPaygate[1].nama">
                 </div>
               </div>
             </div>
