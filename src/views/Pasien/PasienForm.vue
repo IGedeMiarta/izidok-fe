@@ -1053,9 +1053,19 @@
         });
         if (formBasicData.every(item => item.error !== null && !item.error)) {
           if (this.formData.provinsi) {
-            this.formData.provinsi = this.tempat.provinsi.id;
-            this.formData.kota = this.tempat.kota.id;
+            this.formData.provinsi = this.tempat.provinsi && this.tempat.provinsi.id ? this.tempat.provinsi.id : null;
+            this.formData.kota = this.tempat.kota && this.tempat.kota.id ? this.tempat.kota.id : null;
           }
+
+          if(this.formData.provinsi && !this.formData.kota) {
+            return this.$swal({
+              text: `Kota Harus Diisi !`,
+              type: "error",
+              showCancelButton: false,
+              confirmButtonText: startCase("ya")
+            });
+          }
+
           this.$emit("submitForm", this.formData);
         }
       }
