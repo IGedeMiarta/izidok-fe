@@ -10,9 +10,11 @@
             <li class="breadcrumb-item active" aria-current="page">{{pasien.nama}}</li>
           </ol>
           <h5 class="display-4 mt-1 mb-2 font-weight-bold">{{pasien.nama}}</h5>
-          <p
-            class="text-black-50 mb-0"
-          >NO RM. {{pasien.nomor_rekam_medis}} / {{(pasien.jenis_kelamin==1)?'Laki-laki':'Perempuan'}} / {{age}}</p>
+          <template v-if="pasien.nomor_rekam_medis">
+            <p
+              class="text-black-50 mb-0"
+            >NO RM. {{pasien.nomor_rekam_medis}} / {{(pasien.jenis_kelamin==1)?'Laki-laki':'Perempuan'}} / {{age}}</p>
+          </template>
         </div>
         <br>
         <p style="font-weight:bold"
