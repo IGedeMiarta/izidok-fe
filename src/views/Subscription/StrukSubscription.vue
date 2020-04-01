@@ -19,7 +19,7 @@
         <b-row>
           <b-col sm="7" style="text-align: left;" class="mt-1">
             <img fluid :src="require('@/assets/izidok.png')" height="40" width="120">
-            <p class="ml-2 mt-5"><strong>Dr. {{ dataPaygetDetail.dokter.nama}}</strong></p>
+            <p class="ml-2 mt-5"><strong>{{ dataPaygetDetail.dokter.nama}}</strong></p>
             <p class="ml-2 "><strong>No. Handphone : {{ dataPaygetDetail.dokter.nomor_telp}}</strong></p>
             <p class="ml-2 "><strong>{{ dataPaygetDetail.dokter.email}}</strong></p>
           </b-col>
