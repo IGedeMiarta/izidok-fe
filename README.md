@@ -1,5 +1,7 @@
 # izidok-fe
 
+Version 1.2
+
 ## Project setup
 ```
 yarn install
