@@ -34,20 +34,20 @@
         <b-row class="mb-2">
           <b-col sm="4" lg="7" class="text-right-lg">PERIODE</b-col>
           <b-col sm="8" lg="5">
-            <b-form-input class="w-auto text-right" size="sm" disabled
+            <b-form-input class="text-right" size="sm" disabled
               :value="periodeX({ periode: periodeSelected, rawValue: true })" />
           </b-col>
         </b-row>
         <b-row class="mb-2">
           <b-col sm="4" lg="7" class="text-right-lg">TOTAL PASIEN</b-col>
           <b-col sm="8" lg="5">
-            <b-form-input class="w-auto text-right" size="sm" disabled :value="totalPasienValue" />
+            <b-form-input class="text-right" size="sm" disabled :value="totalPasienValue" />
           </b-col>
         </b-row>
         <b-row class="mb-2">
           <b-col sm="4" lg="7" class="text-right-lg">TOTAL PENDAPATAN</b-col>
           <b-col sm="8" lg="5">
-            <b-form-input class="w-auto text-right" size="sm" disabled :value="totalPendapatanValue" />
+            <b-form-input class="text-right" size="sm" disabled :value="totalPendapatanValue" />
           </b-col>
         </b-row>
       </b-col>
