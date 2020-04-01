@@ -28,7 +28,7 @@
                     class="btn-link btn-lg d-flex align-items-center justify-content-between shadow-none"
                     v-b-toggle.accordion-2
                   >
-                    <span>Anamnesis</span>
+                    <span>Anamnesis  <label style="color:red"> *</label></span>
                     <font-awesome-icon icon="angle-up" class="font-size-xl" />
                   </b-button>
                 </div>
@@ -59,7 +59,7 @@
                   <b-button
                     class="btn-link btn-lg d-flex align-items-center justify-content-between shadow-none collapsed"
                     v-b-toggle.accordion-4 >
-                    <span>Diagnosis</span>
+                    <span>Diagnosis <label style="color:red"> *</label></span>
                     <font-awesome-icon icon="angle-up" class="font-size-xl" />
                   </b-button>
                 </div>
