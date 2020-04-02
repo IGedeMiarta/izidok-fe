@@ -106,7 +106,7 @@
                           })
                         " :state="renderError({ error: form.error })" disabled />
                       <b-form-input v-else :type="form.type || 'text'" v-model.lazy="formData[form.label]" @keyup="
-                          setValue({
+                          onKeyInputNumberSpecial({
                             rawLabel: form.rawLabel,
                             label: form.label,
                             $event,
