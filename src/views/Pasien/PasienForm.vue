@@ -154,9 +154,7 @@
               checkNIK()
             " :disabled="disabledForm()" :state="getDataError({ rawLabel: 'nik' })" :value="getValue('nik')"
                   :maxlength="25" />
-                  <template v-else>
-                    <span>test</span>
-                <b-form-input @keypress="
+                <b-form-input v-else @keypress="
               checkInput
             " @keyup="
               setValue({
@@ -166,14 +164,13 @@
               checkNIK()
             " :disabled="disabledForm()" :state="getDataError({ rawLabel: 'nik' })" :value="getValue('nik')"
                   :maxlength="25" />
-                  </template>
                 <template v-if="this.formBasicData[2].error == true && this.formData.nik !== ''">
                   <label style="color:red">No. Identitas telah terdaftar</label>
                 </template>
               </template>
               <template v-else>
-                <b-form-input v-if="this.formData['jenis_identitas'] !== 'Paspor'" @keypress="
-              onKeyInputNumber({
+                <b-form-input v-if="this.formData['jenis_identitas'] !== 'Paspor'" id="fck-shit" @keypress="
+              checkInput({
                 rawLabel: 'nik',
                 $event
               })
@@ -966,8 +963,10 @@
           rawLabel: item.label
         }));
       },
-      checkInput($event) {
-        console.log($event)
+      checkInput({
+        rawLabel,
+        $event
+      }) {
         const { key } = $event;
         var evt = $event;
         evt = evt ? evt : window.event;
