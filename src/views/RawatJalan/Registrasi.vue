@@ -105,8 +105,8 @@
                             tmpId: form.tmpId
                           })
                         " :state="renderError({ error: form.error })" disabled />
-                      <b-form-input id="inputnumberspecial" v-else type="number" v-model.lazy="formData[form.label]"
-                        @keydown="
+                      <b-form-input v-else :type="form.type || 'text'" v-model.lazy="formData[form.label]"
+                                    @keydown="
                           onKeyInputNumberSpecial({
                             label: form.label,
                             rawLabel: form.rawLabel,
@@ -167,7 +167,7 @@
                             tmpId: form.tmpId
                           })
                         " placeholder="Tuliskan keluhan utama secara singkat, mis. sakit kepala, demam 3 hari, dll"
-                        rows="3" max-rows="6"></b-form-textarea>
+                                       rows="3" max-rows="6"></b-form-textarea>
                     </template>
                   </b-form-group>
 
@@ -175,201 +175,201 @@
               </b-row>
               <b-button type="submit" variant="primary" class="text-capitalize my-2 float-right">simpan</b-button>
               <b-button :to="{ name: 'antrean-rawat-jalan' }" variant="danger"
-                class="text-capitalize my-2 mr-4 float-right">keluar</b-button>
+                        class="text-capitalize my-2 mr-4 float-right">keluar</b-button>
             </template>
           </b-form>
         </div>
       </div>
       <template v-if="tambahPasienModal">
-      <b-modal :no-close-on-backdrop="true" @close="closeModall" :no-close-on-esc="true" :cancel-disabled="true"
-        ref='modal-pasien' id="modal-1" style="color:#d3e8eb;" title="Registrasi Pasien Baru" hide-footer>
-        <b-form row v-on:submit.prevent="addPasien">
-          <div class="col-sm-12">
-            <b-form-group abel-for="input-1">
-              <label>Nama Lengkap</label>
-              <label style="color:red">*</label>
-              <b-form-input type="text" v-model.trim="formDataRegister.nama" @input="checkInput({object: 'nama', val: $event})">
-              </b-form-input>
-              <div class="error"
-                v-if="(!$v.formDataRegister.nama.required && $v.formDataRegister.nama.$model == '') || this.checkError.nama !== null">
-                Nama
-                harus diisi!</div>
-            </b-form-group>
-          </div>
-          <div class="col-sm-12">
-            <div class="row">
-              <div class="col-md-4">
-                <b-form-group class="text-capitalize" style="position: relative;">
-                  <label>Jenis Identitas</label>
-                  <template v-if="this.formDataRegister['jenis_identitas'] || this.formDataRegister['nik']">
-                    <label style="color:red"> *</label>
-                  </template>
-                  <vue-select :options="
+        <b-modal :no-close-on-backdrop="true" @close="closeModall" :no-close-on-esc="true" :cancel-disabled="true"
+                 ref='modal-pasien' id="modal-1" style="color:#d3e8eb;" title="Registrasi Pasien Baru" hide-footer>
+          <b-form row v-on:submit.prevent="addPasien">
+            <div class="col-sm-12">
+              <b-form-group abel-for="input-1">
+                <label>Nama Lengkap</label>
+                <label style="color:red">*</label>
+                <b-form-input type="text" v-model.trim="formDataRegister.nama" @input="checkInput({object: 'nama', val: $event})">
+                </b-form-input>
+                <div class="error"
+                     v-if="(!$v.formDataRegister.nama.required && $v.formDataRegister.nama.$model == '') || this.checkError.nama !== null">
+                  Nama
+                  harus diisi!</div>
+              </b-form-group>
+            </div>
+            <div class="col-sm-12">
+              <div class="row">
+                <div class="col-md-4">
+                  <b-form-group class="text-capitalize" style="position: relative;">
+                    <label>Jenis Identitas</label>
+                    <template v-if="this.formDataRegister['jenis_identitas'] || this.formDataRegister['nik']">
+                      <label style="color:red"> *</label>
+                    </template>
+                    <vue-select :options="
                     ['KTP', 'SIM', 'Paspor']
                   " v-model="formDataRegister['jenis_identitas']" />
-                </b-form-group>
-              </div>
-              <div class="col-md-8">
-                <b-form-group class="text-capitalize" style="position: relative">
-                  <label>No. identitas</label>
-                  <template v-if="this.formDataRegister['jenis_identitas'] || this.formDataRegister['nik']">
-                    <label style="color:red"> *</label>
-                  </template>
-                  <b-form-input v-if="this.formDataRegister['jenis_identitas'] !== 'Paspor'"
-                    v-model.trim="formDataRegister['nik']"
-                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')" :maxlength="25"
-                    @keyup="checkNIK" />
-                  <b-form-input v-else :maxlength="25" type="text" v-model.trim="formDataRegister['nik']"
-                    @keyup="checkNIK" />
-                  <template v-if="this.$v.formDataRegister['nik'].error == true">
-                    <label style="color:red">No. Identitas telah terdaftar</label>
-                  </template>
-                </b-form-group>
+                  </b-form-group>
+                </div>
+                <div class="col-md-8">
+                  <b-form-group class="text-capitalize" style="position: relative">
+                    <label>No. identitas</label>
+                    <template v-if="this.formDataRegister['jenis_identitas'] || this.formDataRegister['nik']">
+                      <label style="color:red"> *</label>
+                    </template>
+                    <b-form-input v-if="this.formDataRegister['jenis_identitas'] !== 'Paspor'"
+                                  v-model.trim="formDataRegister['nik']"
+                                  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')" :maxlength="25"
+                                  @keyup="checkNIK" />
+                    <b-form-input v-else :maxlength="25" type="text" v-model.trim="formDataRegister['nik']"
+                                  @keyup="checkNIK" />
+                    <template v-if="this.$v.formDataRegister['nik'].error == true">
+                      <label style="color:red">No. Identitas telah terdaftar</label>
+                    </template>
+                  </b-form-group>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="col-sm-12">
-            <b-form-group label-for="input-1">
-              <label>No. Handphone</label>
-              <label style="color:red">*</label>
-              <b-form-input id="input-1" type="text" pattern=".{10,15}" :maxlength="15"
-                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')"
-                v-model.trim="formDataRegister.nomor_hp" @input="checkInput({object: 'nomor_hp', val: $event})">
-              </b-form-input>
-              <div class="error"
-                v-if="!$v.formDataRegister.nomor_hp.required && $v.formDataRegister.nomor_hp.$model == '' || this.checkError.nomor_hp !== null">
-                No. Handphone
-                harus diisi!</div>
-              <div class="error" v-if="!$v.formDataRegister.nomor_hp.minLength">No. Handphone minimal 10 angka!</div>
-            </b-form-group>
-          </div>
-          <div class="col-sm-12">
-            <div class="row">
-              <div class="col-sm-6">
-                <b-form-group>
-                  <label>Jenis kelamin</label>
-                  <label style="color:red"> *</label>
-                  <b-form-radio-group stacked class="text-capitalize" :options="[
+            <div class="col-sm-12">
+              <b-form-group label-for="input-1">
+                <label>No. Handphone</label>
+                <label style="color:red">*</label>
+                <b-form-input id="input-1" type="text" pattern=".{10,15}" :maxlength="15"
+                              oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')"
+                              v-model.trim="formDataRegister.nomor_hp" @input="checkInput({object: 'nomor_hp', val: $event})">
+                </b-form-input>
+                <div class="error"
+                     v-if="!$v.formDataRegister.nomor_hp.required && $v.formDataRegister.nomor_hp.$model == '' || this.checkError.nomor_hp !== null">
+                  No. Handphone
+                  harus diisi!</div>
+                <div class="error" v-if="!$v.formDataRegister.nomor_hp.minLength">No. Handphone minimal 10 angka!</div>
+              </b-form-group>
+            </div>
+            <div class="col-sm-12">
+              <div class="row">
+                <div class="col-sm-6">
+                  <b-form-group>
+                    <label>Jenis kelamin</label>
+                    <label style="color:red"> *</label>
+                    <b-form-radio-group stacked class="text-capitalize" :options="[
                     { text: 'laki-laki', value: 1 },
                     { text: 'perempuan', value: 0 }
                   ]" v-model.trim="formDataRegister.jenis_kelamin" @input="checkInput({object: 'jenis_kelamin', val: $event})">
-                  </b-form-radio-group>
-                  <div class="error"
-                    v-if="!$v.formDataRegister.jenis_kelamin.required  && $v.formDataRegister.jenis_kelamin.$model == '' || this.checkError.jenis_kelamin !== null">
-                    Jenis Kelamin harus diisi!</div>
-                </b-form-group>
-              </div>
-              <div class="col-sm-6">
-                <b-form-group>
-                  <label>Tanggal Lahir</label>
-                  <label style="color:red"> *</label>
-                  <Datetime input-class="form-control" class="input-group" zone="Asia/Jakarta" value-zone="Asia/Jakarta"
-                    format="d LLL yyyy" @input="tanggalLahirSelected" :max-datetime="maximumDatetime" :input-style="
+                    </b-form-radio-group>
+                    <div class="error"
+                         v-if="!$v.formDataRegister.jenis_kelamin.required  && $v.formDataRegister.jenis_kelamin.$model == '' || this.checkError.jenis_kelamin !== null">
+                      Jenis Kelamin harus diisi!</div>
+                  </b-form-group>
+                </div>
+                <div class="col-sm-6">
+                  <b-form-group>
+                    <label>Tanggal Lahir</label>
+                    <label style="color:red"> *</label>
+                    <Datetime input-class="form-control" class="input-group" zone="Asia/Jakarta" value-zone="Asia/Jakarta"
+                              format="d LLL yyyy" @input="tanggalLahirSelected" :max-datetime="maximumDatetime" :input-style="
                     getDataError({ rawLabel: 'tanggal lahir' }) === null
                       ? null
                       : getDataError({ rawLabel: 'tanggal lahir' })
                       ? null
                       : 'border-color: red'
                   " ref="dob" v-model.trim="formDataRegister.tanggal_lahir" @change="checkInput({object: 'tanggal_lahir', val: $event})">
-                    <template v-slot:after>
-                      <b-input-group-text @click="triggerDob" slot="append" style="
+                      <template v-slot:after>
+                        <b-input-group-text @click="triggerDob" slot="append" style="
                     border-top-left-radius:0; border-left-width: 0; border-bottom-left-radius: 0; cursor: pointer
                     ">
-                        <font-awesome-icon class="mx-auto" icon="calendar" />
-                      </b-input-group-text>
-                    </template>
-                  </Datetime>
-                  <div class="error" v-if="formDataRegister.tanggal_lahir == 'Invalid date' ">Tanggal
-                    Lahir harus diisi!</div>
-                </b-form-group>
-              </div>
-              <div class="col-sm-6">
+                          <font-awesome-icon class="mx-auto" icon="calendar" />
+                        </b-input-group-text>
+                      </template>
+                    </Datetime>
+                    <div class="error" v-if="formDataRegister.tanggal_lahir == 'Invalid date' ">Tanggal
+                      Lahir harus diisi!</div>
+                  </b-form-group>
+                </div>
+                <div class="col-sm-6">
 
-              </div>
-              <div class="col-sm-6">
-                <b-form-group label="gol. darah" class="text-capitalize" style="position: relative;">
-                  <vue-select :options="
+                </div>
+                <div class="col-sm-6">
+                  <b-form-group label="gol. darah" class="text-capitalize" style="position: relative;">
+                    <vue-select :options="
                     ['A', 'B', 'AB', 'O']
                   " v-model="formDataRegister.golongan_darah" />
-                </b-form-group>
+                  </b-form-group>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="col-sm-12">
-            <b-form-group id="input-group-1" label-for="input-1">
-              <label>Alamat</label>
-              <label style="color:red">*</label>
-              <b-form-textarea id="input-1" rows="3" max-rows="6" type="text"
-                v-model.trim="formDataRegister.alamat_rumah" @input="checkInput({object: 'alamat_rumah', val: $event})">
-              </b-form-textarea>
-              <div class="error"
-                v-if="!$v.formDataRegister.alamat && $v.formDataRegister.alamat.$model == ''  || this.checkError.alamat_rumah !== null">
-                Alamat
-                harus diisi!</div>
-            </b-form-group>
-          </div>
-          <div class="col-sm-12">
-            <b-form-group  class="text-capitalize">
-              <label>Provinsi</label>
-              <template v-if="tempat.provinsi">
-                <label style="color:red"> *</label>
-              </template>
-              <vue-select :options="provinces" @input="getCity" v-model="tempat.provinsi" />
-            </b-form-group>
-          </div>
-          <div class="col-sm-12">
-            <b-form-group class="text-capitalize">
-              <label>Kota</label>
-              <template v-if="tempat.provinsi">
-                <label style="color:red"> *</label>
-              </template>
-              <vue-select :options="cities" v-model="tempat.kota" @input="setDataTempat" />
-            </b-form-group>
-          </div>
-          <div class="col-sm-12">
-            <b-form-group label="status perkawinan" class="text-capitalize">
-              <vue-select :options="
+            <div class="col-sm-12">
+              <b-form-group id="input-group-1" label-for="input-1">
+                <label>Alamat</label>
+                <label style="color:red">*</label>
+                <b-form-textarea id="input-1" rows="3" max-rows="6" type="text"
+                                 v-model.trim="formDataRegister.alamat_rumah" @input="checkInput({object: 'alamat_rumah', val: $event})">
+                </b-form-textarea>
+                <div class="error"
+                     v-if="!$v.formDataRegister.alamat && $v.formDataRegister.alamat.$model == ''  || this.checkError.alamat_rumah !== null">
+                  Alamat
+                  harus diisi!</div>
+              </b-form-group>
+            </div>
+            <div class="col-sm-12">
+              <b-form-group  class="text-capitalize">
+                <label>Provinsi</label>
+                <template v-if="tempat.provinsi">
+                  <label style="color:red"> *</label>
+                </template>
+                <vue-select :options="provinces" @input="getCity" v-model="tempat.provinsi" />
+              </b-form-group>
+            </div>
+            <div class="col-sm-12">
+              <b-form-group class="text-capitalize">
+                <label>Kota</label>
+                <template v-if="tempat.provinsi">
+                  <label style="color:red"> *</label>
+                </template>
+                <vue-select :options="cities" v-model="tempat.kota" @input="setDataTempat" />
+              </b-form-group>
+            </div>
+            <div class="col-sm-12">
+              <b-form-group label="status perkawinan" class="text-capitalize">
+                <vue-select :options="
                 ['Belum Kawin', 'Kawin', 'Cerai Hidup', 'Cerai Mati']
               " v-model="formDataRegister.status_perkawinan" />
-            </b-form-group>
-          </div>
-          <div class="col-sm-12">
-            <b-form-group label="email" class="text-capitalize">
-              <b-form-input type="email" v-model="formDataRegister.email" />
-            </b-form-group>
-          </div>
-          <div class="col-sm-12">
-            <b-form-group label="nama penanggung jawab" class="text-capitalize">
-              <b-form-input type="text" v-model.lazy="formDataRegister.nama_penanggung_jawab" />
-            </b-form-group>
-          </div>
-          <div class="col-sm-12">
-            <b-form-group label-for="input-1">
-              <label>No. HP penanggung Jawab</label>
-              <b-form-input id="input-1" type="text" pattern=".{10,15}" :maxlength="15"
-                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')"
-                v-model.trim="formDataRegister.nomor_hp_penanggung_jawab">
-              </b-form-input>
-            </b-form-group>
-          </div>
-          <div class="col-sm-12">
-            <b-form-group label="hubungan dengan pasien" class="text-capitalize">
-              <vue-select :options="
+              </b-form-group>
+            </div>
+            <div class="col-sm-12">
+              <b-form-group label="email" class="text-capitalize">
+                <b-form-input type="email" v-model="formDataRegister.email" />
+              </b-form-group>
+            </div>
+            <div class="col-sm-12">
+              <b-form-group label="nama penanggung jawab" class="text-capitalize">
+                <b-form-input type="text" v-model.lazy="formDataRegister.nama_penanggung_jawab" />
+              </b-form-group>
+            </div>
+            <div class="col-sm-12">
+              <b-form-group label-for="input-1">
+                <label>No. HP penanggung Jawab</label>
+                <b-form-input id="input-1" type="text" pattern=".{10,15}" :maxlength="15"
+                              oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')"
+                              v-model.trim="formDataRegister.nomor_hp_penanggung_jawab">
+                </b-form-input>
+              </b-form-group>
+            </div>
+            <div class="col-sm-12">
+              <b-form-group label="hubungan dengan pasien" class="text-capitalize">
+                <vue-select :options="
                 ['Suami/Istri', 'Orangtua', 'Kakak/Adik', 'Anak', 'Lainnya']
               " v-model="formDataRegister.hubungan_pasien" />
-            </b-form-group>
-          </div>
-          <div class="col-sm-12">
-            <b-button class="ml-3 text-uppercase" variant="success" style="font-size:17.5px;float:right " type="submit">
-              simpan
-            </b-button>
-            <b-button class="ml-3 text-uppercase" to="{ name: 'antrean-rawat-jalan' }" variant="danger"
-              style="font-size:17.5px;float:right " @click='closeModal'>
-              Batal
-            </b-button>
-          </div>
-        </b-form>
-      </b-modal>
+              </b-form-group>
+            </div>
+            <div class="col-sm-12">
+              <b-button class="ml-3 text-uppercase" variant="success" style="font-size:17.5px;float:right " type="submit">
+                simpan
+              </b-button>
+              <b-button class="ml-3 text-uppercase" to="{ name: 'antrean-rawat-jalan' }" variant="danger"
+                        style="font-size:17.5px;float:right " @click='closeModal'>
+                Batal
+              </b-button>
+            </div>
+          </b-form>
+        </b-modal>
       </template>
     </div>
   </div>
@@ -403,15 +403,15 @@
   moment.locale('id');
 
   const tmp = [{
-      label: "nama pasien",
-      type: "select",
-      isImportant: "*",
-      col: 12,
-      colLg: 5,
-      validations: {
-        required
-      }
-    },
+    label: "nama pasien",
+    type: "select",
+    isImportant: "*",
+    col: 12,
+    colLg: 5,
+    validations: {
+      required
+    }
+  },
     {
       label: "no. rekam medis",
       type: "text",
@@ -583,7 +583,7 @@
         }).then(res => {
           if (res.value) {
             next();
-            
+
           } else {
             next(false);
           }
@@ -978,14 +978,20 @@
         });
       },
       onKeyInputNumberSpecial({
-        label,
-        rawLabel,
-        $event
-      }) {
-        console.log($event)
-        if ($event.key === "." || $event.code === "Period" || $event.keyCode === 190 || $event.which === 190) {
-          $event.preventDefault();
-          return false;
+                                label,
+                                rawLabel,
+                                $event
+                              }) {
+        var evt = $event;
+        evt = evt ? evt : window.event;
+        var charCode = evt.which ? evt.which : evt.keyCode;
+        console.log(charCode)
+        if (
+          charCode > 31 &&
+          (charCode < 48 || charCode > 57) &&
+          charCode !== 188
+        ) {
+          evt.preventDefault();
         } else {
           void this.setValue({
             label,
@@ -1183,10 +1189,10 @@
               jenis_kelamin: res.data.data.jenis_kelamin,
               nomor_rekam_medis: res.data.data.nomor_rekam_medis,
             }
-             this.checkError.nama = null;
-              this.checkError.jenis_kelamin = null;
-              this.checkError.alamat_rumah = null;
-              this.checkError.nomor_hp = null;
+            this.checkError.nama = null;
+            this.checkError.jenis_kelamin = null;
+            this.checkError.alamat_rumah = null;
+            this.checkError.nomor_hp = null;
 
             this.tempat = {
               kota: null,
@@ -1305,10 +1311,10 @@
         }));
       },
       setValue({
-        label,
-        rawLabel,
-        $event = null
-      } = {}) {
+                 label,
+                 rawLabel,
+                 $event = null
+               } = {}) {
         let value = $event;
         if (typeof $event === "object") {
           if ($event) {
@@ -1383,9 +1389,9 @@
           jenis_kelamin: this.formData.jenis_kelamin || "",
           nomor_telp: this.formData.nomor_handphone || "",
           waktu_konsultasi: (waktu_konsultasi &&
-              waktu_konsultasi.toLowerCase() &&
-              waktu_konsultasi === "invalid date" &&
-              "") ||
+            waktu_konsultasi.toLowerCase() &&
+            waktu_konsultasi === "invalid date" &&
+            "") ||
             waktu_konsultasi,
           tinggi_badan: this.formData.tinggi_badan || 0,
           berat_badan: this.formData.berat_badan || 0,
@@ -1467,16 +1473,6 @@
 </script>
 
 <style lang="scss">
-  input::-webkit-outer-spin-button,
-  input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-
-  /* Firefox */
-  input[type=number] {
-    -moz-appearance: textfield;
-  }
   .v-select {
     &>.vs__dropdown-toggle {
       height: 41.75px !important;
