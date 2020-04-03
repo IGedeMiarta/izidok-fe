@@ -105,15 +105,8 @@
                             tmpId: form.tmpId
                           })
                         " :state="renderError({ error: form.error })" disabled />
-                      <b-form-input id="inputnumberspecial" v-else type="number" v-model.lazy="formData[form.label]" onchange="removeChar()" @keydown="
-                          setValue({
-                            rawLabel: form.rawLabel,
-                            label: form.label,
-                            $event,
-                            tmpId: form.tmpId
-                          })
-                        "
-                        @keypress="
+                      <b-form-input id="inputnumberspecial" v-else type="number" v-model.lazy="formData[form.label]"
+                        @keydown="
                           onKeyInputNumberSpecial({
                             label: form.label,
                             rawLabel: form.rawLabel,
@@ -655,11 +648,6 @@
       },
     },
     methods: {
-      removeChar() {
-        var a = document.getElementById("inputnumberspecial").value;
-        a = a.replace(/. /g, ',');
-        document.getElementById.innerHTML = a;
-      },
       checkInput({object, val} = {}) {
         if (typeof val === 'Object') {
           const tmp = val.target.value
@@ -994,15 +982,8 @@
         rawLabel,
         $event
       }) {
-        var evt = $event;
-        evt = evt ? evt : window.event;
-        var charCode = evt.which ? evt.which : evt.keyCode;
-        if (
-          charCode > 31 &&
-          (charCode < 48 || charCode > 57) &&
-          charCode !== 44
-        ) {
-          evt.preventDefault();
+        if ($event.key=== ".") {
+          $event.preventDefault();
         } else {
           void this.setValue({
             label,
