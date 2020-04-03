@@ -105,7 +105,7 @@
                             tmpId: form.tmpId
                           })
                         " :state="renderError({ error: form.error })" disabled />
-                      <b-form-input v-else :type="form.type || 'text'" v-model.lazy="formData[form.label]" @keyup="
+                      <b-form-input id="inputnumberspecial" v-else type="number" v-model.lazy="formData[form.label]" onchange="removeChar()" @keydown="
                           setValue({
                             rawLabel: form.rawLabel,
                             label: form.label,
@@ -113,14 +113,7 @@
                             tmpId: form.tmpId
                           })
                         "
-                        v-on:keydown="
-                          onKeyInputNumberSpecial({
-                            label: form.label,
-                            rawLabel: form.rawLabel,
-                            $event
-                          })
-                        "
-                        @input="
+                        @keypress="
                           onKeyInputNumberSpecial({
                             label: form.label,
                             rawLabel: form.rawLabel,
@@ -662,6 +655,11 @@
       },
     },
     methods: {
+      removeChar() {
+        var a = document.getElementById("inputnumberspecial").value;
+        a = a.replace(/. /g, ',');
+        document.getElementById.innerHTML = a;
+      },
       checkInput({object, val} = {}) {
         if (typeof val === 'Object') {
           const tmp = val.target.value
@@ -1486,6 +1484,16 @@
 </script>
 
 <style lang="scss">
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
   .v-select {
     &>.vs__dropdown-toggle {
       height: 41.75px !important;
