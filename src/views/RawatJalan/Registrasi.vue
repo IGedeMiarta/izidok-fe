@@ -113,7 +113,7 @@
                             tmpId: form.tmpId
                           })
                         "
-                        v-on:keypress="
+                        v-on:keydown="
                           onKeyInputNumberSpecial({
                             label: form.label,
                             rawLabel: form.rawLabel,
