@@ -982,8 +982,10 @@
         rawLabel,
         $event
       }) {
-        if ($event.key=== ".") {
+        console.log($event)
+        if ($event.key === "." || $event.code === "Period" || $event.keyCode === 190 || $event.which === 190) {
           $event.preventDefault();
+          return false;
         } else {
           void this.setValue({
             label,
