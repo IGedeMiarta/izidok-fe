@@ -106,7 +106,7 @@
                           })
                         " :state="renderError({ error: form.error })" disabled />
                       <b-form-input v-else :type="form.type || 'text'" v-model.lazy="formData[form.label]"
-                                    @keydown="
+                                    @keydown.native="
                           onKeyInputNumberSpecial({
                             label: form.label,
                             rawLabel: form.rawLabel,
@@ -985,7 +985,6 @@
         var evt = $event;
         evt = evt ? evt : window.event;
         var charCode = evt.which ? evt.which : evt.keyCode;
-        console.log(charCode)
         if (
           charCode > 31 &&
           (charCode < 48 || charCode > 57) &&
