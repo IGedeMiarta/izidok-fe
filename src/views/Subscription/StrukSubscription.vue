@@ -139,7 +139,7 @@
           </b-col>
         </b-row>
         <b-col sm="12" style="text-align: right; text-align:right; margin-top: 200px; ">
-          <label><strong>customercare@medlinx.co.id, contact center : 021-723-7982</strong></label>
+          <label><strong>customercare@izidok.co.id, contact center : 021-723-7982</strong></label>
         </b-col>
       </div>
     </div>
