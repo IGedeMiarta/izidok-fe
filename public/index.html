@@ -7,6 +7,16 @@
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title>izidok</title>
+    <meta name="geo.placename" content="Indonesia" />
+    <meta name="googlebot-news" content="index, follow" />
+    <meta name="googlebot" content="index, follow" />
+    <meta name="robots" content="index, follow"/>
+    <meta name="language" content="id" />
+    <meta name="geo.country" content="id" />
+    <meta http-equiv="content-language" content="In-Id" />
+    <meta name="title" content="Masuk / Login">
+    <meta name="description"  content="Segera login ke akun izidok untuk pengalaman terbaik untuk dashboard monitoring, Manajemen Asisten Dokter, pembayaran, e-Rekam Medis, dimana pun." />
+    <meta name="keywords"  content="izidok login, izidok masuk, aplikasi dokter mandiri termurah, aplikasi rekam medis gratis, aplikasi dokter, aplikasi pengelolaan sistem dokter, rekam medis elektronik, aplikasi platform dokter, aplikasi layanan kesehatan termurah, aplikasi medis, aplikasi jadwal dokter, aplikasi dokter gratis, aplikasi rekam medis gratis, dokter, klinik, aplikasi klinik, aplikasi klinik termurah, aplikasi dokter praktik mandiri" />
   </head>
   <body>
     <noscript>
@@ -14,5 +24,13 @@
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-164164257-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-164164257-1');
+    </script>
+
   </body>
 </html>
