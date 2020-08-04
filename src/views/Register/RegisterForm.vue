@@ -107,10 +107,14 @@
               <div class="form-group">
                 Dengan menekan tombol <strong>Daftar</strong>,
                 <span class="text-capitalize">Anda</span> setuju dengan semua
-                <span class="text-capitalize"><strong>syarat {{ "&" }} ketentuan </strong></span>
+                <a :href="'https://izidok.id/privacy-note'">
+                  <span class="text-capitalize"><strong>syarat {{ "&" }} ketentuan </strong></span>
+                </a>
                 serta
-                <span class="text-capitalize"><strong>kebijakan privasi</strong></span> yang
-                berlaku
+                <a :href="'https://izidok.id/privacy-note'">
+                  <span class="text-capitalize"><strong>kebijakan privasi</strong></span>
+                </a>
+                  yang berlaku
               </div>
               <button type="submit" class="btn btn-md btn-block text-capitalize"
                 style="background-color :#3F7EA7; color:white; border-radius : 10px;">
