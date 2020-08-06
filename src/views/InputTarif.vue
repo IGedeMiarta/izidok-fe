@@ -104,7 +104,8 @@
                       <div role="group">
                         <b-form-input v-model.lazy="inputTarif.tarif_layanan" v-money="money"
                           :state="errorState({ label: 'tarif_layanan', index })"
-                          :placeholder="placeholderInput('tarif_layanan')" maxlength="19" class="text-right">
+                          :placeholder="placeholderInput('tarif_layanan')" maxlength="19" 
+                          class="text-right new-input-tarif text-red">
                         </b-form-input>
                         <b-form-invalid-feedback class="text-capitalize">
                           {{
@@ -134,6 +135,11 @@
                 </b-col>
                 <b-col lg="2" sm="3" align="right">
                   <b-button class="text-capitalize" type="submit" variant="primary">simpan</b-button>
+                </b-col>
+              </b-row>
+              <b-row>
+                <b-col class="text-right text-ternary">
+                  Anda dapat selalu merubah tarif &amp; layanan setelah<br>masuk ke dalam akun Anda nanti
                 </b-col>
               </b-row>
             </b-form>
@@ -592,5 +598,12 @@
   }
   .text-red {
     color: red;
+  }
+  .text-ternary {
+    color: #828282
+  }
+  .new-input-tarif {
+    border-color: #1bc943;
+
   }
 </style>
