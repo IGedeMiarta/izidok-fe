@@ -35,10 +35,15 @@
             <b-form @submit.prevent="submitInputTarif">
               <b-row class="d-flex align-items-center">
                 <b-col sm="12">
-                  <b-row class="d-flex align-items-center mb-4">
+                  <b-row class="d-flex align-items-center">
                     <b-col lg="5" sm="4" class="text-capitalize">nama layanan</b-col>
                     <b-col sm="3" class="text-capitalize">kode layanan</b-col>
                     <b-col lg="3" sm="4" class="text-capitalize">tarif layanan</b-col>
+                  </b-row>
+                  <b-row class="mb-4">
+                    <b-col lg="4" offset-lg="8" sm="5" offset-sm="7">
+                      <small class="text-red">*Silakan sesuaikan dengan tarif praktik Anda</small>
+                    </b-col>
                   </b-row>
                   <b-row class="d-flex align-items-center mb-3" v-for="(inputTarif, index) in tmpInputTarifData"
                     :key="inputTarif.id">
@@ -84,7 +89,9 @@
                               'kode_layanan'
                             )
                           " :state="errorState({ label: 'kode_layanan', index })"
-                          :placeholder="placeholderInput('kode_layanan')" maxlength="5"></b-form-input>
+                          :placeholder="placeholderInput('kode_layanan')" 
+                          :disabled="index <= 1"
+                          maxlength="5"></b-form-input>
                         <b-form-invalid-feedback class="text-capitalize">
                           {{
                             inputTarif.error &&
@@ -97,7 +104,8 @@
                       <div role="group">
                         <b-form-input v-model.lazy="inputTarif.tarif_layanan" v-money="money"
                           :state="errorState({ label: 'tarif_layanan', index })"
-                          :placeholder="placeholderInput('tarif_layanan')" maxlength="19" class="text-right">
+                          :placeholder="placeholderInput('tarif_layanan')" maxlength="19" 
+                          class="text-right new-input-tarif text-red">
                         </b-form-input>
                         <b-form-invalid-feedback class="text-capitalize">
                           {{
@@ -127,6 +135,11 @@
                 </b-col>
                 <b-col lg="2" sm="3" align="right">
                   <b-button class="text-capitalize" type="submit" variant="primary">simpan</b-button>
+                </b-col>
+              </b-row>
+              <b-row>
+                <b-col class="text-right text-ternary">
+                  Anda dapat selalu merubah tarif &amp; layanan setelah<br>masuk ke dalam akun Anda nanti
                 </b-col>
               </b-row>
             </b-form>
@@ -174,14 +187,14 @@
       tmpInputTarifData: [{
           id: 1,
           nama_layanan: startCase("registrasi awal"),
-          kode_layanan: null,
-          tarif_layanan: null
+          kode_layanan: 'A001',
+          tarif_layanan: 'Rp. 70,000'
         },
         {
           id: 2,
           nama_layanan: startCase("konsultasi dokter"),
-          kode_layanan: null,
-          tarif_layanan: null
+          kode_layanan: 'A002',
+          tarif_layanan: 'Rp. 80,000'
         }
       ],
       namaLayananContainer: ["registrasi awal", "konsultasi dokter"],
@@ -534,6 +547,9 @@
               }, {});
           } else if (key === "id") {
             obj[key] = tmpInputTarifData.length + 1;
+          } else if (key === "kode_layanan") {
+            let counter = ((tmpInputTarifData.length+1) + '').padStart(3, '0');
+            obj[key] = 'A' + counter;
           } else {
             obj[key] = null;
           }
@@ -579,5 +595,15 @@
   .invalid-feedback {
     min-height: 18px;
     display: block;
+  }
+  .text-red {
+    color: red;
+  }
+  .text-ternary {
+    color: #828282
+  }
+  .new-input-tarif {
+    border-color: #1bc943;
+
   }
 </style>
