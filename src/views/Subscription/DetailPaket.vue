@@ -88,11 +88,13 @@
                         <!--                          <div class="col-md-8 mt-2">-->
                         <!--                            <strong class="float-right mr-3">Rp. 22.000,-</strong>-->
                         <!--                          </div>-->
-                        <div class="col-md-4 mt-2">
+                        <div class="col-md-6 mt-2">
                           <strong>Kode Promo</strong>
-                          <small class="ml-2">( jika ada )</small>
+                          <!-- <small class="ml-2">( jika ada )</small> -->
+                          <br>
+                          <span class="promo-highlight" @click="putPromo('IZIDOK75')"><small>Dapatkan diskon 75% dengan kode <strong class="promo-code">IZIDOK75</strong></small></span>
                         </div>
-                        <div class="col-md-8 mt-2">
+                        <div class="col-md-6 mt-2">
                           <b-button variant="primary" @click="checkKodePromo" class="float-right" size="md">Gunakan
                           </b-button>
                           <b-form-input v-model="kode_promo" class="col-md-4 float-right mr-2 p-md-1"></b-form-input>
@@ -397,7 +399,26 @@
             }
           });
       },
-
+      putPromo(code) {
+        this.kode_promo = code
+      }
     }
   };
 </script>
+
+<style scoped>
+.promo-code {
+  color: #f83245
+}
+.promo-highlight {
+  padding: 0 .5rem;
+  border: 1px solid #f83245;
+  cursor: pointer;
+}
+.promo-highlight:hover {
+  border-color: red;
+}
+.promo-highlight:hover .promo-code {
+  color: red
+}
+</style>
