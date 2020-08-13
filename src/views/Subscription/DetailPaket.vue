@@ -91,8 +91,7 @@
                         <div class="col-md-6 mt-2">
                           <strong>Kode Promo</strong>
                           <!-- <small class="ml-2">( jika ada )</small> -->
-                          <br>
-                          <span class="promo-highlight" @click="putPromo('IZIDOK75')"><small>Dapatkan diskon 75% dengan kode <strong class="promo-code">IZIDOK75</strong></small></span>
+                          <div @click="putPromo('IZIDOK75')"><small>Dapatkan diskon 75% dengan kode <strong class="promo-code">IZIDOK75</strong></small></div>
                         </div>
                         <div class="col-md-6 mt-2">
                           <b-button variant="primary" @click="checkKodePromo" class="float-right" size="md">Gunakan
@@ -408,17 +407,7 @@
 
 <style scoped>
 .promo-code {
-  color: #f83245
-}
-.promo-highlight {
-  padding: 0 .5rem;
-  border: 1px solid #f83245;
+  color: #f83245;
   cursor: pointer;
-}
-.promo-highlight:hover {
-  border-color: red;
-}
-.promo-highlight:hover .promo-code {
-  color: red
 }
 </style>
