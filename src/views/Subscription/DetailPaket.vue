@@ -91,7 +91,7 @@
                         <div class="col-md-6 mt-2">
                           <strong>Kode Promo</strong>
                           <!-- <small class="ml-2">( jika ada )</small> -->
-                          <div @click="putPromo('IZIDOK75')"><small>Dapatkan diskon 75% dengan kode <strong class="promo-code">IZIDOK75</strong></small></div>
+                          <div @click="putPromo('IZIDOK50')"><small>Dapatkan diskon 50% dengan kode <strong class="promo-code">IZIDOK50</strong></small></div>
                         </div>
                         <div class="col-md-6 mt-2">
                           <b-button variant="primary" @click="checkKodePromo" class="float-right" size="md">Gunakan
