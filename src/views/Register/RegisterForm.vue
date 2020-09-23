@@ -7,7 +7,7 @@
           <div class="flex-grow-1 w-100  align-items-center">
             <VueSlickCarousel :dots="true" :adaptiveHeight="true" :arrows='false' :autoplay="true">
                <div class="wrap" :style="wrapStyle">
-              <img src="@/assets/img/image_Register1.jpg" :style="wrapImgStyle"   alt="Banner izidok 1">
+              <img src="@/assets/img/image_Register1.png" :style="wrapImgStyle"   alt="Banner izidok 1">
                </div>
                <div class="wrap" :style="wrapStyle">
               <img src="@/assets/img/image_Register2.jpg" :style="wrapImgStyle"    alt="Banner izidok 2">
@@ -21,9 +21,10 @@
         </div>
         <div class="col-md-6 col-sm-6 d-flex align-items-center content-register-right">
           <div class="col-sm-10 mt-4" style="margin-left:auto;margin-right:auto">
-            <h4 class="font-weight-bold text-capitalize">
-              daftarkan {{ selectedTipeFaskes }} anda
+            <h4 class="font-weight-bold">
+              Coba Gratis izidok Sekarang!
             </h4>
+            <p>Bergabunglah bersama lebih dari 250 dokter praktik mandiri pengguna izidok dan dapatkan 30 hari coba gratis.</p>
             <b-form @submit.prevent="submitForm">
               <!-- <b-form-group label="Tipe Faskes">
                   <b-form-radio-group

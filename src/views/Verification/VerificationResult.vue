@@ -61,7 +61,7 @@ export default {
       modalShow: false,
       text: {
         success:
-          "Akun Anda berhasil diaktivasi. Silakan login untuk mengakses izidok.",
+          "Selamat! Pendaftaran akun izidok Anda berhasil. Segera jelajahi fitur lengkap izidok dan daftarkan pasien pertama Anda!",
         "already-activated":
           "Akun Anda gagal diaktivasi. Email Anda telah teraktivasi sebelumnya.",
         failed: "Akun Anda gagal diaktivasi. Lakukan aktivasi ulang.",

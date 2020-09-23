@@ -48,7 +48,7 @@
                       </template>
                       <template v-else>
                       <p class="mb-5">
-                        Silahkan cek email Anda untuk melakukan verifikasi akun izidok
+                        Halo, Dokter! Pendaftaran akun izidok Anda hampir selesai. Tinggal selangkah lagi untuk dapat mengakses aplikasi Rekam Medis Terlengkap dan Tercanggih. Silahkan cek email Anda untuk melakukan verifikasi akun!
                       </p>
                       </template>
                       <p class="d-block mb-2" style="font-weight: 600">
